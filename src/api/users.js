@@ -18,7 +18,7 @@ api.interceptors.request.use(
   },
   error => {
     return Promise.reject(error);
-  }
+  },
 );
 
 api.interceptors.response.use(
@@ -81,5 +81,5 @@ api.interceptors.response.use(
       alert(message);
       return Promise.reject(error);
     }
-  }
+  },
 );

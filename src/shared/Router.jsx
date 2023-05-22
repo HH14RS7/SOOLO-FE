@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Main from '../pages/Main';
-import { PATH_URL } from '../constants';
+import { PATH_URL } from '../shared/constants';
 import Login from '../pages/Login';
 import Detail from '../pages/Detail';
 import Layout from './Layout';
