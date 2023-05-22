@@ -1,6 +1,6 @@
 module.exports = {
   printWidth: 100,
   tabWidth: 2,
-  singleQuote: false,
+  singleQuote: true,
   arrowParens: 'avoid',
 };
