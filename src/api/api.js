@@ -1,18 +1,21 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { PATH_URL } from '../shared/constants';
 
-const API_URL = process.env.REACT_APP_SERVER_URL;
+const API_URL = `${process.env.REACT_APP_SERVER_URL}`;
 
-export const api = axios.create({
+const api = axios.create({
   baseURL: API_URL,
 });
 
 api.interceptors.request.use(
   config => {
-    const token = Cookies.get('token');
-    if (token) {
-      config.headers.ACCESS_KEY = `Bearer ${token}`;
+    //TODO cookie에 access_token을 어떤 이름으로 저장했는지?
+    const accessToken = Cookies.get('accessToken');
+    const refreshToken = Cookies.get('refreshToken');
+
+    if (accessToken) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
+      config.headers['refresh_token'] = `Bearer ${accessToken}`;
     }
     return config;
   },
@@ -21,7 +24,41 @@ api.interceptors.request.use(
   },
 );
 
-api.interceptors.response.use(
+export function postAPI(url, data) {
+  return api.post(API_URL + url, data);
+}
+
+export function putAPI(url, data) {
+  return api.put(API_URL + url, data);
+}
+
+export function getAPI(url) {
+  return api.get(API_URL + url);
+}
+
+export function deleteAPI(url) {
+  return api.delete(API_URL + url);
+}
+
+export function patchAPI(url, data) {
+  return api.patch(API_URL + url, data);
+}
+
+export function postImageAPI(url, formData) {
+  return axios.post(API_URL + url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    transformRequest: [
+      function () {
+        return formData;
+      },
+    ],
+  });
+}
+
+/**
+ * api.interceptors.response.use(
   response => {
     return response;
   },
@@ -83,3 +120,5 @@ api.interceptors.response.use(
     }
   },
 );
+
+ */
