@@ -91,7 +91,7 @@ const FormWrapper = styled.div`
 
 const FormContainer = styled.form`
   display: flex;
-  flex-direction: column;s
+  flex-direction: column;
 `;
 
 const ErrorMessage = styled.div`
