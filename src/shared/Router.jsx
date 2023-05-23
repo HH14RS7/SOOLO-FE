@@ -5,7 +5,7 @@ import Login from '../pages/Login';
 import Detail from '../pages/Detail';
 import Layout from './Layout';
 import Redirection from '../components/user/Redirection';
-import PartyDetail from '../pages/PartyDetail';
+import { PartyDetail } from '../pages/PartyDetail';
 import PartyModify from '../pages/PartyModify';
 import PartyCreate from '../pages/PartyCreate';
 
