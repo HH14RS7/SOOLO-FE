@@ -5,6 +5,7 @@ export const PATH_URL = {
   KAKAO: '/kakao/callback',
   PARTY_DETAIL: '/partyDetail',
   PARTY_MODIFY: '/partyModify',
+  PARTY_CREATE: '/partyCreate',
 };
 
 export const MEMBER_URL = {

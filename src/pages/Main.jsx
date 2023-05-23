@@ -1,5 +1,13 @@
+import PartyList from '../components/party/PartyList';
+// import RequestPartyList from '../components/party/requestPartyList';
+
 const Main = () => {
-  return <>main</>;
+  return (
+    <>
+      {/* <RequestPartyList /> */}
+      <PartyList />
+    </>
+  );
 };
 
 export default Main;

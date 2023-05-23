@@ -1,0 +1,74 @@
+{
+  "parties": [
+    {
+      "partyId": 1,
+      "title": "같이 술 마실 분 구합니다",
+      "content": "우리 지금 만나 아 당장 만나",
+      "memberId": 3,
+      "memberName": "서강준",
+      "address": "강서구",
+      "date": "2023-05-22 20:40:22",
+      "totalCount": 10,
+      "currentCount": 10,
+      "processing": false,
+      "profileImage": "https://images.unsplash.com/photo-1587463272361-565200f82b33?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDR8fHB1cHB5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60",
+      "createdAt": "2023-05-20T20:48:43.7499586"
+    },
+    {
+      "partyId": 2,
+      "title": "알쓰파티 하실분",
+      "content": "알쓰들 만나요 여기서",
+      "memberId": 4,
+      "memberName": "김수진",
+      "address": "강남구",
+      "date": "2023-05-23 19:33:22",
+      "totalCount": 3,
+      "currentCount": 2,
+      "processing": true,
+      "profileImage": "https://images.unsplash.com/photo-1587463272361-565200f82b33?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDR8fHB1cHB5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60",
+      "createdAt": "2023-05-20T18:48:43.7499586"
+    },
+    {
+      "partyId": 3,
+      "title": "술마실사뢈 구합니돠",
+      "content": "집에 가기싫어여~",
+      "memberId": 5,
+      "memberName": "최하나",
+      "address": "강남구",
+      "date": "2023-05-18 23:11:35",
+      "totalCount": 6,
+      "currentCount": 6,
+      "processing": false,
+      "profileImage": "https://images.unsplash.com/photo-1587463272361-565200f82b33?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDR8fHB1cHB5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60",
+      "createdAt": "2023-05-18:48:43.7499586"
+    },
+    {
+      "partyId": 4,
+      "title": "심심한데 술 한잔하실분",
+      "content": "만나요 우리 술한잔해용",
+      "memberId": 4,
+      "memberName": "최세준",
+      "address": "강남구",
+      "date": "2023-05-22 19:33:32",
+      "totalCount": 5,
+      "currentCount": 2,
+      "processing": true,
+      "profileImage": "https://images.unsplash.com/photo-1587463272361-565200f82b33?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDR8fHB1cHB5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60",
+      "createdAt": "2023-05-22T19:48:43.7499586"
+    },
+    {
+      "partyId": 5,
+      "title": "조용한 곳에서 술 마시고 싶어요",
+      "content": "조용하신 분들만 모여요",
+      "memberId": 8,
+      "memberName": "정선우",
+      "address": "서울",
+      "date": "2023-05-19 15:30:11",
+      "totalCount": 4,
+      "currentCount": 2,
+      "processing": true,
+      "profileImage": "https://images.unsplash.com/photo-1587463272361-565200f82b33?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDR8fHB1cHB5fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60",
+      "createdAt": "2023-05-19T21:48:43.7499586"
+    }
+  ]
+}
