@@ -6,6 +6,7 @@ import Detail from '../pages/Detail';
 import Layout from './Layout';
 import Redirection from '../components/user/Redirection';
 import PartyDetail from '../pages/PartyDetail';
+import PartyModify from '../pages/PartyModify';
 
 const Router = () => {
   return (
@@ -17,6 +18,7 @@ const Router = () => {
           <Route path={PATH_URL.DETAIL} element={<Detail />} />
           <Route exact path={PATH_URL.KAKAO} element={<Redirection />} />
           <Route path={PATH_URL.PARTY_DETAIL} element={<PartyDetail />} />
+          <Route path={PATH_URL.PARTY_MODIFY} element={<PartyModify />} />
         </Routes>
       </Layout>
     </BrowserRouter>
