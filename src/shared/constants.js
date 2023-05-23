@@ -3,34 +3,38 @@ export const PATH_URL = {
   LOGIN: '/user/login',
   DETAIL: '/detail/:detailId',
   PARTY_DETAIL: '/partyDetail',
+  PARTY_MODIFY: '/partyModify',
 };
 
 export const MEMBER_URL = {
-  LOGIN: '/api/member/login',
-  LOGOUT: '/api/member/logout',
-  MYPAGE_GET: '/api/member/:memberId',
-  MYPAGE_PUT: '/api/member/:memberId',
-  TARGET_PAGE_GET: '/api/member/target/:memberId',
+  LOGIN: '/member/login',
+  LOGOUT: '/member/logout',
+  MYPAGE_GET: '/member/info',
+  MYPAGE_PUT: '/member/update',
+  TARGET_PAGE_GET: '/member/:memberId',
 };
 
 export const PARTIES_URL = {
-  PARTIES_LIST: '/api/parties',
-  MY_PARTIES_LIST: '/api/member/parties/:memberId',
-  PARTIES_DETAIL: 'api/parties/party/:partyId',
-  PARTIES_APPLICATION: '',
-  PARTIES_CANCLE: 'api/party/:partyId',
-  PARTIES_ADD: 'api/parties/newparty',
-  PARTIES_UPDATE: 'api/party/:partyId',
-  PARTIES_DELETE: 'api/party/:partyId',
-  MAP_LIST: 'api/map/parties',
+  PARTIES_LIST: '/parties',
+  MY_PARTIES_LIST: '/party/my-party-list',
+  MY_PARTIES_LIST_WAIT: '/party/my-party-list/await',
+  PARTIES_DETAIL: '/party/detail',
+  PARTIES_APPLICATION: '/party/join/:partyId',
+  PARTIES_CANCLE: '/party/:partyId',
+  PARTIES_CONDITIONS: '/party/accept/:joinId',
+  PARTIES_MAP_INQUIRY: '/map/parties',
+  PARTIES_ADD: '/party/new-party',
+  PARTIES_UPDATE: '/party/:partyId',
+  PARTIES_DELETE: '/party/:partyId',
 };
 
 export const CHATING_URL = {
   CHAT_LIST_SUB: 'sub/chat/chatList/:memberId',
   CHAT_LIST_PUB: 'pub/chat/chatList/:memberId',
-  CHAT_APPROVE: 'api/party/approve/:memberId',
+  CHAT_APPROVE: '/party/approve/:memberId',
   CHAT_ROOM_SUB: 'sub/chat/room/:chatRoomId',
   CHAT_ROOM_PUB: 'pub/chat/room/:chatRoomId',
-  CHAT_MESSAGE_SUB: 'sub/chat/message/:chatRoomId',
-  CHAT_MESSAGE_PUB: 'pub/chat/message/:chatRoomId',
+  CHAT_ROOM_SUBS: 'sub/chat/message/:chatRoomId',
+  BEFORE_CHAT_LIST: 'PUB/chat/room/:chatRoomId',
+  CHAT_INPUT: 'pub/chat/message/:chatRoomId',
 };
