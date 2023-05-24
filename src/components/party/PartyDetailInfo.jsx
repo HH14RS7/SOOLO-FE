@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PARTIES_URL } from '../../shared/constants';
+import { PATH_URL, PARTIES_URL } from '../../shared/constants';
 import { deleteAPI } from '../../api/api';
+import { useMutation } from 'react-query';
 
 export const PartyDetailInfo = () => {
   const navigate = useNavigate();
@@ -16,20 +17,25 @@ export const PartyDetailInfo = () => {
     }
   };
 
-  // 모임 수정
-  const partyModify = () => {
-    navigate(PARTIES_URL.PARTIES_UPDATE);
+  // 모임 수정(임시)
+  const partyId = 3;
+  const updateParty = partyId => {
+    navigate(`${PATH_URL.PARTY_CREATE}?partyId=${partyId}`);
+    // navigate(`${PATH_URL.PARTY_CREATE}?partyID=${partyId}`,{state: party }); // party 값도 넘겨줘야함
   };
 
   // 모임 삭제
-  const partyDelete = () => {
-    deleteAPI(PARTIES_URL.PARTIES_DELETE)
-      .then(() => {
-        alert('삭제가 완료되었습니다.');
-      })
-      .catch(() => {
-        alert('삭제를 실패했습니다.');
-      });
+  const deletePartyMutation = useMutation(() => deleteAPI(`${PARTIES_URL.PARTY}/${partyId}`), {
+    onSuccess: () => {
+      alert('모임이 삭제되었습니다!'); // 매시지 받아서 처리
+    },
+    onError: error => {
+      alert(error.message);
+    },
+  });
+
+  const deleteParty = partyId => {
+    deletePartyMutation.mutate(partyId);
   };
 
   return (
@@ -49,14 +55,14 @@ export const PartyDetailInfo = () => {
         <button onClick={handleButtonClick}>{buttonText}</button>
         <button
           onClick={() => {
-            partyModify();
+            updateParty(partyId);
           }}
         >
           모임수정
         </button>
         <button
           onClick={() => {
-            partyDelete();
+            deleteParty(partyId);
           }}
         >
           모임삭제
