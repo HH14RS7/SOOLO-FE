@@ -4,8 +4,8 @@ import { PATH_URL } from '../shared/constants';
 import Login from '../pages/Login';
 import Detail from '../pages/Detail';
 import Layout from './Layout';
-import PartyDetail from '../pages/PartyDetail';
-import PartyModify from '../pages/PartyModify';
+import Redirection from '../components/user/Redirection';
+import { PartyDetail } from '../pages/PartyDetail';
 import PartyCreate from '../pages/PartyCreate';
 import KakaoRedirection from '../components/user/KakaoRedirection';
 import NaverRedirection from '../components/user/NaverRedirection';
@@ -21,7 +21,6 @@ const Router = () => {
           <Route exact path={PATH_URL.KAKAO} element={<KakaoRedirection />} />
           <Route exact path={PATH_URL.NAVER} element={<NaverRedirection />} />
           <Route path={PATH_URL.PARTY_DETAIL} element={<PartyDetail />} />
-          <Route path={PATH_URL.PARTY_MODIFY} element={<PartyModify />} />
           <Route path={PATH_URL.PARTY_CREATE} element={<PartyCreate />} />
         </Routes>
       </Layout>

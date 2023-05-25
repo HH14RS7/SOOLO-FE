@@ -5,7 +5,7 @@ const Main = () => {
   return (
     <>
       {/* <RequestPartyList /> */}
-      <PartyList />
+      {/* <PartyList /> */}
     </>
   );
 };

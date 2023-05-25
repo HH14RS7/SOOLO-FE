@@ -22,6 +22,7 @@ const Calendars = ({ selectedDate, setSelectedDate }) => {
       locale={ko}
       minTime={minTime}
       maxTime={maxTime}
+      minDate={now}
     />
   );
 };

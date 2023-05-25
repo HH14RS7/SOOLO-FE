@@ -1,17 +1,23 @@
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { PATH_URL, PARTIES_URL } from '../../shared/constants';
 import { useMutation } from 'react-query';
 import { postAPI } from '../../api/api';
 import Calendars from '../../shared/Calendars';
-import { formatDate } from '../../shared/formatDate';
+import moment from 'moment';
 
 const CreateForm = () => {
   const PARTICIPANT_COUNT = Array.from({ length: 10 }, (_, i) => ({ value: i + 1 }));
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const navigator = useNavigate();
+  const location = useLocation();
+  const partyId = parseInt(new URLSearchParams(location.search).get('partyId'));
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const { party } = location.state || {};
+  const isEdit = !!partyId;
+
+  console.log('partyId::', partyId);
 
   const {
     register,
@@ -20,22 +26,34 @@ const CreateForm = () => {
     reset,
   } = useForm();
 
-  // const mutation = useMutation(postAPI(PARTIES_URL.PARTIES_ADD), {
-  //   onSuccess: response => {
-  //     console.log(response);
-  //     alert('모임이 등록되었습니다');
-  //   },
-  //   onError: error => {
-  // },
-  // });
+  if (isEdit) {
+    // 수정
+    // const updateMutation = useMutation(putAPI(`${PARTIES_URL.PARTY}/${partyId}`), {
+    //   onSuccess: response => {
+    //     console.log(response);
+    //   },
+    //   onError: error => {
+    // alert(error.message);
+    // },
+    // });
+    // } else {
+    // 등록
+    // const createMutation = useMutation(postAPI(`${PARTIES_URL.PARTY}/${partyId}`), {
+    //   onSuccess: response => {
+    //     console.log(response);
+    //   },
+    //   onError: error => { alert(error.message);},
+    // });
+  }
 
   const handlePartySubmit = data => {
-    console.log(data);
-    data.date = formatDate(data.date);
-    try {
-      // mutation.mutate(data);
-      navigator(PATH_URL.MAIN);
-    } catch (error) {}
+    data.date = moment(data.date).format('YYYY-MM-DD HH:mm:ss');
+    if (isEdit) {
+      // updateMutate.mutate(data);
+    } else {
+      // createMutation.mutate(data);
+    }
+    navigator(PATH_URL.MAIN);
   };
 
   // memberName은 token완료 후 가져오면 될 듯, 지도 추후 구현
@@ -79,7 +97,10 @@ const CreateForm = () => {
         <label htmlFor="date">모임일시</label>
         <input type="hidden" {...register('date', { value: selectedDate })} />
         <Calendars id="date" selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-        <button type="submit">모임 만들기</button>
+        <Link to={PATH_URL.MAIN}>
+          <button>취소하기</button>
+        </Link>
+        <button type="submit">{isEdit ? '수정하기' : '등록하기'}</button>
       </FormContainer>
     </FormWrapper>
   );
@@ -91,7 +112,7 @@ const FormWrapper = styled.div`
 
 const FormContainer = styled.form`
   display: flex;
-  flex-direction: column;s
+  flex-direction: column;
 `;
 
 const ErrorMessage = styled.div`

@@ -19,16 +19,17 @@ export const MEMBER_URL = {
 
 export const PARTIES_URL = {
   PARTIES_LIST: '/parties',
+  PARTY: '/party',
   MY_PARTIES_LIST: '/party/my-party-list',
   MY_PARTIES_LIST_WAIT: '/party/my-party-list/await',
   PARTIES_DETAIL: '/party/detail',
   PARTIES_APPLICATION: '/party/join/:partyId',
-  PARTIES_CANCLE: '/party/:partyId',
+  // PARTIES_CANCLE: '/party/:partyId',
   PARTIES_CONDITIONS: '/party/accept/:joinId',
   PARTIES_MAP_INQUIRY: '/map/parties',
   PARTIES_ADD: '/party/new-party',
-  PARTIES_UPDATE: '/party/:partyId',
-  PARTIES_DELETE: '/party/:partyId',
+  // PARTIES_UPDATE: '/party/:partyId',
+  // PARTIES_DELETE: '/party/:partyId',
 };
 
 export const CHATING_URL = {
