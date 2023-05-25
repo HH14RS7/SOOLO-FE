@@ -4,7 +4,7 @@ export const PATH_URL = {
   DETAIL: '/detail/:detailId',
   KAKAO: '/kakao/callback',
   NAVER: '/naver/callback',
-  PARTY_DETAIL: '/partyDetail',
+  PARTY_DETAIL: '/party/:partyId',
   PARTY_MODIFY: '/partyModify',
   PARTY_CREATE: '/partyCreate',
 };
