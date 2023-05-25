@@ -19,7 +19,7 @@ const Router = () => {
           <Route path={PATH_URL.DETAIL} element={<Detail />} />
           <Route exact path={PATH_URL.KAKAO} element={<KakaoRedirection />} />
           <Route exact path={PATH_URL.NAVER} element={<NaverRedirection />} />
-          <Route path={PATH_URL.PARTY_DETAIL} element={<PartyDetail />} />
+          <Route path={`${PATH_URL.PARTY_DETAIL}/:partyId`} element={<PartyDetail />} />
           <Route path={PATH_URL.PARTY_CREATE} element={<PartyCreate />} />
         </Routes>
       </Layout>

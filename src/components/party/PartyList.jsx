@@ -20,7 +20,7 @@ const PartyList = () => {
     () => getAPI(`${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=${recruitmentStatus}`),
     {
       onSuccess: data => {
-        console.log('data.data.data, parties::::', data.data.data);
+        //console.log('data.data.data, parties::::', data.data.data.partyList);
       },
       onError: error => {},
     },
@@ -45,7 +45,8 @@ const PartyList = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  const partyList = data.data.data;
+  const partyList = data.data.data.partyList;
+  console.log(partyList);
   return (
     <div>
       <h2>모임 리스트</h2>
