@@ -61,13 +61,13 @@ api.interceptors.response.use(
   },
   error => {
     if (error.response) {
-      const { status, data, msg } = error.response;
+      const { status, data, msg } = error.response.data;
       if (status === 401) {
         // 403 토큰 만료
       } else if (status === 403) {
       } else if (status === 404) {
       } else if (status === 500) {
-        // alert('Internal Server Error');
+        alert('Internal Server Error');
       } else {
         alert(msg);
       }
