@@ -3,6 +3,7 @@ export const PATH_URL = {
   LOGIN: '/user/login',
   DETAIL: '/detail/:detailId',
   KAKAO: '/kakao/callback',
+  NAVER: '/naver/callback',
   PARTY_DETAIL: '/partyDetail',
   PARTY_MODIFY: '/partyModify',
   PARTY_CREATE: '/partyCreate',
