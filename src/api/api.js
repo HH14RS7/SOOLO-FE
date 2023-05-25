@@ -23,28 +23,28 @@ api.interceptors.request.use(
   },
 );
 
-export function postAPI(url, data) {
-  return api.post(API_URL + url, data);
+export async function postAPI(url, data) {
+  return await api.post(API_URL + url, data);
 }
 
-export function putAPI(url, data) {
-  return api.put(API_URL + url, data);
+export async function putAPI(url, data) {
+  return await api.put(API_URL + url, data);
 }
 
-export function getAPI(url) {
-  return api.get(API_URL + url);
+export async function getAPI(url) {
+  return await api.get(API_URL + url);
 }
 
-export function deleteAPI(url) {
-  return api.delete(API_URL + url);
+export async function deleteAPI(url) {
+  return await api.delete(API_URL + url);
 }
 
-export function patchAPI(url, data) {
-  return api.patch(API_URL + url, data);
+export async function patchAPI(url, data) {
+  return await api.patch(API_URL + url, data);
 }
 
-export function postImageAPI(url, formData) {
-  return axios.post(API_URL + url, formData, {
+export async function postImageAPI(url, formData) {
+  return await api.post(API_URL + url, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -55,69 +55,25 @@ export function postImageAPI(url, formData) {
     ],
   });
 }
-
-/**
- * api.interceptors.response.use(
+api.interceptors.response.use(
   response => {
     return response;
   },
-  async error => {
-    const {
-      config,
-      config: { url, method },
-      response: {
-        data: { errorCode, message },
-      },
-    } = error;
-
-    if (errorCode === 'EXPIRED_ACCESS_TOKEN') {
-      const refresh = Cookies.get('refreshToken');
-      const originReq = config;
-      const { headers } = await api({
-        url: url,
-        method: method,
-        headers: { REFRESH_KEY: refresh },
-      });
-
-      const { ACCESS_KEY: newAccessToken, REFRESH_KEY: newRefreshToken } = headers;
-      Cookies.set('token', newAccessToken);
-      Cookies.set('refreshToken', newRefreshToken);
-
-      originReq.headers.ACCESS_KEY = `Bearer ${newAccessToken}`;
-
-      return axios(originReq);
-    } else if (errorCode === 'EXPIRED_REFRESH_TOKEN') {
-      alert('만료시간이 다 되어 재로그인이 필요합니다');
-      window.location.replace(PATH_URL.LOGIN);
-    } else if (errorCode === 'DUPLICATED_MEMBER') {
-      alert(message);
-      return Promise.reject(error);
-    } else if (errorCode === 'DUPLICATED_EMAIL') {
-      alert(message);
-      return Promise.reject(error);
-    } else if (errorCode === 'MEMBER_NOT_FOUND') {
-      alert(message);
-      return Promise.reject(error);
-    } else if (errorCode === 'INACTIVE_MEMBER') {
-      alert(message);
-      return Promise.reject(error);
-    } else if (errorCode === 'INTERNAL_SERVER_ERROR') {
-      alert(message);
-      return Promise.reject(error);
-    } else if (errorCode === 'IO_EXCEPTION') {
-      alert(message);
-      return Promise.reject(error);
-    } else if (errorCode === 'INVALID_REQUEST_PARAMETER') {
-      alert(message);
-      return Promise.reject(error);
-    } else if (errorCode === 'INVALID_PASSWORD') {
-      alert(message);
-      return Promise.reject(error);
-    } else if (errorCode === 'RESOURCE_NOT_FOUND') {
-      alert(message);
-      return Promise.reject(error);
+  error => {
+    if (error.response) {
+      const { status, data, msg } = error.response;
+      if (status === 401) {
+        // 403 토큰 만료
+      } else if (status === 403) {
+      } else if (status === 404) {
+      } else if (status === 500) {
+        // alert('Internal Server Error');
+      } else {
+        alert(msg);
+      }
+    } else {
+      alert('Network Error');
     }
+    return Promise.reject(error);
   },
 );
-
- */

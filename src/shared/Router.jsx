@@ -4,7 +4,6 @@ import { PATH_URL } from '../shared/constants';
 import Login from '../pages/Login';
 import Detail from '../pages/Detail';
 import Layout from './Layout';
-import Redirection from '../components/user/Redirection';
 import { PartyDetail } from '../pages/PartyDetail';
 import PartyCreate from '../pages/PartyCreate';
 import KakaoRedirection from '../components/user/KakaoRedirection';
