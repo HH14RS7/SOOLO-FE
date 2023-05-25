@@ -13,10 +13,10 @@ const KakaoRedirection = () => {
       console.log('header => ', r.headers);
 
       // data을 받아서 localStorage에 저장.
-      localStorage.setItem('memberId', r.data.memberId);
-      localStorage.setItem('memberUniqueId', r.data.memberUniqueId);
-      localStorage.setItem('memberName', r.data.memberName);
-      localStorage.setItem('profileImage', r.data.profileImage);
+      localStorage.setItem('memberId', r.data.data.memberId);
+      localStorage.setItem('memberUniqueId', r.data.data.memberUniqueId);
+      localStorage.setItem('memberName', r.data.data.memberName);
+      localStorage.setItem('profileImage', r.data.data.profileImage);
 
       // Access_key를 쿠키로 설정
       const accessKey = r.headers.get('access_key').split(' ')[1];

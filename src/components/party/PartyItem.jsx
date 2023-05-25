@@ -1,7 +1,7 @@
 import { styled } from 'styled-components';
 import { dDayConvertor } from '../../shared/dDayConvertor';
 import { Link } from 'react-router-dom';
-import { PARTIES_URL } from '../../shared/constants';
+import { PATH_URL } from '../../shared/constants';
 
 const PartyItem = ({ party }) => {
   const {
@@ -22,7 +22,7 @@ const PartyItem = ({ party }) => {
   console.log(partyDate);
   return (
     <PartyItemWrapper>
-      <Link to={`${PARTIES_URL.PARTY}/${partyId}`}>
+      <Link to={`${PATH_URL.PARTY_DETAIL}/${partyId}`}>
         <li key={partyId}>
           <p>디데이 : D-{dDay > 0 ? dDay : 0}</p>
           <p>제목 : {title}</p>
