@@ -1,7 +1,14 @@
-import LoginComponent from '../components/user/LoginComponent';
+import KakaoLoginComponent from '../components/user/KakaoLoginComponent';
+import NaverLoginComponent from '../components/user/NaverLoginComponent';
 
 const Login = () => {
-  return <LoginComponent />;
+  return (
+    <>
+      <KakaoLoginComponent />
+      <br />
+      <NaverLoginComponent />
+    </>
+  );
 };
 
 export default Login;

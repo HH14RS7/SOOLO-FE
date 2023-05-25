@@ -9,13 +9,12 @@ const api = axios.create({
 
 api.interceptors.request.use(
   config => {
-    //TODO cookie에 access_token을 어떤 이름으로 저장했는지?
-    const accessToken = Cookies.get('accessToken');
-    const refreshToken = Cookies.get('refreshToken');
+    //cookie에 access_token,refresh_token을 어떤 이름으로 저장했는지?
+    const accesskey = Cookies.get('Access_key');
+    //const refreshkey = Cookies.get('Refresh_key');
 
-    if (accessToken) {
-      config.headers['Authorization'] = `Bearer ${accessToken}`;
-      config.headers['refresh_token'] = `Bearer ${accessToken}`;
+    if (accesskey) {
+      config.headers['Access_key'] = `Bearer ${accesskey}`;
     }
     return config;
   },

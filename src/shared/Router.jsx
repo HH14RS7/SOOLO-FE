@@ -7,6 +7,8 @@ import Layout from './Layout';
 import Redirection from '../components/user/Redirection';
 import { PartyDetail } from '../pages/PartyDetail';
 import PartyCreate from '../pages/PartyCreate';
+import KakaoRedirection from '../components/user/KakaoRedirection';
+import NaverRedirection from '../components/user/NaverRedirection';
 
 const Router = () => {
   return (
@@ -16,7 +18,8 @@ const Router = () => {
           <Route path={PATH_URL.MAIN} element={<Main />} />
           <Route path={PATH_URL.LOGIN} element={<Login />} />
           <Route path={PATH_URL.DETAIL} element={<Detail />} />
-          <Route exact path={PATH_URL.KAKAO} element={<Redirection />} />
+          <Route exact path={PATH_URL.KAKAO} element={<KakaoRedirection />} />
+          <Route exact path={PATH_URL.NAVER} element={<NaverRedirection />} />
           <Route path={PATH_URL.PARTY_DETAIL} element={<PartyDetail />} />
           <Route path={PATH_URL.PARTY_CREATE} element={<PartyCreate />} />
         </Routes>
