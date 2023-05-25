@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { PATH_URL, PARTIES_URL } from '../../shared/constants';
 import { deleteAPI } from '../../api/api';
 import { useMutation } from 'react-query';
@@ -9,7 +9,9 @@ import SojuRoom from '../../assets/sojuroomimg.webp';
 export const PartyDetailInfo = () => {
   const navigate = useNavigate();
   const [buttonText, setButtonText] = useState('모임신청');
+  const { partyId } = useParams();
 
+  console.log(partyId);
   // 모임 신청
   const handleButtonClick = () => {
     if (buttonText === '모임신청') {
@@ -20,7 +22,7 @@ export const PartyDetailInfo = () => {
   };
 
   // 모임 수정(임시)
-  const partyId = 3;
+
   const updateParty = partyId => {
     navigate(`${PATH_URL.PARTY_CREATE}?partyId=${partyId}`);
     // navigate(`${PATH_URL.PARTY_CREATE}?partyID=${partyId}`,{state: party }); // party 값도 넘겨줘야함
