@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { PATH_URL } from '../shared/constants';
 
 const API_URL = `${process.env.REACT_APP_SERVER_URL}`;
 
@@ -23,41 +24,7 @@ api.interceptors.request.use(
   },
 );
 
-export function postAPI(url, data) {
-  return api.post(API_URL + url, data);
-}
-
-export function putAPI(url, data) {
-  return api.put(API_URL + url, data);
-}
-
-export function getAPI(url) {
-  return api.get(API_URL + url);
-}
-
-export function deleteAPI(url) {
-  return api.delete(API_URL + url);
-}
-
-export function patchAPI(url, data) {
-  return api.patch(API_URL + url, data);
-}
-
-export function postImageAPI(url, formData) {
-  return axios.post(API_URL + url, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-    transformRequest: [
-      function () {
-        return formData;
-      },
-    ],
-  });
-}
-
-/**
- * api.interceptors.response.use(
+api.interceptors.response.use(
   response => {
     return response;
   },
@@ -69,19 +36,20 @@ export function postImageAPI(url, formData) {
         data: { errorCode, message },
       },
     } = error;
-
+    console.log('api.js / error => ', error);
+    console.log('api.js / errorCode => ', errorCode);
     if (errorCode === 'EXPIRED_ACCESS_TOKEN') {
-      const refresh = Cookies.get('refreshToken');
+      const refreshkey = Cookies.get('Refresh_key');
       const originReq = config;
       const { headers } = await api({
         url: url,
         method: method,
-        headers: { REFRESH_KEY: refresh },
+        headers: { REFRESH_KEY: refreshkey },
       });
 
       const { ACCESS_KEY: newAccessToken, REFRESH_KEY: newRefreshToken } = headers;
-      Cookies.set('token', newAccessToken);
-      Cookies.set('refreshToken', newRefreshToken);
+      Cookies.set('Access_key', newAccessToken);
+      Cookies.set('Refresh_key', newRefreshToken);
 
       originReq.headers.ACCESS_KEY = `Bearer ${newAccessToken}`;
 
@@ -120,4 +88,35 @@ export function postImageAPI(url, formData) {
   },
 );
 
- */
+export function postAPI(url, data) {
+  return api.post(API_URL + url, data);
+}
+
+export function putAPI(url, data) {
+  return api.put(API_URL + url, data);
+}
+
+export function getAPI(url) {
+  return api.get(API_URL + url);
+}
+
+export function deleteAPI(url) {
+  return api.delete(API_URL + url);
+}
+
+export function patchAPI(url, data) {
+  return api.patch(API_URL + url, data);
+}
+
+export function postImageAPI(url, formData) {
+  return axios.post(API_URL + url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    transformRequest: [
+      function () {
+        return formData;
+      },
+    ],
+  });
+}
