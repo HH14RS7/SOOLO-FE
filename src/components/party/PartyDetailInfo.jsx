@@ -1,26 +1,59 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { PATH_URL, PARTIES_URL } from '../../shared/constants';
-import { deleteAPI } from '../../api/api';
+import { deleteAPI, getAPI, postAPI } from '../../api/api';
 import { useMutation } from 'react-query';
 import { styled } from 'styled-components';
 import SojuRoom from '../../assets/sojuroomimg.webp';
 
 export const PartyDetailInfo = () => {
+  const location = useLocation();
+  const partyId = location.pathname.split('/')[3];
+
   const navigate = useNavigate();
+  const [data, setDeta] = useState();
   const [buttonText, setButtonText] = useState('모임신청');
 
-  // 모임 신청
+  // 모임 상세 조회
+  useEffect(() => {
+    getAPI(`${PARTIES_URL.DETAIL}/${partyId}`)
+      .then(response => {
+        console.log('data11 :: ', response.data.data);
+        if (response.status === 200) {
+          setDeta(response.data.data);
+        }
+      })
+      .catch(error => {
+        console.log('API 요청 중 에러 발생', error);
+      });
+  }, [data, partyId]);
+
+  // 모임 신청, 취소 버튼
   const handleButtonClick = () => {
     if (buttonText === '모임신청') {
       setButtonText('모임취소');
+      postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`)
+        .then(data => {
+          console.log('data :: ', data);
+          alert('모임이 신청되었습니다.');
+        })
+        .catch(error => {
+          console.log('API 요청 중 에러 : ', error);
+        });
     } else {
       setButtonText('모임신청');
+      deleteAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`)
+        .then(data => {
+          console.log('data :: ', data);
+          alert('모임이 취소되었습니다.');
+        })
+        .catch(error => {
+          console.log('API 요청 중 에러 : ', error);
+        });
     }
   };
 
   // 모임 수정(임시)
-  const partyId = 3;
   const updateParty = partyId => {
     navigate(`${PATH_URL.PARTY_CREATE}?partyId=${partyId}`);
     // navigate(`${PATH_URL.PARTY_CREATE}?partyID=${partyId}`,{state: party }); // party 값도 넘겨줘야함
@@ -87,7 +120,9 @@ export const PartyDetailInfo = () => {
           <div>profileimage</div>
           <div>memberName</div>
           <div>createdAt</div> */}
-            <button onClick={handleButtonClick}>{buttonText}</button>
+            <button id="" onClick={handleButtonClick}>
+              {buttonText}
+            </button>
             <button
               onClick={() => {
                 updateParty(partyId);
