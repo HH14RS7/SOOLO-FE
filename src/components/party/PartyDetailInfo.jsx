@@ -11,11 +11,9 @@ import SojuRoom from '../../assets/sojuroomimg.webp';
 export const PartyDetailInfo = () => {
   const location = useLocation();
   const partyId = location.pathname.split('/')[3];
-
   const navigate = useNavigate();
   const [data, setDeta] = useState();
   const [buttonText, setButtonText] = useState('모임신청');
-  const { partyId } = useParams();
 
   // 모임 신청
   // 모임 상세 조회
