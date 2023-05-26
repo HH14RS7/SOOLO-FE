@@ -1,0 +1,9 @@
+{
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "https://your-website-url/$1",
+        "status": 301
+      }
+    ]
+  }
