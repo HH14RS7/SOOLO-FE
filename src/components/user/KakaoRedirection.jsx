@@ -18,13 +18,25 @@ const KakaoRedirection = () => {
       localStorage.setItem('memberName', r.data.data.memberName);
       localStorage.setItem('profileImage', r.data.data.profileImage);
 
-      // Access_key를 쿠키로 설정
+      // access_key설정
       const accessKey = r.headers.get('access_key').split(' ')[1];
-      Cookies.set('Access_key', accessKey);
 
-      // Refresh_key를 쿠키로 설정
+      // refresh_key설정
       const refreshkey = r.headers.get('refresh_key').split(' ')[1];
+
+      Cookies.set('Access_key', accessKey);
       Cookies.set('Refresh_key', refreshkey);
+
+      //  Access Token 만료 시간 지정
+      // const expirationTime = new Date();
+      // expirationTime.setMinutes(expirationTime.getMinutes() + 1);
+
+      //  Refresh Token 만료 시간 지정
+      // const refreshTokenExpirationTime = new Date();
+      // refreshTokenExpirationTime.setDate(refreshTokenExpirationTime.getDate() + 7);
+
+      // Cookies.set('Access_key', accessKey, { expires: expirationTime });
+      // Cookies.set('Refresh_key', refreshkey, { expires: refreshTokenExpirationTime });
 
       alert(r.data.msg);
       navigate('/');

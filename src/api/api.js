@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { PATH_URL } from '../shared/constants';
 
 const API_URL = `${process.env.REACT_APP_SERVER_URL}`;
 
@@ -20,6 +19,34 @@ api.interceptors.request.use(
     return config;
   },
   error => {
+    return Promise.reject(error);
+  },
+);
+
+//엑세스 토큰 만료 시 처리 코드 미완성
+api.interceptors.response.use(
+  response => {
+    return response;
+  },
+  async error => {
+    if (error.response) {
+      console.log('api.js => error', error);
+      const { status, data, msg } = error.response.data;
+      if (status === 401) {
+        alert('401 에러 입니다');
+        // 403 토큰 만료
+      } else if (status === 403) {
+        alert('403 에러 입니다');
+      } else if (status === 404) {
+        alert('404 에러 입니다');
+      } else if (status === 500) {
+        alert('500 에러 입니다');
+      } else {
+        alert(msg);
+      }
+    } else {
+      alert('Network Error');
+    }
     return Promise.reject(error);
   },
 );
@@ -56,26 +83,3 @@ export async function postImageAPI(url, formData) {
     ],
   });
 }
-
-api.interceptors.response.use(
-  response => {
-    return response;
-  },
-  async error => {
-    if (error.response) {
-      const { status, data, msg } = error.response.data;
-      if (status === 401) {
-        // 403 토큰 만료
-      } else if (status === 403) {
-      } else if (status === 404) {
-      } else if (status === 500) {
-        alert('Internal Server Error');
-      } else {
-        alert(msg);
-      }
-    } else {
-      alert('Network Error');
-    }
-    return Promise.reject(error);
-  },
-);
