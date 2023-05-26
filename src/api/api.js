@@ -56,24 +56,24 @@ export async function postImageAPI(url, formData) {
   });
 }
 api.interceptors.response.use(
-  response => {
-    return response;
-  },
+  response => response,
   error => {
     if (error.response) {
       const { status, data, msg } = error.response.data;
+      // 401 토큰 만료
       if (status === 401) {
-        // 403 토큰 만료
+        throw new Error(msg);
       } else if (status === 403) {
+        throw new Error(msg);
       } else if (status === 404) {
+        throw new Error(msg);
       } else if (status === 500) {
-        alert('Internal Server Error');
+        throw new Error('Internal Server Error');
       } else {
-        alert(msg);
+        throw new Error(msg);
       }
     } else {
-      alert('Network Error');
+      throw new Error('Network Error');
     }
-    return Promise.reject(error);
   },
 );
