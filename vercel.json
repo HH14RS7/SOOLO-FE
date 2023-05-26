@@ -2,7 +2,7 @@
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "https://your-website-url/$1",
+        "dest": "http://soolo-fe.vercel.app/$1",
         "status": 301
       }
     ]
