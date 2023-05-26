@@ -11,22 +11,22 @@ export const PartyDetailInfo = () => {
   const partyId = location.pathname.split('/')[3];
 
   const navigate = useNavigate();
-  const [data, setDeta] = useState();
+  const [data, setData] = useState();
   const [buttonText, setButtonText] = useState('모임신청');
 
   // 모임 상세 조회
   useEffect(() => {
     getAPI(`${PARTIES_URL.DETAIL}/${partyId}`)
       .then(response => {
-        console.log('data11 :: ', response.data.data);
+        // console.log('response :: ', response.data.data);
         if (response.status === 200) {
-          setDeta(response.data.data);
+          setData(response.data.data);
         }
       })
       .catch(error => {
         console.log('API 요청 중 에러 발생', error);
       });
-  }, [data, partyId]);
+  }, [partyId]);
 
   // 모임 신청, 취소 버튼
   const handleButtonClick = () => {
@@ -42,7 +42,7 @@ export const PartyDetailInfo = () => {
         });
     } else {
       setButtonText('모임신청');
-      deleteAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`)
+      postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`)
         .then(data => {
           console.log('data :: ', data);
           alert('모임이 취소되었습니다.');
@@ -53,25 +53,30 @@ export const PartyDetailInfo = () => {
     }
   };
 
-  // 모임 수정(임시)
+  // 모임 수정
   const updateParty = partyId => {
-    navigate(`${PATH_URL.PARTY_CREATE}?partyId=${partyId}`);
-    // navigate(`${PATH_URL.PARTY_CREATE}?partyID=${partyId}`,{state: party }); // party 값도 넘겨줘야함
+    navigate(`${PATH_URL.PARTY_CREATE}?partyId=${partyId}`, { state: data });
   };
 
   // 모임 삭제
-  const deletePartyMutation = useMutation(() => deleteAPI(`${PARTIES_URL.PARTY}/${partyId}`), {
-    onSuccess: () => {
-      alert('모임이 삭제되었습니다!'); // 매시지 받아서 처리
+  const deletePartyMutation = useMutation(
+    () => deleteAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${partyId}`),
+    {
+      onSuccess: response => {
+        alert(response.data.msg);
+        navigate(PATH_URL.MAIN);
+      },
+      onError: error => {
+        alert(error.message);
+      },
     },
-    onError: error => {
-      alert(error.message);
-    },
-  });
+  );
 
   const deleteParty = partyId => {
     deletePartyMutation.mutate(partyId);
   };
+
+  console.log('data ::', data);
 
   return (
     <>
@@ -90,7 +95,7 @@ export const PartyDetailInfo = () => {
             </PartyDetailImg>
             <ProfileBox>
               <img
-                src={SojuRoom}
+                src={data?.memberInfo[0].profileImage}
                 alt="profile"
                 style={{
                   width: '50px',
@@ -98,28 +103,18 @@ export const PartyDetailInfo = () => {
                   borderRadius: '100%',
                 }}
               />
-              <ProfileName>하리뽀</ProfileName>
+              <ProfileName>{data?.memberInfo[0].memberName}</ProfileName>
             </ProfileBox>
             <LineDiv></LineDiv>
-            <PartyName>파티제목 : 아침까지 먹죽팟</PartyName>
-            <div>파티내용 : 코딩 개같아서 못하겠다 술먹을 사람</div>
+            <PartyName>파티 제목 : {data?.title}</PartyName>
+            <div>파티내용 : {data?.content}</div>
             <div>파티 모집 기간 (모이는 시간)</div>
-            <div>현재 인원 수 / 최대 인원 수</div>
+            <div>현재 인원 : {data?.currentCount} </div>
+            <div>최대 인원 : {data?.totalCount}</div>
             <div>모집중</div>
-            <div>만든 날짜 : 2023.05.24</div>
-            <div>수정 날짜 : 2023.05.25</div>
+            <div>만든 날짜 : {data?.createdAt}</div>
+            <div>수정 날짜 : {data?.modifiedAt}</div>
             <PartyInfo></PartyInfo>
-            {/* <h1>PartyDetail</h1>
-          <div>partyid</div>
-          <div>title</div>
-          <div>content</div>
-          <div>date</div>
-          <div>totalCount</div>
-          <div>currentCount</div>
-          <div>processing</div>
-          <div>profileimage</div>
-          <div>memberName</div>
-          <div>createdAt</div> */}
             <button id="" onClick={handleButtonClick}>
               {buttonText}
             </button>

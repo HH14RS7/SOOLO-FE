@@ -83,3 +83,27 @@ export async function postImageAPI(url, formData) {
     ],
   });
 }
+
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response) {
+      const { status, data, msg } = error.response.data;
+      // 401 토큰 만료
+      if (status === 401) {
+        throw new Error(msg);
+      } else if (status === 403) {
+        throw new Error(msg);
+      } else if (status === 404) {
+        throw new Error(msg);
+      } else if (status === 500) {
+        throw new Error('Internal Server Error');
+      } else {
+        throw new Error(msg);
+      }
+    } else {
+      throw new Error('Network Error');
+    }
+  },
+);
+
