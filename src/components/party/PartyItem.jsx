@@ -19,7 +19,7 @@ const PartyItem = ({ party }) => {
 
   const dDay = dDayConvertor(partyDate);
 
-  console.log(partyDate);
+  // console.log(partyDate);
   return (
     <PartyItemWrapper>
       <Link to={`${PATH_URL.PARTY_DETAIL}/${partyId}`}>
