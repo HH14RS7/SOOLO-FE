@@ -53,21 +53,24 @@ export const PartyDetailInfo = () => {
     }
   };
 
-  // 모임 수정(임시)
+  // 모임 수정
   const updateParty = partyId => {
-    navigate(`${PATH_URL.PARTY_CREATE}?partyId=${partyId}`);
-    // navigate(`${PATH_URL.PARTY_CREATE}?partyID=${partyId}`,{state: party }); // party 값도 넘겨줘야함
+    navigate(`${PATH_URL.PARTY_CREATE}?partyId=${partyId}`, { state: data });
   };
 
   // 모임 삭제
-  const deletePartyMutation = useMutation(() => deleteAPI(`${PARTIES_URL.PARTY}/${partyId}`), {
-    onSuccess: () => {
-      alert('모임이 삭제되었습니다!'); // 매시지 받아서 처리
+  const deletePartyMutation = useMutation(
+    () => deleteAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${partyId}`),
+    {
+      onSuccess: response => {
+        alert(response.data.msg);
+        navigate(PATH_URL.MAIN);
+      },
+      onError: error => {
+        alert(error.message);
+      },
     },
-    onError: error => {
-      alert(error.message);
-    },
-  });
+  );
 
   const deleteParty = partyId => {
     deletePartyMutation.mutate(partyId);

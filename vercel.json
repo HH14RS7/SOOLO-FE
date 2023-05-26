@@ -1,9 +1,0 @@
-{
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "http://soolo-fe.vercel.app/$1",
-        "status": 301
-      }
-    ]
-  }
