@@ -10,10 +10,10 @@ const Main = () => {
       <Container>
         <MyPartyList />
         <PartyList />
+        <Link to={`${PATH_URL.PARTY_CREATE}`}>
+          <CreateButton>모임 만들기</CreateButton>
+        </Link>
       </Container>
-      <Link to={`${PATH_URL.PARTY_CREATE}`}>
-        <CreateButton>모임 만들기</CreateButton>
-      </Link>
     </Background>
   );
 };
