@@ -1,6 +1,5 @@
 import PartyList from '../components/party/PartyList';
 import MyPartyList from '../components/party/MyPartyList';
-import MyAcceptList from '../components/party/MyAcceptList';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { PATH_URL } from '../shared/constants';
@@ -29,7 +28,6 @@ const Main = () => {
   return (
     <Background>
       <Container>
-        <MyAcceptList />
         {isLogin && <MyPartyList />}
         <PartyList />
         <Link to={`${PATH_URL.PARTY_CREATE}`} onClick={handleLinkClick}>
