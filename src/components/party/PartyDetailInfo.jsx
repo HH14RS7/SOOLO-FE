@@ -6,14 +6,22 @@ import { useMutation } from 'react-query';
 import { styled } from 'styled-components';
 import SojuRoom from '../../assets/sojuroomimg.webp';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 export const PartyDetailInfo = () => {
   const location = useLocation();
   const partyId = location.pathname.split('/')[3];
-
   const navigate = useNavigate();
   const [data, setData] = useState();
   const [buttonText, setButtonText] = useState('모임신청');
+
+  // 모임 게시물 작성 날짜
+  const [partyCreateDate, setPartyCreateDate] = useState();
+  const CreatePartyDate = moment(partyCreateDate).format('YYYY월 MM월 DD일 a HH:mm');
+
+  // 모임 게시물 기한 날짜
+  const [partyDate, setPartyDate] = useState();
+  const formatPartyDate = moment(partyDate).format('YYYY월 MM월 DD일 a HH:mm');
 
   // 모임 상세 조회
   useEffect(() => {
@@ -22,12 +30,19 @@ export const PartyDetailInfo = () => {
         // console.log('response :: ', response.data.data);
         if (response.status === 200) {
           setData(response.data.data);
+          setPartyDate(response.data.data.partyDate);
+          setPartyCreateDate(response.data.data.createdAt);
         }
       })
       .catch(error => {
         console.log('API 요청 중 에러 발생', error);
       });
   }, [partyId]);
+
+  // 모임 신청, 취소 버튼
+  // const handleButtonClick = () => {
+  //   if
+  // }
 
   // 모임 신청, 취소 버튼
   const handleButtonClick = () => {
@@ -77,9 +92,15 @@ export const PartyDetailInfo = () => {
     deletePartyMutation.mutate(partyId);
   };
 
-  //유저 멤버아이디
-  const memberId = data?.memberInfo[0].memberId;
+  // 모임 신청 , 수정 , 삭제 조건부 버튼 렌더링
+  // toString 을 쓰지 않을 경우에 조건부 핸들에 에러가 생김
+  const memberIdData = data?.memberInfo[0].memberId.toString();
+  const userIdData = localStorage?.memberId.toString();
 
+  // 모임 신청할 자격이 있나 없나
+  const memberIdDatas = data?.memberInfo.some(member => member.memberId === userIdData);
+
+  console.log('memberIdDatas :: ', memberIdDatas);
   console.log('data ::', data);
 
   return (
@@ -98,7 +119,7 @@ export const PartyDetailInfo = () => {
               />
             </PartyDetailImg>
             <ProfileBox>
-              <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${memberId}`}>
+              <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${memberIdData}`}>
                 <img
                   src={data?.memberInfo[0].profileImage}
                   alt="profile"
@@ -110,34 +131,87 @@ export const PartyDetailInfo = () => {
                 />
               </Link>
               <ProfileName>{data?.memberInfo[0].memberName}</ProfileName>
+              <MemberImgDiv>
+                {data?.memberInfo.slice(1).map((member, i) => (
+                  <div key={i}>
+                    <img
+                      src={member.profileImage}
+                      alt="profile"
+                      style={{
+                        width: '30px',
+                        height: '30px',
+                        borderRadius: '100%',
+                        marginLeft: '5px',
+                      }}
+                    />
+                  </div>
+                ))}
+              </MemberImgDiv>
             </ProfileBox>
             <LineDiv></LineDiv>
             <PartyName>파티 제목 : {data?.title}</PartyName>
             <div>파티내용 : {data?.content}</div>
-            <div>파티 모집 기간 (모이는 시간)</div>
             <div>현재 인원 : {data?.currentCount} </div>
             <div>최대 인원 : {data?.totalCount}</div>
+            <div>승인 상태 : </div>
             <div>모집중</div>
-            <div>만든 날짜 : {data?.createdAt}</div>
-            <div>수정 날짜 : {data?.modifiedAt}</div>
+            <div>만든 날짜 : {CreatePartyDate}</div>
+            <div>모임 시간 : {formatPartyDate}</div>
             <PartyInfo></PartyInfo>
-            <button id="" onClick={handleButtonClick}>
-              {buttonText}
-            </button>
-            <button
-              onClick={() => {
-                updateParty(partyId);
-              }}
-            >
-              모임수정
-            </button>
-            <button
-              onClick={() => {
-                deleteParty(partyId);
-              }}
-            >
-              모임삭제
-            </button>
+            {memberIdData && userIdData ? (
+              memberIdData === userIdData ? (
+                <>
+                  <button
+                    onClick={() => {
+                      updateParty(partyId);
+                    }}
+                  >
+                    모임수정
+                  </button>
+                  <button
+                    onClick={() => {
+                      deleteParty(partyId);
+                    }}
+                  >
+                    모임삭제
+                  </button>
+                </>
+              ) : (
+                <button
+                  id=""
+                  onClick={handleButtonClick}
+                  disabled={data.state === 0 ? false : true}
+                >
+                  {buttonText}
+                </button>
+              )
+            ) : null}
+
+            {/* 
+
+
+            {memberIdData === userIdData ? (
+              <>
+                <button
+                  onClick={() => {
+                    updateParty(partyId);
+                  }}
+                >
+                  모임수정
+                </button>
+                <button
+                  onClick={() => {
+                    deleteParty(partyId);
+                  }}
+                >
+                  모임삭제
+                </button>
+              </>
+            ) : (
+              <button id="" onClick={handleButtonClick}>
+                {buttonText}
+              </button>
+            )} */}
           </Contents>
         </Container>
       </Background>
@@ -188,6 +262,15 @@ const ProfileBox = styled.div`
 const ProfileName = styled.div`
   font-size: 15px;
   font-weight: bold;
+`;
+
+const MemberImgDiv = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100px;
+  height: 40px;
+  border: 1px solid black;
+  margin: auto;
 `;
 
 // 파티 관련 스타일
