@@ -50,9 +50,7 @@ const MyAcceptItem = ({ party }) => {
           <ProfileImage src={memberProfileImage} alt="memberProfileImage" />
         </Link>
       </li>
-      <button onClick={handleAcceptClick} disabled={awaiting ? false : true}>
-        승인하기
-      </button>
+      <button onClick={handleAcceptClick}>승인하기</button>
       <button onClick={handleRejectClick}>승인거부</button>
     </PartyItemWrapper>
   );
@@ -68,10 +66,6 @@ const ProfileImage = styled.img`
   object-fit: cover;
   border-radius: 50%;
   display: flex;
-`;
-
-const AcceptButton = styled.button`
-  disabled: disabled;
 `;
 
 export default MyAcceptItem;
