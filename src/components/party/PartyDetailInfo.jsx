@@ -30,16 +30,9 @@ export const PartyDetailInfo = () => {
 
   // 모임 신청 / 취소
   const ApplicationButtonHandler = () => {
-    let alertTitle = '';
-    if (data.state === partyStatus.신청전) {
-      alertTitle = '모임이 신청되었습니다';
-    } else if (data.state === partyStatus.승인 || data.state === partyStatus.승인대기) {
-      alertTitle = '모임이 취소되었습니다';
-    }
-
     postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`).then(response => {
       window.location.replace(`/party/detail/${partyId}`);
-      alert(alertTitle);
+      alert(response.data.msg);
     });
   };
 
@@ -154,7 +147,7 @@ export const PartyDetailInfo = () => {
                   모임삭제
                 </button>
               </>
-            ) : data?.state === partyStatus.승인거절 ? (
+            ) : data?.state === partyStatus.승인거절 || data?.recruitmentStatus === false ? (
               ''
             ) : (
               <button
