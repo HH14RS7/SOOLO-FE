@@ -26,7 +26,7 @@ const MyPartyItem = ({ party }) => {
           <p>디데이 : D-{dDay > 0 ? dDay : 0}</p>
           <p>제목 : {title}</p>
           {/* <p>장소 : {address}</p> 지도 작업후 추가 */}
-          <p>승인여부 : {state === 1 ? '승인대기' : '승인완료'}</p>
+          <p>승인여부: {state === 1 ? '승인완료' : state === 2 ? '승인대기' : ''}</p>
           <p>
             모집인원 : {currentCount} / {totalCount}명
           </p>
