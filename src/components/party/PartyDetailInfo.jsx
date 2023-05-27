@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PATH_URL, PARTIES_URL, MEMBER_URL } from '../../shared/constants';
+import { partyStatus } from '../../shared/partyStatus';
 import { deleteAPI, getAPI, postAPI } from '../../api/api';
 import { useMutation } from 'react-query';
 import { styled } from 'styled-components';
@@ -13,25 +14,13 @@ export const PartyDetailInfo = () => {
   const partyId = location.pathname.split('/')[3];
   const navigate = useNavigate();
   const [data, setData] = useState();
-  const [buttonText, setButtonText] = useState('모임신청');
-
-  // 모임 게시물 작성 날짜
-  const [partyCreateDate, setPartyCreateDate] = useState();
-  const CreatePartyDate = moment(partyCreateDate).format('YYYY월 MM월 DD일 a HH:mm');
-
-  // 모임 게시물 기한 날짜
-  const [partyDate, setPartyDate] = useState();
-  const formatPartyDate = moment(partyDate).format('YYYY월 MM월 DD일 a HH:mm');
 
   // 모임 상세 조회
   useEffect(() => {
     getAPI(`${PARTIES_URL.DETAIL}/${partyId}`)
       .then(response => {
-        // console.log('response :: ', response.data.data);
         if (response.status === 200) {
           setData(response.data.data);
-          setPartyDate(response.data.data.partyDate);
-          setPartyCreateDate(response.data.data.createdAt);
         }
       })
       .catch(error => {
@@ -39,34 +28,19 @@ export const PartyDetailInfo = () => {
       });
   }, [partyId]);
 
-  // 모임 신청, 취소 버튼
-  // const handleButtonClick = () => {
-  //   if
-  // }
-
-  // 모임 신청, 취소 버튼
-  const handleButtonClick = () => {
-    if (buttonText === '모임신청') {
-      setButtonText('모임취소');
-      postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`)
-        .then(data => {
-          console.log('data :: ', data);
-          alert('모임이 신청되었습니다.');
-        })
-        .catch(error => {
-          console.log('API 요청 중 에러 : ', error);
-        });
-    } else {
-      setButtonText('모임신청');
-      postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`)
-        .then(data => {
-          console.log('data :: ', data);
-          alert('모임이 취소되었습니다.');
-        })
-        .catch(error => {
-          console.log('API 요청 중 에러 : ', error);
-        });
+  // 모임 신청 / 취소
+  const ApplicationButtonHandler = () => {
+    let alertTitle = '';
+    if (data.state === partyStatus.신청전) {
+      alertTitle = '모임이 신청되었습니다';
+    } else if (data.state === partyStatus.승인 || data.state === partyStatus.승인대기) {
+      alertTitle = '모임이 취소되었습니다';
     }
+
+    postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`).then(response => {
+      window.location.replace(`/party/detail/${partyId}`);
+      alert(alertTitle);
+    });
   };
 
   // 모임 수정
@@ -97,10 +71,6 @@ export const PartyDetailInfo = () => {
   const memberIdData = data?.memberInfo[0].memberId.toString();
   const userIdData = localStorage?.memberId.toString();
 
-  // 모임 신청할 자격이 있나 없나
-  const memberIdDatas = data?.memberInfo.some(member => member.memberId === userIdData);
-
-  console.log('memberIdDatas :: ', memberIdDatas);
   console.log('data ::', data);
 
   return (
@@ -153,43 +123,20 @@ export const PartyDetailInfo = () => {
             <div>파티내용 : {data?.content}</div>
             <div>현재 인원 : {data?.currentCount} </div>
             <div>최대 인원 : {data?.totalCount}</div>
-            <div>승인 상태 : </div>
-            <div>모집중</div>
-            <div>만든 날짜 : {CreatePartyDate}</div>
-            <div>모임 시간 : {formatPartyDate}</div>
-            <PartyInfo></PartyInfo>
-            {memberIdData && userIdData ? (
-              memberIdData === userIdData ? (
-                <>
-                  <button
-                    onClick={() => {
-                      updateParty(partyId);
-                    }}
-                  >
-                    모임수정
-                  </button>
-                  <button
-                    onClick={() => {
-                      deleteParty(partyId);
-                    }}
-                  >
-                    모임삭제
-                  </button>
-                </>
-              ) : (
-                <button
-                  id=""
-                  onClick={handleButtonClick}
-                  disabled={data.state === 0 ? false : true}
-                >
-                  {buttonText}
-                </button>
-              )
-            ) : null}
-
-            {/* 
-
-
+            <div>
+              {data?.state === partyStatus.신청전
+                ? ''
+                : `승인 상태 : ${
+                    data?.state === partyStatus.승인
+                      ? '참여한 모임'
+                      : data?.state === partyStatus.승인대기
+                      ? '승인대기중인 모임'
+                      : '거절된 모임'
+                  }`}
+            </div>
+            <div>모집 상태 : {data?.recruitmentStatus === true ? '모집중' : '모집마감'}</div>
+            <div>만든 날짜 : {moment(data?.createdAt).format('YYYY월 MM월 DD일 a HH:mm')}</div>
+            <div>모임 시간 : {moment(data?.partyDate).format('YYYY월 MM월 DD일 a HH:mm')}</div>
             {memberIdData === userIdData ? (
               <>
                 <button
@@ -207,11 +154,22 @@ export const PartyDetailInfo = () => {
                   모임삭제
                 </button>
               </>
+            ) : data?.state === partyStatus.승인거절 ? (
+              ''
             ) : (
-              <button id="" onClick={handleButtonClick}>
-                {buttonText}
+              <button
+                id="saveBtn"
+                onClick={() => {
+                  ApplicationButtonHandler();
+                }}
+              >
+                {data?.state === partyStatus.신청전
+                  ? '모임 신청'
+                  : data?.state === partyStatus.승인 || data?.state === partyStatus.승인대기
+                  ? '신청 취소'
+                  : ''}
               </button>
-            )} */}
+            )}
           </Contents>
         </Container>
       </Background>
@@ -274,11 +232,8 @@ const MemberImgDiv = styled.div`
 `;
 
 // 파티 관련 스타일
-const PartyInfo = styled.div``;
 
 const PartyName = styled.div`
   font-size: 20px;
   font-weight: bold;
 `;
-
-// 모임 관련 버튼 스타일
