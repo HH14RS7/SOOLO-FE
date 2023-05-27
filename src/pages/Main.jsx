@@ -27,7 +27,6 @@ const Main = () => {
       <Container>
         {isLogin && <MyPartyList />}
         <PartyList />
-
         <Link to={`${PATH_URL.PARTY_CREATE}`} onClick={handleLinkClick}>
           <CreateButton>모임 만들기</CreateButton>
         </Link>

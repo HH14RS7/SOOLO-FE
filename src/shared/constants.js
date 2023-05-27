@@ -27,8 +27,9 @@ export const PARTIES_URL = {
   PARTIES_MAP_INQUIRY: '/map/parties',
   PARTIES_ADD: '/party/new-party',
   PARTY_MY_REQUEST_PARTY: '/party/request',
-  MY_APPROVE_LIST: 'party/apprve',
-  MY_HOST_LIST: 'party/host-party-list',
+  MY_APPROVE_LIST: '/party/approve',
+  MY_HOST_LIST: '/party/host-party-list',
+  ACCEPT: '/party/accept',
 };
 
 export const CHATING_URL = {
