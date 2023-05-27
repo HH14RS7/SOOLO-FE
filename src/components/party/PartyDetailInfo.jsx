@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { PATH_URL, PARTIES_URL } from '../../shared/constants';
+import { PATH_URL, PARTIES_URL, MEMBER_URL } from '../../shared/constants';
 import { deleteAPI, getAPI, postAPI } from '../../api/api';
 import { useMutation } from 'react-query';
 import { styled } from 'styled-components';
 import SojuRoom from '../../assets/sojuroomimg.webp';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 
 export const PartyDetailInfo = () => {
@@ -118,15 +119,17 @@ export const PartyDetailInfo = () => {
               />
             </PartyDetailImg>
             <ProfileBox>
-              <img
-                src={data?.memberInfo[0].profileImage}
-                alt="profile"
-                style={{
-                  width: '50px',
-                  height: '50px',
-                  borderRadius: '100%',
-                }}
-              />
+              <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${memberIdData}`}>
+                <img
+                  src={data?.memberInfo[0].profileImage}
+                  alt="profile"
+                  style={{
+                    width: '50px',
+                    height: '50px',
+                    borderRadius: '100%',
+                  }}
+                />
+              </Link>
               <ProfileName>{data?.memberInfo[0].memberName}</ProfileName>
               <MemberImgDiv>
                 {data?.memberInfo.slice(1).map((member, i) => (

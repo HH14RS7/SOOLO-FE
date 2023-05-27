@@ -13,7 +13,7 @@ export const MEMBER_URL = {
   LOGOUT: '/member/logout',
   MYPAGE_GET: '/member/info',
   MYPAGE_PUT: '/member/update',
-  TARGET_PAGE_GET: '/member/:memberId',
+  TARGET_PAGE_GET: '/member',
 };
 
 export const PARTIES_URL = {
