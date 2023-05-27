@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 
 const Main = () => {
-  const [isLogin, setIsLogin] = useState(false); // Example token state
+  const [isLogin, setIsLogin] = useState(false);
   const token = Cookies.get('Access_key');
 
   useEffect(() => {
@@ -16,12 +16,19 @@ const Main = () => {
     }
   }, [token]);
 
+  const handleLinkClick = e => {
+    if (!isLogin) {
+      e.preventDefault();
+      alert('로그인이 필요합니다.');
+    }
+  };
   return (
     <Background>
       <Container>
         {isLogin && <MyPartyList />}
         <PartyList />
-        <Link to={`${PATH_URL.PARTY_CREATE}`}>
+
+        <Link to={`${PATH_URL.PARTY_CREATE}`} onClick={handleLinkClick}>
           <CreateButton>모임 만들기</CreateButton>
         </Link>
       </Container>
