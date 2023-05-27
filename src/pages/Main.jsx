@@ -3,12 +3,23 @@ import MyPartyList from '../components/party/MyPartyList';
 import { Link } from 'react-router-dom';
 import { PATH_URL } from '../shared/constants';
 import { styled } from 'styled-components';
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 
 const Main = () => {
+  const [isLogin, setIsLogin] = useState(false); // Example token state
+  const token = Cookies.get('Access_key');
+
+  useEffect(() => {
+    if (token) {
+      setIsLogin(true);
+    }
+  }, [token]);
+
   return (
     <Background>
       <Container>
-        <MyPartyList />
+        {isLogin && <MyPartyList />}
         <PartyList />
         <Link to={`${PATH_URL.PARTY_CREATE}`}>
           <CreateButton>모임 만들기</CreateButton>
