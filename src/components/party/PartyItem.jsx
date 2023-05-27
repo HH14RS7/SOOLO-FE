@@ -3,9 +3,13 @@ import { dDayConvertor } from '../../shared/dDayConvertor';
 import { Link } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
 import moment from 'moment';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import Cookies from 'js-cookie';
 
 const PartyItem = ({ party }) => {
+  const [isLogin, setIsLogin] = useState(false);
+  const token = Cookies.get('Access_key');
+
   const {
     partyId,
     title,
@@ -32,10 +36,21 @@ const PartyItem = ({ party }) => {
     }
   }, [state]);
 
-  useEffect(() => {}, [stateMsg]);
+  useEffect(() => {
+    if (token) {
+      setIsLogin(true);
+    }
+  }, [token, stateMsg]);
+
+  const handleLinkClick = e => {
+    if (!isLogin) {
+      e.preventDefault();
+      alert('로그인이 필요합니다.');
+    }
+  };
   return (
     <PartyItemWrapper>
-      <Link to={`${PATH_URL.PARTY_DETAIL}/${partyId}`}>
+      <Link to={`${PATH_URL.PARTY_DETAIL}/${partyId}`} onClick={handleLinkClick}>
         <li key={partyId}>
           <p>디데이 : D-{dDay > 0 ? dDay : 0}</p>
           <p>제목 : {title}</p>
