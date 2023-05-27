@@ -10,6 +10,12 @@ const MyPartyList = () => {
     getAPI(`${PARTIES_URL.MY_PARTIES_LIST}?approveStatus=${approveStatus}`),
   );
 
+  const partyList = data?.data.data;
+
+  if (partyList) {
+    return <div>신청중인 모임이 없습니다.</div>;
+  }
+
   if (isLoading) {
     return <div>로딩중입니다.</div>;
   }
@@ -17,16 +23,13 @@ const MyPartyList = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-
-  const myPartyList = data?.data.data;
-
   return (
     <>
-      {myPartyList?.length > 0 && (
+      {partyList?.length > 0 && (
         <div>
           <h1>신청 모임 리스트</h1>
           <ul>
-            {myPartyList?.map(party => (
+            {partyList?.map(party => (
               <MyPartyItem key={party.partyId} party={party} />
             ))}
           </ul>
