@@ -19,15 +19,16 @@ export const MEMBER_URL = {
 export const PARTIES_URL = {
   DETAIL: '/party', //상세조회
   PARTIES_STATUS_CHANGE: '/party', //수정, 취소, 삭제 기능 통합 URL
-
   PARTIES_LIST: '/parties',
   MY_PARTIES_LIST: '/party/my-party-list',
-  MY_PARTIES_LIST_WAIT: '/party/my-party-list/await',
   PARTIES_DETAIL: '/party/detail',
   PARTIES_APPLICATION: '/party/join',
   PARTIES_CONDITIONS: '/party/accept',
   PARTIES_MAP_INQUIRY: '/map/parties',
   PARTIES_ADD: '/party/new-party',
+  PARTY_MY_REQUEST_PARTY: '/party/request',
+  MY_APPROVE_LIST: 'party/apprve',
+  MY_HOST_LIST: 'party/host-party-list',
 };
 
 export const CHATING_URL = {
