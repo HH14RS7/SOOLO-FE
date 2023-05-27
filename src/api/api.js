@@ -23,31 +23,26 @@ api.interceptors.request.use(
   },
 );
 
-//엑세스 토큰 만료 시 처리 코드 미완성
 api.interceptors.response.use(
-  response => {
-    return response;
-  },
-  async error => {
+  response => response,
+  error => {
     if (error.response) {
-      console.log('api.js => error', error);
       const { status, data, msg } = error.response.data;
+      // 401 토큰 만료
       if (status === 401) {
-        alert('401 에러 입니다');
-        // 403 토큰 만료
+        throw new Error(msg);
       } else if (status === 403) {
-        alert('403 에러 입니다');
+        throw new Error(msg);
       } else if (status === 404) {
-        alert('404 에러 입니다');
+        throw new Error(msg);
       } else if (status === 500) {
-        alert('500 에러 입니다');
+        throw new Error('Internal Server Error');
       } else {
-        alert(msg);
+        throw new Error(msg);
       }
     } else {
-      alert('Network Error');
+      throw new Error('Network Error');
     }
-    return Promise.reject(error);
   },
 );
 
@@ -83,27 +78,3 @@ export async function postImageAPI(url, formData) {
     ],
   });
 }
-
-api.interceptors.response.use(
-  response => response,
-  error => {
-    if (error.response) {
-      const { status, data, msg } = error.response.data;
-      // 401 토큰 만료
-      if (status === 401) {
-        throw new Error(msg);
-      } else if (status === 403) {
-        throw new Error(msg);
-      } else if (status === 404) {
-        throw new Error(msg);
-      } else if (status === 500) {
-        throw new Error('Internal Server Error');
-      } else {
-        throw new Error(msg);
-      }
-    } else {
-      throw new Error('Network Error');
-    }
-  },
-);
-
