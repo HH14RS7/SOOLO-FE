@@ -1,6 +1,6 @@
 import { styled } from 'styled-components';
 import { dDayConvertor } from '../../shared/dDayConvertor';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
 import moment from 'moment';
 import { useEffect, useMemo, useState } from 'react';
@@ -9,6 +9,7 @@ import Cookies from 'js-cookie';
 const PartyItem = ({ party }) => {
   const [isLogin, setIsLogin] = useState(false);
   const token = Cookies.get('Access_key');
+  const navigate = useNavigate();
 
   const {
     partyId,
@@ -46,6 +47,7 @@ const PartyItem = ({ party }) => {
     if (!isLogin) {
       e.preventDefault();
       alert('로그인이 필요합니다.');
+      navigate(PATH_URL.LOGIN);
     }
   };
   return (

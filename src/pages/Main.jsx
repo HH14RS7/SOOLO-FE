@@ -1,6 +1,8 @@
 import PartyList from '../components/party/PartyList';
 import MyPartyList from '../components/party/MyPartyList';
-import { Link } from 'react-router-dom';
+import MyAcceptList from '../components/party/MyAcceptList';
+
+import { Link, useNavigate } from 'react-router-dom';
 import { PATH_URL } from '../shared/constants';
 import { styled } from 'styled-components';
 import Cookies from 'js-cookie';
@@ -9,6 +11,7 @@ import { useEffect, useState } from 'react';
 const Main = () => {
   const [isLogin, setIsLogin] = useState(false);
   const token = Cookies.get('Access_key');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
@@ -20,11 +23,13 @@ const Main = () => {
     if (!isLogin) {
       e.preventDefault();
       alert('로그인이 필요합니다.');
+      navigate(PATH_URL.LOGIN);
     }
   };
   return (
     <Background>
       <Container>
+        <MyAcceptList />
         {isLogin && <MyPartyList />}
         <PartyList />
         <Link to={`${PATH_URL.PARTY_CREATE}`} onClick={handleLinkClick}>

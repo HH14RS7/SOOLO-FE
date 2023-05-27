@@ -20,7 +20,6 @@ const MyAcceptList = () => {
 
   return (
     <div>
-      <h1>승인 요청 리스트</h1>
       {partyList?.map(party => (
         <MyAcceptItem key={party.partyParticipateId} party={party} />
       ))}
