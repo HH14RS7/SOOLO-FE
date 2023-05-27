@@ -22,11 +22,11 @@ const MyPartyList = () => {
 
   return (
     <>
-      {myPartyList && (
+      {myPartyList?.length > 0 && (
         <div>
           <h1>신청 모임 리스트</h1>
           <ul>
-            {myPartyList.map(party => (
+            {myPartyList?.map(party => (
               <MyPartyItem key={party.partyId} party={party} />
             ))}
           </ul>
