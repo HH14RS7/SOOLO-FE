@@ -2,7 +2,15 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
-import { setHours, setMinutes, startOfDay, endOfDay, addMinutes, isSameDay } from 'date-fns';
+import {
+  setHours,
+  setMinutes,
+  startOfDay,
+  endOfDay,
+  addMinutes,
+  isSameDay,
+  addWeeks,
+} from 'date-fns';
 import { styled } from 'styled-components';
 
 const Calendars = ({ selectedDate, setSelectedDate }) => {
@@ -11,6 +19,8 @@ const Calendars = ({ selectedDate, setSelectedDate }) => {
   const minTime =
     selectedDate && isSameDay(selectedDate, now) ? addMinutes(now, 1) : startOfDay(now);
   const maxTime = setMinutes(setHours(endOfDay(now), 23), 59);
+  const maxDate = addWeeks(now, 2);
+
   return (
     <StDatePicker
       selected={selectedDate}
@@ -22,6 +32,7 @@ const Calendars = ({ selectedDate, setSelectedDate }) => {
       dateFormat="yyyy년 MM월 dd일 a h시 mm분"
       locale={ko}
       minDate={now}
+      maxDate={maxDate}
       minTime={minTime}
       maxTime={maxTime}
     />
