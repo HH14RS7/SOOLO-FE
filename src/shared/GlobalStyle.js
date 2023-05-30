@@ -11,7 +11,7 @@ export const GlobalStyle = createGlobalStyle`
     --color-primary-400: #FD6F8E;
     --color-primary-500: #F63D68;
     --color-primary-600: #E31B54;
-    --color-primary-700: #E31B54;
+    --color-primary-700: #C01048;
     --color-primary-800: #A11043;
     --color-primary-900: #89123E;
     
@@ -71,6 +71,7 @@ export const GlobalStyle = createGlobalStyle`
   
   a {
     text-decoration: none;
+    color: none;
   }
 
 
