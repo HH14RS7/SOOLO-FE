@@ -43,13 +43,13 @@ const PartyList = () => {
   const partyList = data?.data.data.partyList;
   if (!partyList) {
     return (
-      <Link to={`${PATH_URL.PARTY_CREATE}`}>
+      <StLink to={`${PATH_URL.PARTY_CREATE}`}>
         <CreateButton>모임만들기</CreateButton>
         <p>
           앗! 모임이 아직 만들어지지 않았어요!
           <br /> 모임을 열어보시면 어떨까요?
         </p>
-      </Link>
+      </StLink>
     );
   }
 
@@ -77,4 +77,9 @@ const CreateButton = styled.button`
   height: 100px;
   border: 1px solid pink;
 `;
+
+const StLink = styled(Link)`
+  text-decolation: none;
+`;
+
 export default PartyList;

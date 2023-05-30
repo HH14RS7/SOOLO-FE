@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import { dDayConvertor } from '../../shared/dDayConvertor';
 import { Link } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
-import moment from 'moment';
+import { formmatedDate } from '../../shared/formattedDate';
 
 const HostPartyItem = ({ party }) => {
   const {
@@ -18,7 +18,7 @@ const HostPartyItem = ({ party }) => {
   } = party;
 
   const dDay = dDayConvertor(partyDate);
-  const formatPartyDate = moment(partyDate).format('YYYY월 MM월 DD일 a HH:mm');
+  const formattedDateTime = formmatedDate(partyDate, 'MM.DD · a h:mm');
 
   return (
     <PartyItemWrapper>
@@ -32,7 +32,7 @@ const HostPartyItem = ({ party }) => {
           <p>
             모집인원 : {currentCount} / {totalCount}명
           </p>
-          <p>모임시간 : {formatPartyDate}</p>
+          <p>모임시간 : {formattedDateTime}</p>
           {memberInfo?.map((member, i) => (
             <ProfileImageWrapper key={i}>
               <ProfileImage src={member.profileImage} alt="profileImage" />

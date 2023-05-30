@@ -2,9 +2,9 @@ import { styled } from 'styled-components';
 import { dDayConvertor } from '../../shared/dDayConvertor';
 import { Link, useNavigate } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
-import moment from 'moment';
 import { useEffect, useMemo, useState } from 'react';
 import Cookies from 'js-cookie';
+import { formmatedDate } from '../../shared/formattedDate';
 
 const PartyItem = ({ party }) => {
   const [isLogin, setIsLogin] = useState(false);
@@ -22,8 +22,9 @@ const PartyItem = ({ party }) => {
     state,
     memberInfo,
   } = party;
+
   const dDay = dDayConvertor(partyDate);
-  const formatPartyDate = moment(partyDate).format('YYYY월 MM월 DD일 a HH:mm');
+  const formattedDateTime = formmatedDate(partyDate, 'MM.DD · a h:mm');
 
   const stateMsg = useMemo(() => {
     if (state === 0) {
@@ -63,7 +64,7 @@ const PartyItem = ({ party }) => {
           <p>
             모집인원 : {currentCount} / {totalCount}명
           </p>
-          <p>모임시간 : {formatPartyDate}</p>
+          <p>모임시간 : {formattedDateTime}</p>
           {memberInfo?.map((member, i) => (
             <div key={i}>
               <ProfileImage src={member.profileImage} alt="profileImage" />

@@ -39,21 +39,19 @@ const MyRequestPartyList = () => {
   const requestPartyList = data?.data.data;
   return (
     <>
+      <select value={approveStatus} onChange={handleSelectChange}>
+        {APPROVE_STATUS_SELECT.map(status => (
+          <option key={status.value} value={status.value}>
+            {status.label}
+          </option>
+        ))}
+      </select>
       {requestPartyList?.length > 0 ? (
-        <div>
-          <select value={approveStatus} onChange={handleSelectChange}>
-            {APPROVE_STATUS_SELECT.map(status => (
-              <option key={status.value} value={status.value}>
-                {status.label}
-              </option>
-            ))}
-          </select>
-          <ul>
-            {requestPartyList.map(party => (
-              <MyRequestPartyItem key={party.partyId} party={party} />
-            ))}
-          </ul>
-        </div>
+        <ul>
+          {requestPartyList.map(party => (
+            <MyRequestPartyItem key={party.partyId} party={party} />
+          ))}
+        </ul>
       ) : (
         <div>신청한 모임이 없습니다.</div>
       )}
