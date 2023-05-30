@@ -10,10 +10,13 @@ import KakaoRedirection from '../components/user/KakaoRedirection';
 import NaverRedirection from '../components/user/NaverRedirection';
 import { UserProfilePage } from '../pages/UserProfilePage';
 import MyPage from '../pages/MyPage';
+import { PartyListMap } from '../pages/PartyListMap';
+import GlobalStyle from './GlobalStyle';
 
 const Router = () => {
   return (
     <BrowserRouter>
+      <GlobalStyle />
       <Layout>
         <Routes>
           <Route path={PATH_URL.MAIN} element={<Main />} />
@@ -25,6 +28,7 @@ const Router = () => {
           <Route exact path={PATH_URL.NAVER} element={<NaverRedirection />} />
           <Route path={`${PATH_URL.PARTY_DETAIL}/:partyId`} element={<PartyDetail />} />
           <Route path={PATH_URL.PARTY_CREATE} element={<PartyCreate />} />
+          <Route path={PATH_URL.PARTY_LIST_MAP} element={<PartyListMap />} />
         </Routes>
       </Layout>
     </BrowserRouter>
