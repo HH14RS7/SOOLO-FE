@@ -67,23 +67,4 @@ q:after {
   content: '';
   content: none;
 }
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-input:focus {
-  outline: none;
-}
-button {
-  border: 0 none;
-  background: none;
-  cursor: pointer;
-}
 
-li {
-  list-style: none;
-}
-
-a {
-  text-decoration: none;
-}
