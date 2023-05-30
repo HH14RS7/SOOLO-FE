@@ -30,13 +30,13 @@ api.interceptors.response.use(
       const { status, data, msg } = error.response.data;
       // 401 토큰 만료
       if (status === 401) {
-        throw new Error(msg);
+        throw new Error('Internal Server Error 501', msg);
       } else if (status === 403) {
-        throw new Error(msg);
+        throw new Error('Internal Server Error 403', msg);
       } else if (status === 404) {
-        throw new Error(msg);
+        throw new Error('Internal Server Error 404', msg);
       } else if (status === 500) {
-        throw new Error('Internal Server Error');
+        throw new Error('Internal Server Error 500', msg);
       } else {
         throw new Error(msg);
       }
@@ -68,6 +68,19 @@ export async function patchAPI(url, data) {
 
 export async function postImageAPI(url, formData) {
   return await api.post(API_URL + url, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    transformRequest: [
+      function () {
+        return formData;
+      },
+    ],
+  });
+}
+
+export async function putUpdateAPI(url, formData) {
+  return await api.put(API_URL + url, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

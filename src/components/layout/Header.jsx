@@ -10,6 +10,7 @@ const Header = () => {
           <FooterBtn onClick={() => navigate('/')}>메인</FooterBtn>
           <FooterBtn onClick={() => navigate('/user/login')}>로그인</FooterBtn>
           <FooterBtn onClick={() => navigate('/party/create')}>모임 생성</FooterBtn>
+          <FooterBtn onClick={() => navigate('/mypage')}>마이페이지</FooterBtn>
         </Container>
       </Background>
     </>

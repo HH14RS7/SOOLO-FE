@@ -9,6 +9,7 @@ import PartyCreate from '../pages/PartyCreate';
 import KakaoRedirection from '../components/user/KakaoRedirection';
 import NaverRedirection from '../components/user/NaverRedirection';
 import { UserProfilePage } from '../pages/UserProfilePage';
+import MyPage from '../pages/MyPage';
 
 const Router = () => {
   return (
@@ -18,6 +19,7 @@ const Router = () => {
           <Route path={PATH_URL.MAIN} element={<Main />} />
           <Route path={PATH_URL.LOGIN} element={<Login />} />
           <Route path={PATH_URL.DETAIL} element={<Detail />} />
+          <Route path={PATH_URL.MYPAGE} element={<MyPage />} />
           <Route path={`${MEMBER_URL.TARGET_PAGE_GET}/:id`} element={<UserProfilePage />} />
           <Route exact path={PATH_URL.KAKAO} element={<KakaoRedirection />} />
           <Route exact path={PATH_URL.NAVER} element={<NaverRedirection />} />
