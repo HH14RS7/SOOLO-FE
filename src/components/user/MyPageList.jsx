@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import { MEMBER_URL } from '../../shared/constants';
+import { MEMBER_URL, PATH_URL } from '../../shared/constants';
 import { getAPI } from '../../api/api';
 import { styled } from 'styled-components';
 import UserUpdate from './UserUpdate';
+import { Link } from 'react-router-dom';
 
 export const MyPageList = () => {
   const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
@@ -47,9 +48,13 @@ export const MyPageList = () => {
             </PartyDetailImg>
             <LineDiv></LineDiv>
             <ButtonCon>
-              <Button>내가 신청한 모임리스트</Button>
+              <Link to={`${PATH_URL.MY_REQUEST_PARTY}`}>
+                <Button>내가 신청한 모임리스트</Button>
+              </Link>
               <br />
-              <Button>내가 개설한 모임리스트</Button>
+              <Link to={`${PATH_URL.MY_CREATE_PARTY}`}>
+                <Button>내가 개설한 모임리스트</Button>
+              </Link>
             </ButtonCon>
           </Contents>
         </Container>

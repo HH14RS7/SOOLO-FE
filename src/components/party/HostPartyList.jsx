@@ -20,13 +20,17 @@ const HostPartyList = () => {
 
   return (
     <>
-      <div>
-        <ul>
-          {partyList?.map(party => (
-            <HostPartyItem key={party.partyId} party={party} />
-          ))}
-        </ul>
-      </div>
+      {partyList?.length > 0 ? (
+        <div>
+          <ul>
+            {partyList?.map(party => (
+              <HostPartyItem key={party.partyId} party={party} />
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <div>개설한 모임이 없습니다</div>
+      )}
     </>
   );
 };
