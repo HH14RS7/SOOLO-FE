@@ -37,12 +37,10 @@ const MyRequestPartyList = () => {
     return <div>Error: {error.message}</div>;
   }
   const requestPartyList = data?.data.data;
-
   return (
     <>
-      {requestPartyList?.length > 0 && (
+      {requestPartyList?.length > 0 ? (
         <div>
-          <h1>내가 신청한 모임 리스트</h1>
           <select value={approveStatus} onChange={handleSelectChange}>
             {APPROVE_STATUS_SELECT.map(status => (
               <option key={status.value} value={status.value}>
@@ -51,11 +49,13 @@ const MyRequestPartyList = () => {
             ))}
           </select>
           <ul>
-            {requestPartyList?.map(party => (
+            {requestPartyList.map(party => (
               <MyRequestPartyItem key={party.partyId} party={party} />
             ))}
           </ul>
         </div>
+      ) : (
+        <div>신청한 모임이 없습니다.</div>
       )}
     </>
   );

@@ -20,7 +20,7 @@ function LandingPage() {
   return (
     <>
       <form ref={formRef} onSubmit={handleSubmit}>
-        <input placeholder="장소를 입력하세요" value={inputText} onChange={handleChange} />
+        <input placeholder="지역을 입력해주세요" value={inputText} onChange={handleChange} />
       </form>
       <MapContainer searchPlace={place} />
     </>
