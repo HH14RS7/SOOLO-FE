@@ -32,7 +32,6 @@ function UserUpdate({ memberName, profileImage, isModalOpen }) {
     const formData = new FormData();
     const data = {
       memberName: input || memberName,
-      age: 0,
     };
 
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
