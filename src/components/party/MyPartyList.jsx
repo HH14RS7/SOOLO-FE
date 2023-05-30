@@ -12,10 +12,6 @@ const MyPartyList = () => {
 
   const partyList = data?.data.data;
 
-  if (partyList) {
-    return <div>신청중인 모임이 없습니다.</div>;
-  }
-
   if (isLoading) {
     return <div>로딩중입니다.</div>;
   }
