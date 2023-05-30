@@ -2,6 +2,7 @@ export const PATH_URL = {
   MAIN: '/',
   LOGIN: '/user/login',
   DETAIL: '/detail/:detailId',
+  MYPAGE: '/mypage',
   KAKAO: '/kakao/callback',
   NAVER: '/naver/callback',
   PARTY_DETAIL: '/party/detail',
