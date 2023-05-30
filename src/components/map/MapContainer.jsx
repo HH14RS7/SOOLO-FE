@@ -9,7 +9,7 @@ const MapContainer = ({ searchPlace }) => {
   const [map, setMap] = useState(null);
 
   const latitude = loaction.coordinates.latitude; // 위도
-  const longtitude = loaction.coordinates.longtitude; // 경도
+  const longitude = loaction.coordinates.longitude; // 경도
 
   useEffect(() => {
     // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성
@@ -17,7 +17,7 @@ const MapContainer = ({ searchPlace }) => {
 
     const container = document.getElementById('map'); // 지도를 표시할 div
     const centerCoordinate = new kakao.maps.LatLng(37.496777, 127.028185); // 중심 좌표(강남역)
-    // const centerCoordinate = new kakao.maps.LatLng(latitude, longtitude); // 현재위치 중심 좌표
+    // const centerCoordinate = new kakao.maps.LatLng(latitude, longitude); // 현재위치 중심 좌표
 
     const options = {
       center: centerCoordinate, // 중심 좌표 설정
@@ -39,6 +39,7 @@ const MapContainer = ({ searchPlace }) => {
 
     // 키워드 검색 요청 함수
     const placesSearchCB = (data, status, pagination) => {
+      console.log('계속요청');
       if (status === kakao.maps.services.Status.OK) {
         let bounds = new kakao.maps.LatLngBounds();
 
@@ -77,7 +78,7 @@ const MapContainer = ({ searchPlace }) => {
       }
 
       for (i = 1; i <= pagination.last; i++) {
-        var el = document.createElement('a');
+        const el = document.createElement('a');
         el.href = '#';
         el.innerHTML = i;
 
@@ -109,15 +110,14 @@ const MapContainer = ({ searchPlace }) => {
         infowindow.open(map, marker);
       });
     };
-  }, [searchPlace]);
+  }, [latitude, longitude, searchPlace]);
 
   const handlePlaceClick = item => {
     console.log(item);
   };
 
-  //
   const handleCurrentLocation = () => {
-    const currentLocation = new kakao.maps.LatLng(latitude, longtitude);
+    const currentLocation = new kakao.maps.LatLng(latitude, longitude);
     map.panTo(currentLocation);
   };
 
