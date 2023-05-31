@@ -12,6 +12,7 @@ export const PATH_URL = {
   PARTY_LIST_MAP: '/party/list/map',
   MY_REQUEST_PARTY: '/mypage/party/request',
   MY_CREATE_PARTY: '/mypage/party/create',
+};
 
 export const MEMBER_URL = {
   LOGIN: '/member/login',
