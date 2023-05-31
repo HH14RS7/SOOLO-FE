@@ -5,6 +5,7 @@ import useGeolocation from '../../hooks/useGeolocation';
 import { styled } from 'styled-components';
 import ReactDOMServer from 'react-dom/server';
 import SelectedPartyItem from './SelectedPartyItem';
+import { formmatedDate } from '../../shared/formattedDate';
 const { kakao } = window;
 
 const PartyMapContainer = ({ searchPlace, partyInfo }) => {
@@ -127,29 +128,29 @@ const PartyMapContainer = ({ searchPlace, partyInfo }) => {
           height: '300px',
         }}
       />
+      <button onClick={handleCurrentLocation}>현재 위치로 찾기</button>
       <div>
         {selectedParty ? (
           <SelectedPartyItem party={selectedParty} />
         ) : (
           partyInfo?.map(party => (
-            <div key={party.partyId}>
+            <ListMapper key={party.partyId}>
               <p>{party.title}</p>
-              <p>
+              <PlaceImage src={party.image} alt="placeImage" />
+              <span>{party.stationName ? party.stationName : party.placeAddress}</span>
+              <span>
                 {party.currentCount}/{party.totalCount}
-              </p>
-              <p>{party.partyDate}</p>
-              <p>{party.address}</p>
-            </div>
+              </span>
+              <p> {formmatedDate(party.partyDate, 'MM.DD · a h:mm')}</p>
+            </ListMapper>
           ))
         )}
       </div>
-
-      <button onClick={handleCurrentLocation}>현재 위치로 찾기</button>
     </>
   );
 };
 
-const Wrapper = styled.div`
+const ListMapper = styled.div`
   border: 1px solid black;
   font-size: 14px;
 `;
@@ -170,11 +171,12 @@ const PlaceName = styled.h1`
   font-size: var(--font-small);
 `;
 
-const OverlayArrow = styled.div`
-  /* styles for overlayArrow */
-`;
+const OverlayArrow = styled.div``;
 
-const CustomOverlay = styled.div`
-  /* styles for customOverlay */
+const CustomOverlay = styled.div``;
+
+const PlaceImage = styled.img`
+  width: 30px;
+  height: 30px;
 `;
 export default PartyMapContainer;

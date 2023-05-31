@@ -12,9 +12,9 @@ const PartyCreate = () => {
 
   return (
     <>
-      <PartyForm />
       <SearchLocation onPlaceChange={handlePlaceChange} />
       <MapContainer searchPlace={place} />
+      <PartyForm />
     </>
   );
 };
