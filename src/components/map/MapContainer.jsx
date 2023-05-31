@@ -1,23 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import useGeolocation from '../../hooks/useGeolocation';
 import { styled } from 'styled-components';
+import { useSetRecoilState } from 'recoil';
+import { mapDataState, stationDataState } from '../../atoms';
 
 const { kakao } = window;
 
 const MapContainer = ({ searchPlace }) => {
   const currentloaction = useGeolocation();
-  const [Places, setPlaces] = useState([]);
   const mapRef = useRef();
-  const [distance, setDistance] = useState(0); // 중심좌표와 대표역과의 거리
-  const [nearbyStation, setNearbyStation] = useState(''); // 검색기반 가까운 역이름
+  const [Places, setPlaces] = useState([]);
+  const setStationData = useSetRecoilState(stationDataState);
+  const setMapData = useSetRecoilState(mapDataState);
+
   const STATION_CATEGORY_CODE = 'SW8'; // 지하철역 카테고리 코드
-
+  const latitude = currentloaction.latitude; // 위도
+  const longitude = currentloaction.longitude; // 경도
   const initialCurrentPosition = new kakao.maps.LatLng(37.496777, 127.028185); // 초기 중심 좌표(강남역)
+
   const [currentCenter, setCurrentCenter] = useState(initialCurrentPosition);
-
-  const latitude = currentloaction.coordinates.latitude; // 위도
-  const longitude = currentloaction.coordinates.longitude; // 경도
-
   useEffect(() => {
     // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성
     const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
@@ -28,9 +29,6 @@ const MapContainer = ({ searchPlace }) => {
     };
 
     mapRef.current = new kakao.maps.Map(container, options); // 지도 생성
-    // 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성
-    // const zoomControl = new kakao.maps.ZoomControl();
-    // mapRef.current.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
     // 장소 검색 객체 생성
     const ps = new kakao.maps.services.Places();
@@ -46,7 +44,7 @@ const MapContainer = ({ searchPlace }) => {
         }
 
         if (data.length > 0) {
-          const firstPlace = data[0]; // 검색된 첫번째 배열을 중심좌표로 설정
+          const firstPlace = data[0];
           const newCenter = new kakao.maps.LatLng(firstPlace.y, firstPlace.x);
           mapRef.current.setCenter(newCenter);
         }
@@ -68,36 +66,13 @@ const MapContainer = ({ searchPlace }) => {
       size: 6, // 한 페이지내 마커 개수 출력
       level: 3,
       location: currentCenter,
-      sort: kakao.maps.services.SortBy.ACCURANCE, // 정확도 정렬
+      sort: kakao.maps.services.SortBy.ACCURANCE, // 정확도순 정렬
     };
-
-    // 주변역 검색 요청 함수
-    // const nearbyStationsSearch = () => {
-    //   ps.categorySearch(STATION_CATEGORY_CODE, (result, status) => {
-    //     if (status === kakao.maps.services.Status.OK) {
-    //       result.forEach(station => {
-    //         // setDistance(calculateDistance(currentCenter, station)); // 중심 좌표와의 거리 계산
-    //         setNearbyStation(station.place_name);
-    //       });
-    //       console.log('주변역과의 거리:', distance);
-    //       console.log('주변역:', nearbyStation);
-    //     }
-    //   });
-    // };
-
-    // // 중심 좌표와 역의 좌표 사이의 거리 계산 함수
-    // const calculateDistance = (center, station) => {
-    //   const centerLatLng = new kakao.maps.LatLng(center.getLat(), center.getLng());
-    //   const stationLatLng = new kakao.maps.LatLng(station.y, station.x);
-    //   const distance = centerLatLng.distanceTo(stationLatLng);
-    //   return distance;
-    // };
 
     // 검색키워드 함수 호출
     if (searchPlace) {
       ps.keywordSearch(searchPlace, placesSearchCB, searchOptions);
     }
-
     // 검색결과 목록 하단에 페이지 번호 표시
     const displayPagination = pagination => {
       var paginationEl = document.getElementById('pagination'),
@@ -128,6 +103,30 @@ const MapContainer = ({ searchPlace }) => {
       paginationEl.appendChild(fragment);
     };
 
+    // 주변역 검색 요청 함수
+    const nearbyStationsSearch = (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const nearbyStation = result[0];
+        if (nearbyStation) {
+          // console.log('가장 가까운 역과의 거리:', nearbyStation.distance); // m단위(0인경우 1m미만)
+          // console.log('가장 가까운 역:', nearbyStation.place_name);
+
+          const stationData = {
+            distance: nearbyStation.distance,
+            stationName: nearbyStation.place_name,
+          };
+
+          setStationData(stationData);
+        }
+      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        alert('검색 결과가 존재하지 않습니다.');
+        return;
+      } else if (status === kakao.maps.services.Status.ERROR) {
+        alert('검색 결과 중 오류가 발생했습니다.');
+        return;
+      }
+    };
+
     const displayMarker = place => {
       const marker = new kakao.maps.Marker({
         map: mapRef.current,
@@ -138,9 +137,18 @@ const MapContainer = ({ searchPlace }) => {
         // console.log('위도:', place.y); // latitude
         // console.log('경도:', place.x); // longitude
         // console.log('장소명:', place.place_name); // placeName
-        // console.log('장소 URL:', place.place_url); // placeUrl
-        // console.log(':', place.place_url); // placeUrl
-        // nearbyStationsSearch();
+        //console.log('장소위치', place.place_address); //placeAddress
+        // console.log('장소 URL:', place.road_address_name); // placeUrl
+
+        saveMapData(place);
+
+        const categoryOptions = {
+          location: new kakao.maps.LatLng(place.y, place.x),
+          radius: 5000,
+          sort: kakao.maps.services.SortBy.DISTANCE,
+          category: STATION_CATEGORY_CODE,
+        };
+        ps.categorySearch(STATION_CATEGORY_CODE, nearbyStationsSearch, categoryOptions);
 
         infowindow.setContent(
           '<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>',
@@ -148,11 +156,25 @@ const MapContainer = ({ searchPlace }) => {
         infowindow.open(mapRef.current, marker);
       });
     };
-  }, [latitude, longitude, searchPlace]);
+  }, [searchPlace]);
+
+  // console.log('여기서 stationinfo', stationInfo);
+  // console.log('여기서 한번더data', mapData);
+
+  // 정보 data에 담기
+  const saveMapData = item => {
+    const newMapData = {
+      latitude: item.y,
+      longitude: item.x,
+      placeName: item.place_name,
+      placeAddress: item.road_address_name,
+      placeUrl: item.place_url,
+    };
+    setMapData(newMapData);
+  };
 
   const handlePlaceClick = item => {
-    // 여기서 data를 다 담아줘야한다.
-    console.log(item);
+    saveMapData(item);
   };
 
   const zoomIn = () => {
@@ -173,7 +195,6 @@ const MapContainer = ({ searchPlace }) => {
   return (
     <div>
       <Map id="map">
-        {/* 지도 확대, 축소 컨트롤 div 입니다 */}
         <ZoomControlContainer>
           <ZoomButton onClick={zoomIn}>
             <img
