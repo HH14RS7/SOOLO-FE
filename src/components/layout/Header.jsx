@@ -25,14 +25,14 @@ const Background = styled.div`
 `;
 
 const Container = styled.div`
-  width: 390px;
-  height: 100%;
-  background: #1e1e1e;
+  width: 375px;
+  height: 52px;
+  background: #c3c3c3;
   margin: 0 auto;
   padding-top: 20px;
   padding-bottom: 20px;
 `;
 
 const FooterBtn = styled.button`
-  color: white;
+  color: black;
 `;

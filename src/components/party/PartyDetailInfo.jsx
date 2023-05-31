@@ -64,6 +64,8 @@ export const PartyDetailInfo = () => {
   const memberIdData = data?.memberInfo[0].memberId.toString();
   const userIdData = localStorage?.memberId.toString();
 
+  const BtnYesHandler = memberIdData === userIdData && data?.recruitmentStatus === true;
+
   console.log('data ::', data);
 
   return (
@@ -130,7 +132,7 @@ export const PartyDetailInfo = () => {
             <div>모집 상태 : {data?.recruitmentStatus === true ? '모집중' : '모집마감'}</div>
             <div>만든 날짜 : {moment(data?.createdAt).format('YYYY월 MM월 DD일 a HH:mm')}</div>
             <div>모임 시간 : {moment(data?.partyDate).format('YYYY월 MM월 DD일 a HH:mm')}</div>
-            {memberIdData === userIdData ? (
+            {BtnYesHandler ? (
               <>
                 <button
                   onClick={() => {

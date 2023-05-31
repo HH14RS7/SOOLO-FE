@@ -6,6 +6,8 @@ export const PATH_URL = {
   NAVER: '/naver/callback',
   PARTY_DETAIL: '/party/detail',
   PARTY_CREATE: '/party/create',
+  PARTY_CHAT: '/party/chat',
+  PARTY_CHATROOM: '/party/chat/room',
 };
 
 export const MEMBER_URL = {
