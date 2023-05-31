@@ -14,7 +14,11 @@ export const PartyListMap = () => {
       latitude: 37.494272356526984,
       longitude: 127.0280802697825,
       placeName: '홀릭스',
-      address: '서울 서초구 서초대로77길 24',
+      placeAddress: '서울 서초구 서초대로77길 24',
+      distance: 3,
+      stationName: '강남역 신분당선',
+      image:
+        'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
     },
     {
       partyId: 2,
@@ -25,8 +29,12 @@ export const PartyListMap = () => {
       currentCount: 2,
       latitude: 37.5000892164148,
       longitude: 127.028240773556,
-      address: '서울 강남구 강남대로96길 15',
+      placeAddress: '서울 강남구 강남대로96길 15',
       placeName: '하이퍼서울',
+      distance: 251,
+      stationName: '언주역 2호선',
+      image:
+        'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
     },
     {
       partyId: 3,
@@ -38,7 +46,11 @@ export const PartyListMap = () => {
       latitude: 37.4939696557259,
       longitude: 127.027921843719,
       placeName: '먼데이블루스',
-      address: '서울 서초구 강남대로53길 11',
+      placeAddress: '서울 서초구 강남대로53길 11',
+      distance: 252,
+      stationName: '강남역',
+      image:
+        'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
     },
     {
       partyId: 4,
@@ -50,7 +62,10 @@ export const PartyListMap = () => {
       latitude: 37.495759373328156,
       longitude: 127.03361964276374,
       placeName: '언더그라운드',
-      address: '서울 강남구 역삼로9길 25',
+      placeAddress: '서울 강남구 역삼로9길 25',
+      distance: 1000,
+      image:
+        'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
     },
     {
       partyId: 5,
@@ -62,7 +77,11 @@ export const PartyListMap = () => {
       latitude: 37.29243939383418,
       longitude: 127.04860740073208,
       placeName: '역전할머니맥주',
-      address: '경기 수원시 영통구 센트럴타운로 107',
+      placeAddress: '경기 수원시 영통구 센트럴타운로 107',
+      distance: 1003,
+      stationName: '광교중앙역',
+      image:
+        'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
     },
   ];
   const [place, setPlace] = useState('');
