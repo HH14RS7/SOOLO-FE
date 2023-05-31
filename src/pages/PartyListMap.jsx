@@ -1,12 +1,12 @@
 import { styled } from 'styled-components';
-import LandingPage from '../components/map/LandingPage';
+import SearchLocation from '../components/map/SearchLocation';
 import PartyMapContainer from '../components/map/PartyMapContainer';
 import { useRef, useState } from 'react';
 export const PartyListMap = () => {
   const partyLists = [
     {
       partyId: 1,
-      title: '모임1',
+      title: '밤새 술 먹을 파티 구합니다.',
       partyDate: '2023-05-29T22:20',
       recruitmentStatus: false,
       totalCount: 2,
@@ -18,7 +18,7 @@ export const PartyListMap = () => {
     },
     {
       partyId: 2,
-      title: '모임2',
+      title: '알쓰들의 모임',
       partyDate: '2023-05-30T22:20',
       recruitmentStatus: false,
       totalCount: 4,
@@ -30,7 +30,7 @@ export const PartyListMap = () => {
     },
     {
       partyId: 3,
-      title: '모임3',
+      title: '오늘 밤 술 달려봅시다',
       partyDate: '2023-05-31T22:20',
       recruitmentStatus: false,
       totalCount: 4,
@@ -42,7 +42,7 @@ export const PartyListMap = () => {
     },
     {
       partyId: 4,
-      title: '모임4',
+      title: '맛있는 안주랑 같이',
       partyDate: '2023-06-03T22:20',
       recruitmentStatus: false,
       totalCount: 5,
@@ -54,7 +54,7 @@ export const PartyListMap = () => {
     },
     {
       partyId: 5,
-      title: '모임5',
+      title: '역전할매 ㄱㄱ',
       partyDate: '2023-06-03T22:20',
       recruitmentStatus: false,
       totalCount: 5,
@@ -65,56 +65,20 @@ export const PartyListMap = () => {
       address: '경기 수원시 영통구 센트럴타운로 107',
     },
   ];
-
-  const [inputText, setInputText] = useState('');
   const [place, setPlace] = useState('');
-  const inputRef = useRef(null);
 
-  const handleChange = e => {
-    setInputText(e.target.value);
+  const handlePlaceChange = value => {
+    setPlace(value);
   };
-
-  const handleSubmit = e => {
-    e.preventDefault();
-    const searchPlace = inputRef.current.value;
-    setPlace(searchPlace);
-    setInputText('');
-  };
-
   return (
     <>
       <div>
-        <form onSubmit={handleSubmit}>
-          <input
-            ref={inputRef}
-            placeholder="지역을 입력해주세요"
-            value={inputText}
-            onChange={handleChange}
-          />
-        </form>
+        <SearchLocation onPlaceChange={handlePlaceChange} />
         <PartyMapContainer searchPlace={place} partyInfo={partyLists} />
         <div>주변 모임 리스트 {partyLists?.length}</div>
-        <div>
-          {/* PartyItem재활용하면 될듯하다 */}
-          {partyLists.map(party => (
-            <Wrapper key={party.partyId}>
-              <p>{party.title}</p>
-              <p>
-                {party.currentCount}/ {party.totalCount}
-              </p>
-              <p>{party.partyDate}</p>
-              <p>{party.address}</p>
-            </Wrapper>
-          ))}
-        </div>
         {/* 주변모임리스트의 address와 일치하거나 keyword같은 애들만 나온다. */}
         {/* 현재 위치로 찾기 버튼을 클릭하면 latitude, longitude 가 움직이며 리스트의 내용들의 마커가 반경 중심으로바뀐다. */}
       </div>
     </>
   );
 };
-
-const Wrapper = styled.div`
-  border: 1px solid black;
-  font-size: 14px;
-`;

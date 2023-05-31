@@ -1,7 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import marker from '../../assets/marker.svg';
 import useGeolocation from '../../hooks/useGeolocation';
+import { styled } from 'styled-components';
+import ReactDOMServer from 'react-dom/server';
+import SelectedPartyItem from './SelectedPartyItem';
 const { kakao } = window;
 
 const PartyMapContainer = ({ searchPlace, partyInfo }) => {
@@ -9,14 +12,18 @@ const PartyMapContainer = ({ searchPlace, partyInfo }) => {
   const currentloaction = useGeolocation();
   const mapRef = useRef();
   const markersRef = useRef([]);
+  const [selectedParty, setSelectedParty] = useState(null); // Track the selected party
 
   const latitude = currentloaction.coordinates.latitude; // 위도
   const longitude = currentloaction.coordinates.longitude; // 경도
+  const centerCoordinate = new kakao.maps.LatLng(37.496777, 127.028185); // 중심 좌표(강남역)
+
   useEffect(() => {
     const container = document.getElementById('map');
     const options = {
-      center: new kakao.maps.LatLng(37.496777, 127.028185),
+      center: centerCoordinate,
       level: 5,
+      // radius: 10000,
     };
 
     mapRef.current = new kakao.maps.Map(container, options);
@@ -28,7 +35,6 @@ const PartyMapContainer = ({ searchPlace, partyInfo }) => {
       console.log(searchPlace);
       if (status === kakao.maps.services.Status.OK) {
         const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-        // console.log('현재위치', coords);
         mapRef.current.setCenter(coords);
         markersRef.current.forEach(marker => marker.setMap(null));
       }
@@ -43,6 +49,8 @@ const PartyMapContainer = ({ searchPlace, partyInfo }) => {
         title: info.placeName,
         lat: info.latitude,
         lng: info.longitude,
+        partyId: info.partyId,
+        yAnchor: 1,
       };
     });
 
@@ -58,26 +66,24 @@ const PartyMapContainer = ({ searchPlace, partyInfo }) => {
         title: el.title,
         image: markerImage,
       });
-      // markersRef.current = [];
-
-      // markersRef.current.push(newMarker);
 
       // 기존 마커 제거
-
-      const content =
-        '<div class="overlayWrap">' +
-        '    <div class="accommInfoWrap">' +
-        `        <h1 class="accommName">${el.title}</h1>` +
-        '    </div>' +
-        '    <div class="overlayArrow">' +
-        '</div>';
+      const overlayContent = ReactDOMServer.renderToString(
+        <OverlayWrap>
+          <PlaceName>{el.title}</PlaceName>
+          <OverlayArrow />
+        </OverlayWrap>,
+      );
 
       const position = new kakao.maps.LatLng(el.lat, el.lng);
       const customOverlay = new kakao.maps.CustomOverlay({
         position: position,
-        content: content,
+        content: overlayContent,
+        // content: content,
+        // content: () => content(el.title),
       });
 
+      // 마커에 mouseover시 오버레이(가게명)
       kakao.maps.event.addListener(marker, 'mouseover', function () {
         customOverlay.setMap(mapRef.current);
       });
@@ -86,6 +92,22 @@ const PartyMapContainer = ({ searchPlace, partyInfo }) => {
         setTimeout(function () {
           customOverlay.setMap();
         });
+      });
+
+      // 마커 클릭시 목록 출력
+      kakao.maps.event.addListener(marker, 'click', function () {
+        const selected = partyInfo.find(info => info.partyId === el.partyId);
+        setSelectedParty(selected);
+      });
+
+      // 오버레이 클릭 이벤트
+      kakao.maps.event.addListener(customOverlay, 'click', function () {
+        const selected = partyInfo.find(info => info.partyId === el.partyId);
+        setSelectedParty(selected);
+      });
+
+      kakao.maps.event.addListener(mapRef.current, 'click', function () {
+        setSelectedParty(null);
       });
     });
   }, [partyInfo]);
@@ -105,9 +127,54 @@ const PartyMapContainer = ({ searchPlace, partyInfo }) => {
           height: '300px',
         }}
       />
+      <div>
+        {selectedParty ? (
+          <SelectedPartyItem party={selectedParty} />
+        ) : (
+          partyInfo?.map(party => (
+            <div key={party.partyId}>
+              <p>{party.title}</p>
+              <p>
+                {party.currentCount}/{party.totalCount}
+              </p>
+              <p>{party.partyDate}</p>
+              <p>{party.address}</p>
+            </div>
+          ))
+        )}
+      </div>
+
       <button onClick={handleCurrentLocation}>현재 위치로 찾기</button>
     </>
   );
 };
 
+const Wrapper = styled.div`
+  border: 1px solid black;
+  font-size: 14px;
+`;
+
+const OverlayWrap = styled.div`
+  background-color: var(--color-primary-500);
+  border: 1px solid var(--color-primary-700);
+  width: 111px;
+  height: 40px;
+  border-radius: 8px;
+  flex: display;
+  justify-content: center;
+  align-items: center;
+`;
+
+const PlaceName = styled.h1`
+  color: var(--color-gray-25);
+  font-size: var(--font-small);
+`;
+
+const OverlayArrow = styled.div`
+  /* styles for overlayArrow */
+`;
+
+const CustomOverlay = styled.div`
+  /* styles for customOverlay */
+`;
 export default PartyMapContainer;
