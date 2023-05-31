@@ -1,15 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { PATH_URL, PARTIES_URL } from '../../shared/constants';
 import { useMutation } from 'react-query';
-import { putAPI, postImageAPI } from '../../api/api';
 import Calendars from '../../shared/Calendars';
 import moment from 'moment';
 import { useRecoilValue } from 'recoil';
 import { mapDataState, stationDataState } from '../../atoms';
-import { putUpdateAPI } from '../../api/api';
+import { putUpdateAPI, postImageAPI } from '../../api/api';
 
 const CreateForm = () => {
   const mapData = useRecoilValue(mapDataState);
@@ -20,10 +20,15 @@ const CreateForm = () => {
   const location = useLocation();
   const partyId = parseInt(new URLSearchParams(location.search).get('partyId'));
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [previewImage, setPreviewImage] = useState(null);
   const party = location.state || {};
+  party.imageUrl =
+    'https://walkingpuppy7.s3.ap-northeast-2.amazonaws.com/S39e3918e3-a1f8-4ccc-ba8e-9cc70797c6d2.jpeg';
+  const [previewImage, setPreviewImage] = useState(party.imgUrl || null);
   const isEdit = !!partyId;
   const imgRef = useRef();
+  const noImg = '/img/no-img.jpg';
+  const [img, setImg] = useState(noImg);
+
   const {
     register,
     handleSubmit,
@@ -63,6 +68,7 @@ const CreateForm = () => {
     if (isEdit) {
       const partyDate = moment(party.partyDate).format('YYYY-MM-DD HH:mm');
       setSelectedDate(new Date(partyDate));
+
       reset({
         title: party.title,
         content: party.content,
@@ -74,13 +80,13 @@ const CreateForm = () => {
         placeUrl: party.placeUrl,
         stationName: party.stationName,
         distance: party.distance,
+        img: party.imageUrl,
       });
     }
   }, []);
 
   // 수정
   const updateMutation = useMutation(
-    // data => putAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${partyId}`, data),
     formData => putUpdateAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${partyId}`, formData),
     {
       onSuccess: response => {
@@ -126,11 +132,9 @@ const CreateForm = () => {
       distance,
     };
 
-    console.log(data);
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
     img && formData.append('image', img);
     if (isEdit) {
-      // updateMutation.mutate(item);
       updateMutation.mutate(formData);
     } else {
       createMutation.mutate(formData);
@@ -147,6 +151,7 @@ const CreateForm = () => {
         setPreviewImage(reader.result);
       };
       reader.readAsDataURL(file);
+      setImg(file);
     }
   };
   return (
@@ -179,8 +184,7 @@ const CreateForm = () => {
         <label htmlFor="partyDate">모임일시</label>
         <input type="hidden" {...register('partyDate', { value: selectedDate })} />
         <PlaceImageWrapper>
-          {/* 이미지 있으면 그 값으로 보여줘야한다....근데 지금?어쩔... */}
-          <PlaceImage src={previewImage} alt="PlaceImage" />
+          <PlaceImage src={previewImage || party.imageUrl || noImg} alt="PlaceImage" />
         </PlaceImageWrapper>
         <FileInput
           type="file"
