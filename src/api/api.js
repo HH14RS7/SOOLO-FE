@@ -11,10 +11,11 @@ api.interceptors.request.use(
   config => {
     //cookie에 access_token,refresh_token을 어떤 이름으로 저장했는지?
     const accesskey = Cookies.get('Access_key');
-    //const refreshkey = Cookies.get('Refresh_key');
+    const refreshkey = Cookies.get('Refresh_key');
 
     if (accesskey) {
       config.headers['Access_key'] = `Bearer ${accesskey}`;
+      config.headers['Refresh_key'] = `Bearer ${refreshkey}`;
     }
     return config;
   },
