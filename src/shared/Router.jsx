@@ -9,6 +9,8 @@ import PartyCreate from '../pages/PartyCreate';
 import KakaoRedirection from '../components/user/KakaoRedirection';
 import NaverRedirection from '../components/user/NaverRedirection';
 import { UserProfilePage } from '../pages/UserProfilePage';
+import { Chatpage } from '../pages/Chatpage';
+import { ChatRoom } from '../pages/ChatRoom';
 import MyPage from '../pages/MyPage';
 import { PartyListMap } from '../pages/PartyListMap';
 import GlobalStyle from './GlobalStyle';
@@ -30,6 +32,8 @@ const Router = () => {
           <Route exact path={PATH_URL.NAVER} element={<NaverRedirection />} />
           <Route path={`${PATH_URL.PARTY_DETAIL}/:partyId`} element={<PartyDetail />} />
           <Route path={PATH_URL.PARTY_CREATE} element={<PartyCreate />} />
+          <Route path={PATH_URL.PARTY_CHAT} element={<Chatpage />} />
+          <Route path={`${PATH_URL.PARTY_CHATROOM}/:id`} element={<ChatRoom />} />
           <Route path={PATH_URL.PARTY_LIST_MAP} element={<PartyListMap />} />
           <Route path={PATH_URL.MY_REQUEST_PARTY} element={<MyRequestParty />} />
           <Route path={PATH_URL.MY_CREATE_PARTY} element={<MyCreateParty />} />
