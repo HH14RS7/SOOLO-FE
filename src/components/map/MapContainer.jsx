@@ -12,14 +12,13 @@ const MapContainer = ({ searchPlace }) => {
   const [Places, setPlaces] = useState([]);
   const setStationData = useSetRecoilState(stationDataState);
   const setMapData = useSetRecoilState(mapDataState);
+
   const STATION_CATEGORY_CODE = 'SW8'; // 지하철역 카테고리 코드
-
+  const latitude = currentloaction.latitude; // 위도
+  const longitude = currentloaction.longitude; // 경도
   const initialCurrentPosition = new kakao.maps.LatLng(37.496777, 127.028185); // 초기 중심 좌표(강남역)
+
   const [currentCenter, setCurrentCenter] = useState(initialCurrentPosition);
-
-  const latitude = currentloaction.coordinates.latitude; // 위도
-  const longitude = currentloaction.coordinates.longitude; // 경도
-
   useEffect(() => {
     // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성
     const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
@@ -138,7 +137,8 @@ const MapContainer = ({ searchPlace }) => {
         // console.log('위도:', place.y); // latitude
         // console.log('경도:', place.x); // longitude
         // console.log('장소명:', place.place_name); // placeName
-        // console.log('장소 URL:', place.place_url); // placeUrl
+        //console.log('장소위치', place.place_address); //placeAddress
+        // console.log('장소 URL:', place.road_address_name); // placeUrl
 
         saveMapData(place);
 
@@ -167,6 +167,7 @@ const MapContainer = ({ searchPlace }) => {
       latitude: item.y,
       longitude: item.x,
       placeName: item.place_name,
+      placeAddress: item.road_address_name,
       placeUrl: item.place_url,
     };
     setMapData(newMapData);
