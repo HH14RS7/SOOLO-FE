@@ -8,6 +8,7 @@ import { styled } from 'styled-components';
 import SojuRoom from '../../assets/sojuroomimg.webp';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { formmatedDate } from '../../shared/formattedDate';
 
 export const PartyDetailInfo = () => {
   const location = useLocation();
@@ -130,8 +131,8 @@ export const PartyDetailInfo = () => {
                   }`}
             </div>
             <div>모집 상태 : {data?.recruitmentStatus === true ? '모집중' : '모집마감'}</div>
-            <div>만든 날짜 : {moment(data?.createdAt).format('YYYY월 MM월 DD일 a HH:mm')}</div>
-            <div>모임 시간 : {moment(data?.partyDate).format('YYYY월 MM월 DD일 a HH:mm')}</div>
+            <div>만든 날짜: {formmatedDate(data?.createAt, 'MM.DD · a h:mm')}</div>
+            <div>모임 시간: {formmatedDate(data?.partyDate, 'MM.DD · a h:mm')}</div>
             {BtnYesHandler ? (
               <>
                 <button
