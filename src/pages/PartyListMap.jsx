@@ -1,7 +1,6 @@
-import { styled } from 'styled-components';
 import SearchLocation from '../components/map/SearchLocation';
 import PartyMapContainer from '../components/map/PartyMapContainer';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 export const PartyListMap = () => {
   const partyLists = [
     {

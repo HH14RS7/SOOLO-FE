@@ -173,8 +173,6 @@ const PlaceName = styled.h1`
 
 const OverlayArrow = styled.div``;
 
-const CustomOverlay = styled.div``;
-
 const PlaceImage = styled.img`
   width: 30px;
   height: 30px;

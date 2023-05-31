@@ -3,7 +3,6 @@ import useGeolocation from '../../hooks/useGeolocation';
 import { styled } from 'styled-components';
 import { useSetRecoilState } from 'recoil';
 import { mapDataState, stationDataState } from '../../atoms';
-
 const { kakao } = window;
 
 const MapContainer = ({ searchPlace }) => {
@@ -14,17 +13,23 @@ const MapContainer = ({ searchPlace }) => {
   const setMapData = useSetRecoilState(mapDataState);
 
   const STATION_CATEGORY_CODE = 'SW8'; // 지하철역 카테고리 코드
-  const latitude = currentloaction.latitude; // 위도
-  const longitude = currentloaction.longitude; // 경도
-  const initialCurrentPosition = new kakao.maps.LatLng(37.496777, 127.028185); // 초기 중심 좌표(강남역)
 
-  const [currentCenter, setCurrentCenter] = useState(initialCurrentPosition);
+  const latitude = currentloaction.coordinates.latitude; // 위도
+  const longitude = currentloaction.coordinates.longitude; // 경도
+
+  const [currentCenter, setCurrentCenter] = useState('');
+
+  // 로딩 상태에 따라 초기 중심 좌표 설정
+  const initialCurrentPosition = currentloaction.loading
+    ? new kakao.maps.LatLng(37.496777, 127.028185)
+    : new kakao.maps.LatLng(latitude, longitude);
+
   useEffect(() => {
     // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성
     const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
     const container = document.getElementById('map');
     const options = {
-      center: currentCenter,
+      center: initialCurrentPosition,
       level: 3,
     };
 
@@ -73,6 +78,7 @@ const MapContainer = ({ searchPlace }) => {
     if (searchPlace) {
       ps.keywordSearch(searchPlace, placesSearchCB, searchOptions);
     }
+
     // 검색결과 목록 하단에 페이지 번호 표시
     const displayPagination = pagination => {
       var paginationEl = document.getElementById('pagination'),
@@ -110,21 +116,22 @@ const MapContainer = ({ searchPlace }) => {
         if (nearbyStation) {
           // console.log('가장 가까운 역과의 거리:', nearbyStation.distance); // m단위(0인경우 1m미만)
           // console.log('가장 가까운 역:', nearbyStation.place_name);
-
-          const stationData = {
-            distance: nearbyStation.distance,
-            stationName: nearbyStation.place_name,
-          };
-
-          setStationData(stationData);
+          updateStationData(setStationData, nearbyStation);
         }
       } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        alert('검색 결과가 존재하지 않습니다.');
-        return;
+        setStationData({ distance: '', stationName: '' });
       } else if (status === kakao.maps.services.Status.ERROR) {
-        alert('검색 결과 중 오류가 발생했습니다.');
-        return;
+        setStationData({ distance: '', stationName: '' });
       }
+    };
+
+    // 주변역 정보 저장 함수
+    const updateStationData = (setStationData, nearbyStation) => {
+      const updatedStationData = {
+        distance: nearbyStation.distance,
+        stationName: nearbyStation.place_name,
+      };
+      setStationData(updatedStationData);
     };
 
     const displayMarker = place => {
@@ -139,7 +146,6 @@ const MapContainer = ({ searchPlace }) => {
         // console.log('장소명:', place.place_name); // placeName
         //console.log('장소위치', place.place_address); //placeAddress
         // console.log('장소 URL:', place.road_address_name); // placeUrl
-
         saveMapData(place);
 
         const categoryOptions = {
@@ -156,10 +162,7 @@ const MapContainer = ({ searchPlace }) => {
         infowindow.open(mapRef.current, marker);
       });
     };
-  }, [searchPlace]);
-
-  // console.log('여기서 stationinfo', stationInfo);
-  // console.log('여기서 한번더data', mapData);
+  }, [currentloaction, searchPlace]);
 
   // 정보 data에 담기
   const saveMapData = item => {

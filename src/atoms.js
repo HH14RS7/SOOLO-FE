@@ -7,5 +7,8 @@ export const mapDataState = atom({
 
 export const stationDataState = atom({
   key: 'stationDataState',
-  default: '',
+  default: {
+    distance: '',
+    stationName: '',
+  },
 });
