@@ -4,11 +4,16 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { PATH_URL, PARTIES_URL } from '../../shared/constants';
 import { useMutation } from 'react-query';
-import { putAPI, postAPI } from '../../api/api';
+import { putAPI, postAPI, postImageAPI } from '../../api/api';
 import Calendars from '../../shared/Calendars';
 import moment from 'moment';
+import { useRecoilValue } from 'recoil';
+import { mapDataState, stationDataState } from '../../atoms';
 
 const CreateForm = () => {
+  const mapData = useRecoilValue(mapDataState);
+  // const stationData = useRecoilValue(stationDataState);
+
   const PARTICIPANT_COUNT = Array.from({ length: 10 }, (_, i) => ({ value: Number(i + 1) }));
   const navigator = useNavigate();
   const location = useLocation();
@@ -76,23 +81,46 @@ const CreateForm = () => {
       },
     },
   );
+
   // 등록
-  const createMutation = useMutation(data => postAPI(`${PARTIES_URL.PARTIES_ADD}`, data), {
-    onSuccess: response => {
-      alert(response.data.msg);
+  const createMutation = useMutation(
+    formData => postImageAPI(`${PARTIES_URL.PARTIES_ADD}`, formData),
+    {
+      onSuccess: response => {
+        alert(response.data.msg);
+      },
+      onError: error => {
+        alert(error.message);
+      },
     },
-    onError: error => {
-      alert(error.message);
-    },
-  });
-  const handlePartySubmit = data => {
-    data.title = data.title.trim();
-    data.content = data.content.trim();
-    data.partyDate = moment(selectedDate).format('YYYY-MM-DD HH:mm');
+  );
+
+  const handlePartySubmit = item => {
+    const formData = new FormData();
+
+    const { latitude, longitude, placeName, placeUrl } = mapData;
+    // const { stationName, distance } = stationData;
+
+    const data = {
+      title: item.title.trim(),
+      content: item.content.trim(),
+      partyDate: moment(selectedDate).format('YYYY-MM-DD HH:mm'),
+      totalCount: item.totalCount,
+      latitude,
+      longitude,
+      placeName,
+      placeUrl,
+      // stationName,
+      // distance,
+    };
+
+    console.log(data);
+    formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+    // img && formData.append('image', img);
     if (isEdit) {
-      updateMutation.mutate(data);
+      updateMutation.mutate(item);
     } else {
-      createMutation.mutate(data);
+      createMutation.mutate(formData);
     }
     reset();
     navigator(PATH_URL.MAIN);
