@@ -65,6 +65,8 @@ export const PartyDetailInfo = () => {
   const memberIdData = data?.memberInfo[0].memberId.toString();
   const userIdData = localStorage?.memberId.toString();
 
+  const BtnYesHandler = memberIdData === userIdData && data?.recruitmentStatus === true;
+
   console.log('data ::', data);
 
   return (
@@ -131,8 +133,7 @@ export const PartyDetailInfo = () => {
             <div>모집 상태 : {data?.recruitmentStatus === true ? '모집중' : '모집마감'}</div>
             <div>만든 날짜: {formmatedDate(data?.createAt, 'MM.DD · a h:mm')}</div>
             <div>모임 시간: {formmatedDate(data?.partyDate, 'MM.DD · a h:mm')}</div>
-            위의 코드에서 getFormattedDateTime 함수를
-            {memberIdData === userIdData ? (
+            {BtnYesHandler ? (
               <>
                 <button
                   onClick={() => {
