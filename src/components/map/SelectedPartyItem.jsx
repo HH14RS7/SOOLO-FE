@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
 
 export default function SelectedPartyItem({ party }) {
-  const { partyId, title, currentCount, totalCount, partyDate, address, image } = party;
+  const { partyId, title, currentCount, totalCount, partyDate, address, imageUrl } = party;
 
   return (
     <ListMapper>
@@ -19,7 +19,7 @@ export default function SelectedPartyItem({ party }) {
 
           <p> {formmatedDate(partyDate, 'MM.DD · a h:mm')}</p>
           <p>{address}</p>
-          <PlaceImage src={image} alt="placeImage" />
+          <PlaceImage src={imageUrl} alt="placeImage" />
         </div>
       </Link>
     </ListMapper>

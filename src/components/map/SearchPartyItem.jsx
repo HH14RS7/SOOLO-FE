@@ -10,7 +10,7 @@ export default function SearchPartyItem({ party }) {
       <ItemWrapper>
         <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`}>
           <p>{party.title}</p>
-          <PlaceImage src={party.image} alt="placeImage" />
+          <PlaceImage src={party.imageUrl} alt="placeImage" />
           <span>{party.stationName ? party.stationName : party.placeAddress}</span>
           <span>
             {party.currentCount}/{party.totalCount}
