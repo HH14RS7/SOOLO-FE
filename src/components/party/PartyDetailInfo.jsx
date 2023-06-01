@@ -7,7 +7,6 @@ import { useMutation } from 'react-query';
 import { styled } from 'styled-components';
 import SojuRoom from '../../assets/sojuroomimg.webp';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { formmatedDate } from '../../shared/formattedDate';
 
 export const PartyDetailInfo = () => {
@@ -64,8 +63,6 @@ export const PartyDetailInfo = () => {
   // toString 을 쓰지 않을 경우에 조건부 핸들에 에러가 생김
   const memberIdData = data?.memberInfo[0].memberId.toString();
   const userIdData = localStorage?.memberId.toString();
-
-  const BtnYesHandler = memberIdData === userIdData && data?.recruitmentStatus === true;
 
   console.log('data ::', data);
 
@@ -133,15 +130,19 @@ export const PartyDetailInfo = () => {
             <div>모집 상태 : {data?.recruitmentStatus === true ? '모집중' : '모집마감'}</div>
             <div>만든 날짜: {formmatedDate(data?.createAt, 'MM.DD · a h:mm')}</div>
             <div>모임 시간: {formmatedDate(data?.partyDate, 'MM.DD · a h:mm')}</div>
-            {BtnYesHandler ? (
+            {(memberIdData === userIdData) === true ? (
               <>
-                <button
-                  onClick={() => {
-                    updateParty(partyId);
-                  }}
-                >
-                  모임수정
-                </button>
+                {memberIdData === userIdData && data?.recruitmentStatus === false ? (
+                  ''
+                ) : (
+                  <button
+                    onClick={() => {
+                      updateParty(partyId);
+                    }}
+                  >
+                    모임수정
+                  </button>
+                )}
                 <button
                   onClick={() => {
                     deleteParty(partyId);

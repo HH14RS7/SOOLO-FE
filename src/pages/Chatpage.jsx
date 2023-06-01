@@ -4,6 +4,7 @@ import SockJS from 'sockjs-client';
 import SojuRoom from '../assets/sojuroomimg.webp';
 import MemberImg from '../assets/Vector.png';
 import MenuBar from '../assets/icon.png';
+import Profile from '../assets/karina.webp';
 import * as StompJs from '@stomp/stompjs';
 import { Link } from 'react-router-dom';
 import { PATH_URL } from '../shared/constants';
@@ -80,12 +81,11 @@ export const Chatpage = () => {
   return (
     <Background>
       <Container>
-        <TapBar defaultActiveKey={activeTab}>
+        <TapBar>
           <button
             onClick={() => {
               handleTabChange(true);
             }}
-            eventkey={true}
             style={{
               width: '132px',
               height: '48px',
@@ -98,7 +98,6 @@ export const Chatpage = () => {
             onClick={() => {
               handleTabChange(false);
             }}
-            eventkey={false}
             style={{
               width: '132px',
               height: '48px',
@@ -115,7 +114,7 @@ export const Chatpage = () => {
                 style={{
                   marginLeft: '16px',
                 }}
-                to={`${PATH_URL.PARTY_CHATROOM}/${chatDate?.data[0].chatRoomUniqueId}`}
+                to={`${PATH_URL.PARTY_CHATROOM}/${localStorage.memberUniqueId}`}
               >
                 <ChatRoomBox>
                   <ChatRoomImg>
@@ -129,42 +128,82 @@ export const Chatpage = () => {
                       }}
                     />
                   </ChatRoomImg>
-                  <ChatRoomContents>
-                    <ChatRoomInfo>
-                      <ChatRoomName>모임 이름</ChatRoomName>
-                      <ChatRoomContent>최신 대화 내용</ChatRoomContent>
-                    </ChatRoomInfo>
-                    <RoomMember>
-                      <TotalMember>
-                        <div
-                          style={{
-                            marginRight: '6px',
-                          }}
-                        >
-                          <img
-                            src={MemberImg}
-                            alt="Member"
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: '230px',
+                      height: '60px',
+                    }}
+                  >
+                    <ChatRoomContents>
+                      <ChatRoomInfo>
+                        <ChatRoomName>모임 이름</ChatRoomName>
+                        <ChatRoomContent>최신 대화 내용</ChatRoomContent>
+                      </ChatRoomInfo>
+                      <RoomMember>
+                        <TotalMember>
+                          <div
                             style={{
-                              width: '8.75px',
-                              height: '12.25px',
+                              marginRight: '6px',
+                            }}
+                          >
+                            <img
+                              src={MemberImg}
+                              alt="Member"
+                              style={{
+                                width: '8.75px',
+                                height: '12.25px',
+                              }}
+                            />
+                          </div>
+                          5명 참여중
+                        </TotalMember>
+                        <MemberProfile>
+                          <img
+                            src={Profile}
+                            alt="chatprofile"
+                            style={{
+                              width: '18px',
+                              height: '18px',
+                              borderRadius: '15px',
+                              border: '1px solid #f63d68',
+                              borderradius: '100%',
+                              position: 'absolute',
+                              zIndex: 2,
                             }}
                           />
-                        </div>
-                        5명 참여중
-                      </TotalMember>
-                      <MemberProfile>
-                        <img
-                          src={SojuRoom}
-                          alt="chatprofile"
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            borderRadius: '15px',
-                          }}
-                        />
-                      </MemberProfile>
-                    </RoomMember>
-                  </ChatRoomContents>
+                          <img
+                            src={Profile}
+                            alt="chatprofile"
+                            style={{
+                              width: '18px',
+                              height: '18px',
+                              borderRadius: '15px',
+                              border: '1px solid #f63d68',
+                              borderradius: '100%',
+                              position: 'absolute',
+                              marginLeft: '8px',
+                              zIndex: 1,
+                            }}
+                          />
+                          <img
+                            src={Profile}
+                            alt="chatprofile"
+                            style={{
+                              width: '18px',
+                              height: '18px',
+                              borderRadius: '15px',
+                              border: '1px solid #f63d68',
+                              borderradius: '100%',
+                              position: 'absolute',
+                              marginLeft: '16px',
+                              zIndex: 0,
+                            }}
+                          />
+                        </MemberProfile>
+                      </RoomMember>
+                    </ChatRoomContents>
+                  </div>
                   <RightContents>
                     <ChatMessageNumber>
                       <MessageNumber>12</MessageNumber>
@@ -200,7 +239,7 @@ const Background = styled.div`
 
 const Container = styled.div`
   width: 375px;
-  height: 100%;
+  height: 800px;
   background: #ffffff;
   margin: 0 auto;
 `;
@@ -217,7 +256,6 @@ const ChatContainer = styled.div``;
 const ChatRoom = styled.div`
   display: flex;
   align-items: center;
-  width: 375px;
   height: 98px;
   border-bottom: 1px solid #e4e7ec;
 `;
@@ -262,13 +300,13 @@ const TotalMember = styled.div`
 `;
 
 const MemberProfile = styled.div`
+  display: flex;
   width: 20px;
   height: 20px;
-  border: 1px solid #f63d68;
-  border-radius: 100%;
 `;
 
 const RightContents = styled.div`
+  display: block;
   width: 38px;
   height: 60px;
 `;
@@ -295,7 +333,7 @@ const MessageNumber = styled.div`
 const ChatMenu = styled.div`
   width: 18px;
   height: 18px;
-  margin-top: 20px;
+  margin-top: 22px;
   float: right;
   cursor: pointer;
 `;
