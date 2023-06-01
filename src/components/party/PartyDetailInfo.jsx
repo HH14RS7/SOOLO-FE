@@ -73,7 +73,7 @@ export const PartyDetailInfo = () => {
           <Contents>
             <PartyDetailImg>
               <img
-                src={SojuRoom}
+                src={data?.imageUrl || SojuRoom}
                 alt="partydetail"
                 style={{
                   width: '100%',

@@ -11,16 +11,18 @@ const PartyItem = ({ party }) => {
   const token = Cookies.get('Access_key');
   const navigate = useNavigate();
 
+  console.log(party);
   const {
     partyId,
     title,
-    // address,
     currentCount,
     totalCount,
     recruitmentStatus,
     partyDate,
     state,
-    memberInfo,
+    imageUrl,
+    stationName,
+    placeAddress,
   } = party;
 
   const dDay = dDayConvertor(partyDate);
@@ -51,25 +53,21 @@ const PartyItem = ({ party }) => {
       navigate(PATH_URL.LOGIN);
     }
   };
+
   return (
     <PartyItemWrapper>
       <Link to={`${PATH_URL.PARTY_DETAIL}/${partyId}`} onClick={handleLinkClick}>
         <li key={partyId}>
-          <p>디데이 : D-{dDay > 0 ? dDay : 0}</p>
-          <p>제목 : {title}</p>
-          {/* <p>장소 : {address}</p> 지도 작업후 추가 */}
-          <p>모집상태 : {recruitmentStatus ? '모집중' : '모집마감'}</p>
-          {/* <p>모임장 : {hostName}</p> */}
-          <p>승인상태 : {stateMsg}</p>
+          <p> D-{dDay > 0 ? dDay : 0}</p>
+          <p>{title}</p>
+          {/* <p>{recruitmentStatus ? '모집중' : '모집마감'}</p> */}
+          {/* <p>승인상태 : {stateMsg}</p> */}
+          <PlaceImage src={imageUrl} alt="placeImage" />
+          <p>{stationName ? stationName : placeAddress}</p>
           <p>
-            모집인원 : {currentCount} / {totalCount}명
+            {currentCount} / {totalCount}
           </p>
-          <p>모임시간 : {formattedDateTime}</p>
-          {memberInfo?.map((member, i) => (
-            <div key={i}>
-              <ProfileImage src={member.profileImage} alt="profileImage" />
-            </div>
-          ))}
+          <p>{formattedDateTime}</p>
         </li>
       </Link>
     </PartyItemWrapper>
@@ -80,12 +78,9 @@ const PartyItemWrapper = styled.div`
   border: 1px solid black;
 `;
 
-const ProfileImage = styled.img`
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 50%;
-  display: flex;
+const PlaceImage = styled.img`
+  width: 74px;
+  height: 74px;
+  border-radius: 16px;
 `;
-
 export default PartyItem;
