@@ -5,12 +5,13 @@ import { useSetRecoilState } from 'recoil';
 import { mapDataState, stationDataState } from '../../atoms';
 const { kakao } = window;
 
-const MapContainer = ({ searchPlace }) => {
+const MapContainer = ({ searchPlace, party }) => {
   const currentloaction = useGeolocation();
   const mapRef = useRef();
   const [Places, setPlaces] = useState([]);
   const setStationData = useSetRecoilState(stationDataState);
   const setMapData = useSetRecoilState(mapDataState);
+  const isEdit = !!party.partyId;
 
   const STATION_CATEGORY_CODE = 'SW8'; // 지하철역 카테고리 코드
 
@@ -20,7 +21,9 @@ const MapContainer = ({ searchPlace }) => {
   const [currentCenter, setCurrentCenter] = useState('');
 
   // 로딩 상태에 따라 초기 중심 좌표 설정
-  const initialCurrentPosition = currentloaction.loading
+  const initialCurrentPosition = isEdit
+    ? new kakao.maps.LatLng(party.latitude, party.longitude)
+    : currentloaction.loading
     ? new kakao.maps.LatLng(37.496777, 127.028185)
     : new kakao.maps.LatLng(latitude, longitude);
 
@@ -30,7 +33,7 @@ const MapContainer = ({ searchPlace }) => {
     const container = document.getElementById('map');
     const options = {
       center: initialCurrentPosition,
-      level: 3,
+      level: 2,
     };
 
     mapRef.current = new kakao.maps.Map(container, options); // 지도 생성
@@ -69,8 +72,8 @@ const MapContainer = ({ searchPlace }) => {
 
     const searchOptions = {
       size: 6, // 한 페이지내 마커 개수 출력
-      level: 3,
-      location: currentCenter,
+      level: 2,
+      location: isEdit ? initialCurrentPosition : currentCenter,
       sort: kakao.maps.services.SortBy.ACCURANCE, // 정확도순 정렬
     };
 
@@ -162,6 +165,17 @@ const MapContainer = ({ searchPlace }) => {
         infowindow.open(mapRef.current, marker);
       });
     };
+
+    // 수정모드일때 초기 마커 표시
+    if (isEdit) {
+      const partyPlace = {
+        y: party.latitude,
+        x: party.longitude,
+        place_name: party.placeName,
+      };
+      displayMarker(partyPlace);
+      saveMapData(partyPlace);
+    }
   }, [currentloaction, searchPlace]);
 
   // 정보 data에 담기
@@ -188,6 +202,7 @@ const MapContainer = ({ searchPlace }) => {
     const map = mapRef.current;
     map.setLevel(map.getLevel() + 1);
   };
+
   // 현재위치 찾기 클릭 함수
   const handleCurrentLocation = () => {
     const currentLocation = new kakao.maps.LatLng(latitude, longitude);
@@ -195,6 +210,15 @@ const MapContainer = ({ searchPlace }) => {
     mapRef.current.setLevel(4);
     mapRef.current.panTo(currentLocation);
   };
+
+  // 이전 장소 찾기 클릭 함수
+  const handleResetLocation = () => {
+    const currentLocation = new kakao.maps.LatLng(party.latitude, party.longitude);
+    setCurrentCenter(currentLocation);
+    mapRef.current.setLevel(4);
+    mapRef.current.panTo(currentLocation);
+  };
+
   return (
     <div>
       <Map id="map">
@@ -214,6 +238,7 @@ const MapContainer = ({ searchPlace }) => {
         </ZoomControlContainer>
       </Map>
       <button onClick={handleCurrentLocation}>현재 위치 찾기</button>
+      <button onClick={handleResetLocation}>이전 모임장소 그대로</button>
       <div id="result-list">
         {Places.map((item, i) => (
           <div key={i} style={{ marginTop: '20px' }} onClick={() => handlePlaceClick(item)}>
