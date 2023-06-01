@@ -6,95 +6,12 @@ import { styled } from 'styled-components';
 import ReactDOMServer from 'react-dom/server';
 import SelectedPartyItem from './SelectedPartyItem';
 import SearchPartyList from './SearchPartyList';
+import { QueryClient, useQuery } from 'react-query';
+import { PARTIES_URL } from '../../shared/constants';
+import { getAPI } from '../../api/api';
 const { kakao } = window;
-const partyList = [
-  {
-    partyId: 1,
-    title: '밤새 술 먹을 파티 구합니다.',
-    partyDate: '2023-05-29T22:20',
-    recruitmentStatus: false,
-    totalCount: 2,
-    currentCount: 2,
-    latitude: 37.5022613873809,
-    longitude: 127.052438975201,
-    placeName: '센도수산',
-    placeAddress: '서울 강남구 역삼로65길 15',
-    distance: 395,
-    stationName: '선릉역 2호선',
-    placeUrl: 'http://place.map.kakao.com/418495008',
-    image:
-      'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
-  },
-  {
-    partyId: 2,
-    title: '알쓰들의 모임',
-    partyDate: '2023-05-30T22:20',
-    recruitmentStatus: false,
-    totalCount: 4,
-    currentCount: 2,
-    latitude: 37.5000892164148,
-    longitude: 127.028240773556,
-    placeAddress: '서울 강남구 강남대로96길 15',
-    placeName: '하이퍼서울',
-    distance: 251,
-    stationName: '언주역 2호선',
-    placeUrl: 'https://place.map.kakao.com/602523043',
-    image:
-      'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
-  },
-  {
-    partyId: 3,
-    title: '오늘 밤 술 달려봅시다',
-    partyDate: '2023-05-31T22:20',
-    recruitmentStatus: false,
-    totalCount: 4,
-    currentCount: 2,
-    latitude: 37.4939696557259,
-    longitude: 127.027921843719,
-    placeName: '먼데이블루스',
-    placeAddress: '서울 서초구 강남대로53길 11',
-    distance: 252,
-    placeUrl: 'https://place.map.kakao.com/27113679',
-    stationName: '강남역',
-    image:
-      'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
-  },
-  {
-    partyId: 4,
-    title: '맛있는 안주랑 같이',
-    partyDate: '2023-06-03T22:20',
-    recruitmentStatus: false,
-    totalCount: 5,
-    currentCount: 2,
-    latitude: 37.495759373328156,
-    longitude: 127.03361964276374,
-    placeName: '언더그라운드',
-    placeAddress: '서울 강남구 역삼로9길 25',
-    distance: 1000,
-    placeUrl: 'https://place.map.kakao.com/300436372',
-    image:
-      'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
-  },
-  {
-    partyId: 5,
-    title: '역전할매 ㄱㄱ',
-    partyDate: '2023-06-03T22:20',
-    recruitmentStatus: false,
-    totalCount: 5,
-    currentCount: 2,
-    latitude: 37.29243939383418,
-    longitude: 127.04860740073208,
-    placeName: '역전할머니맥주 광교중앙점',
-    placeAddress: '경기 수원시 영통구 센트럴타운로 107',
-    distance: 1003,
-    placeUrl: 'https://place.map.kakao.com/1621313528',
-    stationName: '광교중앙역',
-    image:
-      'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
-  },
-];
+
 const PartyMapContainer = ({ searchPlace }) => {
-  const location = useLocation();
   const currentloaction = useGeolocation();
   const mapRef = useRef();
   const markersRef = useRef([]);
@@ -102,21 +19,42 @@ const PartyMapContainer = ({ searchPlace }) => {
 
   const latitude = currentloaction.coordinates.latitude; // 위도
   const longitude = currentloaction.coordinates.longitude; // 경도
-  const centerCoordinate = new kakao.maps.LatLng(37.496777, 127.028185); // 중심 좌표(강남역)
+  const queryClient = new QueryClient();
 
-  useEffect(() => {
-    const container = document.getElementById('map');
-    const options = {
-      center: centerCoordinate,
-      level: 5,
-      // radius: 10000,
-    };
+  const centerCoordinate = new kakao.maps.LatLng(37.496777, 127.028185);
 
-    mapRef.current = new kakao.maps.Map(container, options);
-  }, [location]);
+  const page = 0; // 임시
+  const radius = 10;
+
+  const { data, isLoading, error } = useQuery(
+    ['parties'],
+    () =>
+      // geolocation 로딩중일때는 강남역 초기 세팅
+      getAPI(
+        `${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=0&latitude=37.496777&longitude=127.028185&radius=${radius}`,
+      ),
+
+    // currentloaction.loading
+    //   ? getAPI(
+    //       `${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=0&latitude=37.496777&longitude=127.028185&radius=${radius}`,
+    //     )
+    //   : getAPI(
+    //       `${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
+    //     ),
+  );
 
   useEffect(() => {
     const ps = new kakao.maps.services.Places();
+    const container = document.getElementById('map');
+    const options = {
+      center: centerCoordinate,
+      level: 6,
+      radius: 10000,
+    };
+
+    mapRef.current = new kakao.maps.Map(container, options);
+
+    queryClient.invalidateQueries('parties');
 
     const placesSearchCB = (result, status) => {
       if (status === kakao.maps.services.Status.OK) {
@@ -130,7 +68,6 @@ const PartyMapContainer = ({ searchPlace }) => {
         alert('검색 결과 중 오류가 발생했습니다.');
         return;
       }
-      // get요청으로 partyList받아와야함
     };
 
     // 검색 키워드 함수 호출
@@ -138,19 +75,21 @@ const PartyMapContainer = ({ searchPlace }) => {
       ps.keywordSearch(searchPlace, placesSearchCB);
     }
 
-    const overlayInfos = partyList?.map(party => {
-      return {
-        title: party.placeName,
-        lat: party.latitude,
-        lng: party.longitude,
-        partyId: party.partyId,
-        yAnchor: 1,
-      };
-    });
+    const overlayInfos =
+      partyList?.map(party => {
+        return {
+          title: party.placeName,
+          lat: party.latitude,
+          lng: party.longitude,
+          partyId: party.partyId,
+          yAnchor: 1,
+        };
+      }) || [];
 
     // 마커 찍기
     const imageSrc = marker;
     overlayInfos.forEach(el => {
+      console.log(el);
       const imageSize = new kakao.maps.Size(24, 35);
       const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
@@ -161,7 +100,6 @@ const PartyMapContainer = ({ searchPlace }) => {
         image: markerImage,
       });
 
-      // 기존 마커 제거
       const overlayContent = ReactDOMServer.renderToString(
         <OverlayWrap>
           <PlaceName>{el.title}</PlaceName>
@@ -191,6 +129,10 @@ const PartyMapContainer = ({ searchPlace }) => {
         const selected = partyList.find(party => party.partyId === el.partyId);
         setSelectedParty(selected);
         markersRef.current.push(marker);
+        // 마커 선택한 중심좌표로 이동
+        console.log(markersRef);
+        const currentLocation = new kakao.maps.LatLng(selected.latitude, selected.longitude);
+        mapRef.current.panTo(currentLocation);
       });
 
       // 오버레이 클릭 이벤트
@@ -203,6 +145,7 @@ const PartyMapContainer = ({ searchPlace }) => {
         setSelectedParty(null);
       });
     });
+
     // unmount될 때 마커 제거
     return () => {
       markersRef.current.forEach(marker => {
@@ -210,7 +153,7 @@ const PartyMapContainer = ({ searchPlace }) => {
       });
       markersRef.current = [];
     };
-  }, [searchPlace, partyList]);
+  }, [searchPlace, queryClient]);
 
   const zoomIn = () => {
     const map = mapRef.current;
@@ -224,10 +167,15 @@ const PartyMapContainer = ({ searchPlace }) => {
 
   // 현재 위치로 찾기
   const handleCurrentLocation = () => {
-    // latitude, longtitude로 get요청해서 받은 목록을 보여줘야 한다.
+    const updatedUrl = `${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=${radius}`;
+    queryClient.prefetchQuery(['parties'], () => getAPI(updatedUrl));
+    queryClient.invalidateQueries('parties');
+
     const currentLocation = new kakao.maps.LatLng(latitude, longitude);
     mapRef.current.panTo(currentLocation);
   };
+
+  const partyList = data?.data.data.partyList;
 
   return (
     <>
