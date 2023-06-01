@@ -212,6 +212,16 @@ const PartyMapContainer = ({ searchPlace }) => {
     };
   }, [searchPlace, partyList]);
 
+  const zoomIn = () => {
+    const map = mapRef.current;
+    map.setLevel(map.getLevel() - 1);
+  };
+
+  const zoomOut = () => {
+    const map = mapRef.current;
+    map.setLevel(map.getLevel() + 1);
+  };
+
   // 현재 위치로 찾기
   const handleCurrentLocation = () => {
     // latitude, longtitude로 get요청해서 받은 목록을 보여줘야 한다.
@@ -221,13 +231,22 @@ const PartyMapContainer = ({ searchPlace }) => {
 
   return (
     <>
-      <div
-        id="map"
-        style={{
-          width: '300px',
-          height: '300px',
-        }}
-      />
+      <Map id="map">
+        <ZoomControlContainer>
+          <ZoomButton onClick={zoomIn}>
+            <img
+              src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png"
+              alt="확대"
+            />
+          </ZoomButton>
+          <ZoomButton onClick={zoomOut}>
+            <img
+              src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png"
+              alt="축소"
+            />
+          </ZoomButton>
+        </ZoomControlContainer>{' '}
+      </Map>
       <button onClick={handleCurrentLocation}>현재 위치로 찾기</button>
       <div>
         {selectedParty ? (
@@ -256,6 +275,39 @@ const PlaceName = styled.h1`
   font-size: var(--font-small);
 `;
 
+const Map = styled.div`
+  // top: 200px;
+  width: 300px;
+  height: 300px;
+  position: relative;
+`;
+
+const ZoomControlContainer = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  z-index: 99;
+`;
+
+const ZoomButton = styled.span`
+  cursor: pointer;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 2px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  img {
+    width: 12px;
+    height: 12px;
+  }
+`;
 const OverlayArrow = styled.div``;
 
 export default PartyMapContainer;
