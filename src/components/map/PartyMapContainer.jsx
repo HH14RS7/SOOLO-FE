@@ -15,12 +15,13 @@ const partyList = [
     recruitmentStatus: false,
     totalCount: 2,
     currentCount: 2,
-    latitude: 37.494272356526984,
-    longitude: 127.0280802697825,
-    placeName: '홀릭스',
-    placeAddress: '서울 서초구 서초대로77길 24',
-    distance: 3,
-    stationName: '강남역 신분당선',
+    latitude: 37.5022613873809,
+    longitude: 127.052438975201,
+    placeName: '센도수산',
+    placeAddress: '서울 강남구 역삼로65길 15',
+    distance: 395,
+    stationName: '선릉역 2호선',
+    placeUrl: 'http://place.map.kakao.com/418495008',
     image:
       'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
   },
@@ -37,6 +38,7 @@ const partyList = [
     placeName: '하이퍼서울',
     distance: 251,
     stationName: '언주역 2호선',
+    placeUrl: 'https://place.map.kakao.com/602523043',
     image:
       'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
   },
@@ -52,6 +54,7 @@ const partyList = [
     placeName: '먼데이블루스',
     placeAddress: '서울 서초구 강남대로53길 11',
     distance: 252,
+    placeUrl: 'https://place.map.kakao.com/27113679',
     stationName: '강남역',
     image:
       'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
@@ -68,6 +71,7 @@ const partyList = [
     placeName: '언더그라운드',
     placeAddress: '서울 강남구 역삼로9길 25',
     distance: 1000,
+    placeUrl: 'https://place.map.kakao.com/300436372',
     image:
       'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
   },
@@ -80,9 +84,10 @@ const partyList = [
     currentCount: 2,
     latitude: 37.29243939383418,
     longitude: 127.04860740073208,
-    placeName: '역전할머니맥주',
+    placeName: '역전할머니맥주 광교중앙점',
     placeAddress: '경기 수원시 영통구 센트럴타운로 107',
     distance: 1003,
+    placeUrl: 'https://place.map.kakao.com/1621313528',
     stationName: '광교중앙역',
     image:
       'https://images.unsplash.com/photo-1578911373434-0cb395d2cbfb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
@@ -93,7 +98,7 @@ const PartyMapContainer = ({ searchPlace }) => {
   const currentloaction = useGeolocation();
   const mapRef = useRef();
   const markersRef = useRef([]);
-  const [selectedParty, setSelectedParty] = useState(null); // Track the selected party
+  const [selectedParty, setSelectedParty] = useState(null);
 
   const latitude = currentloaction.coordinates.latitude; // 위도
   const longitude = currentloaction.coordinates.longitude; // 경도
@@ -112,25 +117,33 @@ const PartyMapContainer = ({ searchPlace }) => {
 
   useEffect(() => {
     const ps = new kakao.maps.services.Places();
+
     const placesSearchCB = (result, status) => {
-      console.log(searchPlace);
       if (status === kakao.maps.services.Status.OK) {
         const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
         mapRef.current.setCenter(coords);
         markersRef.current.forEach(marker => marker.setMap(null));
+      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        alert('검색 결과가 존재하지 않습니다.');
+        return;
+      } else if (status === kakao.maps.services.Status.ERROR) {
+        alert('검색 결과 중 오류가 발생했습니다.');
+        return;
       }
+      // get요청으로 partyList받아와야함
     };
 
     // 검색 키워드 함수 호출
     if (searchPlace) {
       ps.keywordSearch(searchPlace, placesSearchCB);
     }
-    const overlayInfos = partyList?.map(info => {
+
+    const overlayInfos = partyList?.map(party => {
       return {
-        title: info.placeName,
-        lat: info.latitude,
-        lng: info.longitude,
-        partyId: info.partyId,
+        title: party.placeName,
+        lat: party.latitude,
+        lng: party.longitude,
+        partyId: party.partyId,
         yAnchor: 1,
       };
     });
@@ -160,8 +173,6 @@ const PartyMapContainer = ({ searchPlace }) => {
       const customOverlay = new kakao.maps.CustomOverlay({
         position: position,
         content: overlayContent,
-        // content: content,
-        // content: () => content(el.title),
       });
 
       // 마커에 mouseover시 오버레이(가게명)
@@ -177,13 +188,14 @@ const PartyMapContainer = ({ searchPlace }) => {
 
       // 마커 클릭시 목록 출력
       kakao.maps.event.addListener(marker, 'click', function () {
-        const selected = partyList.find(info => info.partyId === el.partyId);
+        const selected = partyList.find(party => party.partyId === el.partyId);
         setSelectedParty(selected);
+        markersRef.current.push(marker);
       });
 
       // 오버레이 클릭 이벤트
       kakao.maps.event.addListener(customOverlay, 'click', function () {
-        const selected = partyList.find(info => info.partyId === el.partyId);
+        const selected = partyList.find(party => party.partyId === el.partyId);
         setSelectedParty(selected);
       });
 
@@ -191,10 +203,18 @@ const PartyMapContainer = ({ searchPlace }) => {
         setSelectedParty(null);
       });
     });
-  }, [partyList]);
+    // unmount될 때 마커 제거
+    return () => {
+      markersRef.current.forEach(marker => {
+        marker.setMap(null);
+      });
+      markersRef.current = [];
+    };
+  }, [searchPlace, partyList]);
 
   // 현재 위치로 찾기
   const handleCurrentLocation = () => {
+    // latitude, longtitude로 get요청해서 받은 목록을 보여줘야 한다.
     const currentLocation = new kakao.maps.LatLng(latitude, longitude);
     mapRef.current.panTo(currentLocation);
   };
@@ -214,17 +234,6 @@ const PartyMapContainer = ({ searchPlace }) => {
           <SelectedPartyItem party={selectedParty} />
         ) : (
           <SearchPartyList partyList={partyList} />
-          // partyList?.map(party => (
-          //   <ListMapper key={party.partyId}>
-          //     <p>{party.title}</p>
-          //     <PlaceImage src={party.image} alt="placeImage" />
-          //     <span>{party.stationName ? party.stationName : party.placeAddress}</span>
-          //     <span>
-          //       {party.currentCount}/{party.totalCount}
-          //     </span>
-          //     <p> {formmatedDate(party.partyDate, 'MM.DD · a h:mm')}</p>
-          //   </ListMapper>
-          // ))
         )}
       </div>
     </>
