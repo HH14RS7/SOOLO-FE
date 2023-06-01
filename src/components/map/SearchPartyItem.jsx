@@ -1,18 +1,22 @@
 import React from 'react';
 import { styled } from 'styled-components';
 import { formmatedDate } from '../../shared/formattedDate';
+import { Link } from 'react-router-dom';
+import { PATH_URL } from '../../shared/constants';
 
 export default function SearchPartyItem({ party }) {
   return (
     <>
       <ItemWrapper>
-        <p>{party.title}</p>
-        <PlaceImage src={party.image} alt="placeImage" />
-        <span>{party.stationName ? party.stationName : party.placeAddress}</span>
-        <span>
-          {party.currentCount}/{party.totalCount}
-        </span>
-        <p> {formmatedDate(party.partyDate, 'MM.DD · a h:mm')}</p>
+        <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`}>
+          <p>{party.title}</p>
+          <PlaceImage src={party.image} alt="placeImage" />
+          <span>{party.stationName ? party.stationName : party.placeAddress}</span>
+          <span>
+            {party.currentCount}/{party.totalCount}
+          </span>
+          <p> {formmatedDate(party.partyDate, 'MM.DD · a h:mm')}</p>
+        </Link>
       </ItemWrapper>
     </>
   );
