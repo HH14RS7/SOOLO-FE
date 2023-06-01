@@ -172,9 +172,16 @@ const MapContainer = ({ searchPlace, party }) => {
         y: party.latitude,
         x: party.longitude,
         place_name: party.placeName,
+        road_address_name: party.road_address_name,
+        place_url: party.place_url,
       };
-      displayMarker(partyPlace);
+      const stationData = {
+        stationName: party.stationName,
+        distance: party.distance,
+      };
       saveMapData(partyPlace);
+      setStationData(stationData);
+      displayMarker(partyPlace);
     }
   }, [currentloaction, searchPlace]);
 
