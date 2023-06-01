@@ -74,7 +74,7 @@ const CreateForm = ({ party }) => {
       reset({
         title: '',
         content: '',
-        totalCount: '',
+        totalCount: 2,
         img: '',
       });
     }
