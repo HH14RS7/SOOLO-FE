@@ -11,23 +11,18 @@ import { useRecoilValue } from 'recoil';
 import { mapDataState, stationDataState } from '../../atoms';
 import { putUpdateAPI, postImageAPI } from '../../api/api';
 
-const CreateForm = () => {
+const CreateForm = ({ party }) => {
   const mapData = useRecoilValue(mapDataState);
   const stationData = useRecoilValue(stationDataState);
 
   const PARTICIPANT_COUNT = Array.from({ length: 9 }, (_, i) => ({ value: Number(i + 2) }));
   const navigator = useNavigate();
-  const location = useLocation();
-  const partyId = parseInt(new URLSearchParams(location.search).get('partyId'));
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const party = location.state || {};
-  party.imageUrl =
-    'https://walkingpuppy7.s3.ap-northeast-2.amazonaws.com/S39e3918e3-a1f8-4ccc-ba8e-9cc70797c6d2.jpeg';
   const [previewImage, setPreviewImage] = useState(party.imgUrl || null);
-  const isEdit = !!partyId;
   const imgRef = useRef();
   const noImg = '/img/no-img.jpg';
   const [img, setImg] = useState(noImg);
+  const isEdit = !!party.partyId;
 
   const {
     register,
@@ -63,31 +58,31 @@ const CreateForm = () => {
     validate: value => value.trim().length > 0 || INPUT_MESSAGE.content,
   };
 
-  // 수정모드일때 가져온 값
   useEffect(() => {
     if (isEdit) {
       const partyDate = moment(party.partyDate).format('YYYY-MM-DD HH:mm');
       setSelectedDate(new Date(partyDate));
-
+      // 수정모드일때 가져온 값
       reset({
         title: party.title,
         content: party.content,
         totalCount: party.totalCount,
         partyDate,
-        longitude: party.longitude,
-        placeName: party.placeName,
-        placeAddress: party.placeAddress,
-        placeUrl: party.placeUrl,
-        stationName: party.stationName,
-        distance: party.distance,
         img: party.imageUrl,
+      });
+    } else {
+      reset({
+        title: '',
+        content: '',
+        totalCount: '',
+        img: '',
       });
     }
   }, []);
 
   // 수정
   const updateMutation = useMutation(
-    formData => putUpdateAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${partyId}`, formData),
+    formData => putUpdateAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${party.partyId}`, formData),
     {
       onSuccess: response => {
         alert(response.data.msg);
