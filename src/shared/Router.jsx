@@ -32,7 +32,7 @@ const Router = () => {
           <Route exact path={PATH_URL.NAVER} element={<NaverRedirection />} />
           <Route path={`${PATH_URL.PARTY_DETAIL}/:partyId`} element={<PartyDetail />} />
           <Route path={PATH_URL.PARTY_CREATE} element={<PartyCreate />} />
-          <Route path={PATH_URL.PARTY_CHAT} element={<Chatpage />} />
+          <Route path={`${PATH_URL.PARTY_CHAT}/:id`} element={<Chatpage />} />
           <Route path={`${PATH_URL.PARTY_CHATROOM}/:id`} element={<ChatRoom />} />
           <Route path={PATH_URL.PARTY_LIST_MAP} element={<PartyListMap />} />
           <Route path={PATH_URL.MY_REQUEST_PARTY} element={<MyRequestParty />} />

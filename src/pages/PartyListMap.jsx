@@ -1,5 +1,4 @@
 import { styled } from 'styled-components';
-import LandingPage from '../components/map/LandingPage';
 import PartyMapContainer from '../components/map/PartyMapContainer';
 import { useRef, useState } from 'react';
 export const PartyListMap = () => {
