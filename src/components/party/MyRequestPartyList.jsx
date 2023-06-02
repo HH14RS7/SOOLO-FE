@@ -5,29 +5,29 @@ import MyRequestPartyItem from './MyRequestPartyItem';
 import { useEffect, useState } from 'react';
 
 const MyRequestPartyList = () => {
-  const APPROVE_STATUS_SELECT = [
-    { value: 0, label: '전체' },
-    { value: 1, label: '승인완료' },
-    { value: 2, label: '승인대기' },
-  ];
+  // const APPROVE_STATUS_SELECT = [
+  //   { value: 0, label: '전체' },
+  //   { value: 1, label: '승인완료' },
+  //   { value: 2, label: '승인대기' },
+  // ];
   const queryClient = new QueryClient();
 
-  const [approveStatus, setApproveStatus] = useState(APPROVE_STATUS_SELECT[0].value);
+  // const [approveStatus, setApproveStatus] = useState(APPROVE_STATUS_SELECT[0].value);
 
-  const { data, isLoading, error } = useQuery(['parties', approveStatus], () =>
-    getAPI(`${PARTIES_URL.MY_PARTIES_LIST}?approveStatus=${approveStatus}`),
+  const { data, isLoading, error } = useQuery(['parties'], () =>
+    getAPI(`${PARTIES_URL.MY_PARTIES_LIST}`),
   );
 
   useEffect(() => {
     queryClient.invalidateQueries('parties');
-  }, [queryClient, approveStatus]);
+  }, [queryClient]);
 
-  const handleSelectChange = e => {
-    const newApproveStatus = e.target.value;
-    if (approveStatus !== newApproveStatus) {
-      setApproveStatus(newApproveStatus);
-    }
-  };
+  // const handleSelectChange = e => {
+  //   const newApproveStatus = e.target.value;
+  //   if (approveStatus !== newApproveStatus) {
+  //     setApproveStatus(newApproveStatus);
+  //   }
+  // };
 
   if (isLoading) {
     return <div>로딩중입니다.</div>;
@@ -39,13 +39,13 @@ const MyRequestPartyList = () => {
   const requestPartyList = data?.data.data;
   return (
     <>
-      <select value={approveStatus} onChange={handleSelectChange}>
+      {/* <select value={approveStatus} onChange={handleSelectChange}>
         {APPROVE_STATUS_SELECT.map(status => (
           <option key={status.value} value={status.value}>
             {status.label}
           </option>
         ))}
-      </select>
+      </select> */}
       {requestPartyList?.length > 0 ? (
         <ul>
           {requestPartyList.map(party => (
