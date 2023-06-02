@@ -1,4 +1,5 @@
 import React from 'react';
+import { flat } from 'sockjs-client/lib/transport-list';
 import styled from 'styled-components';
 
 const Header = () => {
