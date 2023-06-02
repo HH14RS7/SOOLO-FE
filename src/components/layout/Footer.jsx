@@ -101,13 +101,17 @@ export default Footer;
 
 /* Tab Bar */
 const TabBar = styled.div`
-  position: relative;
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 375px;
   height: 83px;
   background: rgba(249, 249, 249, 0.94);
   box-shadow: 0px -0.5px 0px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
   padding-bottom: 34px;
+  left: 50%; /* 중앙 정렬을 위해 변경 */
+  transform: translateX(-50%); /* 중앙 정렬을 위해 변경 */
   /* Note: backdrop-filter has minimal browser support */
 `;
 
