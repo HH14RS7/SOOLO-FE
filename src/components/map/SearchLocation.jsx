@@ -6,13 +6,14 @@ function SearchLocation({ onPlaceChange }) {
 
   const handleChange = e => {
     setInputText(e.target.value);
+    // onPlaceChange(e.target.value);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
     onPlaceChange(inputText);
-    setInputText('');
-    formRef.current.reset();
+    // setInputText('');
+    // formRef.current.reset();
   };
 
   return (
