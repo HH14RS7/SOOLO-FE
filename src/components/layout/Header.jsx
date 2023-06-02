@@ -1,86 +1,66 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-import { ReactComponent as Alarmicon } from '../../assets/header/alarm.svg';
 
 const Header = () => {
-  const navigate = useNavigate();
   return (
     <>
-      <Top>
-        <TopBar>
-          <Title>SOOLO</Title>
-          <FooterBtn onClick={() => navigate('/user/login')}>로그인</FooterBtn>
-          <Icon>
-            <Alarmicon width="19.87px" height="19.44px" />
-          </Icon>
-        </TopBar>
-      </Top>
+      <Background>
+        <Contents>
+          <Logo>SOOLO</Logo>
+          <svg
+            width="24"
+            height="25"
+            viewBox="0 0 24 25"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clip-path="url(#clip0_733_1152)">
+              <path
+                d="M21.6752 19.0536C21.0323 18.4805 20.4695 17.8235 20.0018 17.1003C19.4913 16.102 19.1853 15.0117 19.1018 13.8936V10.6003C19.1062 8.844 18.4692 7.14658 17.3103 5.82691C16.1515 4.50724 14.5506 3.65617 12.8085 3.43359V2.57359C12.8085 2.33755 12.7147 2.11118 12.5478 1.94427C12.3809 1.77736 12.1545 1.68359 11.9185 1.68359C11.6824 1.68359 11.4561 1.77736 11.2892 1.94427C11.1223 2.11118 11.0285 2.33755 11.0285 2.57359V3.44693C9.30199 3.68555 7.72047 4.54176 6.57684 5.857C5.43321 7.17223 4.80498 8.85736 4.80849 10.6003V13.8936C4.72499 15.0117 4.41901 16.102 3.90849 17.1003C3.44908 17.8218 2.89529 18.4788 2.26182 19.0536C2.19071 19.1161 2.13372 19.193 2.09463 19.2792C2.05555 19.3654 2.03528 19.4589 2.03516 19.5536V20.4603C2.03516 20.6371 2.10539 20.8066 2.23042 20.9317C2.35544 21.0567 2.52501 21.1269 2.70182 21.1269H21.2352C21.412 21.1269 21.5815 21.0567 21.7066 20.9317C21.8316 20.8066 21.9018 20.6371 21.9018 20.4603V19.5536C21.9017 19.4589 21.8814 19.3654 21.8423 19.2792C21.8033 19.193 21.7463 19.1161 21.6752 19.0536ZM3.42182 19.7936C4.0421 19.1944 4.58822 18.5229 5.04849 17.7936C5.69156 16.5879 6.06678 15.2576 6.14849 13.8936V10.6003C6.12205 9.81895 6.25311 9.04031 6.53385 8.31071C6.8146 7.5811 7.2393 6.91545 7.78265 6.35339C8.32601 5.79134 8.97692 5.34437 9.69661 5.03911C10.4163 4.73385 11.1901 4.57653 11.9718 4.57653C12.7536 4.57653 13.5273 4.73385 14.247 5.03911C14.9667 5.34437 15.6176 5.79134 16.161 6.35339C16.7043 6.91545 17.129 7.5811 17.4098 8.31071C17.6905 9.04031 17.8216 9.81895 17.7952 10.6003V13.8936C17.8769 15.2576 18.2521 16.5879 18.8952 17.7936C19.3554 18.5229 19.9016 19.1944 20.5218 19.7936H3.42182Z"
+                fill="black"
+              />
+              <path
+                d="M12.0015 23.353C12.4215 23.3433 12.8245 23.1855 13.1392 22.9073C13.454 22.6291 13.6603 22.2486 13.7215 21.833H10.2148C10.2778 22.2599 10.4937 22.6493 10.8224 22.9289C11.151 23.2085 11.5701 23.3592 12.0015 23.353Z"
+                fill="black"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_733_1152">
+                <rect width="24" height="24" fill="white" transform="translate(0 0.5)" />
+              </clipPath>
+            </defs>
+          </svg>
+        </Contents>
+      </Background>
     </>
   );
 };
 
 export default Header;
 
-const Top = styled.div`
-  width: 100vw;
+const Background = styled.div`
+  background: #ffffff;
+  width: 100%;
   height: 52px;
   position: fixed;
-  background: #ffffff;
+  top: 0;
+  border-bottom: 0.5px solid gray;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 `;
 
-/* top-bar */
-const TopBar = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 375px;
-  height: 52px;
-  left: 0px;
-  top: 0px;
-  padding: 13.5px 16px 14.5px 16px;
+const Contents = styled.div`
+  width: 343px;
+  height: 100%;
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
 
-  /* Gray/25 */
-
+const Logo = styled.div`
   background: #ffffff;
-`;
-
-/* SOOLO */
-const Title = styled.span`
-  width: 81px;
-  height: 24px;
-
-  /* title24 */
-
-  font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 100%;
-  /* identical to box height, or 24px */
-
-  letter-spacing: -0.015em;
-
-  /* Text/black */
-
   color: #1d2939;
-
-  /* Inside auto layout */
-
-  flex: none;
-  order: 0;
-  flex-grow: 0;
-`;
-
-const FooterBtn = styled.button`
-  color: black;
-`;
-
-const Icon = styled.div`
-  margin-left: auto;
-  height: 24px;
-  width: 24px;
-  left: 0px;
-  top: 0px;
-  border-radius: 0px;
+  font-size: 24px;
+  font-weight: 700;
 `;

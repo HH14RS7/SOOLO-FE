@@ -13,7 +13,8 @@ const Layout = ({ children }) => {
 };
 
 const Content = styled.div`
-  /* min-height: 100vh; */
+  padding-top: 75px;
+  padding-bottom: 75px;
 `;
 
 export default Layout;

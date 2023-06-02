@@ -1,5 +1,10 @@
 import React from 'react';
+import { ChatRoomPage } from '../components/Chat/ChatRoomPage';
 
 export const ChatRoom = () => {
-  return <div>채팅룸~ 대화창~ </div>;
+  return (
+    <>
+      <ChatRoomPage></ChatRoomPage>
+    </>
+  );
 };

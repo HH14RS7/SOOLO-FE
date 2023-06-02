@@ -47,8 +47,6 @@ const Container = styled.div`
   width: 390px;
   height: 100%;
   margin: 0 auto;
-  padding-top: 20px;
-  padding-bottom: 20px;
 `;
 
 const CreateButton = styled.button`

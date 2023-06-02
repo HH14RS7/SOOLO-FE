@@ -8,12 +8,13 @@ const MyPartyItem = ({ party }) => {
   const {
     partyId,
     title,
-    // address,
     currentCount,
     totalCount,
     partyDate,
     state,
-    memberInfo,
+    imageUrl,
+    stationName,
+    placeAddress,
   } = party;
 
   const dDay = dDayConvertor(partyDate);
@@ -23,19 +24,16 @@ const MyPartyItem = ({ party }) => {
     <PartyItemWrapper>
       <Link to={`${PATH_URL.PARTY_DETAIL}/${partyId}`}>
         <li key={partyId}>
-          <p>디데이 : D-{dDay > 0 ? dDay : 0}</p>
-          <p>제목 : {title}</p>
-          {/* <p>장소 : {address}</p> 지도 작업후 추가 */}
-          <p>승인여부: {state === 1 ? '승인완료' : state === 2 ? '승인대기' : ''}</p>
+          <p> D-{dDay > 0 ? dDay : 0}</p>
+          <p>{title}</p>
+          {/* <p>{recruitmentStatus ? '모집중' : '모집마감'}</p> */}
+          {/* <p>승인상태 : {state}</p> */}
+          <PlaceImage src={imageUrl} alt="placeImage" />
+          <p>{stationName ? stationName : placeAddress}</p>
           <p>
-            모집인원 : {currentCount} / {totalCount}명
+            {currentCount} / {totalCount}
           </p>
-          <p>모임시간 : {formattedDateTime}</p>
-          {memberInfo?.map((member, i) => (
-            <ProfileImageWrapper key={i}>
-              <ProfileImage src={member.profileImage} alt="profileImage" />
-            </ProfileImageWrapper>
-          ))}
+          <p>{formattedDateTime}</p>
         </li>
       </Link>
     </PartyItemWrapper>
@@ -46,15 +44,9 @@ const PartyItemWrapper = styled.div`
   border: 1px solid black;
 `;
 
-const ProfileImageWrapper = styled.div`
-  display: flex;
+const PlaceImage = styled.img`
+  width: 253px;
+  height: 80px;
+  border-radius: 16px;
 `;
-
-const ProfileImage = styled.img`
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 50%;
-`;
-
 export default MyPartyItem;

@@ -5,39 +5,68 @@ import useGeolocation from '../../hooks/useGeolocation';
 import { styled } from 'styled-components';
 import ReactDOMServer from 'react-dom/server';
 import SelectedPartyItem from './SelectedPartyItem';
-import { formmatedDate } from '../../shared/formattedDate';
+import SearchPartyList from './SearchPartyList';
+import { QueryClient, useQuery } from 'react-query';
+import { PARTIES_URL } from '../../shared/constants';
+import { getAPI } from '../../api/api';
 const { kakao } = window;
 
-const PartyMapContainer = ({ searchPlace, partyInfo }) => {
-  const location = useLocation();
+const PartyMapContainer = ({ searchPlace }) => {
   const currentloaction = useGeolocation();
   const mapRef = useRef();
   const markersRef = useRef([]);
-  const [selectedParty, setSelectedParty] = useState(null); // Track the selected party
+  const [selectedParty, setSelectedParty] = useState(null);
 
   const latitude = currentloaction.coordinates.latitude; // 위도
   const longitude = currentloaction.coordinates.longitude; // 경도
-  const centerCoordinate = new kakao.maps.LatLng(37.496777, 127.028185); // 중심 좌표(강남역)
+  const queryClient = new QueryClient();
 
-  useEffect(() => {
-    const container = document.getElementById('map');
-    const options = {
-      center: centerCoordinate,
-      level: 5,
-      // radius: 10000,
-    };
+  const centerCoordinate = new kakao.maps.LatLng(37.496777, 127.028185);
 
-    mapRef.current = new kakao.maps.Map(container, options);
-  }, [location]);
+  const page = 0; // 임시
+  const radius = 10;
+
+  const { data, isLoading, error } = useQuery(
+    ['parties'],
+    () =>
+      // geolocation 로딩중일때는 강남역 초기 세팅
+      getAPI(
+        `${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=0&latitude=37.496777&longitude=127.028185&radius=${radius}`,
+      ),
+
+    // currentloaction.loading
+    //   ? getAPI(
+    //       `${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=0&latitude=37.496777&longitude=127.028185&radius=${radius}`,
+    //     )
+    //   : getAPI(
+    //       `${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
+    //     ),
+  );
 
   useEffect(() => {
     const ps = new kakao.maps.services.Places();
+    const container = document.getElementById('map');
+    const options = {
+      center: centerCoordinate,
+      level: 6,
+      radius: 10000,
+    };
+
+    mapRef.current = new kakao.maps.Map(container, options);
+
+    queryClient.invalidateQueries('parties');
+
     const placesSearchCB = (result, status) => {
-      console.log(searchPlace);
       if (status === kakao.maps.services.Status.OK) {
         const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
         mapRef.current.setCenter(coords);
         markersRef.current.forEach(marker => marker.setMap(null));
+      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        alert('검색 결과가 존재하지 않습니다.');
+        return;
+      } else if (status === kakao.maps.services.Status.ERROR) {
+        alert('검색 결과 중 오류가 발생했습니다.');
+        return;
       }
     };
 
@@ -45,19 +74,22 @@ const PartyMapContainer = ({ searchPlace, partyInfo }) => {
     if (searchPlace) {
       ps.keywordSearch(searchPlace, placesSearchCB);
     }
-    const overlayInfos = partyInfo?.map(info => {
-      return {
-        title: info.placeName,
-        lat: info.latitude,
-        lng: info.longitude,
-        partyId: info.partyId,
-        yAnchor: 1,
-      };
-    });
+
+    const overlayInfos =
+      partyList?.map(party => {
+        return {
+          title: party.placeName,
+          lat: party.latitude,
+          lng: party.longitude,
+          partyId: party.partyId,
+          yAnchor: 1,
+        };
+      }) || [];
 
     // 마커 찍기
     const imageSrc = marker;
     overlayInfos.forEach(el => {
+      console.log(el);
       const imageSize = new kakao.maps.Size(24, 35);
       const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
@@ -68,7 +100,6 @@ const PartyMapContainer = ({ searchPlace, partyInfo }) => {
         image: markerImage,
       });
 
-      // 기존 마커 제거
       const overlayContent = ReactDOMServer.renderToString(
         <OverlayWrap>
           <PlaceName>{el.title}</PlaceName>
@@ -80,8 +111,6 @@ const PartyMapContainer = ({ searchPlace, partyInfo }) => {
       const customOverlay = new kakao.maps.CustomOverlay({
         position: position,
         content: overlayContent,
-        // content: content,
-        // content: () => content(el.title),
       });
 
       // 마커에 mouseover시 오버레이(가게명)
@@ -97,13 +126,18 @@ const PartyMapContainer = ({ searchPlace, partyInfo }) => {
 
       // 마커 클릭시 목록 출력
       kakao.maps.event.addListener(marker, 'click', function () {
-        const selected = partyInfo.find(info => info.partyId === el.partyId);
+        const selected = partyList.find(party => party.partyId === el.partyId);
         setSelectedParty(selected);
+        markersRef.current.push(marker);
+        // 마커 선택한 중심좌표로 이동
+        console.log(markersRef);
+        const currentLocation = new kakao.maps.LatLng(selected.latitude, selected.longitude);
+        mapRef.current.panTo(currentLocation);
       });
 
       // 오버레이 클릭 이벤트
       kakao.maps.event.addListener(customOverlay, 'click', function () {
-        const selected = partyInfo.find(info => info.partyId === el.partyId);
+        const selected = partyList.find(party => party.partyId === el.partyId);
         setSelectedParty(selected);
       });
 
@@ -111,49 +145,67 @@ const PartyMapContainer = ({ searchPlace, partyInfo }) => {
         setSelectedParty(null);
       });
     });
-  }, [partyInfo]);
+
+    // unmount될 때 마커 제거
+    return () => {
+      markersRef.current.forEach(marker => {
+        marker.setMap(null);
+      });
+      markersRef.current = [];
+    };
+  }, [searchPlace, queryClient]);
+
+  const zoomIn = () => {
+    const map = mapRef.current;
+    map.setLevel(map.getLevel() - 1);
+  };
+
+  const zoomOut = () => {
+    const map = mapRef.current;
+    map.setLevel(map.getLevel() + 1);
+  };
 
   // 현재 위치로 찾기
   const handleCurrentLocation = () => {
+    const updatedUrl = `${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=${radius}`;
+    queryClient.prefetchQuery(['parties'], () => getAPI(updatedUrl));
+    queryClient.invalidateQueries('parties');
+
     const currentLocation = new kakao.maps.LatLng(latitude, longitude);
     mapRef.current.panTo(currentLocation);
   };
 
+  const partyList = data?.data.data.partyList;
+
   return (
     <>
-      <div
-        id="map"
-        style={{
-          width: '300px',
-          height: '300px',
-        }}
-      />
+      <Map id="map">
+        <ZoomControlContainer>
+          <ZoomButton onClick={zoomIn}>
+            <img
+              src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png"
+              alt="확대"
+            />
+          </ZoomButton>
+          <ZoomButton onClick={zoomOut}>
+            <img
+              src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png"
+              alt="축소"
+            />
+          </ZoomButton>
+        </ZoomControlContainer>{' '}
+      </Map>
       <button onClick={handleCurrentLocation}>현재 위치로 찾기</button>
       <div>
         {selectedParty ? (
           <SelectedPartyItem party={selectedParty} />
         ) : (
-          partyInfo?.map(party => (
-            <ListMapper key={party.partyId}>
-              <p>{party.title}</p>
-              <PlaceImage src={party.image} alt="placeImage" />
-              <span>{party.stationName ? party.stationName : party.placeAddress}</span>
-              <span>
-                {party.currentCount}/{party.totalCount}
-              </span>
-              <p> {formmatedDate(party.partyDate, 'MM.DD · a h:mm')}</p>
-            </ListMapper>
-          ))
+          <SearchPartyList partyList={partyList} />
         )}
       </div>
     </>
   );
 };
-
-const ListMapper = styled.div`
-  border: 1px solid black;
-  font-size: 14px;
-`;
 
 const OverlayWrap = styled.div`
   background-color: var(--color-primary-500);
@@ -171,12 +223,39 @@ const PlaceName = styled.h1`
   font-size: var(--font-small);
 `;
 
+const Map = styled.div`
+  // top: 200px;
+  width: 300px;
+  height: 300px;
+  position: relative;
+`;
+
+const ZoomControlContainer = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  z-index: 99;
+`;
+
+const ZoomButton = styled.span`
+  cursor: pointer;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 2px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  img {
+    width: 12px;
+    height: 12px;
+  }
+`;
 const OverlayArrow = styled.div``;
 
-const CustomOverlay = styled.div``;
-
-const PlaceImage = styled.img`
-  width: 30px;
-  height: 30px;
-`;
 export default PartyMapContainer;

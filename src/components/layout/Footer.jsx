@@ -101,47 +101,42 @@ export default Footer;
 
 /* Tab Bar */
 const TabBar = styled.div`
+  height: 49px;
   position: fixed;
   bottom: 0;
-  left: 0;
-  width: 375px;
-  height: 83px;
+  width: 100%;
   background: rgba(249, 249, 249, 0.94);
   box-shadow: 0px -0.5px 0px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
-  padding-bottom: 34px;
-  left: 50%; /* 중앙 정렬을 위해 변경 */
-  transform: translateX(-50%); /* 중앙 정렬을 위해 변경 */
-  /* Note: backdrop-filter has minimal browser support */
 `;
 
 /* Tabs */
 const Tabs = styled.div`
-  position: absolute;
-  height: 49px;
-  left: 0px;
-  right: 0px;
-  top: 0px;
+  display: flex;
+  width: 390px;
+  height: 100%;
+  margin: 0 auto;
+  justify-content: space-between;
 `;
 
 /* Tab Bar Item */
 const TabBarItem = styled.div`
-  position: absolute;
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
   width: 76px;
   height: 49px;
-  left: ${props => props.index * 75}px;
-  top: 0px;
 `;
 
 /* icon */
 const Icon = styled.div`
-  position: absolute;
   padding-left: ${props => props.paddingleft};
   padding-top: ${props => props.paddingtop};
-  width: 24px;
-  height: 24px;
-  left: 26px;
-  top: 7px;
+  /* width: 24px; */
+  /* height: 24px; */
+  /* left: 26px; */
+  /* top: 7px; */
 
   cursor: pointer;
   transition: color 0.3s ease-in-out;
@@ -154,21 +149,20 @@ const Icon = styled.div`
 
 /* span */
 const Title = styled.span`
-  position: absolute;
-  width: auto;
-  height: 10px;
-  left: ${props => props.left || 'calc(50% - 18px / 2)'};
-  top: calc(50% - 10px / 2 + 15.37px);
+  /* width: auto; */
+  /* height: 10px; */
+  /* left: ${props => props.left || 'calc(50% - 18px / 2)'};
+  top: calc(50% - 10px / 2 + 15.37px); */
 
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 400;
   font-size: 10px;
-  line-height: 100%;
+  /* line-height: 100%; */
   /* identical to box height, or 10px */
 
-  text-align: center;
-  letter-spacing: -0.015em;
+  /* text-align: center; */
+  /* letter-spacing: -0.015em; */
 
   /* Gray/500 */
   color: ${props => (props.active ? '#F63D68' : '#667085')};
