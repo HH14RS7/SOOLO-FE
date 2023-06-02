@@ -101,23 +101,23 @@ export default Footer;
 
 /* Tab Bar */
 const TabBar = styled.div`
-  position: relative;
-  width: 375px;
-  height: 83px;
+  height: 49px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
   background: rgba(249, 249, 249, 0.94);
   box-shadow: 0px -0.5px 0px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
-  padding-bottom: 34px;
-  /* Note: backdrop-filter has minimal browser support */
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
 `;
 
 /* Tabs */
 const Tabs = styled.div`
   position: absolute;
-  height: 49px;
-  left: 0px;
-  right: 0px;
-  top: 0px;
+  width: 375px;
+  height: 100%;
+  margin: 0 auto;
 `;
 
 /* Tab Bar Item */

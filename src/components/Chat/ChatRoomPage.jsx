@@ -71,24 +71,6 @@ export const ChatRoomPage = () => {
                   }}
                 />
               </ModalBtn>
-              {isModalOpen && (
-                <Modals onClick={handleBackdropClick}>
-                  <ModalContent>
-                    <ModalMenuBar>
-                      <div
-                        style={{
-                          marginTop: '20px',
-                          display: 'inline-block',
-                        }}
-                      >
-                        채팅방 설정
-                      </div>
-                    </ModalMenuBar>
-                    <ModalChatExit>채팅방 나가기</ModalChatExit>
-                    <ModalReport>신고하기</ModalReport>
-                  </ModalContent>
-                </Modals>
-              )}
             </Topbar>
             <Contents>
               <ParticipantDiv>ㅇㅇㅇ님이 참여했습니다.</ParticipantDiv>
@@ -144,7 +126,26 @@ export const ChatRoomPage = () => {
           </div>
         </Container>
       </Background>
-      ;
+      {isModalOpen && (
+        <div>
+          <Modals onClick={handleBackdropClick}>
+            <ModalContent>
+              <ModalMenuBar>
+                <div
+                  style={{
+                    marginTop: '20px',
+                    display: 'inline-block',
+                  }}
+                >
+                  채팅방 설정
+                </div>
+              </ModalMenuBar>
+              <ModalChatExit>채팅방 나가기</ModalChatExit>
+              <ModalReport>신고하기</ModalReport>
+            </ModalContent>
+          </Modals>
+        </div>
+      )}
     </>
   );
 };
@@ -184,7 +185,7 @@ const ModalBtn = styled.button`
 
 const Contents = styled.div`
   width: 100%;
-  height: 700px;
+  height: 100%;
   background: #e4e7ec;
   display: inline-block;
 `;
@@ -230,8 +231,10 @@ const OtherContents = styled.div`
 `;
 
 const OtherChatText = styled.div`
-  width: 105px;
-  height: 40px;
+  /* width: 105px; */
+  /* height: 40px; */
+  max-width: 219px;
+  padding: 10px;
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -313,7 +316,8 @@ const ChatBtn = styled.button`
 // 모달
 const Modals = styled.div`
   position: fixed;
-  top: 52px;
+  overflow: hidden;
+  /* top: 4.3vh; */
   left: 0;
   right: 0;
   bottom: 0;
@@ -321,18 +325,22 @@ const Modals = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   background-color: rgba(29, 41, 57, 0.5);
-  margin: 0 auto;
-  width: 375px;
-  height: 830px;
+  /* margin: 0 auto; */
+  /* width: 375px; */
+  height: 100%;
 `;
 
 const ModalContent = styled.div`
+  position: fixed;
+  left: 0;
+  right: 0;
   text-align: center;
   background-color: white;
   width: 375px;
   height: 150px;
   border-radius: 16px 16px 0px 0px;
-  margin-top: auto;
+  margin: 0 auto;
+  bottom: 52px;
 `;
 
 const ModalMenuBar = styled.div`
