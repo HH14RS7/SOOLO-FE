@@ -1,5 +1,4 @@
 import React from 'react';
-import { flat } from 'sockjs-client/lib/transport-list';
 import styled from 'styled-components';
 
 const Header = () => {
@@ -43,6 +42,8 @@ const Background = styled.div`
   background: #ffffff;
   width: 100%;
   height: 52px;
+  position: fixed;
+  top: 0;
   border-bottom: 0.5px solid gray;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
