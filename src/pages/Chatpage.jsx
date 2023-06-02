@@ -8,7 +8,6 @@ import Profile from '../assets/karina.webp';
 import * as StompJs from '@stomp/stompjs';
 import { Link } from 'react-router-dom';
 import { PATH_URL } from '../shared/constants';
-import { Mobile, PC } from '../shared/MediaQuery';
 import Cookies from 'js-cookie';
 
 export const Chatpage = () => {
