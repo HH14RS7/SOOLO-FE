@@ -7,7 +7,7 @@ const MyPartyList = () => {
   const approveStatus = 0;
 
   const { data, isLoading, error } = useQuery('myParties', () =>
-    getAPI(`${PARTIES_URL.MY_PARTIES_LIST}?approveStatus=${approveStatus}`),
+    getAPI(`${PARTIES_URL.MY_PARTIES_LIST}`),
   );
 
   const partyList = data?.data.data;
