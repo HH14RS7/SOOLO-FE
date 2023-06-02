@@ -27,7 +27,7 @@ const MyPartyItem = ({ party }) => {
           <p> D-{dDay > 0 ? dDay : 0}</p>
           <p>{title}</p>
           {/* <p>{recruitmentStatus ? '모집중' : '모집마감'}</p> */}
-          {/* <p>승인상태 : {stateMsg}</p> */}
+          {/* <p>승인상태 : {state}</p> */}
           <PlaceImage src={imageUrl} alt="placeImage" />
           <p>{stationName ? stationName : placeAddress}</p>
           <p>
