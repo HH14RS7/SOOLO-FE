@@ -2,18 +2,19 @@
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { PATH_URL, PARTIES_URL } from '../../shared/constants';
 import { useMutation } from 'react-query';
 import Calendars from '../../shared/Calendars';
 import moment from 'moment';
 import { useRecoilValue } from 'recoil';
-import { mapDataState, stationDataState } from '../../atoms';
+import { mapDataState, stationDataState, regionNameState } from '../../atoms';
 import { putUpdateAPI, postImageAPI } from '../../api/api';
 
 const CreateForm = ({ party }) => {
   const mapData = useRecoilValue(mapDataState);
   const stationData = useRecoilValue(stationDataState);
+  const regionName = useRecoilValue(regionNameState);
 
   const PARTICIPANT_COUNT = Array.from({ length: 9 }, (_, i) => ({ value: Number(i + 2) }));
   const navigator = useNavigate();
@@ -125,6 +126,7 @@ const CreateForm = ({ party }) => {
       placeUrl,
       stationName,
       distance,
+      regionName,
     };
 
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));

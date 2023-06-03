@@ -12,3 +12,8 @@ export const stationDataState = atom({
     stationName: '',
   },
 });
+
+export const regionNameState = atom({
+  key: 'regionNameState',
+  default: '강남역',
+});

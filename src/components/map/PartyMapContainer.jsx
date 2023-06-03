@@ -17,18 +17,22 @@ const PartyMapContainer = ({ searchPlace }) => {
   const [selectedParty, setSelectedParty] = useState(null);
   const [parties, setParties] = useState([]);
   const queryClient = new QueryClient();
-  const [latitude, setLatitude] = useState(37.496777); // 초기 좌표값 설정
-  const [longitude, setLongitude] = useState(127.028185); // 초기 좌표값 설정
+  const INITIAL_RATITUDE = 37.496777;
+  const INITIAL_LONGITUDE = 127.028185;
+  const [latitude, setLatitude] = useState(INITIAL_RATITUDE); // 초기 좌표값 설정
+  const [longitude, setLongitude] = useState(INITIAL_LONGITUDE); // 초기 좌표값 설정
+  const [regionName, setRegionName] = useState('');
 
   const centerCoordinate = new kakao.maps.LatLng(latitude, longitude);
 
   // 로딩 상태에 따라 초기 중심 좌표 설정
   currentloaction.loading
-    ? new kakao.maps.LatLng(37.496777, 127.028185) // 강남역
+    ? new kakao.maps.LatLng(INITIAL_RATITUDE, INITIAL_LONGITUDE) // 강남역
     : new kakao.maps.LatLng(latitude, longitude);
 
   const page = 0; // 임시
-  const radius = 3; // 반경 km
+  const radius = 5; // 반경 km
+  var geocoder = new kakao.maps.services.Geocoder();
 
   // geolocation 로딩중일때는 강남역 초기 세팅
   const url = `${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=${radius}`;
@@ -45,7 +49,7 @@ const PartyMapContainer = ({ searchPlace }) => {
     const options = {
       center: centerCoordinate,
       level: 6,
-      radius: 50000,
+      radius: 200000,
     };
 
     mapRef.current = new kakao.maps.Map(container, options);
@@ -55,10 +59,13 @@ const PartyMapContainer = ({ searchPlace }) => {
     // 키워드 검색 함수
     const placesSearchCB = (result, status) => {
       if (status === kakao.maps.services.Status.OK) {
-        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-        setLatitude(result[0].y);
-        setLongitude(result[0].x);
-        mapRef.current.setCenter(coords);
+        const latitude = result[0].y;
+        const longitude = result[0].x;
+
+        setLatitude(latitude);
+        setLongitude(longitude);
+        geocoder.coord2RegionCode(longitude, latitude, callback);
+
         markersRef.current.forEach(marker => marker.setMap(null));
       } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
         alert('검색 결과가 존재하지 않습니다.');
@@ -68,7 +75,6 @@ const PartyMapContainer = ({ searchPlace }) => {
         return;
       }
     };
-
     // 검색 키워드 함수 호출
     if (searchPlace) {
       ps.keywordSearch(searchPlace, placesSearchCB);
@@ -89,7 +95,6 @@ const PartyMapContainer = ({ searchPlace }) => {
     // 마커 찍기
     const imageSrc = marker;
     overlayInfos.forEach(el => {
-      console.log(el);
       const imageSize = new kakao.maps.Size(24, 35);
       const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
@@ -131,9 +136,9 @@ const PartyMapContainer = ({ searchPlace }) => {
         setSelectedParty(selected);
         markersRef.current.push(marker);
         // 마커 선택한 중심좌표로 이동
+        fetchData(selected.latitude, selected.longitude);
         const currentLocation = new kakao.maps.LatLng(selected.latitude, selected.longitude);
         mapRef.current.panTo(currentLocation);
-        fetchData(selected.latitude, selected.longitude);
       });
 
       // 오버레이 클릭 이벤트
@@ -155,7 +160,7 @@ const PartyMapContainer = ({ searchPlace }) => {
       });
       markersRef.current = [];
     };
-  }, [searchPlace, parties]);
+  }, [searchPlace, queryClient]);
 
   const zoomIn = () => {
     const map = mapRef.current;
@@ -169,12 +174,56 @@ const PartyMapContainer = ({ searchPlace }) => {
 
   // 현재 위치로 찾기
   const handleCurrentLocation = async () => {
-    setLatitude(currentloaction.coordinates.latitude);
-    setLongitude(currentloaction.coordinates.longitude);
+    navigator.geolocation.getCurrentPosition(
+      async position => {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
 
-    const currentLocation = new kakao.maps.LatLng(latitude, longitude);
-    fetchData(latitude, longitude);
-    mapRef.current.panTo(currentLocation);
+        await fetchData(latitude, longitude);
+
+        setLatitude(latitude);
+        setLongitude(longitude);
+
+        const currentLocation = new kakao.maps.LatLng(latitude, longitude);
+        mapRef.current.panTo(currentLocation);
+        geocoder.coord2RegionCode(longitude, latitude, callback);
+      },
+      error => {
+        console.error(error);
+        alert('현재 위치를 가져올 수 없습니다.');
+      },
+    );
+  };
+
+  // 행정구역명 변환 함수
+  const callback = function (result, status) {
+    let regionName = '';
+    if (status === kakao.maps.services.Status.OK) {
+      const region1DepthName = result[0].region_1depth_name;
+      const region2DepthName = result[0].region_2depth_name;
+      const region3DepthName = result[0].region_3depth_name;
+
+      if (region1DepthName.endsWith('특별시') || region1DepthName.endsWith('광역시')) {
+        // 특별시나 광역시인 경우
+        regionName = region1DepthName.slice(0, -3); // 뒤의 '특별시' 또는 '광역시' 제거
+      } else {
+        // 특별시나 광역시가 아닌 경우
+        regionName = '';
+      }
+      if (region2DepthName.endsWith('구')) {
+        // 2depth가 '구'로 끝나는 경우
+        if (region1DepthName.endsWith('특별시') || region1DepthName.endsWith('광역시')) {
+          regionName += ' ' + region2DepthName;
+        } else {
+          regionName += region2DepthName;
+        }
+      } else {
+        // 2depth가 '구'로 끝나지 않는 경우
+        regionName += region2DepthName + ' ' + region3DepthName;
+      }
+      console.log('행정구역 이름: ' + regionName);
+      setRegionName(regionName);
+    }
   };
 
   const fetchData = async (latitude, longitude) => {
@@ -212,7 +261,7 @@ const PartyMapContainer = ({ searchPlace }) => {
         {selectedParty ? (
           <SelectedPartyItem party={selectedParty} />
         ) : (
-          <SearchPartyList partyList={partyList} />
+          <SearchPartyList partyList={partyList} regionName={regionName} />
         )}
       </div>
     </>
