@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 
@@ -17,10 +17,12 @@ export const ChatRoomPage = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setBackgroundPosition('static');
   };
 
   const openModal = () => {
     setIsModalOpen(true);
+    setBackgroundPosition('fixed');
   };
   const handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
@@ -28,11 +30,57 @@ export const ChatRoomPage = () => {
     }
   };
 
+  // 모달 기능
+  //메뉴 모달
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+  const [backgroundPosition, setBackgroundPosition] = useState('static');
+
+  const ExitopenModal = () => {
+    setIsExitModalOpen(true);
+  };
+
+  const ExitcloseModal = () => {
+    setIsExitModalOpen(false);
+  };
+
+  const ReportButtonHandler = () => {
+    alert('곧 업데이트 예정입니다!');
+  };
+
+  // 채팅방 입장시 안내 문구 기능
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    // 페이지에 진입했을 때 모달을 띄우기 위한 타이머 설정
+    const openTimer = setTimeout(() => {
+      setShowModal(true);
+    }, 0); // 5초 후에 모달을 엽니다.
+
+    // 모달을 닫기 위한 타이머 설정
+    const closeTimer = setTimeout(() => {
+      setShowModal(false);
+    }, 5000); // 5초 후에 모달을 닫습니다. (총 10초)
+
+    // 컴포넌트가 언마운트되거나 업데이트되기 전에 타이머를 정리합니다.
+    return () => {
+      clearTimeout(openTimer);
+      clearTimeout(closeTimer);
+    };
+  }, []);
+
   return (
     <>
-      <Background>
+      <Background
+        style={{
+          position: backgroundPosition,
+        }}
+      >
         <Container>
-          <div>
+          <div
+            style={{
+              height: '100%',
+            }}
+          >
             <Topbar>
               <Link to={`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`}>
                 <div
@@ -75,54 +123,130 @@ export const ChatRoomPage = () => {
             <Contents>
               <ParticipantDiv>ㅇㅇㅇ님이 참여했습니다.</ParticipantDiv>
               <OtherDiv>
-                <OtherProfile>
-                  <img
-                    src={ProfileImg}
-                    alt="profile"
-                    style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '8px',
-                      marginTop: '14px',
-                    }}
-                  />
-                </OtherProfile>
-                <OthertInfo>
-                  <OtherName>김피클</OtherName>
-                  <OtherContents>
-                    <OtherChatText>어서오세요!</OtherChatText>
-                    <OtherChatTime>12:19 pm</OtherChatTime>
-                  </OtherContents>
-                </OthertInfo>
-              </OtherDiv>
-              <MyChatDiv>
-                <MyChatTime>12:19 pm</MyChatTime>
-                <MyChatText>반가워요~!</MyChatText>
-              </MyChatDiv>
-            </Contents>
-            <SendContents>
-              <SendDiv>
-                <input
-                  placeholder="메시지를 입력하세요."
+                <div
                   style={{
-                    width: '277px',
-                    height: '20px',
-                    border: 'none',
-                    marginLeft: '16px',
+                    position: 'relative',
                   }}
-                ></input>
-                <ChatBtn>
-                  <img
-                    src={SendIcon}
-                    alt="sendBtn"
+                >
+                  <div
                     style={{
-                      width: '12px',
-                      height: '12px',
+                      height: '85px',
+                      width: '42px',
+                      position: 'absolute',
+                      bottom: 0,
                     }}
-                  />
-                </ChatBtn>
-              </SendDiv>
-            </SendContents>
+                  >
+                    <OtherProfile>
+                      <img
+                        src={ProfileImg}
+                        alt="profile"
+                        style={{
+                          width: '40px',
+                          height: '40px',
+                          borderRadius: '8px',
+                        }}
+                      />
+                    </OtherProfile>
+                    <div
+                      style={{
+                        width: '18px',
+                        height: '18px',
+                        background: '#F63D68',
+                        borderRadius: '20px',
+                        position: 'absolute',
+                        bottom: '25px',
+                        left: '29px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <img
+                        src={PartyHost}
+                        alt="host"
+                        style={{
+                          width: '10px',
+                          height: '10px',
+                        }}
+                      ></img>
+                    </div>
+                  </div>
+                  <OthertInfo>
+                    <OtherName>김피클</OtherName>
+                    <OtherContents>
+                      <OtherChatText>
+                        hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!
+                      </OtherChatText>
+                      <OtherChatTime>12:19 pm</OtherChatTime>
+                    </OtherContents>
+                  </OthertInfo>
+                </div>
+              </OtherDiv>
+              <div
+                style={{
+                  height: '57px',
+                  marginRight: '16px',
+                  marginTop: '18px',
+                }}
+              >
+                <MyChatDiv>
+                  <MyChatTime>12:19 pm</MyChatTime>
+                  <MyChatText>
+                    반가워요~!반가워요~!반가워요~!반가워요~!반가워요~!반가워요~!반가워요~!반가워요~!반가워요~!반가워요~!
+                  </MyChatText>
+                </MyChatDiv>
+              </div>
+              {showModal && (
+                <div
+                  style={{
+                    display: 'flex',
+                    width: '100%',
+                    height: '100%',
+                  }}
+                >
+                  <NavigateModal>
+                    <NavigateDiv>
+                      <div
+                        style={{
+                          height: '30px',
+                          width: '80%',
+                          margin: 'auto',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'flex-end',
+                        }}
+                      >
+                        <NavigateText>가이드라인 어쩌구 지키지 않으면 죽여버릴거야..</NavigateText>
+                        <NavigateText>채팅할 때 조심하세요 안 그러면 찾아가요..</NavigateText>
+                      </div>
+                    </NavigateDiv>
+                  </NavigateModal>
+                </div>
+              )}
+              <SendContents>
+                <SendDiv>
+                  <input
+                    placeholder="메시지를 입력하세요."
+                    style={{
+                      width: '277px',
+                      height: '20px',
+                      border: 'none',
+                      marginLeft: '16px',
+                    }}
+                  ></input>
+                  <ChatBtn>
+                    <img
+                      src={SendIcon}
+                      alt="sendBtn"
+                      style={{
+                        width: '12px',
+                        height: '12px',
+                      }}
+                    />
+                  </ChatBtn>
+                </SendDiv>
+              </SendContents>
+            </Contents>
           </div>
         </Container>
       </Background>
@@ -140,10 +264,46 @@ export const ChatRoomPage = () => {
                   채팅방 설정
                 </div>
               </ModalMenuBar>
-              <ModalChatExit>채팅방 나가기</ModalChatExit>
-              <ModalReport>신고하기</ModalReport>
+              <ModalChatExit
+                onClick={() => {
+                  ExitopenModal();
+                }}
+              >
+                채팅방 나가기
+              </ModalChatExit>
+              <ModalReport
+                onClick={() => {
+                  ReportButtonHandler();
+                }}
+              >
+                신고하기 <ComingSoon>업데이트 예정</ComingSoon>
+              </ModalReport>
             </ModalContent>
           </Modals>
+        </div>
+      )}
+      {isExitModalOpen && (
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+          }}
+        >
+          <ExitModal>
+            <ExitName>채팅방을 나가시겠습니까?</ExitName>
+            <ExitText>한번 나간 채팅방은 다시 들어올 수 없습니다.</ExitText>
+            <ExitBtnDiv>
+              <ExitCancel
+                onClick={() => {
+                  ExitcloseModal();
+                }}
+              >
+                머무르기
+              </ExitCancel>
+              <EixtBtn>나가기</EixtBtn>
+            </ExitBtnDiv>
+          </ExitModal>
         </div>
       )}
     </>
@@ -151,9 +311,10 @@ export const ChatRoomPage = () => {
 };
 
 const Background = styled.div`
-  background: #c3c3c3;
+  background: #ffffff;
   width: 100%;
-  height: 100%;
+  height: 95vh;
+  padding-top: 50px;
 `;
 
 const Container = styled.div`
@@ -185,7 +346,7 @@ const ModalBtn = styled.button`
 
 const Contents = styled.div`
   width: 100%;
-  height: 100%;
+  height: 80vh;
   background: #e4e7ec;
   display: inline-block;
 `;
@@ -204,20 +365,24 @@ const ParticipantDiv = styled.div`
 `;
 
 const OtherDiv = styled.div`
+  /* height: 57px; */
   margin-left: 16px;
   display: flex;
   margin-top: 18px;
-  margin-bottom: 20px;
+
+  /* margin-bottom: 20px; */
+  position: relative;
 `;
 
 const OtherProfile = styled.div`
   width: 40px;
-  height: 40px;
+  /* height: 40px; */
   display: flex;
+  margin-top: 14px;
 `;
 
 const OthertInfo = styled.div`
-  margin-left: 12px;
+  margin-left: 56px;
 `;
 
 const OtherName = styled.div`
@@ -234,13 +399,15 @@ const OtherChatText = styled.div`
   /* width: 105px; */
   /* height: 40px; */
   max-width: 219px;
+  line-height: 1.2;
   padding: 10px;
   font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
   background: #f8f9fe;
-  overflow-x: auto;
+  /* overflow-x: auto; */
+  word-break: break-all;
   border-radius: 20px 20px 20px 0px;
 `;
 
@@ -255,9 +422,11 @@ const OtherChatTime = styled.div`
 
 // 내 채팅 스타일
 const MyChatDiv = styled.div`
+  /* width: 100%; */
   display: flex;
   float: right;
-  margin-right: 16px;
+  /* float: right; */
+  /* margin-right: 16px; */
 `;
 
 const MyChatTime = styled.div`
@@ -271,10 +440,10 @@ const MyChatTime = styled.div`
 `;
 
 const MyChatText = styled.div`
-  width: 105px;
-  height: 40px;
+  max-width: 219px;
   font-size: 14px;
-  display: flex;
+  line-height: 1.2;
+  padding: 10px;
   align-items: center;
   justify-content: center;
   background: #f63d68;
@@ -284,11 +453,13 @@ const MyChatText = styled.div`
 
 // 채팅창
 const SendContents = styled.div`
+  width: 375px;
   display: flex;
-  align-items: center;
   background: #e4e7ec;
   overflow: hidden;
-  height: 76px;
+  position: fixed;
+  bottom: 0;
+  padding-bottom: 60px;
 `;
 
 const SendDiv = styled.div`
@@ -340,7 +511,7 @@ const ModalContent = styled.div`
   height: 150px;
   border-radius: 16px 16px 0px 0px;
   margin: 0 auto;
-  bottom: 52px;
+  bottom: 49px;
 `;
 
 const ModalMenuBar = styled.div`
@@ -349,15 +520,119 @@ const ModalMenuBar = styled.div`
 `;
 
 const ModalChatExit = styled.button`
-  text-align: left;
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
   font-size: 16px;
   width: 342px;
   height: 48px;
 `;
 
 const ModalReport = styled.button`
+  display: flex;
+  align-items: center;
   text-align: left;
   font-size: 16px;
   width: 342px;
   height: 48px;
+  margin-left: 16px;
+`;
+
+const ComingSoon = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-left: 10px;
+  width: 79px;
+  height: 22px;
+  font-size: 10px;
+  border-radius: 10px;
+  background: #f2f4f7;
+  color: #344054;
+`;
+
+const ExitModal = styled.div`
+  text-align: center;
+  margin: auto;
+  z-index: 100;
+  width: 343px;
+  height: 206px;
+  border-radius: 16px;
+  background: white;
+`;
+
+const ExitName = styled.div`
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 56px;
+`;
+
+const ExitText = styled.div`
+  font-size: 14px;
+  margin-top: 16px;
+`;
+
+const ExitBtnDiv = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 32px;
+`;
+
+const ExitCancel = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  color: #667085;
+  font-size: 12px;
+  font-weight: 600;
+  width: 144px;
+  height: 48px;
+  background: #fff;
+  border: 1.5px solid #667085;
+  border-radius: 12px;
+`;
+
+const EixtBtn = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  width: 144px;
+  height: 48px;
+  background: #f63d68;
+  border-radius: 12px;
+`;
+
+const NavigateModal = styled.div`
+  width: 343px;
+  height: 70vh;
+  display: flex;
+  padding-bottom: 280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+`;
+
+const NavigateDiv = styled.div`
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 343px;
+  height: 61px;
+  background: #f9fafb;
+  border-radius: 16px;
+`;
+
+const NavigateText = styled.div`
+  font-size: 12px;
+  color: #344054;
+  margin-bottom: 5px;
 `;

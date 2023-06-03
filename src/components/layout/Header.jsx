@@ -39,6 +39,7 @@ const Header = () => {
 export default Header;
 
 const Background = styled.div`
+  display: flex;
   background: #ffffff;
   width: 100%;
   height: 52px;
@@ -47,6 +48,7 @@ const Background = styled.div`
   border-bottom: 0.5px solid gray;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+  z-index: 30;
 `;
 
 const Contents = styled.div`
