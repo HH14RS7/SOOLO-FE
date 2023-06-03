@@ -40,7 +40,7 @@ const Footer = () => {
         </TabBarItem>
         <TabBarItem index={2}>
           <Link to={`${PATH_URL.PARTY_CREATE}`}>
-            <AddBtn active={activeTitle === 2}>
+            <AddBtn active={activeTitle === 2} onClick={() => handleTitleClick(2)}>
               <img src={AddButton} alt="Add" />
             </AddBtn>
           </Link>
@@ -102,16 +102,19 @@ const Tabs = styled.div`
 const TabBarItem = styled.div`
   width: 76px;
   height: 49px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `;
 
 /* icon */
 const Icon = styled.div`
-  margin-left: 26px;
+  /* margin-left: 26px; */
   margin-top: 7px;
   cursor: pointer;
   transition: color 0.3s ease-in-out;
   color: ${props => (props.active ? '#F63D68' : '#000000')};
-
   &:hover {
     color: #f63d68;
   }
@@ -119,16 +122,17 @@ const Icon = styled.div`
 
 /* span */
 const Title = styled.span`
-  margin-left: ${props => props.marginLeft};
+  /* margin-left: ${props => props.marginLeft}; */
   margin-top: ${props => props.marginTop};
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 400;
   font-size: 10px;
-  color: ${props => (props.active ? '#F63D68' : '#667085')};
+  color: #667085;
+  /* color: ${props => (props.active ? '#F63D68' : '#667085')}; */
 `;
 
-const AddBtn = styled.div`
+const AddBtn = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
