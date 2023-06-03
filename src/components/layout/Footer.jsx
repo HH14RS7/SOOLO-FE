@@ -6,6 +6,7 @@ import { ReactComponent as Partyicon } from '../../assets/footer/party.svg';
 import { ReactComponent as Mapicon } from '../../assets/footer/map.svg';
 import { ReactComponent as Chaticon } from '../../assets/footer/chat.svg';
 import { ReactComponent as Mypageicon } from '../../assets/footer/mypage.svg';
+import AddButton from '../../assets/footer/Union.png';
 
 const Footer = () => {
   const [activeTitle, setActiveTitle] = useState(0);
@@ -53,11 +54,13 @@ const Footer = () => {
         </TabBarItem>
         <TabBarItem index={2}>
           <Link to={`${PATH_URL.PARTY_CREATE}`}>
-            <Title active={activeTitle === 2}>+</Title>
+            <AddBtn active={activeTitle === 2}>
+              <img src={AddButton} alt="Add" />
+            </AddBtn>
           </Link>
         </TabBarItem>
         <TabBarItem index={3}>
-          <Link to={`${PATH_URL.PARTY_CHAT}`}>
+          <Link to={`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`}>
             <Icon
               paddingleft="1.5px"
               paddingtop="3px"
@@ -108,12 +111,13 @@ const TabBar = styled.div`
   background: rgba(249, 249, 249, 0.94);
   box-shadow: 0px -0.5px 0px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
+  z-index: 30;
 `;
 
 /* Tabs */
 const Tabs = styled.div`
   display: flex;
-  width: 390px;
+  width: 375px;
   height: 100%;
   margin: 0 auto;
   justify-content: space-between;
@@ -133,6 +137,7 @@ const TabBarItem = styled.div`
 const Icon = styled.div`
   padding-left: ${props => props.paddingleft};
   padding-top: ${props => props.paddingtop};
+  margin-top: 5px;
   /* width: 24px; */
   /* height: 24px; */
   /* left: 26px; */
@@ -166,4 +171,15 @@ const Title = styled.span`
 
   /* Gray/500 */
   color: ${props => (props.active ? '#F63D68' : '#667085')};
+`;
+
+const AddBtn = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: #d9d9d9;
+  border-radius: 8px;
+  border: 1px solid #344054;
 `;
