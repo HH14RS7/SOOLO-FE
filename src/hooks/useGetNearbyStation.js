@@ -13,7 +13,7 @@ const useGetNearbyStation = () => {
     const categoryOptions = {
       size: 8,
       location: new kakao.maps.LatLng(latitude, longitude),
-      radius: 20000,
+      radius: 5000,
       sort: kakao.maps.services.SortBy.DISTANCE,
       category: STATION_CATEGORY_CODE,
     };
