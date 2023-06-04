@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-const useGeocoder = () => {
+const useGetRegionName = () => {
   const { kakao } = window;
   const [regionName, setRegionName] = useState('');
   const geocoder = new kakao.maps.services.Geocoder();
@@ -43,4 +43,4 @@ const useGeocoder = () => {
   return { regionName, getRegionName };
 };
 
-export default useGeocoder;
+export default useGetRegionName;
