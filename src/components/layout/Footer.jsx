@@ -23,9 +23,7 @@ const Footer = () => {
             <Icon active={activeTitle === 0} onClick={() => handleTitleClick(0)}>
               <Partyicon fill={activeTitle === 0 ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title marginLeft="29px" marginTop="34.87px" active={activeTitle === 0}>
-              모임
-            </Title>
+            <Title active={activeTitle === 0}>모임</Title>
           </Link>
         </TabBarItem>
         <TabBarItem index={1}>
@@ -33,9 +31,7 @@ const Footer = () => {
             <Icon active={activeTitle === 1} onClick={() => handleTitleClick(1)}>
               <Mapicon fill={activeTitle === 1 ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title marginLeft="29px" marginTop="34.87px" active={activeTitle === 1}>
-              위치
-            </Title>
+            <Title active={activeTitle === 1}>위치</Title>
           </Link>
         </TabBarItem>
         <TabBarItem index={2}>
@@ -50,9 +46,7 @@ const Footer = () => {
             <Icon active={activeTitle === 3} onClick={() => handleTitleClick(3)}>
               <Chaticon fill={activeTitle === 3 ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title marginLeft="29px" marginTop="34.87px" active={activeTitle === 3}>
-              채팅
-            </Title>
+            <Title active={activeTitle === 3}>채팅</Title>
           </Link>
         </TabBarItem>
         <TabBarItem index={4}>
@@ -60,12 +54,7 @@ const Footer = () => {
             <Icon active={activeTitle === 4} onClick={() => handleTitleClick(4)}>
               <Mypageicon fill={activeTitle === 4 ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title
-              marginLeft="17px"
-              marginTop="34.87px"
-              active={activeTitle === 4}
-              left="calc(50% - 43px/2 + 0.5px)"
-            >
+            <Title active={activeTitle === 4} left="calc(50% - 43px/2 + 0.5px)">
               마이페이지
             </Title>
           </Link>
@@ -122,7 +111,6 @@ const Icon = styled.div`
 
 /* span */
 const Title = styled.span`
-  /* margin-left: ${props => props.marginLeft}; */
   margin-top: ${props => props.marginTop};
   font-family: 'Pretendard';
   font-style: normal;
