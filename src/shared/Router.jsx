@@ -16,6 +16,8 @@ import { PartyListMap } from '../pages/PartyListMap';
 import GlobalStyle from './GlobalStyle';
 import MyRequestParty from '../pages/MyRequestParty';
 import MyCreateParty from '../pages/MyCreateParty';
+import PartyMapCreate from '../pages/PartyMapCreate';
+import PartyPlaceCreate from '../pages/PartyPlaceCreate';
 
 const Router = () => {
   return (
@@ -37,6 +39,8 @@ const Router = () => {
           <Route path={PATH_URL.PARTY_LIST_MAP} element={<PartyListMap />} />
           <Route path={PATH_URL.MY_REQUEST_PARTY} element={<MyRequestParty />} />
           <Route path={PATH_URL.MY_CREATE_PARTY} element={<MyCreateParty />} />
+          <Route path={PATH_URL.PARTY_PLACE_CREATE} element={<PartyPlaceCreate />} />
+          <Route path={PATH_URL.PARTY_MAP_CREATE} element={<PartyMapCreate />} />
         </Routes>
       </Layout>
     </BrowserRouter>

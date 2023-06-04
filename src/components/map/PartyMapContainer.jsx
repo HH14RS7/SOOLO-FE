@@ -52,7 +52,7 @@ const PartyMapContainer = ({ searchPlace }) => {
       const lon = currentLocation.coordinates.longitude;
       setLatitude(lat);
       setLongitude(lon);
-      getRegionName(lon, lat);
+      getRegionName(lat, lon);
       getStationInfo(lat, lon);
     } else {
       alert('로딩중입니다');
@@ -150,7 +150,7 @@ const PartyMapContainer = ({ searchPlace }) => {
             customOverlay.setMap(null);
           }
           customOverlay.setMap(map);
-          getRegionName(longitude, latitude);
+          getRegionName(latitude, longitude);
           getStationInfo(latitude, longitude);
         });
 
@@ -181,7 +181,7 @@ const PartyMapContainer = ({ searchPlace }) => {
           if (data.length > 0) {
             setLatitude(data[0].y);
             setLongitude(data[0].x);
-            getRegionName(data[0].x, data[0].y);
+            getRegionName(data[0].y, data[0].x);
             getStationInfo(data[0].y, data[0].x);
           }
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {

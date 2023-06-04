@@ -35,7 +35,7 @@ const Footer = () => {
           </Link>
         </TabBarItem>
         <TabBarItem index={2}>
-          <Link to={`${PATH_URL.PARTY_CREATE}`}>
+          <Link to={`${PATH_URL.PARTY_PLACE_CREATE}`}>
             <AddBtn active={activeTitle === 2} onClick={() => handleTitleClick(2)}>
               <img src={AddButton} alt="Add" />
             </AddBtn>

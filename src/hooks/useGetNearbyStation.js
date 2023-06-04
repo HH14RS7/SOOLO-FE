@@ -11,7 +11,7 @@ const useGetNearbyStation = () => {
   const getStationInfo = (latitude, longitude) => {
     console.log(latitude, longitude);
     const categoryOptions = {
-      size: 8,
+      size: 1,
       location: new kakao.maps.LatLng(latitude, longitude),
       radius: 5000,
       sort: kakao.maps.services.SortBy.DISTANCE,
@@ -19,7 +19,6 @@ const useGetNearbyStation = () => {
     };
 
     const callback = function (result, status) {
-      console.log(result);
       const nearbyStation = result[0];
       if (status === kakao.maps.services.Status.OK && nearbyStation) {
         setStationName(nearbyStation.place_name);
