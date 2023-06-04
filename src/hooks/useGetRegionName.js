@@ -7,7 +7,7 @@ const useGetRegionName = () => {
   const [regionName, setRegionName] = useState('');
   const geocoder = new kakao.maps.services.Geocoder();
 
-  const getRegionName = (longitude, latitude) => {
+  const getRegionName = (latitude, longitude) => {
     const callback = function (result, status) {
       let regionName = '';
       if (status === kakao.maps.services.Status.OK) {
@@ -33,7 +33,6 @@ const useGetRegionName = () => {
           // 2depth가 '구'로 끝나지 않는 경우
           regionName += region2DepthName + ' ' + region3DepthName;
         }
-        console.log('행정구역 이름: ' + regionName);
         setRegionName(regionName);
       }
     };
