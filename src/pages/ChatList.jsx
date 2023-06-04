@@ -1,14 +1,17 @@
+// 기능 import
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SockJS from 'sockjs-client';
-import SojuRoom from '../assets/sojuroomimg.webp';
-import Preperty from '../assets/chating/Property.png';
-import MenuBar from '../assets/icon.png';
-import Profile from '../assets/karina.webp';
 import * as StompJs from '@stomp/stompjs';
+import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
 import { PATH_URL } from '../shared/constants';
-import Cookies from 'js-cookie';
+
+// 이미지 import
+import SojuRoom from '../assets/sojuroomimg.webp';
+import { ReactComponent as PeopleIcon } from '../assets/chating/membericon.svg';
+import { ReactComponent as MenuIcon } from '../assets/chating/menuicons.svg';
+import Karina from '../assets/karina.webp';
 
 export const ChatList = () => {
   const [chatDate, setChatDate] = useState();
@@ -121,30 +124,26 @@ export const ChatList = () => {
       >
         <Container>
           <TapBar>
-            <button
+            <JoinTap
               onClick={() => {
                 handleTabChange(true);
               }}
               style={{
-                width: '132px',
-                height: '48px',
                 borderBottom: activeTab === true ? '1px solid #F63D68' : 'none',
               }}
             >
               참여중인 채팅방
-            </button>
-            <button
+            </JoinTap>
+            <ApprovalTap
               onClick={() => {
                 handleTabChange(false);
               }}
               style={{
-                width: '132px',
-                height: '48px',
                 borderBottom: activeTab === false ? '1px solid #F63D68' : 'none',
               }}
             >
               들어온 승인요청
-            </button>
+            </ApprovalTap>
           </TapBar>
           <ChatContainer>
             {activeTab === true ? (
@@ -162,13 +161,7 @@ export const ChatList = () => {
                         }}
                       />
                     </ChatRoomImg>
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '230px',
-                        height: '60px',
-                      }}
-                    >
+                    <ChatRoomContainer>
                       <ChatRoomContents>
                         <Link to={`${PATH_URL.PARTY_CHATROOM}/${localStorage.memberUniqueId}`}>
                           <ChatRoomInfo>
@@ -178,26 +171,15 @@ export const ChatList = () => {
                         </Link>
                         <RoomMember>
                           <TotalMember>
-                            <div
-                              style={{
-                                marginRight: '6px',
-                              }}
-                            >
-                              <img
-                                src={Preperty}
-                                alt="profiles"
-                                style={{
-                                  width: '14px',
-                                  height: '14px',
-                                }}
-                              />
-                            </div>
+                            <MemberIcon>
+                              <PeopleIcon />
+                            </MemberIcon>
                             5명 참여중
                           </TotalMember>
                           <MemberProfile>
                             <img
-                              src={Profile}
-                              alt="chatprofile"
+                              src={Karina}
+                              alt="member1"
                               style={{
                                 width: '18px',
                                 height: '18px',
@@ -205,12 +187,12 @@ export const ChatList = () => {
                                 border: '1px solid #f63d68',
                                 borderradius: '100%',
                                 position: 'absolute',
-                                // zIndex: 2,
+                                zIndex: '2',
                               }}
                             />
                             <img
-                              src={Profile}
-                              alt="chatprofile"
+                              src={Karina}
+                              alt="member2"
                               style={{
                                 width: '18px',
                                 height: '18px',
@@ -219,12 +201,12 @@ export const ChatList = () => {
                                 borderradius: '100%',
                                 position: 'absolute',
                                 marginLeft: '8px',
-                                // zIndex: 1,
+                                zIndex: '1',
                               }}
                             />
                             <img
-                              src={Profile}
-                              alt="chatprofile"
+                              src={Karina}
+                              alt="member3"
                               style={{
                                 width: '18px',
                                 height: '18px',
@@ -233,704 +215,25 @@ export const ChatList = () => {
                                 borderradius: '100%',
                                 position: 'absolute',
                                 marginLeft: '16px',
-                                // zIndex: 0,
+                                zIndex: '0',
                               }}
                             />
                           </MemberProfile>
                         </RoomMember>
                       </ChatRoomContents>
-                    </div>
-                    <RightContents>
-                      <ChatMessageNumber>
-                        <MessageNumber>12</MessageNumber>
-                      </ChatMessageNumber>
-                      <ChatMenu
-                        onClick={() => {
-                          openModal();
-                        }}
-                      >
-                        <img
-                          src={MenuBar}
-                          alt="menu"
-                          style={{
-                            width: '100%',
-                            height: '100%',
+                      <RightContents>
+                        <ChatMessageNumber>
+                          <MessageNumber>12</MessageNumber>
+                        </ChatMessageNumber>
+                        <ChatMenu
+                          onClick={() => {
+                            openModal();
                           }}
-                        />
-                      </ChatMenu>
-                    </RightContents>
-                  </ChatRoomBox>
-                </ChatRoom>
-                <ChatRoom>
-                  <ChatRoomBox>
-                    <ChatRoomImg>
-                      <img
-                        src={SojuRoom}
-                        alt="chatprofile"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          borderRadius: '16px',
-                        }}
-                      />
-                    </ChatRoomImg>
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '230px',
-                        height: '60px',
-                      }}
-                    >
-                      <ChatRoomContents>
-                        <Link to={`${PATH_URL.PARTY_CHATROOM}/${localStorage.memberUniqueId}`}>
-                          <ChatRoomInfo>
-                            <ChatRoomName>모임 이름</ChatRoomName>
-                            <ChatRoomContent>최신 대화 내용</ChatRoomContent>
-                          </ChatRoomInfo>
-                        </Link>
-                        <RoomMember>
-                          <TotalMember>
-                            <div
-                              style={{
-                                marginRight: '6px',
-                              }}
-                            >
-                              <img
-                                src={Preperty}
-                                alt="profiles"
-                                style={{
-                                  width: '14px',
-                                  height: '14px',
-                                }}
-                              />
-                            </div>
-                            5명 참여중
-                          </TotalMember>
-                          <MemberProfile>
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                // zIndex: 2,
-                              }}
-                            />
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '8px',
-                                // zIndex: 1,
-                              }}
-                            />
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '16px',
-                                // zIndex: 0,
-                              }}
-                            />
-                          </MemberProfile>
-                        </RoomMember>
-                      </ChatRoomContents>
-                    </div>
-                    <RightContents>
-                      <ChatMessageNumber>
-                        <MessageNumber>12</MessageNumber>
-                      </ChatMessageNumber>
-                      <ChatMenu
-                        onClick={() => {
-                          openModal();
-                        }}
-                      >
-                        <img
-                          src={MenuBar}
-                          alt="menu"
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                          }}
-                        />
-                      </ChatMenu>
-                    </RightContents>
-                  </ChatRoomBox>
-                </ChatRoom>
-                <ChatRoom>
-                  <ChatRoomBox>
-                    <ChatRoomImg>
-                      <img
-                        src={SojuRoom}
-                        alt="chatprofile"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          borderRadius: '16px',
-                        }}
-                      />
-                    </ChatRoomImg>
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '230px',
-                        height: '60px',
-                      }}
-                    >
-                      <ChatRoomContents>
-                        <Link to={`${PATH_URL.PARTY_CHATROOM}/${localStorage.memberUniqueId}`}>
-                          <ChatRoomInfo>
-                            <ChatRoomName>모임 이름</ChatRoomName>
-                            <ChatRoomContent>최신 대화 내용</ChatRoomContent>
-                          </ChatRoomInfo>
-                        </Link>
-                        <RoomMember>
-                          <TotalMember>
-                            <div
-                              style={{
-                                marginRight: '6px',
-                              }}
-                            >
-                              <img
-                                src={Preperty}
-                                alt="profiles"
-                                style={{
-                                  width: '14px',
-                                  height: '14px',
-                                }}
-                              />
-                            </div>
-                            5명 참여중
-                          </TotalMember>
-                          <MemberProfile>
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                // zIndex: 2,
-                              }}
-                            />
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '8px',
-                                // zIndex: 1,
-                              }}
-                            />
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '16px',
-                                // zIndex: 0,
-                              }}
-                            />
-                          </MemberProfile>
-                        </RoomMember>
-                      </ChatRoomContents>
-                    </div>
-                    <RightContents>
-                      <ChatMessageNumber>
-                        <MessageNumber>12</MessageNumber>
-                      </ChatMessageNumber>
-                      <ChatMenu
-                        onClick={() => {
-                          openModal();
-                        }}
-                      >
-                        <img
-                          src={MenuBar}
-                          alt="menu"
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                          }}
-                        />
-                      </ChatMenu>
-                    </RightContents>
-                  </ChatRoomBox>
-                </ChatRoom>
-                <ChatRoom>
-                  <ChatRoomBox>
-                    <ChatRoomImg>
-                      <img
-                        src={SojuRoom}
-                        alt="chatprofile"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          borderRadius: '16px',
-                        }}
-                      />
-                    </ChatRoomImg>
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '230px',
-                        height: '60px',
-                      }}
-                    >
-                      <ChatRoomContents>
-                        <Link to={`${PATH_URL.PARTY_CHATROOM}/${localStorage.memberUniqueId}`}>
-                          <ChatRoomInfo>
-                            <ChatRoomName>모임 이름</ChatRoomName>
-                            <ChatRoomContent>최신 대화 내용</ChatRoomContent>
-                          </ChatRoomInfo>
-                        </Link>
-                        <RoomMember>
-                          <TotalMember>
-                            <div
-                              style={{
-                                marginRight: '6px',
-                              }}
-                            >
-                              <img
-                                src={Preperty}
-                                alt="profiles"
-                                style={{
-                                  width: '14px',
-                                  height: '14px',
-                                }}
-                              />
-                            </div>
-                            5명 참여중
-                          </TotalMember>
-                          <MemberProfile>
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                // zIndex: 2,
-                              }}
-                            />
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '8px',
-                                // zIndex: 1,
-                              }}
-                            />
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '16px',
-                                // zIndex: 0,
-                              }}
-                            />
-                          </MemberProfile>
-                        </RoomMember>
-                      </ChatRoomContents>
-                    </div>
-                    <RightContents>
-                      <ChatMessageNumber>
-                        <MessageNumber>12</MessageNumber>
-                      </ChatMessageNumber>
-                      <ChatMenu
-                        onClick={() => {
-                          openModal();
-                        }}
-                      >
-                        <img
-                          src={MenuBar}
-                          alt="menu"
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                          }}
-                        />
-                      </ChatMenu>
-                    </RightContents>
-                  </ChatRoomBox>
-                </ChatRoom>
-                <ChatRoom>
-                  <ChatRoomBox>
-                    <ChatRoomImg>
-                      <img
-                        src={SojuRoom}
-                        alt="chatprofile"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          borderRadius: '16px',
-                        }}
-                      />
-                    </ChatRoomImg>
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '230px',
-                        height: '60px',
-                      }}
-                    >
-                      <ChatRoomContents>
-                        <Link to={`${PATH_URL.PARTY_CHATROOM}/${localStorage.memberUniqueId}`}>
-                          <ChatRoomInfo>
-                            <ChatRoomName>모임 이름</ChatRoomName>
-                            <ChatRoomContent>최신 대화 내용</ChatRoomContent>
-                          </ChatRoomInfo>
-                        </Link>
-                        <RoomMember>
-                          <TotalMember>
-                            <div
-                              style={{
-                                marginRight: '6px',
-                              }}
-                            >
-                              <img
-                                src={Preperty}
-                                alt="profiles"
-                                style={{
-                                  width: '14px',
-                                  height: '14px',
-                                }}
-                              />
-                            </div>
-                            5명 참여중
-                          </TotalMember>
-                          <MemberProfile>
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                // zIndex: 2,
-                              }}
-                            />
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '8px',
-                                // zIndex: 1,
-                              }}
-                            />
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '16px',
-                                // zIndex: 0,
-                              }}
-                            />
-                          </MemberProfile>
-                        </RoomMember>
-                      </ChatRoomContents>
-                    </div>
-                    <RightContents>
-                      <ChatMessageNumber>
-                        <MessageNumber>12</MessageNumber>
-                      </ChatMessageNumber>
-                      <ChatMenu
-                        onClick={() => {
-                          openModal();
-                        }}
-                      >
-                        <img
-                          src={MenuBar}
-                          alt="menu"
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                          }}
-                        />
-                      </ChatMenu>
-                    </RightContents>
-                  </ChatRoomBox>
-                </ChatRoom>
-                <ChatRoom>
-                  <ChatRoomBox>
-                    <ChatRoomImg>
-                      <img
-                        src={SojuRoom}
-                        alt="chatprofile"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          borderRadius: '16px',
-                        }}
-                      />
-                    </ChatRoomImg>
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '230px',
-                        height: '60px',
-                      }}
-                    >
-                      <ChatRoomContents>
-                        <Link to={`${PATH_URL.PARTY_CHATROOM}/${localStorage.memberUniqueId}`}>
-                          <ChatRoomInfo>
-                            <ChatRoomName>모임 이름</ChatRoomName>
-                            <ChatRoomContent>최신 대화 내용</ChatRoomContent>
-                          </ChatRoomInfo>
-                        </Link>
-                        <RoomMember>
-                          <TotalMember>
-                            <div
-                              style={{
-                                marginRight: '6px',
-                              }}
-                            >
-                              <img
-                                src={Preperty}
-                                alt="profiles"
-                                style={{
-                                  width: '14px',
-                                  height: '14px',
-                                }}
-                              />
-                            </div>
-                            5명 참여중
-                          </TotalMember>
-                          <MemberProfile>
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                // zIndex: 2,
-                              }}
-                            />
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '8px',
-                                // zIndex: 1,
-                              }}
-                            />
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '16px',
-                                // zIndex: 0,
-                              }}
-                            />
-                          </MemberProfile>
-                        </RoomMember>
-                      </ChatRoomContents>
-                    </div>
-                    <RightContents>
-                      <ChatMessageNumber>
-                        <MessageNumber>12</MessageNumber>
-                      </ChatMessageNumber>
-                      <ChatMenu
-                        onClick={() => {
-                          openModal();
-                        }}
-                      >
-                        <img
-                          src={MenuBar}
-                          alt="menu"
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                          }}
-                        />
-                      </ChatMenu>
-                    </RightContents>
-                  </ChatRoomBox>
-                </ChatRoom>
-                <ChatRoom>
-                  <ChatRoomBox>
-                    <ChatRoomImg>
-                      <img
-                        src={SojuRoom}
-                        alt="chatprofile"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          borderRadius: '16px',
-                        }}
-                      />
-                    </ChatRoomImg>
-                    <div
-                      style={{
-                        display: 'flex',
-                        width: '230px',
-                        height: '60px',
-                      }}
-                    >
-                      <ChatRoomContents>
-                        <Link to={`${PATH_URL.PARTY_CHATROOM}/${localStorage.memberUniqueId}`}>
-                          <ChatRoomInfo>
-                            <ChatRoomName>모임 이름</ChatRoomName>
-                            <ChatRoomContent>최신 대화 내용</ChatRoomContent>
-                          </ChatRoomInfo>
-                        </Link>
-                        <RoomMember>
-                          <TotalMember>
-                            <div
-                              style={{
-                                marginRight: '6px',
-                              }}
-                            >
-                              <img
-                                src={Preperty}
-                                alt="profiles"
-                                style={{
-                                  width: '14px',
-                                  height: '14px',
-                                }}
-                              />
-                            </div>
-                            5명 참여중
-                          </TotalMember>
-                          <MemberProfile>
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                // zIndex: 2,
-                              }}
-                            />
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '8px',
-                                // zIndex: 1,
-                              }}
-                            />
-                            <img
-                              src={Profile}
-                              alt="chatprofile"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '16px',
-                                // zIndex: 0,
-                              }}
-                            />
-                          </MemberProfile>
-                        </RoomMember>
-                      </ChatRoomContents>
-                    </div>
-                    <RightContents>
-                      <ChatMessageNumber>
-                        <MessageNumber>12</MessageNumber>
-                      </ChatMessageNumber>
-                      <ChatMenu
-                        onClick={() => {
-                          openModal();
-                        }}
-                      >
-                        <img
-                          src={MenuBar}
-                          alt="menu"
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                          }}
-                        />
-                      </ChatMenu>
-                    </RightContents>
+                        >
+                          <MenuIcon />
+                        </ChatMenu>
+                      </RightContents>
+                    </ChatRoomContainer>
                   </ChatRoomBox>
                 </ChatRoom>
               </>
@@ -944,16 +247,7 @@ export const ChatList = () => {
         <div>
           <Modals onClick={handleBackdropClick}>
             <ModalContent>
-              <ModalMenuBar>
-                <div
-                  style={{
-                    marginTop: '20px',
-                    display: 'inline-block',
-                  }}
-                >
-                  채팅방 설정
-                </div>
-              </ModalMenuBar>
+              <ModalMenuBar>채팅방 설정</ModalMenuBar>
               <ModalChatExit
                 onClick={() => {
                   ExitopenModal();
@@ -973,13 +267,7 @@ export const ChatList = () => {
         </div>
       )}
       {isExitModalOpen && (
-        <div
-          style={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
-          }}
-        >
+        <ExitContainer>
           <ExitModal>
             <ExitName>채팅방을 나가시겠습니까?</ExitName>
             <ExitText>한번 나간 채팅방은 다시 들어올 수 없습니다.</ExitText>
@@ -994,64 +282,92 @@ export const ChatList = () => {
               <EixtBtn>나가기</EixtBtn>
             </ExitBtnDiv>
           </ExitModal>
-        </div>
+        </ExitContainer>
       )}
     </>
   );
 };
 
+// Default 스타일
 const Background = styled.div`
   background: #ffffff;
   width: 100%;
   height: 100%;
-  padding-top: 50px;
 `;
 
 const Container = styled.div`
-  width: 375px;
-  height: 100%;
+  width: 360px;
   margin: 0 auto;
   background: #ffffff;
 `;
 
+// TopBar 스타일
 const TapBar = styled.div`
-  height: 48px;
-  margin-left: 16px;
+  width: 360px;
+  height: 52px;
   display: flex;
 `;
 
-const ChatContainer = styled.div``;
+const JoinTap = styled.button`
+  width: 132px;
+  height: 52px;
+  margin-left: 16px;
+`;
+
+const ApprovalTap = styled.button`
+  width: 132px;
+  height: 52px;
+`;
+
+// Chat List 스타일
+const ChatContainer = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 const ChatRoom = styled.div`
   display: flex;
   align-items: center;
-  height: 98px;
+  width: 360px;
+  height: 94px;
   border-bottom: 1px solid #e4e7ec;
 `;
 
 const ChatRoomBox = styled.div`
   display: flex;
   align-items: center;
+  width: 328px;
+  gap: 16px;
+  margin: 0 auto;
 `;
 
 const ChatRoomImg = styled.div`
-  height: 74px;
-  margin-left: 16px;
+  width: 70px;
+  height: 70px;
 `;
 
-const ChatRoomContents = styled.div`
-  margin-left: 16px;
+const ChatRoomContainer = styled.div`
+  display: flex;
+  width: 242px;
+  height: 60px;
+  justify-content: space-between;
 `;
 
-const ChatRoomInfo = styled.div``;
+const ChatRoomContents = styled.div``;
+
+const ChatRoomInfo = styled.div`
+  margin-bottom: 10px;
+`;
 
 const ChatRoomName = styled.div`
   font-size: 16px;
-  margin-bottom: 3px;
+  font-weight: 400;
+  margin-bottom: 4px;
 `;
 
 const ChatRoomContent = styled.div`
   font-size: 10px;
+  font-weight: 400;
   color: #667085;
 `;
 
@@ -1068,36 +384,49 @@ const TotalMember = styled.div`
   margin-right: 10px;
 `;
 
+const MemberIcon = styled.div`
+  margin-right: 4px;
+`;
+
 const MemberProfile = styled.div`
   display: flex;
-  /* width: 20px; */
-  /* height: 20px; */
-  background: purple;
+  align-items: center;
+`;
+
+const MemberImgDiv = styled.div`
+  width: 18px;
+  height: 18px;
+  border-radius: 15px;
+  border: 1px solid #f63d68;
+  position: absolute;
 `;
 
 const RightContents = styled.div`
-  display: block;
   width: 38px;
   height: 60px;
 `;
 
 const ChatMessageNumber = styled.div`
   display: flex;
+  justify-content: center;
+  padding: 4px 12px;
   width: 38px;
   height: 20px;
   background: #f63d68;
   border-radius: 20px;
-  color: white;
 `;
 
 const MessageNumber = styled.div`
   display: flex;
-  align-items: center;
   text-align: center;
+  align-items: center;
   justify-content: center;
+  width: 14px;
+  height: 12px;
+  margin-top: 1px;
   font-size: 12px;
-  margin: auto;
-  margin-top: 5px;
+  font-weight: 700;
+  color: #fff;
 `;
 
 const ChatMenu = styled.div`
@@ -1112,7 +441,6 @@ const ChatMenu = styled.div`
 const Modals = styled.div`
   position: fixed;
   overflow: hidden;
-  /* top: 4.3vh; */
   left: 0;
   right: 0;
   bottom: 0;
@@ -1131,24 +459,28 @@ const ModalContent = styled.div`
   right: 0;
   text-align: center;
   background-color: white;
-  width: 375px;
-  height: 150px;
+  width: 360px;
+  height: 196px;
   border-radius: 16px 16px 0px 0px;
   margin: 0 auto;
-  bottom: 48px;
+  bottom: 70px;
 `;
 
 const ModalMenuBar = styled.div`
-  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
   font-size: 16px;
+  font-weight: 400;
 `;
 
 const ModalChatExit = styled.button`
   display: flex;
   align-items: center;
-  margin-left: 16px;
+  padding: 16px;
   font-size: 16px;
-  width: 342px;
+  width: 330px;
   height: 48px;
 `;
 
@@ -1157,9 +489,9 @@ const ModalReport = styled.button`
   align-items: center;
   text-align: left;
   font-size: 16px;
-  width: 342px;
+  width: 330px;
   height: 48px;
-  margin-left: 16px;
+  padding: 16px;
 `;
 
 const ComingSoon = styled.div`
@@ -1176,31 +508,39 @@ const ComingSoon = styled.div`
   color: #344054;
 `;
 
+// Exit Modal 스타일
+const ExitContainer = styled.div`
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  position: fixed;
+`;
+
 const ExitModal = styled.div`
   text-align: center;
   margin: auto;
   z-index: 100;
-  width: 343px;
-  height: 206px;
+  width: 327px;
+  height: 198px;
   border-radius: 16px;
-  background: white;
+  background: #fff;
 `;
 
 const ExitName = styled.div`
   font-size: 16px;
   font-weight: 700;
-  margin-top: 56px;
+  margin-top: 60px;
 `;
 
 const ExitText = styled.div`
   font-size: 14px;
-  margin-top: 16px;
+  margin-top: 8px;
 `;
 
 const ExitBtnDiv = styled.div`
   display: flex;
   justify-content: space-evenly;
-  margin-top: 32px;
+  margin-top: 36px;
 `;
 
 const ExitCancel = styled.div`
@@ -1211,11 +551,12 @@ const ExitCancel = styled.div`
   color: #667085;
   font-size: 12px;
   font-weight: 600;
-  width: 144px;
+  width: 140px;
   height: 48px;
   background: #fff;
   border: 1.5px solid #667085;
   border-radius: 12px;
+  cursor: pointer;
 `;
 
 const EixtBtn = styled.div`
@@ -1226,8 +567,9 @@ const EixtBtn = styled.div`
   color: #fff;
   font-weight: 600;
   font-size: 12px;
-  width: 144px;
+  width: 140px;
   height: 48px;
   background: #f63d68;
   border-radius: 12px;
+  cursor: pointer;
 `;

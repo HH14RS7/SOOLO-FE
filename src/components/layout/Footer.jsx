@@ -68,7 +68,7 @@ export default Footer;
 
 /* Tab Bar */
 const TabBar = styled.div`
-  height: 49px;
+  height: 70px;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -81,7 +81,7 @@ const TabBar = styled.div`
 /* Tabs */
 const Tabs = styled.div`
   display: flex;
-  width: 375px;
+  width: 360px;
   height: 100%;
   margin: 0 auto;
   justify-content: space-between;
