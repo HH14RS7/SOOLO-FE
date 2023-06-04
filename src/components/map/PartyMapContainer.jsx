@@ -9,10 +9,9 @@ import { styled } from 'styled-components';
 import ReactDOMServer from 'react-dom/server';
 import SelectedPartyList from './SelectedPartyList';
 import useGetRegionName from '../../hooks/useGetRegionName';
+import useGetNearbyStation from '../../hooks/useGetNearbyStation';
 
-// 마커까지
 const { kakao } = window;
-
 const PartyMapContainer = ({ searchPlace }) => {
   const initialLatitude = 37.497942; // 강남역 초기 위도
   const initialLongitude = 127.027621; // 강남역 초기 경도
@@ -24,11 +23,14 @@ const PartyMapContainer = ({ searchPlace }) => {
   const customOverlayRef = useRef();
   const mapRef = useRef();
   const { regionName, getRegionName } = useGetRegionName();
+  const { stationName, getStationInfo } = useGetNearbyStation();
+
+  const radius = searchPlace.endsWith('역') ? 3 : 5;
 
   const fetchPartyList = async (latitude, longitude) => {
     try {
       const response = await getAPI(
-        `${PARTIES_URL.PARTIES_LIST}?page=0&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=2.5`,
+        `${PARTIES_URL.PARTIES_LIST}?page=0&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
       );
       return response.data.data.partyList;
     } catch (error) {
@@ -50,26 +52,20 @@ const PartyMapContainer = ({ searchPlace }) => {
       const lon = currentLocation.coordinates.longitude;
       setLatitude(lat);
       setLongitude(lon);
+      getRegionName(lon, lat);
+      getStationInfo(lat, lon);
     } else {
       alert('로딩중입니다');
     }
   }, [currentLocation]);
-
-  // 검색 콜백 함수
-  const searchCB = data => {
-    if (data.length > 0) {
-      setLatitude(data[0].y);
-      setLongitude(data[0].x);
-    }
-  };
 
   // 모임 리스트 마커 찍기
   const drawMarkers = useCallback(() => {
     const container = document.getElementById('map');
     const options = {
       center: new kakao.maps.LatLng(latitude, longitude),
-      level: 8,
-      radius: 20000,
+      level: 6,
+      radius: 5000,
     };
 
     const map = new kakao.maps.Map(container, options);
@@ -154,6 +150,8 @@ const PartyMapContainer = ({ searchPlace }) => {
             customOverlay.setMap(null);
           }
           customOverlay.setMap(map);
+          getRegionName(longitude, latitude);
+          getStationInfo(latitude, longitude);
         });
 
         // 마커 이외 클릭시 - 전체 조회
@@ -172,16 +170,20 @@ const PartyMapContainer = ({ searchPlace }) => {
 
   useEffect(() => {
     drawMarkers();
-    getRegionName(longitude, latitude);
   }, [drawMarkers]);
 
+  // 검색 키워드 함수
   useEffect(() => {
     if (searchPlace) {
       const ps = new kakao.maps.services.Places();
-
       const placesSearchCB = (data, status) => {
         if (status === kakao.maps.services.Status.OK) {
-          searchCB(data);
+          if (data.length > 0) {
+            setLatitude(data[0].y);
+            setLongitude(data[0].x);
+            getRegionName(data[0].x, data[0].y);
+            getStationInfo(data[0].y, data[0].x);
+          }
         } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
           alert('올바른 지역을 검색해주세요.');
           return;
@@ -231,7 +233,12 @@ const PartyMapContainer = ({ searchPlace }) => {
           {selectedParty ? (
             <SelectedPartyList partyList={selectedParty} />
           ) : (
-            <SearchPartyList partyList={partyList} regionName={regionName} />
+            <SearchPartyList
+              partyList={partyList}
+              regionName={regionName}
+              stationName={stationName}
+              searchPlace={searchPlace}
+            />
           )}
         </div>
       )}
