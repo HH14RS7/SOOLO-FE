@@ -11,7 +11,7 @@ export default function SearchPartyItem({ party }) {
         <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`}>
           <p>{party.title}</p>
           <PlaceImage src={party.imageUrl} alt="placeImage" />
-          <span>{party.stationName ? party.stationName : party.placeAddress}</span>
+          {/* <span>{party.stationName ? party.stationName : party.placeAddress}</span> */}
           <span>
             {party.currentCount}/{party.totalCount}
           </span>
