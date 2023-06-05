@@ -11,18 +11,17 @@ const PartyItem = ({ party }) => {
   const token = Cookies.get('Access_key');
   const navigate = useNavigate();
 
-  console.log(party);
   const {
     partyId,
     title,
     currentCount,
     totalCount,
-    recruitmentStatus,
+    // recruitmentStatus,
     partyDate,
     state,
     imageUrl,
     stationName,
-    placeAddress,
+    regionName,
   } = party;
 
   const dDay = dDayConvertor(partyDate);
@@ -63,7 +62,7 @@ const PartyItem = ({ party }) => {
           {/* <p>{recruitmentStatus ? '모집중' : '모집마감'}</p> */}
           {/* <p>승인상태 : {stateMsg}</p> */}
           <PlaceImage src={imageUrl} alt="placeImage" />
-          <p>{stationName ? stationName : placeAddress}</p>
+          <p>{stationName ? stationName.trim().split(' ')[0] : regionName}</p>
           <p>
             {currentCount} / {totalCount}
           </p>

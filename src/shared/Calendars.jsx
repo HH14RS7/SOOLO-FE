@@ -16,8 +16,10 @@ import { styled } from 'styled-components';
 const Calendars = ({ selectedDate, setSelectedDate }) => {
   const now = new Date();
 
+  // 현시각 기준 +10 분부터 등록 가능
+  // 2주 이내로만 등록 가능
   const minTime =
-    selectedDate && isSameDay(selectedDate, now) ? addMinutes(now, 1) : startOfDay(now);
+    selectedDate && isSameDay(selectedDate, now) ? addMinutes(now, 10) : startOfDay(now);
   const maxTime = setMinutes(setHours(endOfDay(now), 23), 59);
   const maxDate = addWeeks(now, 2);
 

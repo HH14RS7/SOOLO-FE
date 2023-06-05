@@ -1,24 +1,21 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 function SearchLocation({ onPlaceChange }) {
   const [inputText, setInputText] = useState('');
-  const formRef = useRef(null);
 
   const handleChange = e => {
     setInputText(e.target.value);
-    // onPlaceChange(e.target.value);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
     onPlaceChange(inputText);
-    // setInputText('');
-    // formRef.current.reset();
+    setInputText('');
   };
 
   return (
     <>
-      <form ref={formRef} onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <input placeholder="지역을 입력해주세요" value={inputText} onChange={handleChange} />
       </form>
     </>

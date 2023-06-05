@@ -2,18 +2,20 @@ import React, { useEffect, useRef, useState } from 'react';
 import useGeolocation from '../../hooks/useGeolocation';
 import { styled } from 'styled-components';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { mapDataState, stationDataState } from '../../atoms';
+import { mapDataState, regionNameState, stationDataState } from '../../atoms';
 const { kakao } = window;
 
 const MapContainer = ({ searchPlace, party }) => {
   const setStationData = useSetRecoilState(stationDataState);
   const setMapData = useSetRecoilState(mapDataState);
+  const setRegionName = useSetRecoilState(regionNameState);
   const currentloaction = useGeolocation();
   const [Places, setPlaces] = useState([]);
   const mapRef = useRef();
   const mapdata = useRecoilValue(mapDataState);
   const stationData = useRecoilValue(stationDataState);
   const isEdit = !!party.partyId;
+  var geocoder = new kakao.maps.services.Geocoder();
 
   const STATION_CATEGORY_CODE = 'SW8'; // 지하철역 카테고리 코드
   const FOOD_CATEGORY_CODE = 'FD6'; // 음식점 카테고리 코드
@@ -127,10 +129,20 @@ const MapContainer = ({ searchPlace, party }) => {
         // console.log('위도:', place.y); // latitude
         // console.log('경도:', place.x); // longitude
         // console.log('장소명:', place.place_name); // placeName
-        //console.log('장소위치', place.place_address); //placeAddress
-        // console.log('장소 URL:', place.road_address_name); // placeUrl
-        saveMapData(place);
-        searchNearbyStations();
+        // console.log('장소위치', place.road_address_name); //placeAddress
+        // console.log('장소 URL:', place.place_url); // placeUrl
+
+        geocoder.coord2RegionCode(place.x, place.y, callback);
+        const newMapData = {
+          latitude: place.y,
+          longitude: place.x,
+          placeName: place.place_name,
+          placeAddress: place.road_address_name,
+          placeUrl: place.place_url,
+        };
+        setMapData(newMapData);
+        searchNearbyStations(place.y, place.x);
+
         infowindow.setContent(
           '<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>',
         );
@@ -157,15 +169,6 @@ const MapContainer = ({ searchPlace, party }) => {
     }
   }, [currentloaction, searchPlace]);
 
-  // 주변역 정보 저장
-  const updateStationData = (setStationData, nearbyStation) => {
-    const updatedStationData = {
-      distance: nearbyStation.distance,
-      stationName: nearbyStation.place_name,
-    };
-    setStationData(updatedStationData);
-  };
-
   // 주변역 정보(거리, 역이름) 가져오기
   const nearbyStationsSearch = (result, status) => {
     if (status === kakao.maps.services.Status.OK) {
@@ -173,7 +176,11 @@ const MapContainer = ({ searchPlace, party }) => {
       if (nearbyStation) {
         // console.log('가장 가까운 역과의 거리:', nearbyStation.distance); // m단위(0인경우 1m미만)
         // console.log('가장 가까운 역:', nearbyStation.place_name);
-        updateStationData(setStationData, nearbyStation);
+        const updatedStationData = {
+          distance: nearbyStation.distance,
+          stationName: nearbyStation.place_name,
+        };
+        setStationData(updatedStationData);
       }
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
       setStationData({ distance: '', stationName: '' });
@@ -183,10 +190,10 @@ const MapContainer = ({ searchPlace, party }) => {
   };
 
   // 주변역 찾기 함수
-  const searchNearbyStations = () => {
+  const searchNearbyStations = (latitude, longitude) => {
     const categoryOptions = {
       size: 8,
-      location: new kakao.maps.LatLng(mapdata.latitude, mapdata.longitude),
+      location: new kakao.maps.LatLng(latitude, longitude),
       radius: 5000,
       sort: kakao.maps.services.SortBy.DISTANCE,
       category: STATION_CATEGORY_CODE,
@@ -194,7 +201,37 @@ const MapContainer = ({ searchPlace, party }) => {
     ps.categorySearch(STATION_CATEGORY_CODE, nearbyStationsSearch, categoryOptions);
   };
 
-  // 정보 data에 담기
+  // 행정구역명 변환 함수
+  const callback = function (result, status) {
+    let regionName = '';
+    if (status === kakao.maps.services.Status.OK) {
+      const region1DepthName = result[0].region_1depth_name;
+      const region2DepthName = result[0].region_2depth_name;
+      const region3DepthName = result[0].region_3depth_name;
+
+      if (region1DepthName.endsWith('특별시') || region1DepthName.endsWith('광역시')) {
+        // 특별시나 광역시인 경우
+        regionName = region1DepthName.slice(0, -3); // 뒤의 '특별시' 또는 '광역시' 제거
+      } else {
+        // 특별시나 광역시가 아닌 경우
+        regionName = '';
+      }
+      if (region2DepthName.endsWith('구')) {
+        // 2depth가 '구'로 끝나는 경우
+        if (region1DepthName.endsWith('특별시') || region1DepthName.endsWith('광역시')) {
+          regionName += ' ' + region2DepthName;
+        } else {
+          regionName += region2DepthName;
+        }
+      } else {
+        // 2depth가 '구'로 끝나지 않는 경우
+        regionName += region2DepthName + ' ' + region3DepthName;
+      }
+      setRegionName(regionName);
+    }
+  };
+
+  //map정보 data에 담기
   const saveMapData = item => {
     const newMapData = {
       latitude: item.y,
@@ -206,10 +243,11 @@ const MapContainer = ({ searchPlace, party }) => {
     setMapData(newMapData);
   };
 
-  // 마커/리스트 클릭시 맵/지하철 정보 저장
+  // 리스트 클릭시 맵/지하철 정보 저장
   const handlePlaceClick = item => {
+    geocoder.coord2RegionCode(item.x, item.y, callback);
     saveMapData(item);
-    searchNearbyStations();
+    searchNearbyStations(item.y, item.x);
   };
 
   const zoomIn = () => {
@@ -241,7 +279,6 @@ const MapContainer = ({ searchPlace, party }) => {
   //   mapRef.current.panTo(currentLocation);
   // };
 
-  console.log(stationData);
   return (
     <div>
       <Map id="map">

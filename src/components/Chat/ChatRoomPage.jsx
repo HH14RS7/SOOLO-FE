@@ -1,16 +1,15 @@
+// 기능 import
 import { React, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Modal from 'react-modal';
+import { Link } from 'react-router-dom';
+import { PATH_URL } from '../../shared/constants';
 
-// 이미지 파일
+// 이미지 import
 import LeftVector from '../../assets/LeftVector.svg';
 import menu from '../../assets/icon.png';
 import ProfileImg from '../../assets/karina.webp';
 import SendIcon from '../../assets/sendIcon.svg';
 import PartyHost from '../../assets/partyhost.svg';
-
-import { Link } from 'react-router-dom';
-import { PATH_URL } from '../../shared/constants';
 
 export const ChatRoomPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,7 +29,6 @@ export const ChatRoomPage = () => {
     }
   };
 
-  // 모달 기능
   //메뉴 모달
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [backgroundPosition, setBackgroundPosition] = useState('static');
@@ -313,8 +311,6 @@ export const ChatRoomPage = () => {
 const Background = styled.div`
   background: #ffffff;
   width: 100%;
-  height: 95vh;
-  padding-top: 50px;
 `;
 
 const Container = styled.div`

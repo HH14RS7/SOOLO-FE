@@ -23,9 +23,7 @@ const Footer = () => {
             <Icon active={activeTitle === 0} onClick={() => handleTitleClick(0)}>
               <Partyicon fill={activeTitle === 0 ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title marginLeft="29px" marginTop="34.87px" active={activeTitle === 0}>
-              모임
-            </Title>
+            <Title active={activeTitle === 0}>모임</Title>
           </Link>
         </TabBarItem>
         <TabBarItem index={1}>
@@ -33,13 +31,11 @@ const Footer = () => {
             <Icon active={activeTitle === 1} onClick={() => handleTitleClick(1)}>
               <Mapicon fill={activeTitle === 1 ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title marginLeft="29px" marginTop="34.87px" active={activeTitle === 1}>
-              위치
-            </Title>
+            <Title active={activeTitle === 1}>위치</Title>
           </Link>
         </TabBarItem>
         <TabBarItem index={2}>
-          <Link to={`${PATH_URL.PARTY_CREATE}`}>
+          <Link to={`${PATH_URL.PARTY_PLACE_CREATE}`}>
             <AddBtn active={activeTitle === 2} onClick={() => handleTitleClick(2)}>
               <img src={AddButton} alt="Add" />
             </AddBtn>
@@ -50,9 +46,7 @@ const Footer = () => {
             <Icon active={activeTitle === 3} onClick={() => handleTitleClick(3)}>
               <Chaticon fill={activeTitle === 3 ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title marginLeft="29px" marginTop="34.87px" active={activeTitle === 3}>
-              채팅
-            </Title>
+            <Title active={activeTitle === 3}>채팅</Title>
           </Link>
         </TabBarItem>
         <TabBarItem index={4}>
@@ -60,12 +54,7 @@ const Footer = () => {
             <Icon active={activeTitle === 4} onClick={() => handleTitleClick(4)}>
               <Mypageicon fill={activeTitle === 4 ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title
-              marginLeft="17px"
-              marginTop="34.87px"
-              active={activeTitle === 4}
-              left="calc(50% - 43px/2 + 0.5px)"
-            >
+            <Title active={activeTitle === 4} left="calc(50% - 43px/2 + 0.5px)">
               마이페이지
             </Title>
           </Link>
@@ -79,7 +68,7 @@ export default Footer;
 
 /* Tab Bar */
 const TabBar = styled.div`
-  height: 66px;
+  height: 70px;
   position: fixed;
   bottom: 0;
   width: 100%;
@@ -92,7 +81,7 @@ const TabBar = styled.div`
 /* Tabs */
 const Tabs = styled.div`
   display: flex;
-  width: 375px;
+  width: 360px;
   height: 100%;
   margin: 0 auto;
   justify-content: space-between;
@@ -122,7 +111,6 @@ const Icon = styled.div`
 
 /* span */
 const Title = styled.span`
-  /* margin-left: ${props => props.marginLeft}; */
   margin-top: ${props => props.marginTop};
   font-family: 'Pretendard';
   font-style: normal;
