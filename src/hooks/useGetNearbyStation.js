@@ -9,7 +9,6 @@ const useGetNearbyStation = () => {
   const STATION_CATEGORY_CODE = 'SW8'; // 지하철역 카테고리 코드
 
   const getStationInfo = (latitude, longitude) => {
-    console.log(latitude, longitude);
     const categoryOptions = {
       size: 1,
       location: new kakao.maps.LatLng(latitude, longitude),

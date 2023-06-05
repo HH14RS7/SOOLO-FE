@@ -5,7 +5,6 @@ export default function SearchPartyList({ partyList, regionName, stationName, se
   let displayRegionName = regionName;
   let displayStationName = stationName;
 
-  console.log(partyList);
   if (searchPlace.endsWith('구') || searchPlace.endsWith('동') || searchPlace.endsWith('역')) {
     displayRegionName = searchPlace.replace();
   } else {
