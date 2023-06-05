@@ -14,10 +14,8 @@ export const PartyListMap = () => {
 
   return (
     <>
-      <div>
-        <SearchLocation onPlaceChange={handlePlaceChange} />
-        <PartyMapContainer searchPlace={place} onPlaceChange={handleCurrentLocation} />
-      </div>
+      <SearchLocation onPlaceChange={handlePlaceChange} />
+      <PartyMapContainer searchPlace={place} onPlaceChange={handleCurrentLocation} />
     </>
   );
 };
