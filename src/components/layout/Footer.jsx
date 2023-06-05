@@ -79,7 +79,7 @@ export default Footer;
 
 /* Tab Bar */
 const TabBar = styled.div`
-  height: 49px;
+  height: 66px;
   position: fixed;
   bottom: 0;
   width: 100%;

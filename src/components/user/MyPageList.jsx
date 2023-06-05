@@ -42,7 +42,12 @@ export const MyPageList = () => {
             <PartyDetailImg>
               <ProfileImage src={user?.profileImage} alt="ProfileImage" />
               <MemberName>{user?.memberName}</MemberName>
-              {user?.gender === 'male' ? <div>남</div> : <div>여</div>}
+              <MemberAge>
+                연령 : {user?.age}대
+                <br />
+                성별 : {user?.gender === 'male' ? <div>남</div> : <div>여</div>}
+                한줄소개 : {user?.introduce}
+              </MemberAge>
               <br />
               <Button onClick={() => modalOpenToggle()}>프로필 변경</Button>
             </PartyDetailImg>
@@ -99,6 +104,12 @@ const ProfileImage = styled.img`
   width: 50%;
   height: 50%;
   border-radius: 100%;
+`;
+
+const MemberAge = styled.div`
+  margin-top: 10px;
+  font-size: 20px;
+  font-weight: bold;
 `;
 
 const MemberName = styled.div`
