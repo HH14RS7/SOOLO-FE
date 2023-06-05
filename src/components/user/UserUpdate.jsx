@@ -37,7 +37,7 @@ function UserUpdate({ memberName, profileImage, isModalOpen, introduce }) {
     const formData = new FormData();
     const data = {
       memberName: nameInput || memberName,
-      introduce: introduceInput,
+      introduce: introduceInput || introduce,
     };
 
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
@@ -93,7 +93,7 @@ function UserUpdate({ memberName, profileImage, isModalOpen, introduce }) {
                     width: '100px',
                     textAlign: 'center',
                   }}
-                  value={nameInput || memberName}
+                  value={nameInput}
                   onChange={memberNameHanlder}
                 />
               </label>
@@ -105,7 +105,7 @@ function UserUpdate({ memberName, profileImage, isModalOpen, introduce }) {
                     width: '100px',
                     textAlign: 'center',
                   }}
-                  value={introduceInput || introduce}
+                  value={introduceInput}
                   onChange={introduceHanlder}
                 />
               </label>
