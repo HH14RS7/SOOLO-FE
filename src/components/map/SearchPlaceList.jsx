@@ -12,7 +12,6 @@ export default function SearchPlcaeList({ searchPlace }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    // 검색 결과 초기화
     setPlaceList([]);
 
     const placesSearchCB = (data, status) => {
@@ -32,6 +31,9 @@ export default function SearchPlcaeList({ searchPlace }) {
       page: currentPage,
       level: 3,
       category_group_code: FOOD_CATEGORY_CODE,
+      // location,
+      // location: currentLocation, // 현재 위치를 검색 위치로 설정
+      // radius: 1000, // 검색 반경 설정 (1000m)
     };
 
     // 검색키워드 함수 호출
