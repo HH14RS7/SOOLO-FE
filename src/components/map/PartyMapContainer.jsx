@@ -16,7 +16,7 @@ const PartyMapContainer = ({ searchPlace }) => {
   const initialLatitude = 37.497942; // 강남역 초기 위도
   const initialLongitude = 127.027621; // 강남역 초기 경도
 
-  const currentLocation = useGeolocation();
+  const { location, error } = useGeolocation();
   const [latitude, setLatitude] = useState(initialLatitude);
   const [longitude, setLongitude] = useState(initialLongitude);
   const [selectedParty, setSelectedParty] = useState();
@@ -39,25 +39,25 @@ const PartyMapContainer = ({ searchPlace }) => {
     }
   };
 
-  const {
-    data: partyList,
-    isLoading,
-    refetch,
-  } = useQuery(['parties', latitude, longitude], () => fetchPartyList(latitude, longitude));
+  const { data: partyList, isLoading } = useQuery(['parties', latitude, longitude], () =>
+    fetchPartyList(latitude, longitude),
+  );
 
   // 현재위치 내 모임 조회
   const handleCurrentLocation = useCallback(() => {
-    if (currentLocation.loaded) {
-      const lat = currentLocation.coordinates.latitude;
-      const lon = currentLocation.coordinates.longitude;
+    if (error) {
+      alert(error.message);
+    } else if (location.loading) {
+      alert('로딩중입니다');
+    } else {
+      const lat = location.coordinates.latitude;
+      const lon = location.coordinates.longitude;
       setLatitude(lat);
       setLongitude(lon);
       getRegionName(lat, lon);
       getStationInfo(lat, lon);
-    } else {
-      alert('로딩중입니다');
     }
-  }, [currentLocation]);
+  }, [location]);
 
   // 모임 리스트 마커 찍기
   const drawMarkers = useCallback(() => {
