@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { useForm } from 'react-hook-form';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { PATH_URL, PARTIES_URL } from '../../shared/constants';
 import { useMutation } from 'react-query';
 import Calendars from '../../shared/Calendars';
@@ -18,11 +18,13 @@ const CreateForm = ({ party }) => {
   // const PARTICIPANT_COUNT = Array.from({ length: 9 }, (_, i) => ({ value: Number(i + 2) }));
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [previewImage, setPreviewImage] = useState(party.imgUrl || null);
+  const isEdit = !!party.partyId;
+  const initialTotalCount = isEdit ? party.totalCount : 2;
+  const [totalCount, setTotalCount] = useState(initialTotalCount);
 
   const imgRef = useRef();
   const noImg = '/img/no-img.jpg';
   const [img, setImg] = useState(noImg);
-  const isEdit = !!party.partyId;
   const navigate = useNavigate();
 
   const latitude = isEdit ? party.latitude : place.y;
@@ -31,34 +33,39 @@ const CreateForm = ({ party }) => {
   const {
     register,
     handleSubmit,
+    formState: { errors, isValid },
     reset,
-    formState: { errors },
-  } = useForm();
+    watch,
+  } = useForm({
+    mode: 'onChange',
+  });
+
+  const title = watch('title', '');
+  const content = watch('content', '');
 
   const INPUT_MESSAGE = {
-    title: '모임 이름을 적어주세요',
-    content: '모임 내용을 적어주세요',
+    title: '모임 이름을 적어주세요.(공백 제외 최소 5글자)',
+    content: '모임 내용을 적어주세요.',
   };
 
   const TITLE_VALIDATE = {
     required: INPUT_MESSAGE.title,
-    minLength: {
-      value: 5,
-      message: '최소 5자 이상 입력해주세요.',
+    minLength: { value: 5 },
+    maxLength: { value: 20 },
+    validate: value => {
+      const trimmedValue = value.trim();
+      return (
+        (trimmedValue.length > 0 &&
+          trimmedValue.length >= 5 &&
+          trimmedValue.replace(/\s/g, '') !== '') ||
+        INPUT_MESSAGE.title
+      );
     },
-    maxLength: {
-      value: 20,
-      message: '최대 20자까지 입력해주세요.',
-    },
-    validate: value => value.trim().length > 0 || INPUT_MESSAGE.title,
   };
 
   const CONTENT_VALIDATE = {
     required: INPUT_MESSAGE.content,
-    maxLength: {
-      value: 255,
-      message: '최대 255자까지 입력해주세요.',
-    },
+    maxLength: { value: 255 },
     validate: value => value.trim().length > 0 || INPUT_MESSAGE.content,
   };
 
@@ -79,7 +86,7 @@ const CreateForm = ({ party }) => {
       reset({
         title: '',
         content: '',
-        totalCount: 2,
+        totalCount,
         img: '',
       });
     }
@@ -111,12 +118,13 @@ const CreateForm = ({ party }) => {
     },
   );
 
+  // 지하철, 행정구역 정보 조회
   useEffect(() => {
     getRegionName(latitude, longitude);
     getStationInfo(latitude, longitude);
   }, [latitude, longitude]);
 
-  // 모임 등록
+  // 모임 등록 및 수정
   const handlePartySubmit = item => {
     const formData = new FormData();
 
@@ -124,7 +132,7 @@ const CreateForm = ({ party }) => {
       title: item.title.trim(),
       content: item.content.trim(),
       partyDate: moment(selectedDate).format('YYYY-MM-DD HH:mm'),
-      totalCount: 3,
+      totalCount,
       latitude: isEdit ? party.latitude : place.y,
       longitude: isEdit ? party.longitude : place.x,
       placeName: isEdit ? party.placeName : place.place_name,
@@ -162,15 +170,25 @@ const CreateForm = ({ party }) => {
   };
 
   const handlePrevClick = () => {
-    if (!isEdit) {
-      navigate(PATH_URL.PARTY_MAP_CREATE, { state: place });
-    } else {
+    if (isEdit) {
       navigate(PATH_URL.MAIN);
+    } else {
+      navigate(PATH_URL.PARTY_MAP_CREATE, { state: place });
     }
   };
-
+  // 장소 검색 리스트로 이동
   const goSearchPlace = () => {
     navigate(PATH_URL.PARTY_PLACE_CREATE);
+  };
+
+  const handleIncreaseCount = e => {
+    e.preventDefault();
+    setTotalCount(totalCount => Math.min(totalCount + 1, 15));
+  };
+
+  const handleDecreaseCount = e => {
+    e.preventDefault();
+    setTotalCount(totalCount => Math.max(totalCount - 1, 2));
   };
 
   return (
@@ -178,7 +196,7 @@ const CreateForm = ({ party }) => {
       <PlaceWrapper>
         <PlaceHeader>
           <label htmlFor="mapData">모임 장소</label>
-          <ModifyButton onClick={goSearchPlace}>수정하기</ModifyButton>
+          {!isEdit && <ModifyButton onClick={goSearchPlace}>수정하기</ModifyButton>}
         </PlaceHeader>
         <div>
           <div>{isEdit ? party.placeName : place.place_name}</div>
@@ -192,27 +210,31 @@ const CreateForm = ({ party }) => {
             id="title"
             type="text"
             placeholder={INPUT_MESSAGE.title}
+            maxLength="20"
             {...register('title', TITLE_VALIDATE)}
           />
-          {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
+          <div>
+            {title.length}/{TITLE_VALIDATE.maxLength.value}
+          </div>
+          {/* {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>} */}
           <label htmlFor="content">모임 정보</label>
           <textarea
             id="content"
             type="text"
             placeholder={INPUT_MESSAGE.content}
+            maxLength="255"
             {...register('content', CONTENT_VALIDATE)}
           ></textarea>
-          {errors.content && <ErrorMessage>{errors.content.message}</ErrorMessage>}
+          <div>
+            {content.length}/{CONTENT_VALIDATE.maxLength.value}
+          </div>
+          {/* {errors.content && <ErrorMessage>{errors.content.message}</ErrorMessage>} */}
           <label htmlFor="totalCount">모임 인원</label>
-          <button>-</button>
-          <button>+</button>
-          {/* <select id="totalCount" {...register('totalCount')}>
-          {PARTICIPANT_COUNT.map(option => (
-            <option key={option.value} value={option.value}>
-              {option.value}
-            </option>
-          ))}
-        </select> */}
+          <div>
+            <div>{totalCount}</div>
+            <button onClick={handleDecreaseCount}>-</button>
+            <button onClick={handleIncreaseCount}>+</button>
+          </div>
           <label htmlFor="partyDate">모임 날짜</label>
           <input type="hidden" {...register('partyDate', { value: selectedDate })} />
           <Calendars id="partyDate" selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
@@ -230,7 +252,9 @@ const CreateForm = ({ party }) => {
           />
           <div>
             <button onClick={handlePrevClick}>취소하기</button>
-            <button type="submit">업로드하기</button>
+            <button type="submit" disabled={!isValid}>
+              업로드하기
+            </button>
           </div>
         </FormContainer>
       </FormWrapper>
