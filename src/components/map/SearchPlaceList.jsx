@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import SearchPlaceItem from './SearchPlaceItem';
 import { styled } from 'styled-components';
 
-export default function SearchPlcaeList({ searchPlace }) {
+export default function SearchPlcaeList({ searchPlace, currentLocation, isChecked }) {
   const [placeList, setPlaceList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -11,36 +11,42 @@ export default function SearchPlcaeList({ searchPlace }) {
   const ps = new kakao.maps.services.Places();
   const containerRef = useRef(null);
 
+  // 키워드 검색 함수
+  const placesSearchCB = useCallback((data, status) => {
+    if (status === kakao.maps.services.Status.OK) {
+      setPlaceList(prevList => [...prevList, ...data]);
+      setIsLoading(false);
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+      alert('검색 결과가 존재하지 않습니다.');
+    } else if (status === kakao.maps.services.Status.ERROR) {
+      alert('검색 결과 중 오류가 발생했습니다.');
+    }
+  }, []);
+
   useEffect(() => {
     setPlaceList([]);
-
-    const placesSearchCB = (data, status) => {
-      if (status === kakao.maps.services.Status.OK) {
-        setPlaceList(prevList => [...prevList, ...data]);
-        setIsLoading(false);
-      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        alert('검색 결과가 존재하지 않습니다.');
-      } else if (status === kakao.maps.services.Status.ERROR) {
-        alert('검색 결과 중 오류가 발생했습니다.');
-      }
-    };
 
     // 검색 옵션
     const searchOptions = {
       size: 15,
-      page: currentPage,
       level: 3,
       category_group_code: FOOD_CATEGORY_CODE,
-      // location,
-      // location: currentLocation, // 현재 위치를 검색 위치로 설정
-      // radius: 1000, // 검색 반경 설정 (1000m)
     };
+
+    // 현재위치로 검색
+    if (currentLocation && isChecked) {
+      searchOptions.location = new kakao.maps.LatLng(
+        currentLocation.latitude,
+        currentLocation.longitude,
+      );
+      searchOptions.radius = 20000;
+    }
 
     // 검색키워드 함수 호출
     if (searchPlace) {
       ps.keywordSearch(searchPlace, placesSearchCB, searchOptions);
     }
-  }, [searchPlace, currentPage]);
+  }, [searchPlace, currentLocation, isChecked, placesSearchCB]);
 
   // 다음 페이지 불러오기 함수
   const loadNextPage = () => {

@@ -10,9 +10,12 @@ import ReactDOMServer from 'react-dom/server';
 import SelectedPartyList from './SelectedPartyList';
 import useGetRegionName from '../../hooks/useGetRegionName';
 import useGetNearbyStation from '../../hooks/useGetNearbyStation';
+import { ReactComponent as Coordinate } from '../../assets/map/coordinate.svg';
+import { ReactComponent as Overlay } from '../../assets/map/overlay.svg';
+import { ReactComponent as OverlayArrow } from '../../assets/map/overlay-arrow.svg';
 
 const { kakao } = window;
-const PartyMapContainer = ({ searchPlace }) => {
+const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   const initialLatitude = 37.497942; // 강남역 초기 위도
   const initialLongitude = 127.027621; // 강남역 초기 경도
 
@@ -25,7 +28,7 @@ const PartyMapContainer = ({ searchPlace }) => {
   const { regionName, getRegionName } = useGetRegionName();
   const { stationName, getStationInfo } = useGetNearbyStation();
 
-  const radius = searchPlace.endsWith('역') ? 3 : 5;
+  const radius = searchPlace.endsWith('역') ? 2.5 : 5;
 
   const fetchPartyList = async (latitude, longitude) => {
     try {
@@ -56,6 +59,11 @@ const PartyMapContainer = ({ searchPlace }) => {
       setLongitude(lon);
       getRegionName(lat, lon);
       getStationInfo(lat, lon);
+      onPlaceChange('');
+      if (mapRef.current) {
+        const center = new kakao.maps.LatLng(lat, lon);
+        mapRef.current.setCenter(center);
+      }
     }
   }, [location]);
 
@@ -65,7 +73,7 @@ const PartyMapContainer = ({ searchPlace }) => {
     const options = {
       center: new kakao.maps.LatLng(latitude, longitude),
       level: 6,
-      radius: 5000,
+      radius: 20000,
     };
 
     const map = new kakao.maps.Map(container, options);
@@ -115,7 +123,9 @@ const PartyMapContainer = ({ searchPlace }) => {
         kakao.maps.event.addListener(marker, 'click', function () {
           const overlayContent = ReactDOMServer.renderToString(
             <OverlayWrap>
-              <PlaceName>{el.title}</PlaceName>
+              <Overlay />
+              <OverlayPlaceName>{el.title}</OverlayPlaceName>
+              <OverlayArrowIcon />
             </OverlayWrap>,
           );
 
@@ -172,30 +182,32 @@ const PartyMapContainer = ({ searchPlace }) => {
     drawMarkers();
   }, [drawMarkers]);
 
+  // 키워드 검색
+  const placesSearchCB = useCallback((data, status) => {
+    if (status === kakao.maps.services.Status.OK) {
+      if (data.length > 0) {
+        setLatitude(data[0].y);
+        setLongitude(data[0].x);
+        getRegionName(data[0].y, data[0].x);
+        getStationInfo(data[0].y, data[0].x);
+      }
+      // 검색한 (searchPlace랑) = 같다면?
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+      alert('올바른 지역을 검색해주세요.');
+      return;
+    } else if (status === kakao.maps.services.Status.ERROR) {
+      alert('검색 결과 중 오류가 발생했습니다.');
+      return;
+    }
+  }, []);
+
   // 검색 키워드 함수
   useEffect(() => {
     if (searchPlace) {
       const ps = new kakao.maps.services.Places();
-      const placesSearchCB = (data, status) => {
-        if (status === kakao.maps.services.Status.OK) {
-          if (data.length > 0) {
-            setLatitude(data[0].y);
-            setLongitude(data[0].x);
-            getRegionName(data[0].y, data[0].x);
-            getStationInfo(data[0].y, data[0].x);
-          }
-        } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-          alert('올바른 지역을 검색해주세요.');
-          return;
-        } else if (status === kakao.maps.services.Status.ERROR) {
-          alert('검색 결과 중 오류가 발생했습니다.');
-          return;
-        }
-      };
-
       ps.keywordSearch(searchPlace, placesSearchCB);
     }
-  }, [searchPlace]);
+  }, [searchPlace, placesSearchCB]);
 
   const zoomIn = () => {
     const map = mapRef.current;
@@ -225,7 +237,12 @@ const PartyMapContainer = ({ searchPlace }) => {
           </ZoomButton>
         </ZoomControlContainer>
       </Map>
-      <CurrentButton onClick={handleCurrentLocation}>현재위치로 찾기</CurrentButton>
+      <ButtonWrapper>
+        <CurrentButton onClick={handleCurrentLocation}>
+          <CoordnateIcon />
+          <CoordinateTitle>현재 위치로 찾기</CoordinateTitle>
+        </CurrentButton>
+      </ButtonWrapper>
       {isLoading ? (
         <div>로딩중입니다</div>
       ) : (
@@ -246,28 +263,74 @@ const PartyMapContainer = ({ searchPlace }) => {
   );
 };
 
-const OverlayWrap = styled.div`
-  background-color: var(--color-primary-500);
-  border: 1px solid var(--color-primary-700);
-  width: 111px;
-  height: 40px;
-  border-radius: 8px;
-  flex: display;
+const Map = styled.div`
+  display: flex;
+  // width: 100%;
+  // gap: 9px;
+  // bottom: 0px;
+  align-items: center;
+  justify-content: center;
+  width: 360px;
+  // height: 320px;
+  margin: 0 auto;
+  height: 498px;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin: 0 auto;
 `;
 
-const PlaceName = styled.h1`
-  color: var(--color-gray-25);
-  font-size: var(--font-small);
+const CurrentButton = styled.button`
+  display: flex;
+  width: 175px;
+  height: 48px;
+  background: var(--color-gray-800);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-top: -5rem;
+  z-index: 5;
+  gap: 0.5rem;
 `;
 
-const Map = styled.div`
-  // top: 200px;
-  width: 300px;
-  height: 300px;
+const CoordnateIcon = styled(Coordinate)`
+  width: 16px;
+  height: 16px;
+`;
+
+const CoordinateTitle = styled.h4`
+  font-family: 'Pretendard';
+  font-style: normal;
+  letter-spacing: -0.015rem;
+  color: var(--color-white);
+`;
+
+/* Overlay */
+const OverlayWrap = styled.div`
+  width: 100%;
   position: relative;
+  display: flex;
+  margin-bottom: 26px;
+  justify-content: center;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  gap: 4px;
+  height: 40px;
+  background-color: var(--color-primary-500);
+  border: 1px solid var(--color-primary-700);
+  border-radius: 0.5rem;
+`;
+
+const OverlayArrowIcon = styled(OverlayArrow)`
+  position: absolute;
+  margin-top: 48px;
+  transform: translateX(-14%);
+`;
+
+const OverlayPlaceName = styled.h3`
+  color: var(--color-gray-25);
 `;
 
 const ZoomControlContainer = styled.div`
@@ -295,24 +358,6 @@ const ZoomButton = styled.span`
     width: 12px;
     height: 12px;
   }
-`;
-
-const CurrentButton = styled.button`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 16px 24px;
-  gap: 8px;
-
-  width: 175px;
-  height: 48px;
-  left: 92.5px;
-  top: 317px;
-
-  /* Gray/800 */
-
-  background: #1d2939;
-  border-radius: 12px;
 `;
 
 export default PartyMapContainer;

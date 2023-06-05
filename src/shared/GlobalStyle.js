@@ -1,5 +1,4 @@
 import { createGlobalStyle } from 'styled-components';
-
 export const GlobalStyle = createGlobalStyle`
   :root {
     /* color */
@@ -28,27 +27,102 @@ export const GlobalStyle = createGlobalStyle`
 
     --color-success-500: #12B76A;
     --color-error-500 : #F04438;
-    
+
+    --color-tabbar: #F8F9FE;
+
     --color-black: #000000;
     --color-white : #FFFFFF;
 
     /* font size */
-    --font-large: 48px;
-    --font-medium: 28px;
-    --font-regular: 18px;
-    --font-small: 16px;
-    --font-micro: 14px;
+    --font-large: 1.5rem;
+    --font-medium: 1.25rem;
+    --font-regular: 1rem;
+    --font-small: 0.875rem;
+    --font-micro: 0.75rem;
+    --font-nano: 0.625rem;
+
+    /* font weight */
+    --font-wegith-700 : 700;
+    --font-wegith-600 : 600;
+    --font-wegith-500 : 500;
+    --font-wegith-400 : 400;
   }
 
-/* Typography */
-/*
-  h1 {
-    font-size: var(--font-large);
-    font-weight: var(--weight-bold);
-    color: var(--color-black);
-    margin: 16px 0px;
+  /* font-style */
+  body {
+    font-family: "Pretendard Variable", Pretendard
   }
-  */
+
+  /* Typography */
+
+  html { 
+    font-size :16px;
+  }
+
+  /* Title 24 */
+  h1 {
+    font-style: normal;
+    font-weight: var(--font-wegith-700);
+    font-size: var(--font-large);
+    line-height: 100%;
+    letter-spacing: -0.015em;
+  }
+
+  /* Title 20 */ 
+  h2 { 
+    font-style: normal;
+    font-weight: var(--font-wegith-700);
+    font-size: var(--font-medium);
+    line-height: 100%;
+    letter-spacing: -0.015em;
+  }
+  
+  /* Title 16 */
+  h3 {
+    font-style: normal;
+    font-weight: var(--font-wegith-600);
+    font-size: var(--font-regular);
+    line-height: 100%;
+    letter-spacing: -0.015em;
+  }
+  
+  /* body 16 */
+  h4 { 
+    font-style: normal;
+    font-weight: var(--font-wegith-400);
+    font-size: var(--font-regular);
+    line-height: 100%;
+    letter-spacing: -0.015em;
+  }
+
+  / * body 14 */
+  h5 {
+    font-style: normal;
+    font-weight: var(--font-micro-400);
+    font-size: var(--font-small);
+    line-height: 100%;
+    letter-spacing: -0.015em;
+  }
+
+  / * caption 12-bold */
+  h6 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: var(--font-wegith-700);
+    font-size: var(--font-micro);
+    line-height: 100%;
+    letter-spacing: -0.015em;
+  }
+
+  /* caption 10 */
+  p {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: var(--font-weight-400);
+    font-size: var(--font-nano);
+    line-height: 14px;
+    letter-spacing: -0.015em;
+  }
 
   table {
     border-collapse: collapse;
