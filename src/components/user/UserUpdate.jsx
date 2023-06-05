@@ -4,9 +4,10 @@ import { putUpdateAPI } from '../../api/api';
 import { MEMBER_URL } from '../../shared/constants';
 import { styled } from 'styled-components';
 
-function UserUpdate({ memberName, profileImage, isModalOpen }) {
+function UserUpdate({ memberName, profileImage, isModalOpen, introduce }) {
   const queryClient = useQueryClient();
-  const [input, setInput] = useState('');
+  const [nameInput, setNameInput] = useState('');
+  const [introduceInput, setIntroduceInput] = useState('');
   const [previewImage, setPreviewImage] = useState(null);
   const imgRef = useRef();
 
@@ -22,7 +23,11 @@ function UserUpdate({ memberName, profileImage, isModalOpen }) {
   });
 
   const memberNameHanlder = e => {
-    setInput(e.target.value);
+    setNameInput(e.target.value);
+  };
+
+  const introduceHanlder = e => {
+    setIntroduceInput(e.target.value);
   };
 
   const onSubmitHandler = async e => {
@@ -31,7 +36,8 @@ function UserUpdate({ memberName, profileImage, isModalOpen }) {
     const img = imgRef.current.files[0];
     const formData = new FormData();
     const data = {
-      memberName: input || memberName,
+      memberName: nameInput || memberName,
+      introduce: introduceInput,
     };
 
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
@@ -87,8 +93,20 @@ function UserUpdate({ memberName, profileImage, isModalOpen }) {
                     width: '100px',
                     textAlign: 'center',
                   }}
-                  value={input || memberName}
+                  value={nameInput || memberName}
                   onChange={memberNameHanlder}
+                />
+              </label>
+              <br />
+              <label>
+                한줄소개 :{' '}
+                <input
+                  style={{
+                    width: '100px',
+                    textAlign: 'center',
+                  }}
+                  value={introduceInput || introduce}
+                  onChange={introduceHanlder}
                 />
               </label>
               <br />
