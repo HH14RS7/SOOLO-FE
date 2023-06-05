@@ -12,7 +12,7 @@ import useGetRegionName from '../../hooks/useGetRegionName';
 import useGetNearbyStation from '../../hooks/useGetNearbyStation';
 
 const { kakao } = window;
-const PartyMapContainer = ({ searchPlace }) => {
+const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   const initialLatitude = 37.497942; // 강남역 초기 위도
   const initialLongitude = 127.027621; // 강남역 초기 경도
 
@@ -56,6 +56,7 @@ const PartyMapContainer = ({ searchPlace }) => {
       setLongitude(lon);
       getRegionName(lat, lon);
       getStationInfo(lat, lon);
+      onPlaceChange('');
     }
   }, [location]);
 
@@ -172,30 +173,31 @@ const PartyMapContainer = ({ searchPlace }) => {
     drawMarkers();
   }, [drawMarkers]);
 
+  // 키워드 검색
+  const placesSearchCB = useCallback((data, status) => {
+    if (status === kakao.maps.services.Status.OK) {
+      if (data.length > 0) {
+        setLatitude(data[0].y);
+        setLongitude(data[0].x);
+        getRegionName(data[0].y, data[0].x);
+        getStationInfo(data[0].y, data[0].x);
+      }
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+      alert('올바른 지역을 검색해주세요.');
+      return;
+    } else if (status === kakao.maps.services.Status.ERROR) {
+      alert('검색 결과 중 오류가 발생했습니다.');
+      return;
+    }
+  }, []);
+
   // 검색 키워드 함수
   useEffect(() => {
     if (searchPlace) {
       const ps = new kakao.maps.services.Places();
-      const placesSearchCB = (data, status) => {
-        if (status === kakao.maps.services.Status.OK) {
-          if (data.length > 0) {
-            setLatitude(data[0].y);
-            setLongitude(data[0].x);
-            getRegionName(data[0].y, data[0].x);
-            getStationInfo(data[0].y, data[0].x);
-          }
-        } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-          alert('올바른 지역을 검색해주세요.');
-          return;
-        } else if (status === kakao.maps.services.Status.ERROR) {
-          alert('검색 결과 중 오류가 발생했습니다.');
-          return;
-        }
-      };
-
       ps.keywordSearch(searchPlace, placesSearchCB);
     }
-  }, [searchPlace]);
+  }, [searchPlace, placesSearchCB]);
 
   const zoomIn = () => {
     const map = mapRef.current;

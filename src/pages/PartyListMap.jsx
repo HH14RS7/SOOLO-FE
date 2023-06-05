@@ -8,11 +8,15 @@ export const PartyListMap = () => {
   const handlePlaceChange = value => {
     setPlace(value);
   };
+  const handleCurrentLocation = () => {
+    setPlace('');
+  };
+
   return (
     <>
       <div>
         <SearchLocation onPlaceChange={handlePlaceChange} />
-        <PartyMapContainer searchPlace={place} />
+        <PartyMapContainer searchPlace={place} onPlaceChange={handleCurrentLocation} />
       </div>
     </>
   );

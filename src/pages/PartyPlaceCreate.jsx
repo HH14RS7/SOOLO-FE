@@ -7,23 +7,25 @@ const PartyPlaceCreate = () => {
   const [place, setPlace] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const { location, error } = useGeolocation();
+  const [currentLocation, setCurrentLocation] = useState({});
 
   useEffect(() => {
     if (isChecked) {
-      if (error) {
-        alert(error.message);
+      if (location.loaded && !error) {
+        const { latitude, longitude } = location.coordinates;
+        setCurrentLocation({ latitude, longitude });
+        setIsChecked(true);
       } else if (location.loading) {
         alert('로딩중입니다');
-      } else {
-        const lat = location.coordinates.latitude;
-        const lon = location.coordinates.longitude;
-        // 이 정보로 현재 위치 이름 가져오고 latitude , longtidue를 넘겨서 줘야한다.
-        // console.log(lat, lon);
-        // setLatitude(lat);
-        // setLongitude(lon);
+        setIsChecked(false);
+      } else if (error) {
+        alert(error.message);
+        setIsChecked(false);
       }
+    } else {
+      setIsChecked(false);
     }
-  }, [location, error, isChecked]);
+  }, [isChecked, location, error]);
 
   const handlePlaceChange = value => {
     setPlace(value);
@@ -38,7 +40,11 @@ const PartyPlaceCreate = () => {
       <SearchLocation onPlaceChange={handlePlaceChange} />
       <input id="location" type="checkbox" checked={isChecked} onChange={handleCheckboxChange} />
       <label htmlFor="location"> 현재위치로 검색하기</label>
-      <SearchPlaceList searchPlace={place} />
+      <SearchPlaceList
+        searchPlace={place}
+        currentLocation={currentLocation}
+        isChecked={isChecked}
+      />
     </>
   );
 };

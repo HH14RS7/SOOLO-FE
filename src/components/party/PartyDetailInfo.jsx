@@ -128,7 +128,7 @@ export const PartyDetailInfo = () => {
                   }`}
             </div>
             <div>모집 상태 : {data?.recruitmentStatus === true ? '모집중' : '모집마감'}</div>
-            <div>만든 날짜: {formmatedDate(data?.createAt, 'MM.DD · a h:mm')}</div>
+            <div>만든 날짜: {formmatedDate(data?.createdAt, 'MM.DD · a h:mm')}</div>
             <div>모임 시간: {formmatedDate(data?.partyDate, 'MM.DD · a h:mm')}</div>
             {(memberIdData === userIdData) === true ? (
               <>
