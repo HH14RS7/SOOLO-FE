@@ -47,7 +47,7 @@ const SearchBarContainer = styled.div`
   gap: 1rem;
   width: 328px;
   height: 40px;
-  margin: 0 auto;s
+  margin: 0 auto;
 `;
 
 const SearchInput = styled.input`
