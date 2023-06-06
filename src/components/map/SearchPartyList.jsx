@@ -1,5 +1,9 @@
 import React from 'react';
 import SearchPartyItem from './SearchPartyItem';
+import { styled } from 'styled-components';
+import { ReactComponent as Fire } from '../../assets/map/fire.svg';
+import { PATH_URL } from '../../shared/constants';
+import { Link } from 'react-router-dom';
 
 export default function SearchPartyList({ partyList, regionName, stationName, searchPlace }) {
   let displayRegionName = regionName;
@@ -20,26 +24,126 @@ export default function SearchPartyList({ partyList, regionName, stationName, se
   }
 
   return (
-    <>
-      <span>주변 모임 리스트</span>
-      <span>{partyList?.length}</span>
-      <ul>
-        {partyList?.map(party => (
-          <SearchPartyItem key={party.partyId} party={party} />
-        ))}
-        {partyList?.length > 0 ? (
-          <div>마음에 드는 모임이 없으신가요?</div>
-        ) : (
-          <>
-            <div>주변에 모임이 없습니다</div>
-          </>
-        )}
-      </ul>
-      <button>
-        {/* {displayStationName ? displayStationName.trim().split(' ')[0] : displayRegionName}에서 모임
-        만들기 */}
-        모임 만들기
-      </button>
-    </>
+    <Wrapper>
+      <Header>
+        <HeaderTitle>주변 모임 리스트</HeaderTitle>
+        <Badge>
+          <BadgeCount>{partyList?.length}</BadgeCount>
+        </Badge>
+      </Header>
+      <ListWrapper>
+        <List>
+          {partyList?.map(party => (
+            <SearchPartyItem key={party.partyId} party={party} />
+          ))}
+        </List>
+        <ListInfo>
+          {partyList?.length > 0 ? (
+            <InfoTitle>마음에 드는 모임이 없으신가요?</InfoTitle>
+          ) : (
+            <>
+              <InfoTitle>주변에 모임이 없습니다</InfoTitle>
+            </>
+          )}
+          <Link to={`${PATH_URL.PARTY_PLACE_CREATE}`}>
+            <Button>
+              <ButtonTitle>모임 만들기</ButtonTitle>
+              {/* ’{displayStationName ? displayStationName.trim().split(' ')[0] : displayRegionName}
+              ’에서 모임 만들기 */}
+              <FireIcon />
+            </Button>
+          </Link>
+        </ListInfo>
+      </ListWrapper>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  width: 360px;
+  margin: 0 auto;
+  // width: 100%;
+  // height: 100%;
+`;
+
+/* 추후 분리 */
+const Header = styled.header`
+  display: flex;
+  height: 52px;
+  // background-color: var(--color-white);
+  border-radius: 16px 16px 0 0;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  z-index: 10;
+`;
+
+const HeaderTitle = styled.h4``;
+
+const Badge = styled.div`
+  padding: 0.125rem 0.5rem;
+  min-width: 33px;
+  height: 20px;
+  gap: 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: var(--color-gray-100);
+  border-radius: 999px;
+  // width: auto;
+`;
+
+const BadgeCount = styled.h4`
+  text-align: center;
+  white-space: nowrap;
+`;
+
+const ListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const List = styled.ul`
+  // width: 360px;
+  width: 100%;
+`;
+
+const ListInfo = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0px 0px;
+  gap: 0.5rem;
+`;
+
+const InfoTitle = styled.h5``;
+
+const Button = styled.button`
+  display: flex;
+  flex-direction: row;
+  // justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  gap: 0.5rem;
+  height: 3rem;
+  background-color: var(--color-primary-500);
+  border-radius: 0.75rem;
+`;
+
+const ButtonTitle = styled.div`
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: var(--color-weight-600);
+  color: var(--color-white);
+  font-size: 0.75rem;
+  line-height: 15px;
+`;
+
+const FireIcon = styled(Fire)`
+  fill: white;
+`;

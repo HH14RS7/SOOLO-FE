@@ -46,7 +46,7 @@ export const GlobalStyle = createGlobalStyle`
     --font-weight-600 : 600;
     --font-weight-500 : 500;
     --font-weight-400 : 400;
-}
+  }
 
   /* font-style */
   * {

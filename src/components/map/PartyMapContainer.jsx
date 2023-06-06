@@ -10,7 +10,7 @@ import ReactDOMServer from 'react-dom/server';
 import SelectedPartyList from './SelectedPartyList';
 import useGetRegionName from '../../hooks/useGetRegionName';
 import useGetNearbyStation from '../../hooks/useGetNearbyStation';
-import { ReactComponent as Coordinate } from '../../assets/map/coordinate.svg';
+import { ReactComponent as Location } from '../../assets/map/location.svg';
 import { ReactComponent as Overlay } from '../../assets/map/overlay.svg';
 import { ReactComponent as OverlayArrow } from '../../assets/map/overlay-arrow.svg';
 
@@ -239,7 +239,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
       </Map>
       <ButtonWrapper>
         <CurrentButton onClick={handleCurrentLocation}>
-          <CoordnateIcon />
+          <LocationIcon />
           <CoordinateTitle>현재 위치로 찾기</CoordinateTitle>
         </CurrentButton>
       </ButtonWrapper>
@@ -266,7 +266,6 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
 const Map = styled.div`
   display: flex;
   // width: 100%;
-  // gap: 9px;
   // bottom: 0px;
   align-items: center;
   justify-content: center;
@@ -289,21 +288,17 @@ const CurrentButton = styled.button`
   height: 48px;
   background: var(--color-gray-800);
   padding: 1rem 1.5rem;
-  border-radius: 12px;
-  margin-top: -5rem;
+  border-radius: 0.75rem;
+  margin-top: -15rem;
   z-index: 5;
   gap: 0.5rem;
 `;
 
-const CoordnateIcon = styled(Coordinate)`
-  width: 16px;
-  height: 16px;
+const LocationIcon = styled(Location)`
+  fill: white;
 `;
 
 const CoordinateTitle = styled.h4`
-  font-family: 'Pretendard';
-  font-style: normal;
-  letter-spacing: -0.015rem;
   color: var(--color-white);
 `;
 
@@ -333,6 +328,7 @@ const OverlayPlaceName = styled.h3`
   color: var(--color-gray-25);
 `;
 
+/* Zoom Button */
 const ZoomControlContainer = styled.div`
   position: absolute;
   top: 10px;
