@@ -28,10 +28,7 @@ export default function SearchPartyItem({ party }) {
             </DdayTag>
           </ImageDayInfo>
           <PartyDetailWrapper>
-            <Title>
-              {party.title}
-              {/* 신도림에서 밤새 술 먹을 파티구합니... */}
-            </Title>
+            <Title>{party.title}</Title>
             <DetailPlacePeople>
               <PartyPlace>
                 {party.stationName ? <Subway /> : <Location />}

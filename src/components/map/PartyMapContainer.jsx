@@ -13,6 +13,8 @@ import useGetNearbyStation from '../../hooks/useGetNearbyStation';
 import { ReactComponent as Location } from '../../assets/map/location.svg';
 import { ReactComponent as Overlay } from '../../assets/map/overlay.svg';
 import { ReactComponent as OverlayArrow } from '../../assets/map/overlay-arrow.svg';
+import { ReactComponent as Add } from '../../assets/map/add.svg';
+import { ReactComponent as Subtract } from '../../assets/map/subtract.svg';
 
 const { kakao } = window;
 const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
@@ -73,7 +75,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
     const options = {
       center: new kakao.maps.LatLng(latitude, longitude),
       level: 6,
-      radius: 20000,
+      radius: 5000,
     };
 
     const map = new kakao.maps.Map(container, options);
@@ -220,20 +222,14 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   };
 
   return (
-    <div>
+    <Wrap>
       <Map id="map">
         <ZoomControlContainer>
           <ZoomButton onClick={zoomIn}>
-            <img
-              src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_plus.png"
-              alt="확대"
-            />
+            <AddIcon />
           </ZoomButton>
           <ZoomButton onClick={zoomOut}>
-            <img
-              src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/ico_minus.png"
-              alt="축소"
-            />
+            <SubtractIcon />
           </ZoomButton>
         </ZoomControlContainer>
       </Map>
@@ -244,7 +240,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
         </CurrentButton>
       </ButtonWrapper>
       {isLoading ? (
-        <div>로딩중입니다</div>
+        <Loading>로딩중입니다</Loading>
       ) : (
         <div>
           {selectedParty ? (
@@ -259,20 +255,23 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
           )}
         </div>
       )}
-    </div>
+    </Wrap>
   );
 };
+
+const Wrap = styled.div`
+  height: 640px;
+`;
 
 const Map = styled.div`
   display: flex;
   // width: 100%;
-  // bottom: 0px;
   align-items: center;
   justify-content: center;
   width: 360px;
-  // height: 320px;
+  height: 496px;
   margin: 0 auto;
-  height: 498px;
+  // height: 100%; // footer 임시용
 `;
 
 const ButtonWrapper = styled.div`
@@ -330,30 +329,51 @@ const OverlayPlaceName = styled.h3`
 
 /* Zoom Button */
 const ZoomControlContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 1rem 1rem 0 0;
+  gap: 0.5rem;
+
   position: absolute;
-  top: 10px;
-  right: 10px;
+  width: 64px;
+  height: 120px;
+  left: 296px;
+  top: 72px;
+
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
   display: flex;
   flex-direction: column;
   z-index: 3;
 `;
 
-const ZoomButton = styled.span`
-  cursor: pointer;
-  padding: 5px;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  margin-bottom: 2px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-
-  img {
-    width: 12px;
-    height: 12px;
-  }
+const AddIcon = styled(Add)`
+  fill: var(--color-gray-600);
 `;
 
+const SubtractIcon = styled(Subtract)`
+  fill: var(--color-gray-600);
+`;
+
+const ZoomButton = styled.span`
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  background: var(--color-gray-25);
+  border: 1px solid var(--color-gray-300);
+  box-shadow: 2px 4px 16px rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+`;
+
+// 로딩바 임시
+const Loading = styled.div`
+  margin: 0 auto;
+  width: 360px;
+`;
 export default PartyMapContainer;
