@@ -1,18 +1,98 @@
 // 기능 import
-import { React, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { React, useEffect, useState, useRef } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
+import * as StompJs from '@stomp/stompjs';
+import styled from 'styled-components';
+import SockJS from 'sockjs-client';
+import Cookies from 'js-cookie';
 
 // 이미지 import
-import LeftVector from '../../assets/LeftVector.svg';
-import menu from '../../assets/icon.png';
-import ProfileImg from '../../assets/karina.webp';
-import SendIcon from '../../assets/sendIcon.svg';
-import PartyHost from '../../assets/partyhost.svg';
+import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
+import { ReactComponent as RoomMenuIcon } from '../../assets/chating/chatroommenu.svg';
+import { ReactComponent as ChatSendIcon } from '../../assets/chating/chatsend.svg';
+import { ReactComponent as NavigateExitIcon } from '../../assets/chating/NavigateExit.svg';
+import { ReactComponent as PartHostIcon } from '../../assets/chating/hosticon.svg';
 
 export const ChatRoomPage = () => {
+  //메뉴 모달
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+  const [backgroundPosition, setBackgroundPosition] = useState('static');
+
+  const location = useLocation();
+  const params = location.pathname;
+  const segments = params.split('/');
+  const RoomUniqueId = segments[4];
+  const RoomId = segments[5];
+  const [messageData, setMessageData] = useState();
+  const [messageList, setMessageList] = useState();
+
+  const [message, setMessage] = useState('');
+
+  const accesskey = Cookies.get('Access_key');
+
+  // 채팅방 입장시 안내 문구 기능
+  const [showModal, setShowModal] = useState(false);
+  const client = useRef({});
+  useEffect(() => {
+    console.log('유즈이펙트 쉴행');
+    setShowModal(true);
+    connect('L');
+
+    return () => disconnect();
+  }, []);
+
+  const connect = type => {
+    client.current = new StompJs.Client({
+      brokerURL: 'ws://222.102.175.141:8081/ws-stomp',
+      connectHeaders: {
+        Access_key: `Bearer ${accesskey}`,
+      },
+      debug: function (str) {
+        console.log('str ::', str);
+      },
+      onConnect: () => {
+        if (type === 'L') {
+          subscribe();
+          publish();
+        } else {
+          subscribe1();
+          publish1();
+        }
+      },
+    });
+
+    client.current.webSocketFactory = function () {
+      return new SockJS('http://222.102.175.141:8081/ws-stomp');
+    };
+
+    client.current.activate();
+
+    return () => disconnect();
+  };
+
+  const subscribe = () => {
+    client.current.subscribe(`/sub/chat/messageList/${localStorage.memberUniqueId}`, message => {
+      // console.log('messageData11 : ', JSON.parse(`${message.body}`));
+      setMessageData(JSON.parse(`${message.body}`));
+
+      const data = JSON.parse(`${message.body}`);
+
+      setMessageList(data.data.chatMessageList);
+    });
+  };
+
+  const publish = () => {
+    client.current.publish({
+      destination: `/pub/chat/messageList/${localStorage.memberUniqueId}`,
+      body: JSON.stringify({
+        chatRoomId: RoomId,
+        chatRoomUniqueId: RoomUniqueId,
+        page: 0,
+      }),
+    });
+  };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -23,15 +103,13 @@ export const ChatRoomPage = () => {
     setIsModalOpen(true);
     setBackgroundPosition('fixed');
   };
+
   const handleBackdropClick = e => {
+    console.log('e ::', e);
     if (e.target === e.currentTarget) {
       closeModal();
     }
   };
-
-  //메뉴 모달
-  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
-  const [backgroundPosition, setBackgroundPosition] = useState('static');
 
   const ExitopenModal = () => {
     setIsExitModalOpen(true);
@@ -45,223 +123,157 @@ export const ChatRoomPage = () => {
     alert('곧 업데이트 예정입니다!');
   };
 
-  // 채팅방 입장시 안내 문구 기능
-  const [showModal, setShowModal] = useState(false);
+  // 채팅 보내기
+  const sendMessage = message => {
+    console.log('message :: ', message);
 
-  useEffect(() => {
-    // 페이지에 진입했을 때 모달을 띄우기 위한 타이머 설정
-    const openTimer = setTimeout(() => {
-      setShowModal(true);
-    }, 0); // 5초 후에 모달을 엽니다.
+    connect();
+    setMessage('');
 
-    // 모달을 닫기 위한 타이머 설정
-    const closeTimer = setTimeout(() => {
-      setShowModal(false);
-    }, 5000); // 5초 후에 모달을 닫습니다. (총 10초)
+    return () => disconnect();
+  };
 
-    // 컴포넌트가 언마운트되거나 업데이트되기 전에 타이머를 정리합니다.
-    return () => {
-      clearTimeout(openTimer);
-      clearTimeout(closeTimer);
-    };
-  }, []);
+  const subscribe1 = () => {
+    client.current.subscribe(`/sub/chat/message/${RoomUniqueId}`, message => {
+      setMessageData({ ...messageList, message });
+    });
+  };
+
+  const publish1 = () => {
+    client.current.publish({
+      destination: `/pub/chat/message/${RoomUniqueId}`,
+      body: JSON.stringify({
+        memberId: `${localStorage.memberId}`,
+        memberName: `${localStorage.memberName}`,
+        memberUniqueId: `${localStorage.memberUniqueId}`,
+        memberProfileImage: `${localStorage.profileImage}`,
+        chatRoomId: RoomId,
+        chatRoomUniqueId: RoomUniqueId,
+        message: message,
+      }),
+    });
+  };
+
+  const disconnect = () => {
+    client.current.deactivate();
+  };
+
+  console.log('messageList :: ', messageList);
 
   return (
     <>
-      <Background
+      <div
         style={{
+          width: '100%',
+          height: '100%',
           position: backgroundPosition,
         }}
       >
-        <Container>
-          <div
-            style={{
-              height: '100%',
-            }}
-          >
-            <Topbar>
-              <Link to={`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '40px',
-                    height: '28px',
-                  }}
-                >
-                  <img
-                    src={LeftVector}
-                    alt="back"
-                    style={{
-                      width: '8px',
-                      height: '15px',
-                      marginLeft: '16px',
-                    }}
-                  />
-                </div>
-              </Link>
-              <TopbarName>모임이름</TopbarName>
-              <ModalBtn
-                onClick={() => {
-                  openModal();
-                }}
-              >
-                <img
-                  src={menu}
-                  alt="menu"
-                  style={{
-                    width: '24px',
-                    height: '24px',
-                    marginRight: '16px',
-                  }}
-                />
-              </ModalBtn>
-            </Topbar>
+        <Background>
+          <Topbar>
+            <Link to={`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`}>
+              <TopBackDiv>
+                <LeftBack />
+              </TopBackDiv>
+            </Link>
+            <TopbarName>모임이름</TopbarName>
+            <ModalBtn
+              onClick={() => {
+                openModal();
+              }}
+            >
+              <RoomMenuIcon />
+            </ModalBtn>
+          </Topbar>
+          <Container>
             <Contents>
               <ParticipantDiv>ㅇㅇㅇ님이 참여했습니다.</ParticipantDiv>
-              <OtherDiv>
-                <div
-                  style={{
-                    position: 'relative',
-                  }}
-                >
-                  <div
-                    style={{
-                      height: '85px',
-                      width: '42px',
-                      position: 'absolute',
-                      bottom: 0,
-                    }}
-                  >
-                    <OtherProfile>
-                      <img
-                        src={ProfileImg}
-                        alt="profile"
-                        style={{
-                          width: '40px',
-                          height: '40px',
-                          borderRadius: '8px',
-                        }}
-                      />
-                    </OtherProfile>
+              {messageList?.map((data, index) => {
+                return (
+                  <OtherDiv key={index}>
                     <div
                       style={{
-                        width: '18px',
-                        height: '18px',
-                        background: '#F63D68',
-                        borderRadius: '20px',
-                        position: 'absolute',
-                        bottom: '25px',
-                        left: '29px',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
+                        position: 'relative',
                       }}
                     >
-                      <img
-                        src={PartyHost}
-                        alt="host"
-                        style={{
-                          width: '10px',
-                          height: '10px',
-                        }}
-                      ></img>
+                      <OtherImg>
+                        <OtherProfile>
+                          <img
+                            src={data.memberProfileImage}
+                            alt="profile"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              borderRadius: '8px',
+                            }}
+                          />
+                        </OtherProfile>
+                        <OtherHostIcon>
+                          <PartHostIcon />
+                        </OtherHostIcon>
+                      </OtherImg>
+                      <OthertInfo>
+                        <OtherName>{data.sender}</OtherName>
+                        <OtherContents>
+                          <OtherChatText>{data.message}</OtherChatText>
+                          <OtherChatTime>12:19 pm</OtherChatTime>
+                        </OtherContents>
+                      </OthertInfo>
                     </div>
-                  </div>
-                  <OthertInfo>
-                    <OtherName>김피클</OtherName>
-                    <OtherContents>
-                      <OtherChatText>
-                        hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!hello!!!!
-                      </OtherChatText>
-                      <OtherChatTime>12:19 pm</OtherChatTime>
-                    </OtherContents>
-                  </OthertInfo>
-                </div>
-              </OtherDiv>
-              <div
-                style={{
-                  height: '57px',
-                  marginRight: '16px',
-                  marginTop: '18px',
-                }}
-              >
+                  </OtherDiv>
+                );
+              })}
+              <MyChatContainer>
                 <MyChatDiv>
                   <MyChatTime>12:19 pm</MyChatTime>
-                  <MyChatText>
-                    반가워요~!반가워요~!반가워요~!반가워요~!반가워요~!반가워요~!반가워요~!반가워요~!반가워요~!반가워요~!
-                  </MyChatText>
+                  <MyChatText>반가워요~!반가워요~!반가워요~!</MyChatText>
                 </MyChatDiv>
-              </div>
-              {showModal && (
-                <div
-                  style={{
-                    display: 'flex',
-                    width: '100%',
-                    height: '100%',
+              </MyChatContainer>
+            </Contents>
+          </Container>
+          {showModal && (
+            <NavigateModal>
+              <NavigateDiv>
+                <NavigateText>
+                  가이드라인 어쩌구 지키지 않으면 죽여버릴거야..채팅할 때 조심하세요 안 그러면
+                  찾아가요..
+                </NavigateText>
+                <NavigateExitDiv
+                  onClick={() => {
+                    setShowModal();
                   }}
                 >
-                  <NavigateModal>
-                    <NavigateDiv>
-                      <div
-                        style={{
-                          height: '30px',
-                          width: '80%',
-                          margin: 'auto',
-                          display: 'flex',
-                          flexDirection: 'column',
-                          justifyContent: 'flex-end',
-                        }}
-                      >
-                        <NavigateText>가이드라인 어쩌구 지키지 않으면 죽여버릴거야..</NavigateText>
-                        <NavigateText>채팅할 때 조심하세요 안 그러면 찾아가요..</NavigateText>
-                      </div>
-                    </NavigateDiv>
-                  </NavigateModal>
-                </div>
-              )}
-              <SendContents>
-                <SendDiv>
-                  <input
-                    placeholder="메시지를 입력하세요."
-                    style={{
-                      width: '277px',
-                      height: '20px',
-                      border: 'none',
-                      marginLeft: '16px',
-                    }}
-                  ></input>
-                  <ChatBtn>
-                    <img
-                      src={SendIcon}
-                      alt="sendBtn"
-                      style={{
-                        width: '12px',
-                        height: '12px',
-                      }}
-                    />
-                  </ChatBtn>
-                </SendDiv>
-              </SendContents>
-            </Contents>
-          </div>
-        </Container>
-      </Background>
+                  <NavigateExitIcon />
+                </NavigateExitDiv>
+              </NavigateDiv>
+            </NavigateModal>
+          )}
+          <SendContents>
+            <SendDiv>
+              <input
+                type={'text'}
+                value={message}
+                onChange={e => setMessage(e.target.value)}
+                placeholder="메시지를 입력하세요."
+                style={{
+                  width: '260px',
+                  height: '20px',
+                  border: 'none',
+                  marginLeft: '16px',
+                }}
+              ></input>
+              <ChatBtn onClick={() => sendMessage(message)}>
+                <ChatSendIcon />
+              </ChatBtn>
+            </SendDiv>
+          </SendContents>
+        </Background>
+      </div>
       {isModalOpen && (
         <div>
           <Modals onClick={handleBackdropClick}>
             <ModalContent>
-              <ModalMenuBar>
-                <div
-                  style={{
-                    marginTop: '20px',
-                    display: 'inline-block',
-                  }}
-                >
-                  채팅방 설정
-                </div>
-              </ModalMenuBar>
+              <ModalMenuBar>채팅방 설정</ModalMenuBar>
               <ModalChatExit
                 onClick={() => {
                   ExitopenModal();
@@ -283,25 +295,30 @@ export const ChatRoomPage = () => {
       {isExitModalOpen && (
         <div
           style={{
-            width: '100%',
-            height: '100%',
-            display: 'flex',
+            width: '100vw',
+            height: '100vh',
+            background: 'none',
+            position: 'fixed',
+            top: 0,
+            zIndex: 13,
           }}
         >
-          <ExitModal>
-            <ExitName>채팅방을 나가시겠습니까?</ExitName>
-            <ExitText>한번 나간 채팅방은 다시 들어올 수 없습니다.</ExitText>
-            <ExitBtnDiv>
-              <ExitCancel
-                onClick={() => {
-                  ExitcloseModal();
-                }}
-              >
-                머무르기
-              </ExitCancel>
-              <EixtBtn>나가기</EixtBtn>
-            </ExitBtnDiv>
-          </ExitModal>
+          <ExitContainer>
+            <ExitModal>
+              <ExitName>채팅방을 나가시겠습니까?</ExitName>
+              <ExitText>한번 나간 채팅방은 다시 들어올 수 없습니다.</ExitText>
+              <ExitBtnDiv>
+                <ExitCancel
+                  onClick={() => {
+                    ExitcloseModal();
+                  }}
+                >
+                  머무르기
+                </ExitCancel>
+                <EixtBtn>나가기</EixtBtn>
+              </ExitBtnDiv>
+            </ExitModal>
+          </ExitContainer>
         </div>
       )}
     </>
@@ -309,23 +326,40 @@ export const ChatRoomPage = () => {
 };
 
 const Background = styled.div`
-  background: #ffffff;
-  width: 100%;
-`;
-
-const Container = styled.div`
-  width: 375px;
+  background: #e4e7ec;
+  width: 360px;
   height: 100%;
-  background: #ffffff;
   margin: 0 auto;
 `;
 
+const Container = styled.div`
+  padding-top: 47px;
+  width: 360px;
+  margin: 0 auto;
+  background: #ffffff;
+`;
+
+// TopBar 스타일
 const Topbar = styled.div`
   display: flex;
+  position: fixed;
+  top: 0;
+  margin-top: 51px;
   justify-content: space-between;
   align-items: center;
-  width: 375px;
+  width: 360px;
   height: 52px;
+  border-bottom: 1px solid #f2f4f7;
+  background: #fff;
+  z-index: 10;
+`;
+
+const TopBackDiv = styled.div`
+  display: flex;
+  padding-left: 16px;
+  width: 40px;
+  height: 24px;
+  cursor: pointer;
 `;
 
 const TopbarName = styled.div`
@@ -333,18 +367,19 @@ const TopbarName = styled.div`
   font-size: 16px;
 `;
 
-const ModalBtn = styled.button`
+const ModalBtn = styled.div`
   display: flex;
-  align-items: center;
   width: 40px;
-  height: 28px;
+  height: 24px;
+  cursor: pointer;
 `;
 
 const Contents = styled.div`
   width: 100%;
-  height: 80vh;
+  height: 100%;
   background: #e4e7ec;
   display: inline-block;
+  padding-bottom: 150px;
 `;
 
 const ParticipantDiv = styled.div`
@@ -357,24 +392,40 @@ const ParticipantDiv = styled.div`
   background: #d0d5dd;
   border-radius: 20px;
   font-size: 10px;
-  margin-top: 12px;
+  margin-top: 10px;
 `;
 
 const OtherDiv = styled.div`
-  /* height: 57px; */
   margin-left: 16px;
   display: flex;
   margin-top: 18px;
-
-  /* margin-bottom: 20px; */
   position: relative;
+`;
+
+const OtherImg = styled.div`
+  width: 100%;
+  width: 40px;
+  position: absolute;
 `;
 
 const OtherProfile = styled.div`
   width: 40px;
-  /* height: 40px; */
+  height: 40px;
   display: flex;
   margin-top: 14px;
+`;
+
+const OtherHostIcon = styled.div`
+  width: 18px;
+  height: 18px;
+  background: #f63d68;
+  border-radius: 20px;
+  position: absolute;
+  bottom: -4px;
+  left: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const OthertInfo = styled.div`
@@ -417,12 +468,15 @@ const OtherChatTime = styled.div`
 `;
 
 // 내 채팅 스타일
+const MyChatContainer = styled.div`
+  height: 100%;
+  margin-top: 18px;
+  margin-right: 16px;
+`;
+
 const MyChatDiv = styled.div`
-  /* width: 100%; */
   display: flex;
   float: right;
-  /* float: right; */
-  /* margin-right: 16px; */
 `;
 
 const MyChatTime = styled.div`
@@ -449,20 +503,20 @@ const MyChatText = styled.div`
 
 // 채팅창
 const SendContents = styled.div`
-  width: 375px;
+  width: 360px;
+  height: 80px;
   display: flex;
-  background: #e4e7ec;
-  overflow: hidden;
   position: fixed;
+  align-items: center;
+  background: #e4e7ec;
   bottom: 0;
-  padding-bottom: 60px;
+  margin-bottom: 70px;
 `;
 
 const SendDiv = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 343px;
+  width: 328px;
   height: 48px;
   margin: 0 auto;
   border-radius: 20px;
@@ -478,13 +532,13 @@ const ChatBtn = styled.button`
   align-items: center;
   justify-content: center;
   margin-right: 6px;
+  margin-left: 12px;
 `;
 
 // 모달
 const Modals = styled.div`
   position: fixed;
   overflow: hidden;
-  /* top: 4.3vh; */
   left: 0;
   right: 0;
   bottom: 0;
@@ -492,9 +546,8 @@ const Modals = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   background-color: rgba(29, 41, 57, 0.5);
-  /* margin: 0 auto; */
-  /* width: 375px; */
   height: 100%;
+  z-index: 11;
 `;
 
 const ModalContent = styled.div`
@@ -503,24 +556,28 @@ const ModalContent = styled.div`
   right: 0;
   text-align: center;
   background-color: white;
-  width: 375px;
-  height: 150px;
+  width: 360px;
+  height: 196px;
   border-radius: 16px 16px 0px 0px;
   margin: 0 auto;
-  bottom: 49px;
+  bottom: 70px;
 `;
 
 const ModalMenuBar = styled.div`
-  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
   font-size: 16px;
+  font-weight: 400;
 `;
 
 const ModalChatExit = styled.button`
   display: flex;
   align-items: center;
-  margin-left: 16px;
+  padding: 16px;
   font-size: 16px;
-  width: 342px;
+  width: 330px;
   height: 48px;
 `;
 
@@ -529,9 +586,9 @@ const ModalReport = styled.button`
   align-items: center;
   text-align: left;
   font-size: 16px;
-  width: 342px;
+  width: 330px;
   height: 48px;
-  margin-left: 16px;
+  padding: 16px;
 `;
 
 const ComingSoon = styled.div`
@@ -548,31 +605,40 @@ const ComingSoon = styled.div`
   color: #344054;
 `;
 
+const ExitContainer = styled.div`
+  width: 100%;
+  /* height: 100%; */
+  top: 32vh;
+  /* display: inline-flex; */
+  display: flex;
+  position: absolute;
+`;
+
 const ExitModal = styled.div`
   text-align: center;
   margin: auto;
   z-index: 100;
-  width: 343px;
-  height: 206px;
+  width: 327px;
+  height: 198px;
   border-radius: 16px;
-  background: white;
+  background: #fff;
 `;
 
 const ExitName = styled.div`
   font-size: 16px;
   font-weight: 700;
-  margin-top: 56px;
+  margin-top: 60px;
 `;
 
 const ExitText = styled.div`
   font-size: 14px;
-  margin-top: 16px;
+  margin-top: 8px;
 `;
 
 const ExitBtnDiv = styled.div`
   display: flex;
   justify-content: space-evenly;
-  margin-top: 32px;
+  margin-top: 36px;
 `;
 
 const ExitCancel = styled.div`
@@ -583,11 +649,12 @@ const ExitCancel = styled.div`
   color: #667085;
   font-size: 12px;
   font-weight: 600;
-  width: 144px;
+  width: 140px;
   height: 48px;
   background: #fff;
   border: 1.5px solid #667085;
   border-radius: 12px;
+  cursor: pointer;
 `;
 
 const EixtBtn = styled.div`
@@ -598,37 +665,45 @@ const EixtBtn = styled.div`
   color: #fff;
   font-weight: 600;
   font-size: 12px;
-  width: 144px;
+  width: 140px;
   height: 48px;
   background: #f63d68;
   border-radius: 12px;
+  cursor: pointer;
 `;
 
 const NavigateModal = styled.div`
-  width: 343px;
-  height: 70vh;
+  width: 360px;
+  height: 72px;
   display: flex;
-  padding-bottom: 280px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  position: fixed;
+  bottom: 0;
+  align-items: center;
+  margin-bottom: 150px;
 `;
 
 const NavigateDiv = styled.div`
   display: flex;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
   margin: 0 auto;
-  width: 343px;
-  height: 61px;
+  width: 328px;
+  height: 72px;
+  padding-left: 16px;
   background: #f9fafb;
   border-radius: 16px;
 `;
 
 const NavigateText = styled.div`
-  font-size: 12px;
+  max-width: 190px;
+  line-height: 14px;
+  font-size: 10px;
   color: #344054;
-  margin-bottom: 5px;
+  margin: auto 0;
+`;
+
+const NavigateExitDiv = styled.div`
+  display: flex;
+  padding-top: 8px;
+  width: 32px;
+  height: 32px;
 `;

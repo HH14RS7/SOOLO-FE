@@ -1,23 +1,22 @@
 // 기능 import
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import SockJS from 'sockjs-client';
-import * as StompJs from '@stomp/stompjs';
-import Cookies from 'js-cookie';
+import { React, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PATH_URL } from '../shared/constants';
+import * as StompJs from '@stomp/stompjs';
+import styled from 'styled-components';
+import SockJS from 'sockjs-client';
+import Cookies from 'js-cookie';
 
 // 이미지 import
-import SojuRoom from '../assets/sojuroomimg.webp';
 import { ReactComponent as PeopleIcon } from '../assets/chating/membericon.svg';
 import { ReactComponent as MenuIcon } from '../assets/chating/menuicons.svg';
-import Karina from '../assets/karina.webp';
 
 export const ChatList = () => {
-  const [chatDate, setChatDate] = useState();
+  const [chatData, setChatData] = useState();
   const [activeTab, setActiveTab] = useState(true);
-
   const accesskey = Cookies.get('Access_key');
+  const [zIndex, setZIndex] = useState(8);
+  const [marzinLeft, setMarzinLeft] = useState(0);
 
   useEffect(() => {
     const client = new StompJs.Client({
@@ -33,13 +32,12 @@ export const ChatList = () => {
           `/sub/chat/chatList/${localStorage.memberUniqueId}`,
           message => {
             console.log(`Received:: ${message.body}`);
-            setChatDate(JSON.parse(`${message.body}`));
+            setChatData(JSON.parse(`${message.body}`));
           },
         );
         console.log('subscription :: ', subscription);
         client.publish({
           destination: `/pub/chat/chatList/${localStorage.memberUniqueId}`,
-          body: 'First Message',
         });
       },
       // reconnectDelay: 5000, //자동 재 연결
@@ -60,25 +58,9 @@ export const ChatList = () => {
       // disconnect(); // 컴포넌트 언마운트 시 웹소켓 연결 해제
     };
   }, []);
-  console.log('chatDate :: ', chatDate);
+  console.log('chatData :: ', chatData);
 
-  // 다 오류뜸 이상
-  // const [messageInput, setMessageInput] = useState('');
-  // const handleSendMessage = () => {
-  //   sendMessage(messageInput); // 메시지 전송
-  //   setMessageInput(''); // 입력 필드 초기화
-  // };
-  // const handleInputChange = e => {
-  //   setMessageInput(e.target.value);
-  // };
-  // useEffect(() => {
-  //   const handleReceivedMessage = message => {
-  //     console.log('Received message:', message);
-  //     // 수신한 메시지 처리
-  //   };
-  //   subscribe(handleReceivedMessage); // 메시지 수신
-  // }, []);
-
+  // 탭 UI
   const handleTabChange = tab => {
     setActiveTab(tab);
   };
@@ -97,6 +79,7 @@ export const ChatList = () => {
     setIsModalOpen(true);
     setBackgroundPosition('fixed');
   };
+
   const handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
       closeModal();
@@ -148,94 +131,80 @@ export const ChatList = () => {
           <ChatContainer>
             {activeTab === true ? (
               <>
-                <ChatRoom>
-                  <ChatRoomBox>
-                    <ChatRoomImg>
-                      <img
-                        src={SojuRoom}
-                        alt="chatprofile"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          borderRadius: '16px',
-                        }}
-                      />
-                    </ChatRoomImg>
-                    <ChatRoomContainer>
-                      <ChatRoomContents>
-                        <Link to={`${PATH_URL.PARTY_CHATROOM}/${localStorage.memberUniqueId}`}>
-                          <ChatRoomInfo>
-                            <ChatRoomName>모임 이름</ChatRoomName>
-                            <ChatRoomContent>최신 대화 내용</ChatRoomContent>
-                          </ChatRoomInfo>
-                        </Link>
-                        <RoomMember>
-                          <TotalMember>
-                            <MemberIcon>
-                              <PeopleIcon />
-                            </MemberIcon>
-                            5명 참여중
-                          </TotalMember>
-                          <MemberProfile>
-                            <img
-                              src={Karina}
-                              alt="member1"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                zIndex: '2',
+                {chatData?.data.map((data, index) => {
+                  return (
+                    <ChatRoom key={index}>
+                      <ChatRoomBox>
+                        <ChatRoomImg>
+                          <img
+                            src={data.imageUrl}
+                            alt="chatprofile"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              borderRadius: '16px',
+                            }}
+                          />
+                        </ChatRoomImg>
+                        <ChatRoomContainer>
+                          <ChatRoomContents>
+                            <Link
+                              to={`${PATH_URL.PARTY_CHATROOM}/${data.chatRoomUniqueId}/${data.chatRoomId}`}
+                            >
+                              <ChatRoomInfo>
+                                <ChatRoomName>{data.title}</ChatRoomName>
+                                <ChatRoomContent>{data.lastMessage}</ChatRoomContent>
+                              </ChatRoomInfo>
+                            </Link>
+                            <RoomMember>
+                              <TotalMember>
+                                <MemberIcon>
+                                  <PeopleIcon />
+                                </MemberIcon>
+                                {data.currentCount}명 참여중
+                              </TotalMember>
+                              <MemberProfile>
+                                {data.imageList.map((imgdata, index) => {
+                                  const currentZIndex = zIndex - index; // 현재 이미지 zindex 값 구하는 로직
+                                  const marzinLefts = marzinLeft + index * 8;
+                                  return (
+                                    <img
+                                      key={index}
+                                      src={imgdata}
+                                      alt="member1"
+                                      style={{
+                                        width: '18px',
+                                        height: '18px',
+                                        borderRadius: '15px',
+                                        border: '1px solid #f63d68',
+                                        borderradius: '100%',
+                                        position: 'absolute',
+                                        marginLeft: marzinLefts,
+                                        zIndex: currentZIndex,
+                                      }}
+                                    />
+                                  );
+                                })}
+                              </MemberProfile>
+                            </RoomMember>
+                          </ChatRoomContents>
+                          <RightContents>
+                            <ChatMessageNumber>
+                              <MessageNumber>12</MessageNumber>
+                            </ChatMessageNumber>
+                            <ChatMenu
+                              onClick={() => {
+                                openModal();
                               }}
-                            />
-                            <img
-                              src={Karina}
-                              alt="member2"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '8px',
-                                zIndex: '1',
-                              }}
-                            />
-                            <img
-                              src={Karina}
-                              alt="member3"
-                              style={{
-                                width: '18px',
-                                height: '18px',
-                                borderRadius: '15px',
-                                border: '1px solid #f63d68',
-                                borderradius: '100%',
-                                position: 'absolute',
-                                marginLeft: '16px',
-                                zIndex: '0',
-                              }}
-                            />
-                          </MemberProfile>
-                        </RoomMember>
-                      </ChatRoomContents>
-                      <RightContents>
-                        <ChatMessageNumber>
-                          <MessageNumber>12</MessageNumber>
-                        </ChatMessageNumber>
-                        <ChatMenu
-                          onClick={() => {
-                            openModal();
-                          }}
-                        >
-                          <MenuIcon />
-                        </ChatMenu>
-                      </RightContents>
-                    </ChatRoomContainer>
-                  </ChatRoomBox>
-                </ChatRoom>
+                            >
+                              <MenuIcon />
+                            </ChatMenu>
+                          </RightContents>
+                        </ChatRoomContainer>
+                      </ChatRoomBox>
+                    </ChatRoom>
+                  );
+                })}
               </>
             ) : (
               <div>승인요청임</div>
