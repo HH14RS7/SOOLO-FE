@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
 const Content = styled.div`
   padding-top: 55px;
   padding-bottom: 70px;
-  height: 100%;
+  height: 100vh;
 `;
 
 export default Layout;
