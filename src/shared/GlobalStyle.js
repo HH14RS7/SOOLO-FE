@@ -42,19 +42,18 @@ export const GlobalStyle = createGlobalStyle`
     --font-nano: 0.625rem;
 
     /* font weight */
-    --font-wegith-700 : 700;
-    --font-wegith-600 : 600;
-    --font-wegith-500 : 500;
-    --font-wegith-400 : 400;
+    --font-weight-700 : 700;
+    --font-weight-600 : 600;
+    --font-weight-500 : 500;
+    --font-weight-400 : 400;
   }
 
   /* font-style */
-  body {
-    font-family: "Pretendard Variable", Pretendard
+  * {
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   }
 
   /* Typography */
-
   html { 
     font-size :16px;
   }
@@ -62,7 +61,7 @@ export const GlobalStyle = createGlobalStyle`
   /* Title 24 */
   h1 {
     font-style: normal;
-    font-weight: var(--font-wegith-700);
+    font-weight: var(--font-weight-700);
     font-size: var(--font-large);
     line-height: 100%;
     letter-spacing: -0.015em;
@@ -71,7 +70,7 @@ export const GlobalStyle = createGlobalStyle`
   /* Title 20 */ 
   h2 { 
     font-style: normal;
-    font-weight: var(--font-wegith-700);
+    font-weight: var(--font-weight-700);
     font-size: var(--font-medium);
     line-height: 100%;
     letter-spacing: -0.015em;
@@ -80,7 +79,7 @@ export const GlobalStyle = createGlobalStyle`
   /* Title 16 */
   h3 {
     font-style: normal;
-    font-weight: var(--font-wegith-600);
+    font-weight: var(--font-weight-600);
     font-size: var(--font-regular);
     line-height: 100%;
     letter-spacing: -0.015em;
@@ -89,7 +88,7 @@ export const GlobalStyle = createGlobalStyle`
   /* body 16 */
   h4 { 
     font-style: normal;
-    font-weight: var(--font-wegith-400);
+    font-weight: var(--font-weight-400);
     font-size: var(--font-regular);
     line-height: 100%;
     letter-spacing: -0.015em;
@@ -98,7 +97,7 @@ export const GlobalStyle = createGlobalStyle`
   / * body 14 */
   h5 {
     font-style: normal;
-    font-weight: var(--font-micro-400);
+    font-weight: var(--font-weight-400);
     font-size: var(--font-small);
     line-height: 100%;
     letter-spacing: -0.015em;
@@ -106,9 +105,9 @@ export const GlobalStyle = createGlobalStyle`
 
   / * caption 12-bold */
   h6 {
-    font-family: 'Inter';
+    // font-family: 'Inter';
     font-style: normal;
-    font-weight: var(--font-wegith-700);
+    font-weight: var(--font-weight-700);
     font-size: var(--font-micro);
     line-height: 100%;
     letter-spacing: -0.015em;
@@ -116,7 +115,7 @@ export const GlobalStyle = createGlobalStyle`
 
   /* caption 10 */
   p {
-    font-family: 'Inter';
+    // font-family: 'Inter';
     font-style: normal;
     font-weight: var(--font-weight-400);
     font-size: var(--font-nano);
@@ -145,10 +144,8 @@ export const GlobalStyle = createGlobalStyle`
   
   a {
     text-decoration: none;
-    color: none;
+    color: inherit;
   }
-
-
 `;
 
 export default GlobalStyle;
