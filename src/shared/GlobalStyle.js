@@ -114,14 +114,14 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   /* caption 10 */
-  p {
-    // font-family: 'Inter';
-    font-style: normal;
-    font-weight: var(--font-weight-400);
-    font-size: var(--font-nano);
-    line-height: 14px;
-    letter-spacing: -0.015em;
-  }
+  // p {
+  //   // font-family: 'Inter';
+  //   font-style: normal;
+  //   font-weight: var(--font-weight-400);
+  //   font-size: var(--font-nano);
+  //   line-height: 14px;
+  //   letter-spacing: -0.015em;
+  // }
 
   table {
     border-collapse: collapse;
