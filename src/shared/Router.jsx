@@ -18,6 +18,7 @@ import MyRequestParty from '../pages/MyRequestParty';
 import MyCreateParty from '../pages/MyCreateParty';
 import PartyMapCreate from '../pages/PartyMapCreate';
 import PartyPlaceCreate from '../pages/PartyPlaceCreate';
+import UserUpdatePage from '../pages/UserUpdatePage';
 
 const Router = () => {
   return (
@@ -29,6 +30,7 @@ const Router = () => {
           <Route path={PATH_URL.LOGIN} element={<Login />} />
           <Route path={PATH_URL.DETAIL} element={<Detail />} />
           <Route path={PATH_URL.MYPAGE} element={<MyPage />} />
+          <Route path={PATH_URL.MYPAGE_UPDATE} element={<UserUpdatePage />} />
           <Route path={`${MEMBER_URL.TARGET_PAGE_GET}/:id`} element={<UserProfilePage />} />
           <Route exact path={PATH_URL.KAKAO} element={<KakaoRedirection />} />
           <Route exact path={PATH_URL.NAVER} element={<NaverRedirection />} />
