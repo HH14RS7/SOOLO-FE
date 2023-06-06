@@ -2,8 +2,7 @@ import React from 'react';
 
 const KakaoLoginComponent = () => {
   const REST_API_KEY = `${process.env.REACT_APP_REST_API_KEY}`;
-  const REDIRECT_URI = 'http://localhost:3000/kakao/callback';
-  // const REDIRECT_URI = 'https://soolo-fe.vercel.app/kakao/callback'; 프론트 서버 배포 주소
+  const REDIRECT_URI = 'https://soolo-fe.vercel.app/kakao/callback'; // 프론트 서버 배포 주소
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   const loginHandler = () => {
