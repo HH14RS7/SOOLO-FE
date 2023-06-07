@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery } from 'react-query';
 import { MEMBER_URL, PATH_URL } from '../../shared/constants';
 import { getAPI } from '../../api/api';
 import { styled } from 'styled-components';
-import UserUpdate from './UserUpdate';
 import { Link } from 'react-router-dom';
 import { ReactComponent as UpdateIcon } from '../../assets/mypage/update.svg';
 import { ReactComponent as FrameIcon } from '../../assets/mypage/frame35.svg';
 import { ReactComponent as ListIcon } from '../../assets/mypage/listicon.svg';
+import { ReactComponent as Profile } from '../../assets/mypage/profile.svg';
 
 export const MyPageList = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
   const { data, isLoading } = useQuery('mypagelist', async () => {
     const response = await getAPI(`${MEMBER_URL.MYPAGE_GET}`);
     return response;
@@ -21,28 +19,18 @@ export const MyPageList = () => {
     return <div>Loading...</div>; // 로딩 상태에 따른 표시 추가
   }
 
-  const modalOpenToggle = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
   const user = data?.data?.data;
   console.log('mydata 확인 => ', data?.data?.data);
 
   return (
     <>
-      {isModalOpen && (
-        <UserUpdate
-          memberName={user?.memberName}
-          profileImage={user?.profileImage}
-          introduce={user?.introduce}
-          isModalOpen={modalOpenToggle}
-        ></UserUpdate>
-      )}
       <Container>
         <PartyDetailImg>
           <Topbar360>
             <Frame3959>
-              <UpdateIcon onClick={() => modalOpenToggle()} />
+              <Link to={`${PATH_URL.MYPAGE_UPDATE}`}>
+                <UpdateIcon />
+              </Link>
             </Frame3959>
           </Topbar360>
           <Frame4017>
@@ -55,7 +43,7 @@ export const MyPageList = () => {
                   <Info>{user?.age}대</Info>
                 </Frame4010>
               </Frame4011>
-              <ProfileImage src={user?.profileImage} alt="ProfileImage" />
+              <ProfileImage src={user?.profileImage || <Profile />} alt="ProfileImage" />
             </Frame4016>
             <Frame4013>
               <Introduce>자기 소개</Introduce>
