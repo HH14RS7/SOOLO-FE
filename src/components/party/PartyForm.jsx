@@ -22,8 +22,10 @@ const CreateForm = ({ party }) => {
   const initialTotalCount = isEdit ? party.totalCount : 2;
   const [totalCount, setTotalCount] = useState(initialTotalCount);
 
+  const locationIcon = '/img/map-location.png';
   const imgRef = useRef();
   const noImg = '/img/no-img.jpg';
+
   const [img, setImg] = useState(noImg);
   const navigate = useNavigate();
 
@@ -192,20 +194,29 @@ const CreateForm = ({ party }) => {
   };
 
   return (
-    <div>
-      <PlaceWrapper>
+    <Wrapper>
+      <PlaceSection>
         <PlaceHeader>
-          <label htmlFor="mapData">모임 장소</label>
-          {!isEdit && <ModifyButton onClick={goSearchPlace}>수정하기</ModifyButton>}
+          <h6 htmlFor="mapData">모임 장소</h6>
+          {!isEdit && <ModifyButton onClick={goSearchPlace}>장소 변경하기</ModifyButton>}
         </PlaceHeader>
-        <div>
-          <div>{isEdit ? party.placeName : place.place_name}</div>
-          <div>{isEdit ? party.placeAddress : place.road_address_name}</div>
-        </div>
-      </PlaceWrapper>
-      <FormWrapper>
+        <PlaceInfo>
+          <LocationIcon src={locationIcon} alt="location" />
+          <PlaceDetail>
+            <TopInfo>
+              <h4>{isEdit ? party.placeName : place.place_name}</h4>
+              <Category> {place.category_name.split('>').reverse()[0]}</Category>
+              {/* <Category>
+                {isEdit ? party.categoryName : place.category_name.split('>').reverse()[0]}
+              </Category> */}
+            </TopInfo>
+            <PlaceAddress>{isEdit ? party.placeAddress : place.road_address_name}</PlaceAddress>
+          </PlaceDetail>
+        </PlaceInfo>
+      </PlaceSection>
+      <FormSection>
         <FormContainer onSubmit={handleSubmit(handlePartySubmit)}>
-          <label htmlFor="title">모임 이름</label>
+          <h6 htmlFor="title">모임 이름</h6>
           <input
             id="title"
             type="text"
@@ -257,28 +268,75 @@ const CreateForm = ({ party }) => {
             </button>
           </div>
         </FormContainer>
-      </FormWrapper>
-    </div>
+      </FormSection>
+    </Wrapper>
   );
 };
 
-const PlaceWrapper = styled.div`
-  border: 2px solid black;
-  margin-bottom: 10px;
+const Wrapper = styled.div`
+  width: 360px;
+  height: 100%;
+  margin: 0 auto;
+`;
+
+/* PlaceSection */
+const PlaceSection = styled.section`
+  padding: 1.5rem 1rem;
+  height: 80px;
+  margin-bottom: 50px;
 `;
 
 const PlaceHeader = styled.div`
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
 `;
 
-const ModifyButton = styled.div`
-  width: 75px;
+const ModifyButton = styled.h6`
+  cursor: pointer;
+`;
+
+const PlaceInfo = styled.div`
+  display: flex;
+  height: 80px;
+  background: var(--color-gray-50);
+  border: var(--color-gray-200);
+  border-radius: 1rem;
+  padding: 21px 1rem;
+  gap: 0.5rem;
+`;
+
+const LocationIcon = styled.img`
+  width: 38px;
+  height: 38px;
+`;
+
+const PlaceDetail = styled.div`
+  display: flex;
+  flex-direction: column;
   height: 36px;
-  background-color: pink;
+  align-items: flex-start;
+  gap: 0.5rem;
 `;
 
-const FormWrapper = styled.div`
+const TopInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 16px;
+  align-items: flex-center;
+  gap: 0.5rem;
+`;
+
+const Category = styled.h5`
+  color: var(--color-gray-500);
+`;
+
+const PlaceAddress = styled.h5`
+  color: var(--color-gray-500);
+`;
+const FormSection = styled.section`
   display: flex;
 `;
 

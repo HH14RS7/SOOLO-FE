@@ -13,9 +13,7 @@ export default function SelectedPartyList({ partyList }) {
     </>
   );
 }
-
 const ListWrapper = styled.ul`
-  // width: 100%;
   width: 360px;
   height: 170px;
   margin: 0 auto;
@@ -24,6 +22,6 @@ const ListWrapper = styled.ul`
   align-items: flex-start;
   gap: 0.5rem;
   position: relative;
-  bottom: 260px;
+  bottom: 250px;
   z-index: 30;
 `;
