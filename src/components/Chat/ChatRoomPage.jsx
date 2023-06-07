@@ -52,7 +52,7 @@ export const ChatRoomPage = () => {
   useEffect(() => {
     setShowModal(true);
     console.log('렌더링');
-  }, [showModal]);
+  }, []);
 
   //이 방에 참여한 사용자(나)의 정보를 가져와!!! 실시!!!
 
@@ -65,6 +65,9 @@ export const ChatRoomPage = () => {
       onConnect: () => {
         console.log('success');
         subscribeSend();
+
+        subscribe();
+        publish();
       },
       // onDisconnect: () => {
       //   disconnect();
@@ -76,17 +79,18 @@ export const ChatRoomPage = () => {
   const subscribe = () => {
     client.current.subscribe(`/sub/chat/messageList/${localStorage.memberUniqueId}`, response => {
       const data = JSON.parse(response.body);
+      setChatMessageList(data.data.chatMessageList.reverse());
 
       console.log('chatMessageList 3333:: ', chatMessageList);
-      if (chatMessageList == null) {
-        const data1 = [chatMessageList];
-        data1.push(data.data.chatMessageList);
-        setChatMessageList(data.data.chatMessageList);
-      } else {
-        const data1 = [...chatMessageList];
-        data1.push(data.data.chatMessageList);
-        setChatMessageList(data.data.chatMessageList);
-      }
+      // if (chatMessageList == null) {
+      //   const data1 = [chatMessageList];
+      //   data1.push(data.data.chatMessageList);
+      //   setChatMessageList(data.data.chatMessageList);
+      // } else {
+      //   const data1 = [...chatMessageList];
+      //   data1.push(data.data.chatMessageList);
+      //   setChatMessageList(data.data.chatMessageList);
+      // }
 
       setPage(data.data.page + 1);
       setTotalPage(data.data.totalpage);
