@@ -37,10 +37,7 @@ const Router = () => {
           <Route path={`${PATH_URL.PARTY_DETAIL}/:partyId`} element={<PartyDetail />} />
           <Route path={PATH_URL.PARTY_CREATE} element={<PartyCreate />} />
           <Route path={`${PATH_URL.PARTY_CHAT}/:id`} element={<ChatList />} />
-          <Route
-            path={`${PATH_URL.PARTY_CHATROOM}/:chatRoomUniqueId/:chatRoomId`}
-            element={<ChatRoom />}
-          />
+          <Route path={PATH_URL.PARTY_CHATROOM} element={<ChatRoom />} />
           <Route path={PATH_URL.PARTY_LIST_MAP} element={<PartyListMap />} />
           <Route path={PATH_URL.MY_REQUEST_PARTY} element={<MyRequestParty />} />
           <Route path={PATH_URL.MY_CREATE_PARTY} element={<MyCreateParty />} />
