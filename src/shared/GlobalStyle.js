@@ -105,7 +105,6 @@ export const GlobalStyle = createGlobalStyle`
 
   / * caption 12-bold */
   h6 {
-    // font-family: 'Inter';
     font-style: normal;
     font-weight: var(--font-weight-700);
     font-size: var(--font-micro);
