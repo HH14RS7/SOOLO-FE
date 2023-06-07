@@ -10,6 +10,7 @@ export default function SearchPlcaeList({ searchPlace, currentLocation, isChecke
   const FOOD_CATEGORY_CODE = 'FD6'; // 음식점 카테고리 코드
   const ps = new kakao.maps.services.Places();
   const containerRef = useRef(null);
+  const defaultImg = '/img/default-image.png';
 
   // 키워드 검색 함수
   const placesSearchCB = useCallback((data, status) => {
@@ -17,9 +18,9 @@ export default function SearchPlcaeList({ searchPlace, currentLocation, isChecke
       setPlaceList(prevList => [...prevList, ...data]);
       setIsLoading(false);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-      alert('검색 결과가 존재하지 않습니다.');
+      // alert('검색 결과가 존재하지 않습니다.');
     } else if (status === kakao.maps.services.Status.ERROR) {
-      alert('검색 결과 중 오류가 발생했습니다.');
+      // alert('검색 결과 중 오류가 발생했습니다.');
     }
   }, []);
 
@@ -77,20 +78,41 @@ export default function SearchPlcaeList({ searchPlace, currentLocation, isChecke
 
   return (
     <div>
-      <ListContainer ref={containerRef}>
+      <ListWrapper ref={containerRef}>
         {placeList.length > 0 ? (
           placeList.map(place => <SearchPlaceItem key={place.id} place={place} />)
         ) : (
-          <div>장소를 검색해주세요!</div>
+          <DefaultContainer>
+            <DefaultImage src={defaultImg} alt="defaultImg" />
+            <h5>장소를 검색해주세요!</h5>
+          </DefaultContainer>
         )}
         {isLoading && <div>로딩중입니다</div>}
-      </ListContainer>
+      </ListWrapper>
     </div>
   );
 }
 
-const ListContainer = styled.div`
-  background-color: pink;
-  overflow-y: scroll;
-  height: 400px;
+const ListWrapper = styled.div`
+  width: 360px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+`;
+
+const DefaultContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  gap: 7px;
+  padding: 185px 0;
+  top: calc(50% - 360px / 2);
+`;
+
+const DefaultImage = styled.img`
+  width: 50px;
+  height: 50px;
 `;
