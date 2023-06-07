@@ -30,8 +30,8 @@ export const ChatRoomPage = () => {
 
   //채팅목록 조회 후 셋팅 값
   const [chatMessageList, setChatMessageList] = useState([]);
-  const [page, setPage] = useState([]);
-  const [totalPage, setTotalPage] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
 
   const [message, setMessage] = useState('');
 
@@ -41,17 +41,12 @@ export const ChatRoomPage = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    console.log('렌더링 - 스타우');
+    setShowModal(true);
     connect();
 
     return () => {
       disconnect();
     };
-  }, []);
-
-  useEffect(() => {
-    setShowModal(true);
-    console.log('렌더링');
   }, []);
 
   //이 방에 참여한 사용자(나)의 정보를 가져와!!! 실시!!!
@@ -81,17 +76,6 @@ export const ChatRoomPage = () => {
       const data = JSON.parse(response.body);
       setChatMessageList(data.data.chatMessageList.reverse());
 
-      console.log('chatMessageList 3333:: ', chatMessageList);
-      // if (chatMessageList == null) {
-      //   const data1 = [chatMessageList];
-      //   data1.push(data.data.chatMessageList);
-      //   setChatMessageList(data.data.chatMessageList);
-      // } else {
-      //   const data1 = [...chatMessageList];
-      //   data1.push(data.data.chatMessageList);
-      //   setChatMessageList(data.data.chatMessageList);
-      // }
-
       setPage(data.data.page + 1);
       setTotalPage(data.data.totalpage);
     });
@@ -105,7 +89,7 @@ export const ChatRoomPage = () => {
       body: JSON.stringify({
         chatRoomId,
         chatRoomUniqueId,
-        page: 0,
+        page,
       }),
     });
   };
