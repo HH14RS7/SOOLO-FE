@@ -161,6 +161,13 @@ export const ChatRoomPage = () => {
 
       setChatMessageList(chatList => [...chatList, data.data]);
     });
+
+    client.current.publish({
+      destination: `/pub/chat/message/${chatRoomUniqueId}`,
+      body: JSON.stringify({
+        readStatus: 'READ',
+      }),
+    });
   };
 
   const publishSend = () => {
@@ -176,6 +183,7 @@ export const ChatRoomPage = () => {
         chatRoomId: chatRoomId,
         chatRoomUniqueId: chatRoomUniqueId,
         message: message,
+        readStatus: 'READ',
       }),
     });
     setMessage('');
@@ -249,47 +257,51 @@ export const ChatRoomPage = () => {
             <Contents>
               <ParticipantDiv>ㅇㅇㅇ님이 참여했습니다.</ParticipantDiv>
               {chatMessageList?.map((data, index) => {
-                return (
-                  <OtherDiv key={index}>
-                    <div
-                      style={{
-                        position: 'relative',
-                      }}
-                    >
-                      <OtherImg>
-                        <OtherProfile>
-                          <img
-                            src={data.memberProfileImage}
-                            alt="profile"
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              borderRadius: '8px',
-                            }}
-                          />
-                        </OtherProfile>
-                        <OtherHostIcon>
-                          <PartHostIcon />
-                        </OtherHostIcon>
-                      </OtherImg>
-                      <OthertInfo>
-                        <OtherName>{data.sender}</OtherName>
-                        <OtherContents>
-                          <OtherChatText>{data.message}</OtherChatText>
-                          <OtherChatTime>{formmatedDate(data.createdAt, 'h:mm')}</OtherChatTime>
-                        </OtherContents>
-                      </OthertInfo>
-                    </div>
-                  </OtherDiv>
-                );
+                if (data.memberId == localStorage.memberId) {
+                  return (
+                    <MyChatContainer key={index}>
+                      <MyChatDiv>
+                        <MyChatTime>{formmatedDate(data.createdAt, 'h:mm')}</MyChatTime>
+                        <MyChatText>{data.message}</MyChatText>
+                      </MyChatDiv>
+                    </MyChatContainer>
+                  );
+                } else {
+                  return (
+                    <OtherDiv key={index}>
+                      <div
+                        style={{
+                          position: 'relative',
+                        }}
+                      >
+                        <OtherImg>
+                          <OtherProfile>
+                            <img
+                              src={data.memberProfileImage}
+                              alt="profile"
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                borderRadius: '8px',
+                              }}
+                            />
+                          </OtherProfile>
+                          <OtherHostIcon>
+                            <PartHostIcon />
+                          </OtherHostIcon>
+                        </OtherImg>
+                        <OthertInfo>
+                          <OtherName>{data.sender}</OtherName>
+                          <OtherContents>
+                            <OtherChatText>{data.message}</OtherChatText>
+                            <OtherChatTime>{formmatedDate(data.createdAt, 'h:mm')}</OtherChatTime>
+                          </OtherContents>
+                        </OthertInfo>
+                      </div>
+                    </OtherDiv>
+                  );
+                }
               })}
-              {/* <MyChatContainer>
-                <MyChatDiv>
-                  <MyChatTime>12:19 pm</MyChatTime>
-                  <MyChatText>반가워요~!반가워요~!반가워요~!</MyChatText>
-                </MyChatDiv>
-              </MyChatContainer> */}
-              {/* <div ref={messageEndRef}></div> */}
               <div ref={messageEndRef}></div>
             </Contents>
           </Container>
@@ -446,8 +458,7 @@ const Contents = styled.div`
   height: 100%;
   background: #e4e7ec;
   display: inline-block;
-  padding-bottom: 150px;
-  margin-bottom: 8px;
+  padding-bottom: 160px;
 `;
 
 const ParticipantDiv = styled.div`
@@ -537,6 +548,8 @@ const OtherChatTime = styled.div`
 
 // 내 채팅 스타일
 const MyChatContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
   height: 100%;
   margin-top: 18px;
   margin-right: 16px;
