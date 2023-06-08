@@ -1,29 +1,67 @@
-import React from 'react';
-import { useQuery } from 'react-query';
+import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery } from 'react-query';
 import { MEMBER_URL, PATH_URL } from '../../shared/constants';
-import { getAPI } from '../../api/api';
+import { deleteAPI, getAPI } from '../../api/api';
 import { styled } from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as UpdateIcon } from '../../assets/mypage/update.svg';
 import { ReactComponent as FrameIcon } from '../../assets/mypage/frame35.svg';
 import { ReactComponent as ListIcon } from '../../assets/mypage/listicon.svg';
 import { ReactComponent as Profile } from '../../assets/mypage/profile.svg';
+import LoginModal from '../LoginModal';
+import Cookies from 'js-cookie';
 
 export const MyPageList = () => {
+  const [logoutModalOpen, setlogoutModalOpen] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const navigate = useNavigate();
+
+  const token = Cookies.get('Access_key');
+
+  useEffect(() => {
+    if (!token) {
+      setShowLoginModal(true);
+    }
+  }, [token]);
+
+  const mutation = useMutation(() => deleteAPI(`${MEMBER_URL.LOGOUT}`), {
+    onSuccess: response => {
+      Cookies.remove('Access_key');
+      Cookies.remove('Refresh_key');
+      navigate('/user/login');
+    },
+    onError: error => {
+      alert('로그아웃 요청실패 ', error);
+    },
+  });
+
   const { data, isLoading } = useQuery('mypagelist', async () => {
     const response = await getAPI(`${MEMBER_URL.MYPAGE_GET}`);
     return response;
   });
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩 상태에 따른 표시 추가
+    return <div>로딩중</div>;
   }
 
   const user = data?.data?.data;
   console.log('mydata 확인 => ', data?.data?.data);
 
+  const logoutHandler = () => {
+    mutation.mutate();
+  };
+
+  const openModal = () => {
+    setlogoutModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setlogoutModalOpen(false);
+  };
+
   return (
     <>
+      {showLoginModal && <LoginModal />}
       <Container>
         <PartyDetailImg>
           <Topbar360>
@@ -62,15 +100,55 @@ export const MyPageList = () => {
               <ListIcon />
             </Frame4005>
           </Link>
-          <br />
           <Link to={`${PATH_URL.MY_CREATE_PARTY}`}>
             <Frame4005>
               <ListTitle>내가 개설한 모임</ListTitle>
               <ListIcon />
             </Frame4005>
           </Link>
+          <Frame4005 onClick={() => openModal()}>
+            <ListTitle>로그아웃</ListTitle>
+            <ListIcon />
+          </Frame4005>
         </Frame4015>
       </Container>
+      {logoutModalOpen && (
+        <div
+          style={{
+            width: '100vw',
+            height: '100vh',
+            background: 'none',
+            position: 'fixed',
+            top: 0,
+            zIndex: 13,
+          }}
+        >
+          <Modals>
+            <ExitContainer>
+              <ExitModal>
+                <ExitName>로그아웃 하시겠습니까?</ExitName>
+                <ExitText>로그아웃시 모임에 참여할 수 없습니다.</ExitText>
+                <ExitBtnDiv>
+                  <ExitCancel
+                    onClick={() => {
+                      closeModal();
+                    }}
+                  >
+                    머무르기
+                  </ExitCancel>
+                  <EixtBtn
+                    onClick={() => {
+                      logoutHandler();
+                    }}
+                  >
+                    로그아웃
+                  </EixtBtn>
+                </ExitBtnDiv>
+              </ExitModal>
+            </ExitContainer>
+          </Modals>
+        </div>
+      )}
     </>
   );
 };
@@ -169,6 +247,7 @@ const Name = styled.div`
   align-items: center;
   letter-spacing: -0.015em;
   color: #000000;
+  white-space: nowrap;
 `;
 
 const Frame4010 = styled.div`
@@ -287,6 +366,7 @@ const Frame4005 = styled.div`
   height: 56px;
   border-bottom: 1px solid #e4e7ec;
   white-space: nowrap;
+  cursor: pointer;
 `;
 
 const ListTitle = styled.div`
@@ -301,4 +381,87 @@ const ListTitle = styled.div`
   align-items: center;
   letter-spacing: -0.015em;
   color: #000000;
+`;
+
+//모달
+
+const Modals = styled.div`
+  position: fixed;
+  overflow: hidden;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: rgba(29, 41, 57, 0.5);
+  height: 100%;
+  z-index: 11;
+`;
+
+const ExitContainer = styled.div`
+  width: 100%;
+  /* height: 100%; */
+  top: 32vh;
+  /* display: inline-flex; */
+  display: flex;
+  position: absolute;
+`;
+
+const ExitModal = styled.div`
+  text-align: center;
+  margin: auto;
+  z-index: 100;
+  width: 327px;
+  height: 198px;
+  border-radius: 16px;
+  background: #fff;
+`;
+
+const ExitName = styled.div`
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 60px;
+`;
+
+const ExitText = styled.div`
+  font-size: 14px;
+  margin-top: 8px;
+`;
+
+const ExitBtnDiv = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 36px;
+`;
+
+const ExitCancel = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  color: #667085;
+  font-size: 12px;
+  font-weight: 600;
+  width: 140px;
+  height: 48px;
+  background: #fff;
+  border: 1.5px solid #667085;
+  border-radius: 12px;
+  cursor: pointer;
+`;
+
+const EixtBtn = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  width: 140px;
+  height: 48px;
+  background: #f63d68;
+  border-radius: 12px;
+  cursor: pointer;
 `;

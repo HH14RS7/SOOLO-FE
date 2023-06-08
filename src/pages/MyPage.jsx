@@ -3,7 +3,7 @@ import { MyPageList } from '../components/user/MyPageList';
 const MyPage = () => {
   return (
     <>
-      <MyPageList />;
+      <MyPageList />
     </>
   );
 };

@@ -36,6 +36,8 @@ api.interceptors.response.use(
         throw new Error('Internal Server Error 403', msg);
       } else if (status === 404) {
         throw new Error('Internal Server Error 404', msg);
+      } else if (status === 410) {
+        throw new Error('Internal Server Error 410 로그아웃한 토큰', msg);
       } else if (status === 500) {
         throw new Error('Internal Server Error 500', msg);
       } else {
