@@ -18,43 +18,43 @@ const Footer = () => {
   return (
     <TabBar>
       <Tabs>
-        <TabBarItem index={0}>
+        <TabBarItem index={'0'}>
           <Link to={`${PATH_URL.MAIN}`}>
-            <Icon active={activeTitle === 0} onClick={() => handleTitleClick(0)}>
-              <Partyicon fill={activeTitle === 0 ? '#F63D68' : '#000000'} />
+            <Icon active={activeTitle === '0'} onClick={() => handleTitleClick('0')}>
+              <Partyicon fill={activeTitle === '0' ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title active={activeTitle === 0}>모임</Title>
+            <Title active={activeTitle === '0'}>모임</Title>
           </Link>
         </TabBarItem>
-        <TabBarItem index={1}>
+        <TabBarItem index={'1'}>
           <Link to={`${PATH_URL.PARTY_LIST_MAP}`}>
-            <Icon active={activeTitle === 1} onClick={() => handleTitleClick(1)}>
-              <Mapicon fill={activeTitle === 1 ? '#F63D68' : '#000000'} />
+            <Icon active={activeTitle === '1'} onClick={() => handleTitleClick('1')}>
+              <Mapicon fill={activeTitle === '1' ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title active={activeTitle === 1}>위치</Title>
+            <Title active={activeTitle === '1'}>위치</Title>
           </Link>
         </TabBarItem>
-        <TabBarItem index={2}>
+        <TabBarItem index={'2'}>
           <Link to={`${PATH_URL.PARTY_PLACE_CREATE}`}>
-            <AddBtn active={activeTitle === 2} onClick={() => handleTitleClick(2)}>
+            <AddBtn active={activeTitle === '2'} onClick={() => handleTitleClick('2')}>
               <img src={AddButton} alt="Add" />
             </AddBtn>
           </Link>
         </TabBarItem>
-        <TabBarItem index={3}>
+        <TabBarItem index={'3'}>
           <Link to={`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`}>
-            <Icon active={activeTitle === 3} onClick={() => handleTitleClick(3)}>
-              <Chaticon fill={activeTitle === 3 ? '#F63D68' : '#000000'} />
+            <Icon active={activeTitle === '3'} onClick={() => handleTitleClick('3')}>
+              <Chaticon fill={activeTitle === '3' ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title active={activeTitle === 3}>채팅</Title>
+            <Title active={activeTitle === '3'}>채팅</Title>
           </Link>
         </TabBarItem>
-        <TabBarItem index={4}>
+        <TabBarItem index={'4'}>
           <Link to={`${PATH_URL.MYPAGE}`}>
-            <Icon active={activeTitle === 4} onClick={() => handleTitleClick(4)}>
-              <Mypageicon fill={activeTitle === 4 ? '#F63D68' : '#000000'} />
+            <Icon active={activeTitle === '4'} onClick={() => handleTitleClick('4')}>
+              <Mypageicon fill={activeTitle === '4' ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title active={activeTitle === 4} left="calc(50% - 43px/2 + 0.5px)">
+            <Title active={activeTitle === '4'} left="calc(50% - 43px/2 + 0.5px)">
               마이페이지
             </Title>
           </Link>

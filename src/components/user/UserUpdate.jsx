@@ -29,15 +29,16 @@ function UserUpdate() {
 
   const { data, isLoading } = useQuery('mypagelist', async () => {
     const response = await getAPI(`${MEMBER_URL.MYPAGE_GET}`);
+    localStorage.setItem('memberName', response.data.data.memberName);
+    localStorage.setItem('profileImage', response.data.data.profileImage);
     return response;
   });
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩 상태에 따른 표시 추가
+    return <div>Loading...</div>;
   }
 
   const user = data?.data?.data;
-  console.log('mydata 확인 => ', data?.data?.data);
 
   const memberNameHanlder = e => {
     setNameInput(e.target.value);
@@ -130,10 +131,15 @@ function UserUpdate() {
             <Titleprofile>이름</Titleprofile>
             <Frame4094>
               <Field height={40}>
-                <Content value={nameInput} onChange={memberNameHanlder} />
+                <Content
+                  maxlength="9"
+                  value={nameInput}
+                  placeholder={user?.memberName}
+                  onChange={memberNameHanlder}
+                />
               </Field>
               <Frame4031>
-                {nameInput.length > 10 ? (
+                {nameInput.length > 9 ? (
                   <SupportText color={'red'}>
                     닉네임은 최대 10자 입니다. {nameInput.length} / 10
                   </SupportText>
@@ -146,7 +152,11 @@ function UserUpdate() {
           <TextArea>
             <Titleprofile>자기소개</Titleprofile>
             <Field height={100}>
-              <Content value={introduceInput} onChange={introduceHanlder} />
+              <Content
+                value={introduceInput}
+                placeholder={user?.introduce}
+                onChange={introduceHanlder}
+              />
             </Field>
           </TextArea>
         </Frame4041>
@@ -210,8 +220,9 @@ const Topbar = styled.div`
   width: 360px;
   height: 52px;
   display: flex;
-  justify-content: space-between; /* Title과 Frame3959를 좌우로 정렬 */
+  justify-content: space-between;
   align-items: center;
+  border-bottom: 1px solid #f2f4f7;
 `;
 
 const Title = styled.div`

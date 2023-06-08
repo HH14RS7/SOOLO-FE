@@ -1,39 +1,57 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { MEMBER_URL } from '../../shared/constants';
 import { getAPI } from '../../api/api';
 import { styled } from 'styled-components';
+import { ReactComponent as Backicon } from '../../assets/userprofile/back.svg';
+import { ReactComponent as FrameIcon } from '../../assets/mypage/frame35.svg';
 
 export const UserProfileInfo = () => {
   const { id: memberID } = useParams();
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+  const navigate = useNavigate();
 
-  const { data } = useQuery('memberInfo', async () => {
+  const { data, isLoading } = useQuery('memberInfo', async () => {
     const response = await getAPI(`${MEMBER_URL.TARGET_PAGE_GET}/${memberID}`);
-    setIsLoading(false); // 데이터 로드 완료 후 로딩 상태 변경
     return response;
   });
 
   const user = data?.data?.data;
 
   if (isLoading) {
-    return <div>Loading...</div>; // 로딩 상태에 따른 표시 추가
+    return <div>Loading...</div>;
   }
 
   return (
     <>
       <Background>
-        <Container>
-          <Contents>
-            <PartyDetailImg>
-              <ProfileImage src={user?.profileImage} alt="ProfileImage" />
-              <MemberName>{user?.memberName}</MemberName>
-              {user?.gender === 'male' ? <div>남</div> : <div>여</div>}
-            </PartyDetailImg>
-            <LineDiv></LineDiv>
-          </Contents>
-        </Container>
+        <Topbar>
+          <IconCon>
+            <StyledBackicon
+              onClick={() => {
+                navigate(-1);
+              }}
+            />
+          </IconCon>
+          프로필
+          <IconCon />
+        </Topbar>
+        <BackGroundColor />
+        <Frame4047>
+          <ProfileImage src={user?.profileImage} alt="ProfileImage" />
+          <MemberName>{user?.memberName}</MemberName>
+          <Frame4010>
+            <Info>{user?.gender === 'male' ? <div>남</div> : <div>여</div>}</Info>
+            <FrameIcon fill="#1D2939" />
+            <Info>{user?.age}대</Info>
+          </Frame4010>
+          <Frame4013>
+            <Frame4014>
+              <TextInfo>자기소개</TextInfo>
+              <TextContent>{user?.introduce}</TextContent>
+            </Frame4014>
+          </Frame4013>
+        </Frame4047>
       </Background>
     </>
   );
@@ -41,51 +59,153 @@ export const UserProfileInfo = () => {
 
 // 기본 스타일
 const Background = styled.div`
-  background: #a4a4a4;
-  width: 100vw;
-  height: 100vh;
-`;
-
-const Container = styled.div`
-  width: 390px;
+  position: relative;
+  width: 360px;
   height: 100%;
-  background: #505050;
   margin: 0 auto;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  background: #ffffff;
 `;
 
-const Contents = styled.div`
-  width: 90%;
-  margin: 0 auto;
+const Topbar = styled.div`
+  box-sizing: border-box;
+  width: 360px;
+  height: 52px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  border-bottom: 1px solid #f2f4f7;
 `;
 
-const PartyDetailImg = styled.div`
-  width: 100%;
-  height: 350px;
-  margin-bottom: 10px;
-  margin-bottom: 15px;
+const IconCon = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px 0px 0px 16px;
+  width: 40px;
+  height: 24px;
+  left: 0px;
+  top: calc(50% - 24px / 2);
+`;
+
+const BackGroundColor = styled.div`
+  position: absolute;
+  width: 360px;
+  height: 178px;
+  background: #c01048;
+  border-radius: 0px 0px 16px 16px;
+`;
+
+const Frame4047 = styled.div`
+  position: absolute;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  width: 360px;
+  height: 274px;
+  margin-top: 128px;
 `;
 
 const ProfileImage = styled.img`
-  width: 50%;
-  height: 50%;
-  border-radius: 100%;
+  width: 100px;
+  height: 100px;
+  border-radius: 999px;
+  margin-bottom: 16px;
 `;
 
 const MemberName = styled.div`
-  margin-top: 10px;
+  width: auto;
+  height: 20px;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 700;
   font-size: 20px;
-  font-weight: bold;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.015em;
+  color: #1d2939;
+  margin-bottom: 8px;
 `;
 
-const LineDiv = styled.div`
-  height: 1px;
-  background-color: #b6b6b6;
-  margin-top: 10px;
-  margin-bottom: 10px;
+const Frame4010 = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px;
+  width: 56px;
+  height: 14px;
+  white-space: nowrap;
+`;
+
+const Info = styled.div`
+  width: 13px;
+  height: 14px;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.015em;
+  color: #1d2939;
+`;
+
+const Frame4013 = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 16px;
+  padding: 32px;
+  width: 328px;
+  height: 100px;
+  background: #f2f4f7;
+  border: 1px solid #ffffff;
+  border-radius: 16px;
+`;
+
+const Frame4014 = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  gap: 8px;
+  width: 264px;
+  height: 36px;
+`;
+
+const TextInfo = styled.div`
+  width: 44px;
+  height: 12px;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.015em;
+  color: #475467;
+`;
+
+const TextContent = styled.div`
+  width: 237px;
+  height: 16px;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  letter-spacing: -0.015em;
+  color: #000000;
+`;
+
+const StyledBackicon = styled(Backicon)`
+  cursor: pointer;
 `;
