@@ -1,6 +1,7 @@
 // 기능 import
-import { React, useEffect, useState, useRef } from 'react';
+import { React, useEffect, useState, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 import { PATH_URL } from '../../shared/constants';
 import * as StompJs from '@stomp/stompjs';
 import styled from 'styled-components';
@@ -13,86 +14,172 @@ import { ReactComponent as RoomMenuIcon } from '../../assets/chating/chatroommen
 import { ReactComponent as ChatSendIcon } from '../../assets/chating/chatsend.svg';
 import { ReactComponent as NavigateExitIcon } from '../../assets/chating/NavigateExit.svg';
 import { ReactComponent as PartHostIcon } from '../../assets/chating/hosticon.svg';
+import { formmatedDate } from '../../shared/formattedDate';
 
 export const ChatRoomPage = () => {
+  const Access_key = `Bearer ${Cookies.get('Access_key')}`;
+  let client = useRef({});
   //메뉴 모달
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [backgroundPosition, setBackgroundPosition] = useState('static');
 
   const location = useLocation();
-  const params = location.pathname;
-  const segments = params.split('/');
-  const RoomUniqueId = segments[4];
-  const RoomId = segments[5];
-  const [messageData, setMessageData] = useState();
-  const [messageList, setMessageList] = useState();
-
-  const [message, setMessage] = useState('');
-
-  const accesskey = Cookies.get('Access_key');
+  const queryObj = queryString.parse(location.search); // 문자열의 쿼리스트링을 Object로 변환
+  const { chatRoomUniqueId, chatRoomId } = queryObj;
 
   // 채팅방 입장시 안내 문구 기능
   const [showModal, setShowModal] = useState(false);
-  const client = useRef({});
+
+  //채팅목록 조회 후 셋팅 값
+  const [chatMessageList, setChatMessageList] = useState([]);
+  const [page, setPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(0);
+
+  const [message, setMessage] = useState('');
+  const [data, setData] = useState(null);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const containerRef = useRef(null);
+
   useEffect(() => {
-    console.log('유즈이펙트 쉴행');
-    setShowModal(true);
-    connect('L');
-
-    return () => disconnect();
-  }, []);
-
-  const connect = type => {
-    client.current = new StompJs.Client({
-      brokerURL: 'ws://222.102.175.141:8081/ws-stomp',
-      connectHeaders: {
-        Access_key: `Bearer ${accesskey}`,
-      },
-      debug: function (str) {
-        console.log('str ::', str);
-      },
-      onConnect: () => {
-        if (type === 'L') {
-          subscribe();
-          publish();
-        } else {
-          subscribe1();
-          publish1();
-        }
-      },
+    const observer = new IntersectionObserver(handleIntersect, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.3,
     });
 
-    client.current.webSocketFactory = function () {
-      return new SockJS('http://222.102.175.141:8081/ws-stomp');
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
     };
+  }, []);
 
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      console.log('페치');
+
+      subscribe();
+      publish();
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleIntersect = entries => {
+    const target = entries[0];
+    if (target.isIntersecting && !isLoading) {
+      fetchData();
+    }
+  };
+
+  useEffect(() => {
+    setShowModal(true);
+    connect();
+
+    return () => {
+      disconnect();
+    };
+  }, []);
+
+  //이 방에 참여한 사용자(나)의 정보를 가져와!!! 실시!!!
+
+  const connect = () => {
+    client.current = new StompJs.Client({
+      webSocketFactory: () => new SockJS(`http://${process.env.REACT_APP_SOCKET_URL}`),
+      connectHeaders: {
+        Access_key,
+      },
+      onConnect: () => {
+        console.log('success');
+        subscribeSend();
+
+        subscribe();
+        publish();
+      },
+      // onDisconnect: () => {
+      //   disconnect();
+      // },
+    });
     client.current.activate();
-
-    return () => disconnect();
   };
 
   const subscribe = () => {
-    client.current.subscribe(`/sub/chat/messageList/${localStorage.memberUniqueId}`, message => {
-      // console.log('messageData11 : ', JSON.parse(`${message.body}`));
-      setMessageData(JSON.parse(`${message.body}`));
+    client.current.subscribe(`/sub/chat/messageList/${localStorage.memberUniqueId}`, response => {
+      const data = JSON.parse(response.body);
+      console.log('data.data.chatMessageList :: ', data);
+      setChatMessageList(data.data.chatMessageList.reverse());
 
-      const data = JSON.parse(`${message.body}`);
-
-      setMessageList(data.data.chatMessageList);
+      console.log('page 이전::', page);
+      const prevPage = data.data.page;
+      console.log('prevPage :: ', prevPage);
+      setPage(prev => prev + 1);
+      console.log('page 이후::', page);
+      setTotalPage(data.data.totalpage);
     });
   };
 
   const publish = () => {
+    if (!client.current.connected) return;
+
     client.current.publish({
       destination: `/pub/chat/messageList/${localStorage.memberUniqueId}`,
       body: JSON.stringify({
-        chatRoomId: RoomId,
-        chatRoomUniqueId: RoomUniqueId,
-        page: 0,
+        chatRoomId,
+        chatRoomUniqueId,
+        page,
       }),
     });
   };
+
+  // 채팅 보내기
+  const sendMessage = message => {
+    publishSend();
+  };
+
+  const subscribeSend = () => {
+    client.current.subscribe(`/sub/chat/message/${chatRoomUniqueId}`, response => {
+      console.log('response :: ', response);
+      const data = JSON.parse(response.body);
+
+      setChatMessageList(chatList => [...chatList, data.data]);
+    });
+  };
+
+  const publishSend = () => {
+    if (!client.current.connected) return;
+
+    client.current.publish({
+      destination: `/pub/chat/message/${chatRoomUniqueId}`,
+      body: JSON.stringify({
+        memberId: `${localStorage.memberId}`,
+        memberName: `${localStorage.memberName}`,
+        memberUniqueId: `${localStorage.memberUniqueId}`,
+        memberProfileImage: `${localStorage.profileImage}`,
+        chatRoomId: chatRoomId,
+        chatRoomUniqueId: chatRoomUniqueId,
+        message: message,
+      }),
+    });
+    setMessage('');
+  };
+
+  const disconnect = () => {
+    console.log('소켓 종료');
+    client.current.deactivate();
+  };
+
+  //TODO 채팅방 나가기 누를 때 disconnect() 호출하게 추가
+
+  // console.log('chatMessageList :: ', chatMessageList);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -123,43 +210,6 @@ export const ChatRoomPage = () => {
     alert('곧 업데이트 예정입니다!');
   };
 
-  // 채팅 보내기
-  const sendMessage = message => {
-    console.log('message :: ', message);
-
-    connect();
-    setMessage('');
-
-    return () => disconnect();
-  };
-
-  const subscribe1 = () => {
-    client.current.subscribe(`/sub/chat/message/${RoomUniqueId}`, message => {
-      setMessageData({ ...messageList, message });
-    });
-  };
-
-  const publish1 = () => {
-    client.current.publish({
-      destination: `/pub/chat/message/${RoomUniqueId}`,
-      body: JSON.stringify({
-        memberId: `${localStorage.memberId}`,
-        memberName: `${localStorage.memberName}`,
-        memberUniqueId: `${localStorage.memberUniqueId}`,
-        memberProfileImage: `${localStorage.profileImage}`,
-        chatRoomId: RoomId,
-        chatRoomUniqueId: RoomUniqueId,
-        message: message,
-      }),
-    });
-  };
-
-  const disconnect = () => {
-    client.current.deactivate();
-  };
-
-  console.log('messageList :: ', messageList);
-
   return (
     <>
       <div
@@ -186,9 +236,10 @@ export const ChatRoomPage = () => {
             </ModalBtn>
           </Topbar>
           <Container>
+            <div ref={containerRef}>target</div>
             <Contents>
               <ParticipantDiv>ㅇㅇㅇ님이 참여했습니다.</ParticipantDiv>
-              {messageList?.map((data, index) => {
+              {chatMessageList?.map((data, index) => {
                 return (
                   <OtherDiv key={index}>
                     <div
@@ -216,7 +267,7 @@ export const ChatRoomPage = () => {
                         <OtherName>{data.sender}</OtherName>
                         <OtherContents>
                           <OtherChatText>{data.message}</OtherChatText>
-                          <OtherChatTime>12:19 pm</OtherChatTime>
+                          <OtherChatTime>{formmatedDate(data.createdAt, 'h:mm')}</OtherChatTime>
                         </OtherContents>
                       </OthertInfo>
                     </div>
