@@ -73,3 +73,9 @@ q:after {
   content: '';
   content: none;
 }
+button,
+input,
+select,
+textarea {
+  resize: none;
+}
