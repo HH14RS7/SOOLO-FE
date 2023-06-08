@@ -162,12 +162,12 @@ export const ChatRoomPage = () => {
       setChatMessageList(chatList => [...chatList, data.data]);
     });
 
-    client.current.publish({
-      destination: `/pub/chat/message/${chatRoomUniqueId}`,
-      body: JSON.stringify({
-        readStatus: 'READ',
-      }),
-    });
+    // client.current.publish({
+    //   destination: `/pub/chat/message/${chatRoomUniqueId}`,
+    //   body: JSON.stringify({
+    //     readStatus: 'READ',
+    //   }),
+    // });
   };
 
   const publishSend = () => {
@@ -183,7 +183,7 @@ export const ChatRoomPage = () => {
         chatRoomId: chatRoomId,
         chatRoomUniqueId: chatRoomUniqueId,
         message: message,
-        readStatus: 'READ',
+        // readStatus: 'READ',
       }),
     });
     setMessage('');

@@ -62,7 +62,7 @@ export const MyPageList = () => {
                 <Name>{user?.memberName}</Name>
                 <Frame4010>
                   <Info>{user?.gender === 'male' ? <div>남</div> : <div>여</div>}</Info>
-                  <FrameIcon />
+                  <FrameIcon fill="white" />
                   <Info>{user?.age}대</Info>
                 </Frame4010>
               </Frame4011>
