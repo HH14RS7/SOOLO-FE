@@ -187,7 +187,7 @@ export const ChatList = () => {
                           </ChatRoomContents>
                           <RightContents>
                             <ChatMessageNumber>
-                              <MessageNumber>12</MessageNumber>
+                              <MessageNumber>{data.readCount}</MessageNumber>
                             </ChatMessageNumber>
                             <ChatMenu
                               onClick={() => {

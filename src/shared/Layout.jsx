@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
 };
 
 const Content = styled.div`
-  padding-top: 55px;
+  padding-top: 51px;
   padding-bottom: 70px;
   height: 100vh;
 `;
