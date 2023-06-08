@@ -31,7 +31,7 @@ const Background = styled.div`
 `;
 
 const Container = styled.div`
-  width: 390px;
+  width: 360px;
   height: 100%;
   margin: 0 auto;
 `;

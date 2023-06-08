@@ -11,14 +11,35 @@ export default function SearchPlaceItem({ place }) {
   };
 
   return (
-    <LocationItem onClick={handleItemClick}>
-      <p>{place.place_name}</p>
-      <p> {place.road_address_name}</p>
-    </LocationItem>
+    <PlaceItem onClick={handleItemClick}>
+      <PlaceInfo>
+        <h3>{place.place_name}</h3>
+        <Category> {place.category_name.split('>').reverse()[0]}</Category>
+      </PlaceInfo>
+      <PlaceAddress> {place.road_address_name}</PlaceAddress>
+    </PlaceItem>
   );
 }
 
-const LocationItem = styled.li`
-  border: 1px solid black;
+const PlaceItem = styled.li`
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1rem;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--color-gray-200);
+`;
+
+const PlaceInfo = styled.div`
+  display: flex;
+  gap: 0.5rem;
+`;
+
+const Category = styled.h5`
+  color: var(--color-gray-500);
+`;
+
+const PlaceAddress = styled.h5`
+  color: var(--color-gray-500);
 `;

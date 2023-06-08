@@ -37,6 +37,7 @@ const Calendars = ({ selectedDate, setSelectedDate }) => {
       maxDate={maxDate}
       minTime={minTime}
       maxTime={maxTime}
+      inline
     />
   );
 };

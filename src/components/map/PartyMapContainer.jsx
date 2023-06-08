@@ -187,6 +187,9 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   // 키워드 검색
   const placesSearchCB = useCallback((data, status) => {
     if (status === kakao.maps.services.Status.OK) {
+      setSelectedParty(null);
+      onPlaceChange('');
+      // marker.setMap('');
       if (data.length > 0) {
         setLatitude(data[0].y);
         setLongitude(data[0].x);
@@ -203,9 +206,21 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
     }
   }, []);
 
+  // 오버레이 닫기
+  const closeOverlay = useCallback(() => {
+    if (customOverlayRef.current) {
+      customOverlayRef.current.setMap(null);
+      customOverlayRef.current = null;
+    }
+    setSelectedParty(null);
+  }, []);
+
   // 검색 키워드 함수
   useEffect(() => {
     if (searchPlace) {
+      closeOverlay();
+      setSelectedParty(null);
+
       const ps = new kakao.maps.services.Places();
       ps.keywordSearch(searchPlace, placesSearchCB);
     }
@@ -260,16 +275,15 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
 };
 
 const Wrap = styled.div`
-  height: 640px;
+  height: 100%;
 `;
 
 const Map = styled.div`
   display: flex;
-  // width: 100%;
   align-items: center;
   justify-content: center;
   width: 360px;
-  height: 496px;
+  min-height: 512px;
   margin: 0 auto;
   // height: 100%; // footer 임시용
 `;

@@ -2,6 +2,7 @@
 import { React, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { PATH_URL } from '../shared/constants';
+import { ChatApprove } from '../components/Chat/ChatApprove';
 import * as StompJs from '@stomp/stompjs';
 import styled from 'styled-components';
 import SockJS from 'sockjs-client';
@@ -47,11 +48,7 @@ export const ChatList = () => {
     client.webSocketFactory = function () {
       return new SockJS('http://222.102.175.141:8081/ws-stomp');
     };
-    // client.onConnect = function (frame) {};
-    // client.onStompError = function (frame) {
-    //   console.log('Broker reported error: ' + frame.headers['message']);
-    //   console.log('Additional details: ' + frame.body);
-    // };
+
     client.activate();
     // connect(); // 웹소켓 연결 수행
     return () => {
@@ -149,7 +146,7 @@ export const ChatList = () => {
                         <ChatRoomContainer>
                           <ChatRoomContents>
                             <Link
-                              to={`${PATH_URL.PARTY_CHATROOM}/${data.chatRoomUniqueId}/${data.chatRoomId}`}
+                              to={`${PATH_URL.PARTY_CHATROOM}?chatRoomUniqueId=${data.chatRoomUniqueId}&chatRoomId=${data.chatRoomId}`}
                             >
                               <ChatRoomInfo>
                                 <ChatRoomName>{data.title}</ChatRoomName>
@@ -190,7 +187,7 @@ export const ChatList = () => {
                           </ChatRoomContents>
                           <RightContents>
                             <ChatMessageNumber>
-                              <MessageNumber>12</MessageNumber>
+                              <MessageNumber>{data.readCount}</MessageNumber>
                             </ChatMessageNumber>
                             <ChatMenu
                               onClick={() => {
@@ -207,7 +204,7 @@ export const ChatList = () => {
                 })}
               </>
             ) : (
-              <div>승인요청임</div>
+              <ChatApprove></ChatApprove>
             )}
           </ChatContainer>
         </Container>

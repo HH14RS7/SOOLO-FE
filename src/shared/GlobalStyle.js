@@ -32,6 +32,10 @@ export const GlobalStyle = createGlobalStyle`
 
     --color-black: #000000;
     --color-white : #FFFFFF;
+    --color-netural-dark : #2F3036;
+    --color-netural-dark-lightest: #8F9098;
+
+    --color-border: #C5C6CC;
 
     /* font size */
     --font-large: 1.5rem;
@@ -105,7 +109,6 @@ export const GlobalStyle = createGlobalStyle`
 
   / * caption 12-bold */
   h6 {
-    // font-family: 'Inter';
     font-style: normal;
     font-weight: var(--font-weight-700);
     font-size: var(--font-micro);
@@ -114,14 +117,14 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   /* caption 10 */
-  // p {
-  //   // font-family: 'Inter';
-  //   font-style: normal;
-  //   font-weight: var(--font-weight-400);
-  //   font-size: var(--font-nano);
-  //   line-height: 14px;
-  //   letter-spacing: -0.015em;
-  // }
+  p {
+    // font-family: 'Inter';
+    font-style: normal;
+    font-weight: var(--font-weight-400);
+    font-size: var(--font-nano);
+    line-height: 100%;
+    letter-spacing: -0.015em;
+  }
 
   table {
     border-collapse: collapse;

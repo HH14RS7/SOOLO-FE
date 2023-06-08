@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
 import { dDayConvertor } from '../../shared/dDayConvertor';
 import { ReactComponent as Slash } from '../../assets/map/slash.svg';
-import { ReactComponent as Location } from '../../assets/map/location.svg';
+import { ReactComponent as Location } from '../../assets/map/location-line.svg';
 import { ReactComponent as People } from '../../assets/footer/mypage.svg';
 import { ReactComponent as Subway } from '../../assets/map/subway.svg';
 import { ReactComponent as Dot } from '../../assets/map/dot.svg';
@@ -55,12 +55,9 @@ const Wrapper = styled.div``;
 
 const ItemWrapper = styled.li`
   display: flex;
-  // justify-content: flex-end;
   padding: 1rem;
   align-items: center;
   gap: 1rem;
-  // height: auto;
-  // height: 101px;
   font-size: var(--font-size-regular);
   border-bottom: 1px solid var(--color-gray-100);
 `;
