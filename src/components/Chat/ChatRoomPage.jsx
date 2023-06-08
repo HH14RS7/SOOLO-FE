@@ -1,5 +1,5 @@
 // 기능 import
-import { React, useEffect, useState, useRef } from 'react';
+import { React, useEffect, useState, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { PATH_URL } from '../../shared/constants';
@@ -28,17 +28,58 @@ export const ChatRoomPage = () => {
   const queryObj = queryString.parse(location.search); // 문자열의 쿼리스트링을 Object로 변환
   const { chatRoomUniqueId, chatRoomId } = queryObj;
 
+  // 채팅방 입장시 안내 문구 기능
+  const [showModal, setShowModal] = useState(false);
+
   //채팅목록 조회 후 셋팅 값
   const [chatMessageList, setChatMessageList] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
 
   const [message, setMessage] = useState('');
-
   const [data, setData] = useState(null);
 
-  // 채팅방 입장시 안내 문구 기능
-  const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleIntersect, {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.3,
+    });
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      console.log('페치');
+
+      subscribe();
+      publish();
+
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleIntersect = entries => {
+    const target = entries[0];
+    if (target.isIntersecting && !isLoading) {
+      fetchData();
+    }
+  };
 
   useEffect(() => {
     setShowModal(true);
@@ -74,9 +115,14 @@ export const ChatRoomPage = () => {
   const subscribe = () => {
     client.current.subscribe(`/sub/chat/messageList/${localStorage.memberUniqueId}`, response => {
       const data = JSON.parse(response.body);
+      console.log('data.data.chatMessageList :: ', data);
       setChatMessageList(data.data.chatMessageList.reverse());
 
-      setPage(data.data.page + 1);
+      console.log('page 이전::', page);
+      const prevPage = data.data.page;
+      console.log('prevPage :: ', prevPage);
+      setPage(prev => prev + 1);
+      console.log('page 이후::', page);
       setTotalPage(data.data.totalpage);
     });
   };
@@ -133,7 +179,7 @@ export const ChatRoomPage = () => {
 
   //TODO 채팅방 나가기 누를 때 disconnect() 호출하게 추가
 
-  console.log('chatMessageList :: ', chatMessageList);
+  // console.log('chatMessageList :: ', chatMessageList);
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -190,6 +236,7 @@ export const ChatRoomPage = () => {
             </ModalBtn>
           </Topbar>
           <Container>
+            <div ref={containerRef}>target</div>
             <Contents>
               <ParticipantDiv>ㅇㅇㅇ님이 참여했습니다.</ParticipantDiv>
               {chatMessageList?.map((data, index) => {
