@@ -9,6 +9,8 @@ import moment from 'moment';
 import { putUpdateAPI, postImageAPI } from '../../api/api';
 import useGetRegionName from '../../hooks/useGetRegionName';
 import useGetNearbyStation from '../../hooks/useGetNearbyStation';
+import { ReactComponent as Check } from '../../assets/common/check.svg';
+// import { ReactComponent as Upload } from '../../assets/common/upload.svg';
 
 const CreateForm = ({ party }) => {
   const { regionName, getRegionName } = useGetRegionName();
@@ -23,10 +25,15 @@ const CreateForm = ({ party }) => {
   const [totalCount, setTotalCount] = useState(initialTotalCount);
 
   const locationIcon = '/img/map-location.png';
+  const addIcon = '/img/add.png';
+  const minusIcon = '/img/minus.png';
   const imgRef = useRef();
-  const noImg = '/img/no-img.jpg';
+  // const noImg = '/img/no-img.jpg';
+  const defaultImg = '/img/default-image.png';
+  const uploadImg = '/img/upload-image.png';
 
-  const [img, setImg] = useState(noImg);
+  const [img, setImg] = useState(defaultImg);
+
   const navigate = useNavigate();
 
   const latitude = isEdit ? party.latitude : place.y;
@@ -46,29 +53,31 @@ const CreateForm = ({ party }) => {
   const content = watch('content', '');
 
   const INPUT_MESSAGE = {
-    title: '모임 이름을 적어주세요.(공백 제외 최소 5글자)',
-    content: '모임 내용을 적어주세요.',
+    title: '모임 이름을 적어주세요.',
+    content: '모임 정보가 자세할수록 모임에 참여하는 사람들의\n성향이 나와 맞을 수 있습니다.',
+    errortitle: '최소 5자 이상 적어주세요',
+    errorContent: '모임 정보를 적어주세요.',
   };
 
   const TITLE_VALIDATE = {
-    required: INPUT_MESSAGE.title,
-    minLength: { value: 5 },
-    maxLength: { value: 20 },
+    required: INPUT_MESSAGE.errortitle,
+    minLength: { value: 5, message: INPUT_MESSAGE.errortitle }, // 에러 메시지 추가
+    maxLength: { value: 20, message: '최대 20자까지 입력할 수 있습니다.' }, // 최대 길이 에러 메시지 추가
     validate: value => {
       const trimmedValue = value.trim();
       return (
         (trimmedValue.length > 0 &&
           trimmedValue.length >= 5 &&
           trimmedValue.replace(/\s/g, '') !== '') ||
-        INPUT_MESSAGE.title
+        INPUT_MESSAGE.errortitle
       );
     },
   };
 
   const CONTENT_VALIDATE = {
-    required: INPUT_MESSAGE.content,
-    maxLength: { value: 255 },
-    validate: value => value.trim().length > 0 || INPUT_MESSAGE.content,
+    required: INPUT_MESSAGE.errorContent,
+    maxLength: { value: 255, message: '최대 255자까지 입력할 수 있습니다.' }, // 최대 길이 에러 메시지 추가
+    validate: value => value.trim().length > 0 || INPUT_MESSAGE.errorContent,
   };
 
   useEffect(() => {
@@ -197,7 +206,7 @@ const CreateForm = ({ party }) => {
     <Wrapper>
       <PlaceSection>
         <PlaceHeader>
-          <h6 htmlFor="mapData">모임 장소</h6>
+          <Label htmlFor="mapData">모임 장소</Label>
           {!isEdit && <ModifyButton onClick={goSearchPlace}>장소 변경하기</ModifyButton>}
         </PlaceHeader>
         <PlaceInfo>
@@ -205,85 +214,127 @@ const CreateForm = ({ party }) => {
           <PlaceDetail>
             <TopInfo>
               <h4>{isEdit ? party.placeName : place.place_name}</h4>
-              <Category> {place.category_name.split('>').reverse()[0]}</Category>
-              {/* <Category>
-                {isEdit ? party.categoryName : place.category_name.split('>').reverse()[0]}
-              </Category> */}
+              {/* <Category> {place.category_name.split('>').reverse()[0]}</Category> */}
+              <Category>
+                {/* {isEdit ? party.categoryName : place.category_name?.split('>').reverse()[0]} */}
+              </Category>
             </TopInfo>
             <PlaceAddress>{isEdit ? party.placeAddress : place.road_address_name}</PlaceAddress>
           </PlaceDetail>
         </PlaceInfo>
       </PlaceSection>
-      <FormSection>
-        <FormContainer onSubmit={handleSubmit(handlePartySubmit)}>
-          <h6 htmlFor="title">모임 이름</h6>
-          <input
+      <FormContainer onSubmit={handleSubmit(handlePartySubmit)}>
+        <PlaceNameSection>
+          <Label htmlFor="title">모임 이름</Label>
+          <InputField
             id="title"
             type="text"
             placeholder={INPUT_MESSAGE.title}
             maxLength="20"
             {...register('title', TITLE_VALIDATE)}
           />
-          <div>
-            {title.length}/{TITLE_VALIDATE.maxLength.value}
-          </div>
-          {/* {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>} */}
-          <label htmlFor="content">모임 정보</label>
-          <textarea
+          <FieldValidate>
+            {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
+            <ChaValidate>
+              {title.length}/{TITLE_VALIDATE.maxLength.value}
+            </ChaValidate>
+          </FieldValidate>
+        </PlaceNameSection>
+        <PlaceContentSection>
+          <Label htmlFor="content">모임 정보</Label>
+          <TextAreaField
             id="content"
             type="text"
             placeholder={INPUT_MESSAGE.content}
             maxLength="255"
             {...register('content', CONTENT_VALIDATE)}
-          ></textarea>
-          <div>
-            {content.length}/{CONTENT_VALIDATE.maxLength.value}
-          </div>
-          {/* {errors.content && <ErrorMessage>{errors.content.message}</ErrorMessage>} */}
-          <label htmlFor="totalCount">모임 인원</label>
-          <div>
-            <div>{totalCount}</div>
-            <button onClick={handleDecreaseCount}>-</button>
-            <button onClick={handleIncreaseCount}>+</button>
-          </div>
-          <label htmlFor="partyDate">모임 날짜</label>
+          ></TextAreaField>
+          <FieldValidate>
+            {errors.content && <ErrorMessage>{errors.content.message}</ErrorMessage>}
+            <ChaValidate>
+              {content.length}/{CONTENT_VALIDATE.maxLength.value}
+            </ChaValidate>
+          </FieldValidate>
+        </PlaceContentSection>
+        <InfoSection>
+          <InfoHeader>
+            <CheckIcon />
+            <Infotitle>모임 정보 작성 가이드</Infotitle>
+          </InfoHeader>
+          <InfoMessage>
+            <InfoContent>
+              모임의 목적, 마실 주류, 먹을 안주류, 예정된 종료시간 등 모임에 관한
+            </InfoContent>
+            <InfoContent>자세한 정보를 적어보세요. </InfoContent>
+          </InfoMessage>
+        </InfoSection>
+        <PeopleCountSection>
+          <Label htmlFor="totalCount">모임 인원</Label>
+          <Count>
+            <button onClick={handleDecreaseCount}>
+              <img src={minusIcon} alt="minusIcon" />
+            </button>
+            <TotalCount>{totalCount}</TotalCount>
+            <button onClick={handleIncreaseCount}>
+              <img src={addIcon} alt="addIcon" />
+            </button>
+          </Count>
+        </PeopleCountSection>
+        <DateContainer>
+          <Label htmlFor="partyDate">모임 날짜</Label>
           <input type="hidden" {...register('partyDate', { value: selectedDate })} />
           <Calendars id="partyDate" selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-          <label htmlFor="img">이미지 업로드</label>
+        </DateContainer>
+        <ImageUplaodSection>
+          <Label htmlFor="img">이미지 업로드</Label>
           <PlaceImageWrapper>
-            <PlaceImage src={previewImage || party.imageUrl || noImg} alt="PlaceImage" />
+            <PlaceImage src={previewImage || party.imageUrl || defaultImg} alt="PlaceImage" />
+            <UploadButton>
+              <PlaceImage src={uploadImg} alt="PlaceImage" />
+            </UploadButton>
           </PlaceImageWrapper>
-          <FileInput
-            type="file"
-            accept="image/*"
-            id="img"
-            name="img"
-            ref={imgRef}
-            onChange={handleFileChange}
-          />
-          <div>
-            <button onClick={handlePrevClick}>취소하기</button>
-            <button type="submit" disabled={!isValid}>
-              업로드하기
-            </button>
-          </div>
-        </FormContainer>
-      </FormSection>
+        </ImageUplaodSection>
+        <FileInput
+          type="file"
+          accept="image/*"
+          id="img"
+          name="img"
+          ref={imgRef}
+          onChange={handleFileChange}
+        />
+        <ImageInfoSection>
+          <CheckIcon />
+          <InfoMessage>
+            <Infotitle>이미지 업로드 가이드</Infotitle>
+            <InfoContent>
+              업로드 되는 이미지는 모임 게시할 때 맨 처음 소개됩니다. 불쾌한 이미지,
+            </InfoContent>
+            {/* <InfoContent> */}
+            {/* 논란의 여지가 있는 이미지를 업로드시 서비스 가이드 위반으로 이용 */}
+            {/* <InfoContent>제제가 들어갈 수 있습니다.</InfoContent> */}
+            {/* </InfoContent> */}
+          </InfoMessage>
+        </ImageInfoSection>
+        <ButtonWrapper>
+          {/* <button onClick={handlePrevClick}>취소하기</button> */}
+          <PlaceButton type="submit">{isEdit ? '모임글 수정하기' : '모임글 게시하기'}</PlaceButton>
+        </ButtonWrapper>
+      </FormContainer>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
   width: 360px;
-  height: 100%;
+  // height: 100%;
   margin: 0 auto;
+  // background: pink;
 `;
 
 /* PlaceSection */
 const PlaceSection = styled.section`
   padding: 1.5rem 1rem;
   height: 80px;
-  margin-bottom: 50px;
 `;
 
 const PlaceHeader = styled.div`
@@ -291,7 +342,6 @@ const PlaceHeader = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 0.5rem;
 `;
 
 const ModifyButton = styled.h6`
@@ -305,6 +355,15 @@ const PlaceInfo = styled.div`
   border: var(--color-gray-200);
   border-radius: 1rem;
   padding: 21px 1rem;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+`;
+
+const TopInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 16px;
+  align-items: flex-center;
   gap: 0.5rem;
 `;
 
@@ -321,14 +380,6 @@ const PlaceDetail = styled.div`
   gap: 0.5rem;
 `;
 
-const TopInfo = styled.div`
-  display: flex;
-  flex-direction: row;
-  height: 16px;
-  align-items: flex-center;
-  gap: 0.5rem;
-`;
-
 const Category = styled.h5`
   color: var(--color-gray-500);
 `;
@@ -336,28 +387,225 @@ const Category = styled.h5`
 const PlaceAddress = styled.h5`
   color: var(--color-gray-500);
 `;
-const FormSection = styled.section`
+
+/* PartySection */
+const PlaceNameSection = styled.section`
   display: flex;
+  flex-direction: column;
 `;
 
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
+  padding: 1rem;
+  margin-top: 4rem;
 `;
 
-const ErrorMessage = styled.div`
-  color: red;
+const Label = styled.label`
+  font-style: normal;
+  font-weight: var(--font-weight-700);
+  font-size: 0.75rem;
+  line-height: 100%;
+  letter-spacing: -0.015em;
+  color: var(--color-netural-dark);
+  // margin-bottom: 0.5rem;
 `;
+
+const InputField = styled.input`
+  width: 328px;
+  height: 48px;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  margin-top: 0.5rem;
+
+  &::placeholder {
+    color: var(--color-netural-dark-lightest);
+    font-style: normal;
+    font-weight: var(--font-weight-400);
+    font-size: 0.875rem;
+    line-height: 100%;
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.015em;
+  }
+`;
+
+const FieldValidate = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 3rem;
+`;
+
+const ChaValidate = styled.p`
+  font-style: normal;
+  font-weight: 
+  font-size: 10px;
+  line-height: 100%;
+  letter-spacing: -0.015em;
+  color: var(--color-gray-500);
+`;
+
+const ErrorMessage = styled.p`
+  color: var(--color-error-500);
+`;
+
+/* PlaceContentSection */
+const PlaceContentSection = styled.section`
+  width: 320px;
+`;
+
+const TextAreaField = styled.textarea`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 1rem;
+  gap: 0.5rem;
+  width: 328px;
+  height: 100px;
+  border: 1px solid #c5c6cc;
+  border-radius: 12px;
+  margin-top: 0.5rem;
+  // background: yellow;
+
+  &::placeholder {
+    font-family: 'Pretendard';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 100%;
+    /* or 14px */
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.015em;
+    /* Neutral/Dark/Lightest */
+    color: #8f9098;
+  }
+`;
+
+/* InfoSection */
+const InfoSection = styled.section`
+  flex-direction: column;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  height: 74px;
+  // height: 100%;
+  background: var(--color-gray-100);
+  padding: 1rem 0px 1rem 1rem;
+  border-radius: 0.5rem;
+  width: 328px;
+`;
+
+const InfoHeader = styled.div`
+  align-items: flex-start;
+  display: flex;
+  gap: 4px;
+`;
+
+const CheckIcon = styled(Check)`
+  width: 10px;
+  height: 10px;
+  fill: var(--color-gray-600);
+`;
+
+const InfoMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0 1rem;
+`;
+
+const Infotitle = styled.p`
+  font-family: 'Inter';
+  font-weight: var(--font-weight-600);
+  color: var(--color-gray-600);
+`;
+
+const InfoContent = styled.p`
+  color: var(--color-gray-400);
+  font-weight: var(--font-weight-400);
+  letter-spacing: 0.015em;
+  white-space: pre-wrap;
+`;
+
+/* PeopleCountSection */
+const PeopleCountSection = styled.div`
+  width: 328px;
+  padding: 0 1rem 0 0;
+  margin-top: 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+`;
+
+const Count = styled.div`
+  display: flex;
+  gap: 6px;
+  height: 26px;
+  width: 77px;
+  white-space: nowrap;
+`;
+
+const TotalCount = styled.div`
+  // align-items: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-netural-dark);
+  flex-shrink: 0;
+`;
+
+const DateContainer = styled.div``;
+
+/* ImageInfoSection */
+const ImageInfoSection = styled.div`
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  height: 90px;
+  // height: 100%;
+  background: var(--color-gray-100);
+  padding: 1rem 0px 1rem 1rem;
+  border-radius: 0.5rem;
+  width: 328px;
+`;
+
+/* ImageUploadSection */
+const ImageUplaodSection = styled.section``;
 
 const PlaceImageWrapper = styled.div`
-  width: 100px;
-  height: 100px;
-  overflow: hidden;
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: flex-start;
+  padding: 0px;
+  gap: 0.5rem;
+  height: 94px;
 `;
+
 const PlaceImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  width: 160px;
+  height: 94px;
+  /* Primary/500 */
+  background: #f63d68;
+  border-radius: 16px;
+`;
+
+const UploadButton = styled.button`
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  width: 160px;
+  height: 94px;
 `;
 
 const FileInput = styled.input`
@@ -367,4 +615,32 @@ const FileInput = styled.input`
   height: auto;
   cursor: pointer;
 `;
+
+/* ButtonWrapper */
+const ButtonWrapper = styled.div`
+  margin-top: 4rem;
+  bottom: 0;
+  // position: fixed;
+`;
+
+/* PlaceButton */
+const PlaceButton = styled.button`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 328px;
+  height: 48px;
+  background: var(--color-primary-500);
+  border: 1px solid var(--color-primary-500);
+  border-radius: 0.75rem;
+
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: var(--font-weight-600);
+  font-size: 0.75rem;
+  line-height: 15px;
+  color: var(--color-gray-25);
+`;
+
 export default CreateForm;
