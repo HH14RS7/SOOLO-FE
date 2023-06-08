@@ -42,6 +42,9 @@ export const ChatRoomPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef(null);
 
+  // 자동 스크롤
+  const messageEndRef = useRef(null);
+
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersect, {
       root: null,
@@ -89,6 +92,11 @@ export const ChatRoomPage = () => {
       disconnect();
     };
   }, []);
+
+  // 스크롤
+  useEffect(() => {
+    messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessageList]);
 
   //이 방에 참여한 사용자(나)의 정보를 가져와!!! 실시!!!
 
@@ -148,6 +156,7 @@ export const ChatRoomPage = () => {
   const subscribeSend = () => {
     client.current.subscribe(`/sub/chat/message/${chatRoomUniqueId}`, response => {
       console.log('response :: ', response);
+      //사용자 유니크 ID, 이미지 URL 추가 필요
       const data = JSON.parse(response.body);
 
       setChatMessageList(chatList => [...chatList, data.data]);
@@ -236,7 +245,7 @@ export const ChatRoomPage = () => {
             </ModalBtn>
           </Topbar>
           <Container>
-            <div ref={containerRef}>target</div>
+            {/* <div ref={containerRef}>target</div> */}
             <Contents>
               <ParticipantDiv>ㅇㅇㅇ님이 참여했습니다.</ParticipantDiv>
               {chatMessageList?.map((data, index) => {
@@ -274,12 +283,14 @@ export const ChatRoomPage = () => {
                   </OtherDiv>
                 );
               })}
-              <MyChatContainer>
+              {/* <MyChatContainer>
                 <MyChatDiv>
                   <MyChatTime>12:19 pm</MyChatTime>
                   <MyChatText>반가워요~!반가워요~!반가워요~!</MyChatText>
                 </MyChatDiv>
-              </MyChatContainer>
+              </MyChatContainer> */}
+              {/* <div ref={messageEndRef}></div> */}
+              <div ref={messageEndRef}></div>
             </Contents>
           </Container>
           {showModal && (
@@ -305,6 +316,11 @@ export const ChatRoomPage = () => {
                 type={'text'}
                 value={message}
                 onChange={e => setMessage(e.target.value)}
+                onKeyDown={e => {
+                  if (e.keyCode === 13) {
+                    sendMessage(message);
+                  }
+                }}
                 placeholder="메시지를 입력하세요."
                 style={{
                   width: '260px',
@@ -431,6 +447,7 @@ const Contents = styled.div`
   background: #e4e7ec;
   display: inline-block;
   padding-bottom: 150px;
+  margin-bottom: 8px;
 `;
 
 const ParticipantDiv = styled.div`
