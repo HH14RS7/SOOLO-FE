@@ -130,10 +130,15 @@ function UserUpdate() {
             <Titleprofile>이름</Titleprofile>
             <Frame4094>
               <Field height={40}>
-                <Content value={nameInput} onChange={memberNameHanlder} />
+                <Content
+                  maxlength="9"
+                  value={nameInput}
+                  placeholder={user?.memberName}
+                  onChange={memberNameHanlder}
+                />
               </Field>
               <Frame4031>
-                {nameInput.length > 10 ? (
+                {nameInput.length > 9 ? (
                   <SupportText color={'red'}>
                     닉네임은 최대 10자 입니다. {nameInput.length} / 10
                   </SupportText>
@@ -146,7 +151,11 @@ function UserUpdate() {
           <TextArea>
             <Titleprofile>자기소개</Titleprofile>
             <Field height={100}>
-              <Content value={introduceInput} onChange={introduceHanlder} />
+              <Content
+                value={introduceInput}
+                placeholder={user?.introduce}
+                onChange={introduceHanlder}
+              />
             </Field>
           </TextArea>
         </Frame4041>
@@ -212,6 +221,7 @@ const Topbar = styled.div`
   display: flex;
   justify-content: space-between; /* Title과 Frame3959를 좌우로 정렬 */
   align-items: center;
+  border-bottom: 1px solid #f2f4f7;
 `;
 
 const Title = styled.div`

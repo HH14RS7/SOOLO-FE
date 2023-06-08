@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import { MEMBER_URL, PATH_URL } from '../../shared/constants';
 import { deleteAPI, getAPI } from '../../api/api';
@@ -8,21 +8,11 @@ import { ReactComponent as UpdateIcon } from '../../assets/mypage/update.svg';
 import { ReactComponent as FrameIcon } from '../../assets/mypage/frame35.svg';
 import { ReactComponent as ListIcon } from '../../assets/mypage/listicon.svg';
 import { ReactComponent as Profile } from '../../assets/mypage/profile.svg';
-import LoginModal from '../LoginModal';
 import Cookies from 'js-cookie';
 
 export const MyPageList = () => {
   const [logoutModalOpen, setlogoutModalOpen] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
   const navigate = useNavigate();
-
-  const token = Cookies.get('Access_key');
-
-  useEffect(() => {
-    if (!token) {
-      setShowLoginModal(true);
-    }
-  }, [token]);
 
   const mutation = useMutation(() => deleteAPI(`${MEMBER_URL.LOGOUT}`), {
     onSuccess: response => {
@@ -35,14 +25,10 @@ export const MyPageList = () => {
     },
   });
 
-  const { data, isLoading } = useQuery('mypagelist', async () => {
+  const { data } = useQuery('mypagelist', async () => {
     const response = await getAPI(`${MEMBER_URL.MYPAGE_GET}`);
     return response;
   });
-
-  if (isLoading) {
-    return <div>로딩중</div>;
-  }
 
   const user = data?.data?.data;
   console.log('mydata 확인 => ', data?.data?.data);
@@ -61,7 +47,6 @@ export const MyPageList = () => {
 
   return (
     <>
-      {showLoginModal && <LoginModal />}
       <Container>
         <PartyDetailImg>
           <Topbar360>

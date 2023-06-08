@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { MEMBER_URL } from '../../shared/constants';
 import { getAPI } from '../../api/api';
 import { styled } from 'styled-components';
+import { ReactComponent as Backicon } from '../../assets/userprofile/back.svg';
 
 export const UserProfileInfo = () => {
   const { id: memberID } = useParams();
@@ -24,16 +25,16 @@ export const UserProfileInfo = () => {
   return (
     <>
       <Background>
-        <Container>
-          <Contents>
-            <PartyDetailImg>
-              <ProfileImage src={user?.profileImage} alt="ProfileImage" />
-              <MemberName>{user?.memberName}</MemberName>
-              {user?.gender === 'male' ? <div>남</div> : <div>여</div>}
-            </PartyDetailImg>
-            <LineDiv></LineDiv>
-          </Contents>
-        </Container>
+        <Topbar>
+          <IconCon>
+            <Backicon />
+          </IconCon>
+          프로필
+          <IconCon />
+        </Topbar>
+        <ProfileImage src={user?.profileImage} alt="ProfileImage" />
+        <MemberName>{user?.memberName}</MemberName>
+        {user?.gender === 'male' ? <div>남</div> : <div>여</div>}
       </Background>
     </>
   );
@@ -41,18 +42,33 @@ export const UserProfileInfo = () => {
 
 // 기본 스타일
 const Background = styled.div`
-  background: #a4a4a4;
-  width: 100vw;
-  height: 100vh;
+  position: relative;
+  width: 360px;
+  height: 100%;
+  margin: 0 auto;
+  background: #ffffff;
 `;
 
-const Container = styled.div`
-  width: 390px;
-  height: 100%;
-  background: #505050;
-  margin: 0 auto;
-  padding-top: 20px;
-  padding-bottom: 20px;
+const Topbar = styled.div`
+  box-sizing: border-box;
+  width: 360px;
+  height: 52px;
+  display: flex;
+  justify-content: space-between; /* Title과 Frame3959를 좌우로 정렬 */
+  align-items: center;
+  background: #ffffff;
+  border-bottom: 1px solid #f2f4f7;
+`;
+
+const IconCon = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0px 0px 0px 16px;
+  width: 40px;
+  height: 24px;
+  left: 0px;
+  top: calc(50% - 24px / 2);
 `;
 
 const Contents = styled.div`

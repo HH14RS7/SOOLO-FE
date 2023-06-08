@@ -1,4 +1,5 @@
 import React from 'react';
+import { ReactComponent as Loginicon } from '../../assets/loginpage/kakao_login.svg';
 
 const KakaoLoginComponent = () => {
   const REST_API_KEY = `${process.env.REACT_APP_REST_API_KEY}`;
@@ -11,7 +12,7 @@ const KakaoLoginComponent = () => {
 
   return (
     <button type="button" onClick={loginHandler}>
-      <img src="/img/kakao_login.png" alt="Kakao Login" width="190" height="48" />
+      <Loginicon />
     </button>
   );
 };
