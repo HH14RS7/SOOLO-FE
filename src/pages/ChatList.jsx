@@ -11,6 +11,8 @@ import Cookies from 'js-cookie';
 // 이미지 import
 import { ReactComponent as PeopleIcon } from '../assets/chating/membericon.svg';
 import { ReactComponent as MenuIcon } from '../assets/chating/menuicons.svg';
+import { deleteAPI, postAPI } from '../api/api';
+import { PARTIES_URL } from '../shared/constants';
 
 export const ChatList = () => {
   const [chatData, setChatData] = useState();
@@ -93,6 +95,17 @@ export const ChatList = () => {
 
   const ReportButtonHandler = () => {
     alert('곧 업데이트 예정입니다!');
+  };
+
+  // 나가기 버튼
+  const ExitButtonHandler = () => {
+    if (chatData?.data.host === true) {
+      deleteAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${chatData.data.chatRoomId}`);
+      alert('모임이 삭제되었습니다.');
+    } else {
+      postAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${chatData.data.chatRoomId}`);
+      alert('모임이 취소되었습니다.');
+    }
   };
 
   return (
@@ -245,7 +258,13 @@ export const ChatList = () => {
               >
                 머무르기
               </ExitCancel>
-              <EixtBtn>나가기</EixtBtn>
+              <EixtBtn
+                onClick={() => {
+                  ExitButtonHandler();
+                }}
+              >
+                나가기
+              </EixtBtn>
             </ExitBtnDiv>
           </ExitModal>
         </ExitContainer>

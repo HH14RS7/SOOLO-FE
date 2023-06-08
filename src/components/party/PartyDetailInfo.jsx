@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PATH_URL, PARTIES_URL, MEMBER_URL } from '../../shared/constants';
+import { dDayConvertor } from '../../shared/dDayConvertor';
 import { partyStatus } from '../../shared/partyStatus';
 import { deleteAPI, getAPI, postAPI } from '../../api/api';
 import { useMutation } from 'react-query';
@@ -8,6 +9,12 @@ import { styled } from 'styled-components';
 import SojuRoom from '../../assets/sojuroomimg.webp';
 import { Link } from 'react-router-dom';
 import { formmatedDate } from '../../shared/formattedDate';
+
+// 이미지 import
+import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
+import { ReactComponent as Location } from '../../assets/map/location-line.svg';
+import { ReactComponent as People } from '../../assets/footer/mypage.svg';
+import { ReactComponent as Slash } from '../../assets/map/slash.svg';
 
 export const PartyDetailInfo = () => {
   const location = useLocation();
@@ -64,6 +71,15 @@ export const PartyDetailInfo = () => {
   const memberIdData = data?.memberInfo[0].memberId.toString();
   const userIdData = localStorage?.memberId.toString();
 
+  // 참여자
+  const isfulled = data?.currentCount === data?.totalCount;
+
+  // 디데이
+  const dDay = dDayConvertor(data?.partyDate);
+  const isdday = dDay === 0;
+
+  console.log('dDay ::', dDay);
+
   console.log('data ::', data);
 
   return (
@@ -71,6 +87,19 @@ export const PartyDetailInfo = () => {
       <Background>
         <Container>
           <Contents>
+            <Topbar>
+              <Link
+                style={{
+                  position: 'absolute',
+                }}
+                to={'/'}
+              >
+                <TopBackDiv>
+                  <LeftBack />
+                </TopBackDiv>
+              </Link>
+              <TopbarName>모임 정보</TopbarName>
+            </Topbar>
             <PartyDetailImg>
               <img
                 src={data?.imageUrl || SojuRoom}
@@ -81,92 +110,147 @@ export const PartyDetailInfo = () => {
                 }}
               />
             </PartyDetailImg>
-            <ProfileBox>
-              <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${memberIdData}`}>
-                <img
-                  src={data?.memberInfo[0].profileImage}
-                  alt="profile"
-                  style={{
-                    width: '50px',
-                    height: '50px',
-                    borderRadius: '100%',
-                  }}
-                />
-              </Link>
-              <ProfileName>{data?.memberInfo[0].memberName}</ProfileName>
-              <MemberImgDiv>
-                {data?.memberInfo.slice(1).map((member, i) => (
-                  <div key={i}>
-                    <img
-                      src={member.profileImage}
-                      alt="profile"
-                      style={{
-                        width: '30px',
-                        height: '30px',
-                        borderRadius: '100%',
-                        marginLeft: '5px',
-                      }}
-                    />
-                  </div>
-                ))}
-              </MemberImgDiv>
-            </ProfileBox>
-            <LineDiv></LineDiv>
-            <PartyName>파티 제목 : {data?.title}</PartyName>
-            <div>파티내용 : {data?.content}</div>
-            <div>현재 인원 : {data?.currentCount} </div>
-            <div>최대 인원 : {data?.totalCount}</div>
-            <div>
-              {data?.state === partyStatus.신청전
-                ? ''
-                : `승인 상태 : ${
-                    data?.state === partyStatus.승인
-                      ? '참여한 모임'
-                      : data?.state === partyStatus.승인대기
-                      ? '승인대기중인 모임'
-                      : '거절된 모임'
-                  }`}
-            </div>
-            <div>모집 상태 : {data?.recruitmentStatus === true ? '모집중' : '모집마감'}</div>
-            <div>만든 날짜: {formmatedDate(data?.createdAt, 'MM.DD · a h:mm')}</div>
-            <div>모임 시간: {formmatedDate(data?.partyDate, 'MM.DD · a h:mm')}</div>
-            {(memberIdData === userIdData) === true ? (
-              <>
-                {memberIdData === userIdData && data?.recruitmentStatus === false ? (
-                  ''
-                ) : (
-                  <button
-                    onClick={() => {
-                      updateParty(partyId);
-                    }}
-                  >
-                    모임수정
-                  </button>
-                )}
-                <button
-                  onClick={() => {
-                    deleteParty(partyId);
-                  }}
-                >
-                  모임삭제
-                </button>
-              </>
-            ) : data?.state === partyStatus.승인거절 || data?.recruitmentStatus === false ? (
-              ''
-            ) : (
-              <button
-                id="saveBtn"
-                onClick={() => {
-                  ApplicationButtonHandler();
+            <PartyInfo>
+              <div
+                style={{
+                  marginLeft: '17px',
                 }}
               >
-                {data?.state === partyStatus.신청전
-                  ? '모임 신청'
-                  : data?.state === partyStatus.승인 || data?.state === partyStatus.승인대기
-                  ? '신청 취소'
-                  : ''}
-              </button>
-            )}
+                <DdayTag isdday={isdday ? 1 : 0}>
+                  <Dday>D-{isdday ? 0 : dDay}</Dday>
+                </DdayTag>
+                <PartyName>{data?.title}</PartyName>
+                <Addresses>
+                  <div
+                    style={{
+                      display: 'flex',
+                    }}
+                  >
+                    <Location
+                      style={{
+                        marginRight: '4px',
+                      }}
+                    />
+                    {data?.regionName}
+                  </div>
+                  <PeopleCountInfo isfulled={isfulled ? 1 : 0}>
+                    <PeopleIcon isfulled={isfulled ? 1 : 0} />
+                    <PeopleCount>{data?.currentCount} </PeopleCount>
+                    <SlashIcon isfulled={isfulled ? 1 : 0} />
+                    <PeopleCount> {data?.totalCount} </PeopleCount>
+                  </PeopleCountInfo>
+                </Addresses>
+                <TimePromise>{formmatedDate(data?.partyDate, 'MM.DD (ddd) · a h:mm')}</TimePromise>
+              </div>
+            </PartyInfo>
+            <LineBar></LineBar>
+            <PartyContents>
+              <PartyInfoText>모임 정보</PartyInfoText>
+              <div>{data?.content}</div>
+            </PartyContents>
+            <div>
+              <div>모임 장소 정보</div>
+              <div>지도 정보</div>
+            </div>
+            <PartyHostContainer>
+              <PartyHostInfoText>모임 주최자 정보</PartyHostInfoText>
+              <PartyHostInfo>
+                <PartyHostImg>
+                  <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${memberIdData}`}>
+                    <img
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '100%',
+                      }}
+                      src={data?.memberInfo[0].profileImage}
+                      alt="hostimg"
+                    />
+                  </Link>
+                </PartyHostImg>
+                <HostDetailInfo>
+                  <HostName>{data?.memberInfo[0].memberName}</HostName>
+                  <div
+                    style={{
+                      display: 'flex',
+                    }}
+                  >
+                    <HostStatus>성별</HostStatus>
+                    <HostStatus>30대</HostStatus>
+                  </div>
+                  <HostIntroduceDiv>자기소개</HostIntroduceDiv>
+                  <HostIntroduce>내가 씨 너랑 술 먹겠다는데 불만있냐?</HostIntroduce>
+                </HostDetailInfo>
+              </PartyHostInfo>
+            </PartyHostContainer>
+            <PartyMemberContainer>
+              <PartyMemberInfoText>참여자 정보</PartyMemberInfoText>
+              <PartyMemberInfo>
+                {data?.memberInfo.slice(1).map((member, i) => (
+                  <PartyMemberInfoBox key={i}>
+                    <PartyMemberImg>
+                      <img
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: '100%',
+                        }}
+                        src={member.profileImage}
+                        alt="partymemberimg"
+                      />
+                    </PartyMemberImg>
+                    <div>
+                      <PartyMemberName>{member.memberName}</PartyMemberName>
+                      <PartyMemberIntroduce>안녕 내 이름은 조난 탐정이지</PartyMemberIntroduce>
+                    </div>
+                  </PartyMemberInfoBox>
+                ))}
+              </PartyMemberInfo>
+            </PartyMemberContainer>
+            <div
+              style={{
+                background: '#f2f4f7',
+                paddingBottom: '80px',
+              }}
+            >
+              {(memberIdData === userIdData) === true ? (
+                <>
+                  {memberIdData === userIdData && data?.recruitmentStatus === false ? (
+                    ''
+                  ) : (
+                    <PartyModifyBtn
+                      onClick={() => {
+                        updateParty(partyId);
+                      }}
+                    >
+                      모임수정
+                    </PartyModifyBtn>
+                  )}
+                  <PartyDeleteBtn
+                    onClick={() => {
+                      deleteParty(partyId);
+                    }}
+                  >
+                    모임삭제
+                  </PartyDeleteBtn>
+                </>
+              ) : data?.state === partyStatus.승인거절 || data?.recruitmentStatus === false ? (
+                ''
+              ) : (
+                <PartyRequestBtn
+                  id="saveBtn"
+                  onClick={() => {
+                    ApplicationButtonHandler();
+                  }}
+                >
+                  {data?.state === partyStatus.신청전
+                    ? '모임 신청'
+                    : data?.state === partyStatus.승인 || data?.state === partyStatus.승인대기
+                    ? '신청 취소'
+                    : ''}
+                </PartyRequestBtn>
+              )}
+            </div>
           </Contents>
         </Container>
       </Background>
@@ -176,61 +260,341 @@ export const PartyDetailInfo = () => {
 
 // 기본 스타일
 const Background = styled.div`
-  background: #a4a4a4;
+  background: #fff;
   width: 100%;
   height: 100%;
 `;
 
 const Container = styled.div`
-  width: 390px;
+  width: 360px;
   height: 100%;
-  background: #505050;
+  background: #fff;
   margin: 0 auto;
-  padding-top: 20px;
-  padding-bottom: 20px;
 `;
 
 const Contents = styled.div`
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
 `;
 
 const PartyDetailImg = styled.div`
-  width: 100%;
-  height: 350px;
-  margin-bottom: 10px;
-  margin-bottom: 15px;
-`;
-
-const LineDiv = styled.div`
-  height: 1px;
-  background-color: #b6b6b6;
-  margin-top: 10px;
-  margin-bottom: 10px;
-`;
-
-// 프로필 관련 스타일
-const ProfileBox = styled.div`
-  display: flex;
-`;
-
-const ProfileName = styled.div`
-  font-size: 15px;
-  font-weight: bold;
-`;
-
-const MemberImgDiv = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100px;
-  height: 40px;
-  border: 1px solid black;
-  margin: auto;
+  width: 360px;
+  height: 260px;
 `;
 
 // 파티 관련 스타일
 
 const PartyName = styled.div`
-  font-size: 20px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 600;
+`;
+
+// TopBar 스타일
+const Topbar = styled.div`
+  display: flex;
+  position: fixed;
+  top: 0;
+  margin-top: 51px;
+  align-items: center;
+  justify-content: space-between;
+  width: 360px;
+  height: 52px;
+  border-bottom: 1px solid #f2f4f7;
+  background: #fff;
+  z-index: 10;
+`;
+
+const TopBackDiv = styled.div`
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  width: 40px;
+  height: 24px;
+  cursor: pointer;
+`;
+
+const TopbarName = styled.div`
+  color: #1d2939;
+  font-size: 16px;
+  text-align: center;
+  flex-grow: 1;
+`;
+
+// 리메이크
+const PartyInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 359px;
+  height: 104px;
+  background: #fff;
+  margin-top: 14px;
+`;
+
+const DdayDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 40px;
+  height: 22px;
+  background: #f63d68;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #fff;
+  margin-bottom: 12px;
+`;
+
+const Addresses = styled.div`
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 400;
+`;
+
+const TimePromise = styled.div`
+  font-size: 14px;
+  color: #667085;
+  font-weight: 400;
+`;
+
+const LineBar = styled.div`
+  margin-top: 32px;
+  width: 360px;
+  height: 8px;
+  background: #f2f4f7;
+`;
+
+const PartyContents = styled.div`
+  width: 320px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #fff;
+  font-size: 16px;
+  font-weight: 400;
+  color: #1d2939;
+`;
+
+const PartyInfoText = styled.div`
+  font-size: 12px;
+  font-weight: 700;
+  color: #667085;
+  margin-top: 24px;
+  margin-bottom: 16px;
+`;
+
+const PartyHostContainer = styled.div`
+  width: 360px;
+  height: 254px;
+  display: flex;
+  flex-direction: column;
+  background: #f2f4f7;
+`;
+
+const PartyHostInfoText = styled.div`
+  font-size: 12px;
+  font-weight: 700;
+  color: #667085;
+  margin: 24px 0px 8px 16px;
+`;
+
+const PartyHostInfo = styled.div`
+  width: 328px;
+  height: 162px;
+  background: #fff;
+  display: flex;
+  margin: 0 auto;
+  border-radius: 16px;
+  box-shadow: 6px 4px 16px rgba(0, 0, 0, 0.05);
+`;
+
+const PartyHostImg = styled.div`
+  width: 48px;
+  height: 48px;
+  margin-top: 24px;
+  margin-left: 16px;
+  margin-right: 16px;
+`;
+
+const HostDetailInfo = styled.div`
+  margin-top: 24px;
+`;
+
+const HostName = styled.div`
+  font-size: 16px;
+  font-weight: 600;
+  color: #1d2939;
+  margin-bottom: 8px;
+`;
+
+const HostStatus = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 22px;
+  background: #e4e7ec;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-right: 4px;
+  margin-bottom: 16px;
+`;
+
+const HostIntroduceDiv = styled.div`
+  font-size: 10px;
+  color: #667085;
+  margin-bottom: 8px;
+`;
+
+const HostIntroduce = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+  color: #1d2939;
+`;
+
+// 참여자 스타일
+const PartyMemberContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  height: 100%;
+  background: #f2f4f7;
+  padding-bottom: 8px;
+`;
+
+const PartyMemberInfoText = styled.div`
+  font-size: 12px;
+  font-weight: 700;
+  color: #667085;
+  margin-left: 16px;
+  margin-bottom: 8px;
+`;
+
+const PartyMemberInfo = styled.div`
+  width: 328px;
+  height: 100%;
+  margin: 0 auto;
+  background: #fff;
+`;
+
+const PartyMemberInfoBox = styled.div`
+  display: flex;
+  align-items: center;
+  width: 328px;
+  height: 72px;
+  background: #f2f4f7;
+`;
+
+const PartyMemberImg = styled.div`
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  margin: 12px 16px 12px 16px;
+`;
+
+const PartyMemberName = styled.div`
+  font-size: 16px;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 8px;
+`;
+
+const PartyMemberIntroduce = styled.div`
+  font-size: 14px;
+  font-weight: 400;
+  color: #667085;
+`;
+
+// 모임 버튼
+
+const PartyRequestBtn = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  width: 328px;
+  height: 48px;
+  margin: 0 auto;
+  background-color: #f63d68;
+  border: 1px solid #f63d68;
+  border-radius: 12px;
+  margin-bottom: 8px;
+`;
+
+const PartyModifyBtn = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  width: 328px;
+  height: 48px;
+  margin: 0 auto;
+  background-color: #f63d68;
+  border: 1px solid #f63d68;
+  border-radius: 12px;
+  margin-bottom: 8px;
+`;
+
+const PartyDeleteBtn = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  width: 328px;
+  height: 48px;
+  margin: 0 auto;
+  background-color: #f63d68;
+  border: 1px solid #f63d68;
+  border-radius: 12px;
+  margin-bottom: 8px;
+`;
+
+// 참여자 인원수 스타일
+const PeopleCountInfo = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  align-items: center;
+  color: ${props => (props.isfulled ? 'var(--color-error-500)' : 'inherit')};
+`;
+
+const PeopleIcon = styled(People)`
+  width: 14px;
+  height: 14px;
+  fill: ${props => (props.isfulled ? 'var(--color-error-500)' : 'inherit')};
+`;
+
+const SlashIcon = styled(Slash)`
+  fill: ${props => (props.isfulled ? 'var(--color-error-500)' : 'inherit')};
+`;
+
+const PeopleCount = styled.h5``;
+
+// 디데이 스타일
+const DdayTag = styled.div`
+  top: 6px;
+  left: 6px;
+  align-items: flex-start;
+  padding: 0.25rem 0.5rem;
+  width: 40px;
+  height: 22px;
+  background: ${props => (props.isdday ? 'var(--color-primary-500)' : 'var(--color-primary-300)')};
+  border-radius: 999px;
+  margin-bottom: 12px;
+`;
+
+const Dday = styled.h5`
+  color: var(--color-white);
+  border-bottom: var(--color-gray-100);
+  white-space: nowrap;
 `;
