@@ -99,6 +99,7 @@ const ListWrapper = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 `;
 
 const DefaultContainer = styled.div`
@@ -106,10 +107,8 @@ const DefaultContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-grow: 1;
   gap: 7px;
-  padding: 185px 0;
-  top: calc(50% - 360px / 2);
+  height: calc(100vh - 270px);
 `;
 
 const DefaultImage = styled.img`

@@ -1,0 +1,141 @@
+.react-datepicker {
+  border: none;
+  font-family: 'Pretendard';
+}
+
+.custom-header {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.625rem;
+  padding: 0 0.625rem;
+}
+
+.current-month {
+  width: fit-content;
+  height: 17px;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 0.875rem;
+  line-height: 17px;
+  color: #1f2024;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  width: 46px;
+  height: 0.75rem;
+}
+
+/* 헤더 배경 */
+.react-datepicker__header {
+  background-color: white;
+}
+
+/* 전체 글자 크기 및 간격 */
+.react-datepicker__day-name,
+.react-datepicker__day,
+.react-datepicker__time-name {
+  display: inline-block;
+  text-align: center;
+  width: 40px;
+  line-height: 1.9rem;
+  text-align: center;
+  width: 40px;
+  height: 40px;
+  font-weight: 400;
+}
+
+.react-datepicker__day {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* 선택된 날짜 스타일 */
+.react-datepicker__day--selected {
+  font-weight: bold;
+  width: 40px;
+  height: 40px;
+  background: #f63d68;
+  border-radius: 20px;
+  padding: 8px;
+  text-align: center;
+  letter-spacing: -0.015em;
+  color: #ffffff;
+}
+
+/* 현재 날짜 스타일 */
+.react-datepicker__day--today {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  text-align: center;
+  padding: 8px;
+  background: #e4e7ec;
+  border-radius: 20px;
+}
+
+/* Hover 효과 제거 */
+.react-datepicker__day:hover {
+  font-weight: bold;
+  /* width: 40px; */
+  /* height: 40px; */
+  background: #f63d68;
+  border-radius: 20px;
+  /* padding: 4px; */
+  text-align: center;
+  letter-spacing: -0.015em;
+  color: #ffffff;
+}
+
+.react-datepicker__navigation {
+  top: 13px !important;
+}
+/* 토요일 스타일 */
+.react-datepicker__day:nth-child(1) {
+  /* color: red; 일요일 날짜 */
+}
+
+/* 일요일 스타일 */
+/* 헤더 day-name: 요일 */
+/* 일요일 */
+.react-datepicker__day-name:nth-child(1) {
+  color: #f63d68;
+}
+.react-datepicker__day-name:nth-child(7) {
+  color: #f63d68;
+}
+/* 선택된 애 스타일*
+/background: #F63D68;
+border-radius: 20px;
+width: 40px;
+height: 40px;
+
+/*선택된 애 글자색 */
+
+/* 헤더 적용 */
+.react-datepicker__current-month,
+.react-datepicker-time__header,
+.react-datepicker-year-header {
+  margin-top: 0;
+  display: flex;
+  color: #000;
+  font-weight: bold;
+  /* font-size: 0.944rem; */
+  /* padding: 1rem; */
+}
+
+.react-datepicker__header {
+  /* text-align: center; */
+  /* background-color: #f0f0f0; */
+  /* border-bottom: 1px solid #aeaeae; */
+  border-top-left-radius: 0.3rem;
+  /* padding: 8px 0; */
+  position: relative;
+}

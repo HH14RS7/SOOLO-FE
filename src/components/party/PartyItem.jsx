@@ -2,8 +2,8 @@ import { styled } from 'styled-components';
 import { dDayConvertor } from '../../shared/dDayConvertor';
 import { Link, useNavigate } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
-import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 import { formmatedDate } from '../../shared/formattedDate';
 import { ReactComponent as Slash } from '../../assets/map/slash.svg';
 import { ReactComponent as Location } from '../../assets/map/location-line.svg';
@@ -48,7 +48,6 @@ const PartyItem = ({ party }) => {
     }
   };
 
-  console.log(party.stationName);
   return (
     <>
       <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`} onClick={handleLinkClick}>

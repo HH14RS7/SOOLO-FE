@@ -13,7 +13,6 @@ import { ChatList } from '../pages/ChatList';
 import { ChatRoom } from '../pages/ChatRoom';
 import MyPage from '../pages/MyPage';
 import { PartyListMap } from '../pages/PartyListMap';
-import GlobalStyle from './GlobalStyle';
 import MyRequestParty from '../pages/MyRequestParty';
 import MyCreateParty from '../pages/MyCreateParty';
 import PartyMapCreate from '../pages/PartyMapCreate';
@@ -23,7 +22,6 @@ import UserUpdatePage from '../pages/UserUpdatePage';
 const Router = () => {
   return (
     <BrowserRouter>
-      <GlobalStyle />
       <Layout>
         <Routes>
           <Route path={PATH_URL.MAIN} element={<Main />} />

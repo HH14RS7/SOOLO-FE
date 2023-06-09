@@ -39,6 +39,7 @@ export const PARTIES_URL = {
   MY_APPROVE_LIST: '/party/approve',
   MY_HOST_LIST: '/party/host-party-list',
   ACCEPT: '/party/accept',
+  PARTIES_LIST_SEARCH: '/parties/search',
 };
 
 export const CHATING_URL = {

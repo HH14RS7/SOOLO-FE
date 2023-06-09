@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
-import GlobalStyle from './shared/GlobalStyle';
+import { GlobalStyle } from './shared/GlobalStyle';
 import Router from './shared/Router';
 import { RecoilRoot } from 'recoil';
 const queryclient = new QueryClient();

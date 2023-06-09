@@ -10,6 +10,7 @@ import { putUpdateAPI, postImageAPI } from '../../api/api';
 import useGetRegionName from '../../hooks/useGetRegionName';
 import useGetNearbyStation from '../../hooks/useGetNearbyStation';
 import { ReactComponent as Check } from '../../assets/common/check.svg';
+import TimeSlotPicker from '../../shared/TimeSlotPicker';
 // import { ReactComponent as Upload } from '../../assets/common/upload.svg';
 
 const CreateForm = ({ party }) => {
@@ -17,10 +18,13 @@ const CreateForm = ({ party }) => {
   const { stationName, distance, getStationInfo } = useGetNearbyStation();
   const location = useLocation();
   const place = location.state || {};
-  // const PARTICIPANT_COUNT = Array.from({ length: 9 }, (_, i) => ({ value: Number(i + 2) }));
+
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(null);
+
   const [previewImage, setPreviewImage] = useState(party.imgUrl || null);
   const isEdit = !!party.partyId;
+
   const initialTotalCount = isEdit ? party.totalCount : 2;
   const [totalCount, setTotalCount] = useState(initialTotalCount);
 
@@ -84,7 +88,8 @@ const CreateForm = ({ party }) => {
     if (isEdit) {
       const partyDate = moment(party.partyDate).format('YYYY-MM-DD HH:mm');
       setSelectedDate(new Date(partyDate));
-      // 수정모드일때 가져온 값
+      setSelectedTime(partyDate.split(' ')[1]);
+
       reset({
         title: party.title,
         content: party.content,
@@ -138,11 +143,12 @@ const CreateForm = ({ party }) => {
   // 모임 등록 및 수정
   const handlePartySubmit = item => {
     const formData = new FormData();
+    const formatDate = moment(selectedDate).format('YYYY-MM-DD') + ' ' + selectedTime;
 
     const data = {
       title: item.title.trim(),
       content: item.content.trim(),
-      partyDate: moment(selectedDate).format('YYYY-MM-DD HH:mm'),
+      partyDate: formatDate,
       totalCount,
       latitude: isEdit ? party.latitude : place.y,
       longitude: isEdit ? party.longitude : place.x,
@@ -152,6 +158,7 @@ const CreateForm = ({ party }) => {
       stationName: isEdit ? party.stationName : stationName,
       distance: isEdit ? party.distance : distance,
       regionName: isEdit ? party.regionName : regionName,
+      categoryName: isEdit ? party.categoryName : place.category_name?.split('>').reverse()[0],
     };
 
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
@@ -165,7 +172,7 @@ const CreateForm = ({ party }) => {
       createMutation.mutate(formData);
     }
     reset();
-    navigate(PATH_URL.MAIN);
+    // navigate(PATH_URL.MAIN);
   };
 
   const handleFileChange = e => {
@@ -201,22 +208,24 @@ const CreateForm = ({ party }) => {
     e.preventDefault();
     setTotalCount(totalCount => Math.max(totalCount - 1, 2));
   };
-
+  const handleTimeSelect = time => {
+    setSelectedTime(time);
+  };
   return (
     <Wrapper>
       <PlaceSection>
         <PlaceHeader>
           <Label htmlFor="mapData">모임 장소</Label>
-          {!isEdit && <ModifyButton onClick={goSearchPlace}>장소 변경하기</ModifyButton>}
+          {/* {!isEdit && <ModifyButton onClick={goSearchPlace}>장소 변경하기</ModifyButton>} */}
+          <ModifyButton onClick={goSearchPlace}>장소 변경하기</ModifyButton>
         </PlaceHeader>
         <PlaceInfo>
           <LocationIcon src={locationIcon} alt="location" />
           <PlaceDetail>
             <TopInfo>
-              <h4>{isEdit ? party.placeName : place.place_name}</h4>
-              {/* <Category> {place.category_name.split('>').reverse()[0]}</Category> */}
+              <PlaceName>{isEdit ? party.placeName : place.place_name}</PlaceName>
               <Category>
-                {/* {isEdit ? party.categoryName : place.category_name?.split('>').reverse()[0]} */}
+                {isEdit ? party.categoryName : place.category_name?.split('>').reverse()[0]}
               </Category>
             </TopInfo>
             <PlaceAddress>{isEdit ? party.placeAddress : place.road_address_name}</PlaceAddress>
@@ -282,8 +291,13 @@ const CreateForm = ({ party }) => {
         </PeopleCountSection>
         <DateContainer>
           <Label htmlFor="partyDate">모임 날짜</Label>
-          <input type="hidden" {...register('partyDate', { value: selectedDate })} />
+          {/* <input type="hidden" {...register('partyDate', { value: selectedDate })} /> */}
           <Calendars id="partyDate" selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+          <TimeSlotPicker
+            selectedTime={selectedTime}
+            onTimeSelect={handleTimeSelect}
+            isEdit={isEdit}
+          />
         </DateContainer>
         <ImageUplaodSection>
           <Label htmlFor="img">이미지 업로드</Label>
@@ -326,9 +340,8 @@ const CreateForm = ({ party }) => {
 
 const Wrapper = styled.div`
   width: 360px;
-  // height: 100%;
+  height: 100%;
   margin: 0 auto;
-  // background: pink;
 `;
 
 /* PlaceSection */
@@ -365,6 +378,11 @@ const TopInfo = styled.div`
   height: 16px;
   align-items: flex-center;
   gap: 0.5rem;
+  width: auto;
+  width: 440px;
+`;
+const PlaceName = styled.h4`
+  white-space: no-wrap;
 `;
 
 const LocationIcon = styled.img`
@@ -618,8 +636,9 @@ const FileInput = styled.input`
 
 /* ButtonWrapper */
 const ButtonWrapper = styled.div`
-  margin-top: 4rem;
-  bottom: 0;
+  margin-bottom: 70px; // 임시
+  // margin-top: 4rem;
+  // bottom: 0;
   // position: fixed;
 `;
 
