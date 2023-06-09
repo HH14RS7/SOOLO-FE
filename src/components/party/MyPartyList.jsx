@@ -2,10 +2,15 @@ import { useQuery } from 'react-query';
 import { getAPI } from '../../api/api';
 import { PARTIES_URL } from '../../shared/constants';
 import MyPartyItem from './MyPartyItem';
+import { styled } from 'styled-components';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar } from 'swiper';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const MyPartyList = () => {
-  const approveStatus = 0;
-
   const { data, isLoading, error } = useQuery('myParties', () =>
     getAPI(`${PARTIES_URL.MY_PARTIES_LIST}`),
   );
@@ -21,18 +26,55 @@ const MyPartyList = () => {
   }
   return (
     <>
-      {partyList?.length > 0 && (
-        <div>
-          <h1>신청 모임 리스트</h1>
-          <ul>
-            {partyList?.map(party => (
-              <MyPartyItem key={party.partyId} party={party} />
-            ))}
-          </ul>
-        </div>
-      )}
+      <Title>신청한 모임</Title>
+      <Swiper
+        modules={[Navigation, Pagination]}
+        spaceBetween={150}
+        slidesPerView={2}
+        navigation
+        pagination={{ clickable: true }}
+        // scrollbar={{ draggable: true }}
+      >
+        {partyList?.length > 0 && (
+          <Wrapper>
+            <PartyList>
+              {partyList?.map(party => (
+                <SwiperSlide key={party.partyId} party={party}>
+                  <MyPartyItem key={party.partyId} party={party} />
+                </SwiperSlide>
+              ))}
+            </PartyList>
+          </Wrapper>
+        )}
+      </Swiper>
     </>
   );
 };
+
+const Wrapper = styled.section`
+  width: 360px;
+  margin: 0 auto;
+  height: 100%;
+`;
+
+const Title = styled.h4`
+  color: var(--color-gray-500);
+  white-space: nowrap;
+  padding: 0 0 1rem 8px;
+`;
+
+const StyledSwiper = styled(Swiper)`
+  height: 146px;
+`;
+
+const PartyList = styled.div`
+  margin-top: 1rem;
+  // padding: 0 1rem;
+  display: flex;
+  align-items: flex-start;
+  // gap: 1rem;
+  width: 500px;
+  height: 146px;
+`;
 
 export default MyPartyList;
