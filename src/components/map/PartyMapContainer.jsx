@@ -36,6 +36,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   const { regionName, getRegionName } = useGetRegionName();
   const { stationName, getStationInfo } = useGetNearbyStation();
   const [loading, setLoading] = useState(false);
+  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 
   const radius = 2.5;
   // const radius = searchPlace.endsWith('역') ? 2.5 : 5;
