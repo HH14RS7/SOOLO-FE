@@ -48,6 +48,7 @@ const TimePickerContainer = styled.div`
   grid-template-columns: repeat(4, 1fr);
   gap: 0.5rem;
   margin-top: 0.5rem;
+  width: 328px;
 `;
 
 const TimeBox = styled.div`

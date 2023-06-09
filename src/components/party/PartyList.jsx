@@ -4,8 +4,6 @@ import { getAPI } from '../../api/api';
 import { PARTIES_URL } from '../../shared/constants';
 import PartyItem from './PartyItem';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import MainInfo from './MainInfo';
 import Select from 'react-select'; //라이브러리 import
 import { ReactComponent as ArrowBottom } from '../../assets/common/arrow-bottom.svg';
 
@@ -65,27 +63,9 @@ const PartyList = () => {
                 <Select
                   placeholder={RECRUITMENT_STATUS_SELECT[0].label}
                   options={RECRUITMENT_STATUS_SELECT}
-                  // clearable={false}
                   onChange={option => handleSelected(option)}
                   value={recruitmentStatus}
-                  style={{
-                    '--swiper-navigation-color': 'pink',
-                    '--swiper-pagination-color': 'yellow',
-                  }}
                 />
-                {/* <ArrowBottom /> */}
-                {/* <Select
-                  options={recruitmentStatus} //위에서 만든 배열을 select로 넣기
-                  onChange={setRecruitmentStatus} //값이 바뀌면 setState되게
-                  defaultValue={recruitmentStatus[0]}
-                /> */}
-                {/* <SelectElement value={recruitmentStatus} onChange={handleSelectChange}>
-                  {RECRUITMENT_STATUS_SELECT.map(recruitment => (
-                    <OptionElement key={recruitment.value} value={recruitment.value}>
-                      {recruitment.label}
-                    </OptionElement>
-                  ))}
-                </SelectElement> */}
               </SelectContainer>
             </PartyHeader>
             <ListWrapper>
@@ -221,6 +201,7 @@ const ListBottomSection = styled.section`
   align-items: center;
   padding: 2rem 0;
   gap: 6px;
+  padding-bottom: 120px; // 무한스크롤 구현 후 제거
 `;
 /* BottomInfoSection */
 const BottomInfoSection = styled.section`

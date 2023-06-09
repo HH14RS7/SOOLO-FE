@@ -96,7 +96,7 @@ const PartyDateInfo = styled.div`
 `;
 
 const PartyDate = styled.h4`
-  // color: var(--color-white);
+  color: var(--color-white);
 `;
 
 const DdayTag = styled.div`

@@ -33,13 +33,13 @@ const MyPartyList = () => {
         slidesPerView={2}
         navigation
         pagination={{ clickable: true }}
-        // scrollbar={{ draggable: true }}
+        scrollbar={{ draggable: true }}
       >
         {partyList?.length > 0 && (
           <Wrapper>
             <PartyList>
               {partyList?.map(party => (
-                <SwiperSlide key={party.partyId} party={party}>
+                <SwiperSlide key={party.partyId}>
                   <MyPartyItem key={party.partyId} party={party} />
                 </SwiperSlide>
               ))}

@@ -4,12 +4,12 @@
 }
 
 .custom-header {
-  margin-top: 2rem;
+  margin-top: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 0.625rem;
-  padding: 0 0.625rem;
+  width: 312px;
 }
 
 .current-month {
@@ -19,16 +19,18 @@
   font-style: normal;
   font-weight: 800;
   font-size: 0.875rem;
-  line-height: 17px;
+  line-height: 15px;
   color: #1f2024;
 }
 
+/* 헤더 월 이동 아이콘 */
 .icons {
   display: flex;
   align-items: center;
   gap: 22px;
   width: 46px;
   height: 0.75rem;
+  cursor: pointer;
 }
 
 /* 헤더 배경 */
@@ -43,7 +45,7 @@
   display: inline-block;
   text-align: center;
   width: 40px;
-  line-height: 1.9rem;
+  line-height: 2.2rem;
   text-align: center;
   width: 40px;
   height: 40px;
@@ -51,7 +53,6 @@
 }
 
 .react-datepicker__day {
-  font-family: 'Pretendard';
   font-style: normal;
   font-weight: 700;
   font-size: 12px;
@@ -64,9 +65,8 @@
   height: 40px;
   background: #f63d68;
   border-radius: 20px;
-  padding: 8px;
+  padding: 0px;
   text-align: center;
-  letter-spacing: -0.015em;
   color: #ffffff;
 }
 
@@ -76,22 +76,16 @@
   height: 40px;
   border-radius: 20px;
   text-align: center;
-  padding: 8px;
+  padding: 0px;
   background: #e4e7ec;
-  border-radius: 20px;
 }
 
-/* Hover 효과 제거 */
 .react-datepicker__day:hover {
-  font-weight: bold;
-  /* width: 40px; */
-  /* height: 40px; */
-  background: #f63d68;
+  width: 40px;
+  height: 40px;
+  /* padding: 6px; */
   border-radius: 20px;
-  /* padding: 4px; */
-  text-align: center;
-  letter-spacing: -0.015em;
-  color: #ffffff;
+  background: #f63d68;
 }
 
 .react-datepicker__navigation {
@@ -135,7 +129,6 @@ height: 40px;
   /* text-align: center; */
   /* background-color: #f0f0f0; */
   /* border-bottom: 1px solid #aeaeae; */
-  border-top-left-radius: 0.3rem;
+  border: none;
   /* padding: 8px 0; */
-  position: relative;
 }

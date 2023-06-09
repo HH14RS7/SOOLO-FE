@@ -9,18 +9,22 @@ import { styled } from 'styled-components';
 import SojuRoom from '../../assets/sojuroomimg.webp';
 import { Link } from 'react-router-dom';
 import { formmatedDate } from '../../shared/formattedDate';
+import PartyDetailMap from '../map/PartyDetailMap';
 
 // 이미지 import
 import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 import { ReactComponent as Location } from '../../assets/map/location-line.svg';
 import { ReactComponent as People } from '../../assets/footer/mypage.svg';
 import { ReactComponent as Slash } from '../../assets/map/slash.svg';
+import { ReactComponent as Information } from '../../assets/common/information.svg';
 
 export const PartyDetailInfo = () => {
   const location = useLocation();
   const partyId = location.pathname.split('/')[3];
   const navigate = useNavigate();
   const [data, setData] = useState();
+
+  const locationIcon = '/img/map-location.png';
 
   // 모임 상세 조회
   useEffect(() => {
@@ -33,6 +37,7 @@ export const PartyDetailInfo = () => {
       .catch(error => {
         console.log('API 요청 중 에러 발생', error);
       });
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [partyId]);
 
   // 모임 신청 / 취소
@@ -78,7 +83,20 @@ export const PartyDetailInfo = () => {
   const dDay = dDayConvertor(data?.partyDate);
   const isdday = dDay === 0;
 
+  // 주변역과의 거리 정보
+  const distanceInfo =
+    data?.distance === 0
+      ? '1m 이내'
+      : data?.distance <= 1000
+      ? `${data?.distance}m`
+      : `${data?.distance}km`;
+
   console.log('data ::', data);
+
+  // 가게 정보 더보기
+  const handleDetailClick = url => {
+    window.open(url, '_blank');
+  };
 
   return (
     <>
@@ -146,10 +164,31 @@ export const PartyDetailInfo = () => {
               <PartyInfoText>모임 정보</PartyInfoText>
               <div>{data?.content}</div>
             </PartyContents>
-            <div>
-              <div>모임 장소 정보</div>
-              <div>지도 정보</div>
-            </div>
+            <MapSection>
+              <PartyInfoText>모임 장소 정보</PartyInfoText>
+              <MapImage>
+                {data && data.latitude && data.longitude && (
+                  <PartyDetailMap latitude={data.latitude} longitude={data.longitude} />
+                )}
+              </MapImage>
+              <PlaceSection>
+                <PlaceInfo onClick={() => handleDetailClick(data?.placeUrl)}>
+                  <LocationIcon src={locationIcon} alt="location" />
+                  <PlaceDetail>
+                    <TopInfo>
+                      <PlaceName>{data?.placeName}</PlaceName>
+                      <Category>{data?.categoryName}</Category>
+                    </TopInfo>
+                    <PlaceAddress>{data?.placeAddress}</PlaceAddress>
+                    {data?.stationName && (
+                      <PlaceAddress>
+                        {data?.stationName}에서 {distanceInfo}
+                      </PlaceAddress>
+                    )}
+                  </PlaceDetail>
+                </PlaceInfo>
+              </PlaceSection>
+            </MapSection>
             <PartyHostContainer>
               <PartyHostInfoText>모임 주최자 정보</PartyHostInfoText>
               <PartyHostInfo>
@@ -597,4 +636,75 @@ const Dday = styled.h5`
   color: var(--color-white);
   border-bottom: var(--color-gray-100);
   white-space: nowrap;
+`;
+
+/* MapSection */
+const MapSection = styled.div`
+  padding: 1rem;
+  margin-top: 1rem;
+  position: relative;
+  margin-bottom: 52px;
+`;
+
+const MapImage = styled.div`
+  width: 328px;
+`;
+
+const PlaceSection = styled.section`
+  position: absolute;
+  overflow: hidden;
+  top: 180px;
+  width: 328px;
+  z-index: 4;
+`;
+
+const PlaceInfo = styled.div`
+  display: flex;
+  height: 100px;
+  background: var(--color-gray-50);
+  border: var(--color-gray-200);
+  border-radius: 1rem;
+  padding: 21px 1rem;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  cursor: pointer;
+`;
+
+const TopInfo = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 16px;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const PlaceName = styled.h4`
+  white-space: no-wrap;
+`;
+
+const LocationIcon = styled.img`
+  width: 38px;
+  height: 38px;
+  margin: auto 0;
+`;
+
+const PlaceDetail = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 36px;
+  align-items: flex-start;
+  gap: 0.5rem;
+`;
+
+const Category = styled.h5`
+  color: var(--color-gray-500);
+`;
+
+const PlaceAddress = styled.h5`
+  color: var(--color-gray-500);
+`;
+
+const PlaceNameSection = styled.section`
+  display: flex;
+  flex-direction: column;
 `;

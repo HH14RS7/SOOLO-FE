@@ -50,7 +50,7 @@ const Calendars = ({ selectedDate, setSelectedDate }) => {
       }) => (
         <div className="custom-header">
           <div className="current-month">
-            {date.toLocaleString('default', { year: 'numeric', month: 'long' })}
+            {date.toLocaleString('default', { month: 'long', year: 'numeric' })}
           </div>
           <div className="icons">
             <AroowLeft
