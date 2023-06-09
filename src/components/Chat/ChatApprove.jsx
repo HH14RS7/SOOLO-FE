@@ -1,34 +1,42 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { useMutation, useQuery } from 'react-query';
 import { getAPI, postAPI, deleteAPI } from '../../api/api';
-import { PARTIES_URL } from '../../shared/constants';
-
-import Karina from '../../assets/karina.webp';
+import { MEMBER_URL, PARTIES_URL } from '../../shared/constants';
+import styled from 'styled-components';
+import { Link, useNavigate } from 'react-router-dom';
+import { PATH_URL } from '../../shared/constants';
 
 export const ChatApprove = () => {
+  const navigate = useNavigate();
+
   const [requestList, setRequestList] = useState([]);
 
+  // 모임 승인
   const acceptRequest = useMutation(
     participateId => postAPI(`${PARTIES_URL.ACCEPT}/${participateId}`),
     {
       onSuccess: response => {
-        // alert('성공');
+        alert(response.data.msg);
+        navigate(`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`);
       },
       onError: error => {
-        // alert('실패');
+        alert(error.data.msg);
+        navigate(`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`);
       },
     },
   );
 
+  // 모임 거절
   const rejectRequest = useMutation(
     participateId => deleteAPI(`${PARTIES_URL.ACCEPT}/${participateId}`),
     {
       onSuccess: response => {
-        alert('성공');
+        alert(response.data.msg);
+        navigate(`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`);
       },
       onError: error => {
-        alert('실패');
+        alert(error.data.msg);
+        navigate(`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`);
       },
     },
   );
@@ -75,15 +83,17 @@ export const ChatApprove = () => {
             <RequestContainer key={index}>
               <RequestContents>
                 <RequestImgDiv>
-                  <img
-                    src={user.memberProfileImage}
-                    alt="memberimg"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: '100%',
-                    }}
-                  />
+                  <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${user.memberId}`}>
+                    <img
+                      src={user.memberProfileImage}
+                      alt="memberimg"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '100%',
+                      }}
+                    />
+                  </Link>
                 </RequestImgDiv>
                 <RequestInfo>
                   <RequestUserName>{user.memberName}</RequestUserName>
@@ -125,7 +135,7 @@ export const ChatApprove = () => {
 const Background = styled.div`
   background: #f9fafb;
   width: 100%;
-  height: 89vh;
+  height: 82vh;
 `;
 
 const Container = styled.div`
