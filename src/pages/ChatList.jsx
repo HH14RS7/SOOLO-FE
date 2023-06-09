@@ -1,8 +1,9 @@
 // 기능 import
 import { React, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { PATH_URL } from '../shared/constants';
+import { Link, useNavigate } from 'react-router-dom';
+import { CHATING_URL, PATH_URL } from '../shared/constants';
 import { ChatApprove } from '../components/Chat/ChatApprove';
+import { deleteAPI, postAPI } from '../api/api';
 import * as StompJs from '@stomp/stompjs';
 import styled from 'styled-components';
 import SockJS from 'sockjs-client';
@@ -11,15 +12,18 @@ import Cookies from 'js-cookie';
 // 이미지 import
 import { ReactComponent as PeopleIcon } from '../assets/chating/membericon.svg';
 import { ReactComponent as MenuIcon } from '../assets/chating/menuicons.svg';
-import { deleteAPI, postAPI } from '../api/api';
 import { PARTIES_URL } from '../shared/constants';
 
 export const ChatList = () => {
+  const navigate = useNavigate();
   const [chatData, setChatData] = useState();
   const [activeTab, setActiveTab] = useState(true);
   const accesskey = Cookies.get('Access_key');
   const [zIndex, setZIndex] = useState(8);
   const [marzinLeft, setMarzinLeft] = useState(0);
+
+  const [roomId, setRoomId] = useState();
+  const [hostId, setHostId] = useState();
 
   useEffect(() => {
     const client = new StompJs.Client({
@@ -74,10 +78,16 @@ export const ChatList = () => {
     setBackgroundPosition('static');
   };
 
-  const openModal = () => {
+  const openModal = (chatRoomId, host) => {
     setIsModalOpen(true);
     setBackgroundPosition('fixed');
+    setRoomId(chatRoomId);
+    setHostId(host);
   };
+
+  console.log('roomId ::', roomId);
+  console.log('hostId ::', hostId);
+  console.log('localStorage.memberUniqueId ::', localStorage.memberUniqueId);
 
   const handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
@@ -99,14 +109,19 @@ export const ChatList = () => {
 
   // 나가기 버튼
   const ExitButtonHandler = () => {
-    if (chatData?.data.host === true) {
-      deleteAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${chatData.data.chatRoomId}`);
+    console.log('ExitButtonHandler - hostId :: ', hostId);
+    console.log('ExitButtonHandler - roomId :: ', roomId);
+    console.log('localStorage.memberUniqueId ::', localStorage.memberUniqueId);
+    if (hostId === localStorage.memberUniqueId) {
+      deleteAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${roomId}`);
       alert('모임이 삭제되었습니다.');
     } else {
-      postAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${chatData.data.chatRoomId}`);
-      alert('모임이 취소되었습니다.');
+      postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${roomId}`);
+      alert('모임이 취소되었습니다');
     }
   };
+
+  //
 
   return (
     <>
@@ -204,7 +219,7 @@ export const ChatList = () => {
                             </ChatMessageNumber>
                             <ChatMenu
                               onClick={() => {
-                                openModal();
+                                openModal(data.chatRoomId, data.host);
                               }}
                             >
                               <MenuIcon />
@@ -308,6 +323,7 @@ const ApprovalTap = styled.button`
 const ChatContainer = styled.div`
   width: 100%;
   height: 100%;
+  padding-bottom: 70px;
 `;
 
 const ChatRoom = styled.div`
