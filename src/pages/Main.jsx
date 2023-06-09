@@ -4,6 +4,7 @@ import MyPartyList from '../components/party/MyPartyList';
 import { styled } from 'styled-components';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
+import MainInfo from '../components/party/MainInfo';
 
 const Main = () => {
   const [isLogin, setIsLogin] = useState(false);
@@ -18,6 +19,7 @@ const Main = () => {
   return (
     <Background>
       <Container>
+        <MainInfo />
         {isLogin && <MyPartyList />}
         <PartyList />
       </Container>
