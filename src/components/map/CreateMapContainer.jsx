@@ -103,7 +103,7 @@ const Wrapper = styled.div`
 
 const Map = styled.div`
   display: flex;
-  max-height: 1024px;
+  max-height: 360px;
   min-height: 568px;
 `;
 
@@ -150,11 +150,11 @@ const PlaceWrapper = styled.div`
   flex-direction: column;
   flex-grow: 1;
   bottom: 0;
-  // margin-bottom: 140px;
   z-index: 5;
   background: var(--color-white);
   padding: 1.5rem 1rem;
   border-top: 1px solid var(--color-gray-200);
+  margin-bottom: 70px; // 임시주석
 `;
 
 const PlaceDetail = styled.div`
