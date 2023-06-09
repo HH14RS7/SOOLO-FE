@@ -6,7 +6,7 @@ import { ReactComponent as Partyicon } from '../../assets/footer/party.svg';
 import { ReactComponent as Mapicon } from '../../assets/footer/map.svg';
 import { ReactComponent as Chaticon } from '../../assets/footer/chat.svg';
 import { ReactComponent as Mypageicon } from '../../assets/footer/mypage.svg';
-import AddButton from '../../assets/footer/Union.png';
+import { ReactComponent as Addbtn } from '../../assets/footer/addbtn.svg';
 
 const Footer = () => {
   const [activeTitle, setActiveTitle] = useState(0);
@@ -36,9 +36,9 @@ const Footer = () => {
         </TabBarItem>
         <TabBarItem index={'2'}>
           <Link to={`${PATH_URL.PARTY_PLACE_CREATE}`}>
-            <AddBtn active={activeTitle === '2'} onClick={() => handleTitleClick('2')}>
-              <img src={AddButton} alt="Add" />
-            </AddBtn>
+            <PartyAdd active={activeTitle === '2'} onClick={() => handleTitleClick('2')}>
+              <Addbtn />
+            </PartyAdd>
           </Link>
         </TabBarItem>
         <TabBarItem index={'3'}>
@@ -120,13 +120,13 @@ const Title = styled.span`
   /* color: ${props => (props.active ? '#F63D68' : '#667085')}; */
 `;
 
-const AddBtn = styled.button`
+const PartyAdd = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 38px;
   height: 38px;
-  background: #d9d9d9;
+  background: #f63d68;
   border-radius: 8px;
-  border: 1px solid #344054;
+  border: 1px solid #fff;
 `;

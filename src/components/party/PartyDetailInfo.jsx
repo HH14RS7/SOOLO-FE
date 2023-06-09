@@ -78,8 +78,6 @@ export const PartyDetailInfo = () => {
   const dDay = dDayConvertor(data?.partyDate);
   const isdday = dDay === 0;
 
-  console.log('dDay ::', dDay);
-
   console.log('data ::', data);
 
   return (
@@ -175,11 +173,13 @@ export const PartyDetailInfo = () => {
                       display: 'flex',
                     }}
                   >
-                    <HostStatus>성별</HostStatus>
-                    <HostStatus>30대</HostStatus>
+                    <HostStatus>
+                      {data?.memberInfo[0].gender === 'female' ? '여자' : '남자'}
+                    </HostStatus>
+                    <HostStatus>{data?.memberInfo[0].age}대</HostStatus>
                   </div>
                   <HostIntroduceDiv>자기소개</HostIntroduceDiv>
-                  <HostIntroduce>내가 씨 너랑 술 먹겠다는데 불만있냐?</HostIntroduce>
+                  <HostIntroduce>{data?.memberInfo[0].introduce}</HostIntroduce>
                 </HostDetailInfo>
               </PartyHostInfo>
             </PartyHostContainer>
@@ -201,7 +201,9 @@ export const PartyDetailInfo = () => {
                     </PartyMemberImg>
                     <div>
                       <PartyMemberName>{member.memberName}</PartyMemberName>
-                      <PartyMemberIntroduce>안녕 내 이름은 조난 탐정이지</PartyMemberIntroduce>
+                      <PartyMemberIntroduce>
+                        {member.introduce || '안녕하세요. 반갑습니다.'}
+                      </PartyMemberIntroduce>
                     </div>
                   </PartyMemberInfoBox>
                 ))}
@@ -209,8 +211,10 @@ export const PartyDetailInfo = () => {
             </PartyMemberContainer>
             <div
               style={{
+                display: 'flex',
                 background: '#f2f4f7',
                 paddingBottom: '80px',
+                justifyContent: 'space-evenly',
               }}
             >
               {(memberIdData === userIdData) === true ? (
@@ -531,16 +535,14 @@ const PartyModifyBtn = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: #f63d68;
   font-size: 12px;
   font-weight: 600;
-  width: 328px;
+  width: 156px;
   height: 48px;
-  margin: 0 auto;
-  background-color: #f63d68;
+  background-color: #fff;
   border: 1px solid #f63d68;
   border-radius: 12px;
-  margin-bottom: 8px;
 `;
 
 const PartyDeleteBtn = styled.div`
@@ -550,13 +552,11 @@ const PartyDeleteBtn = styled.div`
   color: #fff;
   font-size: 12px;
   font-weight: 600;
-  width: 328px;
+  width: 156px;
   height: 48px;
-  margin: 0 auto;
   background-color: #f63d68;
   border: 1px solid #f63d68;
   border-radius: 12px;
-  margin-bottom: 8px;
 `;
 
 // 참여자 인원수 스타일
