@@ -286,9 +286,11 @@ export const ChatRoomPage = () => {
                               }}
                             />
                           </OtherProfile>
-                          <OtherHostIcon>
-                            <PartHostIcon />
-                          </OtherHostIcon>
+                          {data.host ? (
+                            <OtherHostIcon>
+                              <PartHostIcon />
+                            </OtherHostIcon>
+                          ) : null}
                         </OtherImg>
                         <OthertInfo>
                           <OtherName>{data.sender}</OtherName>
