@@ -31,7 +31,7 @@ const MyPartyList = () => {
         modules={[Navigation, Pagination]}
         spaceBetween={150}
         slidesPerView={2}
-        navigation
+        // navigation
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
       >
