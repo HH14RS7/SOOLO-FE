@@ -1,12 +1,17 @@
+import Cookies from 'js-cookie';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Header = () => {
+  const logo = '/img/logo.png';
   return (
     <>
       <Background>
         <Contents>
-          <Logo>SOOLO</Logo>
+          <Link to="/">
+            <Logo src={logo} alt="logo" />
+          </Link>
           <svg
             width="24"
             height="25"
@@ -60,9 +65,7 @@ const Contents = styled.div`
   justify-content: space-between;
 `;
 
-const Logo = styled.div`
-  background: #ffffff;
-  color: #1d2939;
-  font-size: 24px;
-  font-weight: 700;
+const Logo = styled.img`
+  width: 52.05px;
+  height: 18.25px;
 `;
