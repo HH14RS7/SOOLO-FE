@@ -2,6 +2,7 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { ko } from 'date-fns/locale';
+import './Calendars.css';
 import {
   setHours,
   setMinutes,
@@ -12,6 +13,8 @@ import {
   addWeeks,
 } from 'date-fns';
 import { styled } from 'styled-components';
+import { ReactComponent as AroowLeft } from '../assets/common/arrow-left.svg';
+import { ReactComponent as AroowRight } from '../assets/common/arrow-right.svg';
 
 const Calendars = ({ selectedDate, setSelectedDate }) => {
   const now = new Date();
@@ -27,7 +30,7 @@ const Calendars = ({ selectedDate, setSelectedDate }) => {
     <StDatePicker
       selected={selectedDate}
       onChange={date => setSelectedDate(date)}
-      showTimeSelect
+      // showTimeSelect
       timeFormat="HH:mm"
       timeIntervals={10}
       timeCaption="시각"
@@ -38,6 +41,31 @@ const Calendars = ({ selectedDate, setSelectedDate }) => {
       minTime={minTime}
       maxTime={maxTime}
       inline
+      renderCustomHeader={({
+        date,
+        decreaseMonth,
+        increaseMonth,
+        prevMonthButtonDisabled,
+        nextMonthButtonDisabled,
+      }) => (
+        <div className="custom-header">
+          <div className="current-month">
+            {date.toLocaleString('default', { year: 'numeric', month: 'long' })}
+          </div>
+          <div className="icons">
+            <AroowLeft
+              className="icon"
+              onClick={decreaseMonth}
+              disabled={prevMonthButtonDisabled}
+            />
+            <AroowRight
+              className="icon"
+              onClick={increaseMonth}
+              disabled={nextMonthButtonDisabled}
+            />
+          </div>
+        </div>
+      )}
     />
   );
 };
