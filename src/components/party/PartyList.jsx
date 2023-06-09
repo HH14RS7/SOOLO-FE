@@ -3,8 +3,11 @@ import { QueryClient, useQuery } from 'react-query';
 import { getAPI } from '../../api/api';
 import { PARTIES_URL } from '../../shared/constants';
 import PartyItem from './PartyItem';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import MainInfo from './MainInfo';
+import Select from 'react-select'; //라이브러리 import
+import { ReactComponent as ArrowBottom } from '../../assets/common/arrow-bottom.svg';
 
 const PartyList = () => {
   const unionImg = './img/union.png';
@@ -17,11 +20,14 @@ const PartyList = () => {
   ];
 
   const queryClient = new QueryClient();
-  const [recruitmentStatus, setRecruitmentStatus] = useState(RECRUITMENT_STATUS_SELECT[0].value);
+  // const [recruitmentStatus, setRecruitmentStatus] = useState(RECRUITMENT_STATUS_SELECT[0].value);
+  const [recruitmentStatus, setRecruitmentStatus] = useState(RECRUITMENT_STATUS_SELECT[0]);
+  const [toggle, setToggle] = useState(false);
+
   const page = 0; // 임시
 
-  const { data, isLoading, error } = useQuery(['parties', recruitmentStatus], () =>
-    getAPI(`${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=${recruitmentStatus}`),
+  const { data, isLoading, error } = useQuery(['parties', recruitmentStatus.value], () =>
+    getAPI(`${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=${recruitmentStatus.value}`),
   );
 
   useEffect(() => {
@@ -45,25 +51,41 @@ const PartyList = () => {
 
   const partyList = data?.data.data.partyList;
 
+  const handleSelected = option => {
+    setRecruitmentStatus(option);
+  };
   return (
     <Wrapper>
-      <InfoSection>
-        <InfoTitle>반가워요!🍷 </InfoTitle>
-        <InfoTitle>우리 함께 달려볼까요?</InfoTitle>
-      </InfoSection>
       {partyList ? (
         <>
           <PartySection>
             <PartyHeader>
               <Title>현재 진행중인 모임</Title>
               <SelectContainer>
-                <SelectElement value={recruitmentStatus} onChange={handleSelectChange}>
+                <Select
+                  placeholder={RECRUITMENT_STATUS_SELECT[0].label}
+                  options={RECRUITMENT_STATUS_SELECT}
+                  // clearable={false}
+                  onChange={option => handleSelected(option)}
+                  value={recruitmentStatus}
+                  style={{
+                    '--swiper-navigation-color': 'pink',
+                    '--swiper-pagination-color': 'yellow',
+                  }}
+                />
+                {/* <ArrowBottom /> */}
+                {/* <Select
+                  options={recruitmentStatus} //위에서 만든 배열을 select로 넣기
+                  onChange={setRecruitmentStatus} //값이 바뀌면 setState되게
+                  defaultValue={recruitmentStatus[0]}
+                /> */}
+                {/* <SelectElement value={recruitmentStatus} onChange={handleSelectChange}>
                   {RECRUITMENT_STATUS_SELECT.map(recruitment => (
                     <OptionElement key={recruitment.value} value={recruitment.value}>
                       {recruitment.label}
                     </OptionElement>
                   ))}
-                </SelectElement>
+                </SelectElement> */}
               </SelectContainer>
             </PartyHeader>
             <ListWrapper>
@@ -100,36 +122,48 @@ const PartyList = () => {
   );
 };
 
+const customStyles = {
+  control: (provided, state) => ({
+    ...provided,
+    border: state.isFocused ? '2px solid blue' : '1px solid #d0d5dd',
+    borderRadius: '999px',
+    fontStyle: 'normal',
+    fontWeight: 400,
+    fontSize: '16px',
+    lineHeight: '100%',
+    // letter-spacing: '-0.015em';
+    // color: '#475467',
+    // boxShadow: 'none',
+    '&:hover': {
+      border: state.isFocused ? '2px solid blue' : '1px solid #d0d5dd',
+    },
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isFocused ? '#f7f8fa' : 'white',
+    color: state.isFocused ? 'blue' : 'black',
+    fontStyle: 'normal',
+    fontWeight: 400,
+    fontSize: '16px',
+    lineHeight: '100%',
+    '&:hover': {
+      backgroundColor: '#f7f8fa',
+    },
+  }),
+};
 const Wrapper = styled.div`
   width: 360px;
   margin: 0 auto;
-  // height: 100%;
-`;
-
-/* InfoSection */
-const InfoSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding: 36px 1rem;
-  display: flex;
-`;
-
-const InfoTitle = styled.div`
-  gap: 30px;
-  font-size: 1.5rem;
-  font-weight: var(--font-weight-700);
-  letter-spacing: -0.015em;
-  text-align: left;
+  height: 100%;
+  padding-bottom: 250px;
 `;
 
 /* PartySection */
 const PartySection = styled.section`
-  padding: 0 1rem;
+  padding: 1rem;
 `;
 
 const PartyHeader = styled.div`
-  // background: blue;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -139,8 +173,21 @@ const Title = styled.h4`
   color: var(--color-gray-500);
   white-space: nowrap;
 `;
+// const SelectContainer = styled.div`
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: flex-end;
+//   align-items: flex-start;
+//   gap: 0.25rem;
+// `;
 
-const SelectContainer = styled.div`
+// const SelectElement = styled.select`
+//   width: 80px;
+//   height: 32px;
+//   border: 1px solid #d0d5dd;
+//   border-radius: 999px;
+// `;
+const SelectContainer = styled.ul`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -148,7 +195,7 @@ const SelectContainer = styled.div`
   gap: 0.25rem;
 `;
 
-const SelectElement = styled.select`
+const SelectElement = styled.li`
   width: 80px;
   height: 32px;
   border: 1px solid #d0d5dd;
@@ -199,12 +246,18 @@ const UnionImage = styled.img`
   height: 16px;
 `;
 
+const InfoContainer = styled.div`
+  // background: green;
+  // height: 100vh;
+`;
+
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: calc(100vh - 278px);
+  height: calc(100vh - 220px);
   align-items: center;
+  min-height: 250px;
 `;
 
 const InfoImg = styled.img`
@@ -213,3 +266,4 @@ const InfoImg = styled.img`
 `;
 
 export default PartyList;
+//
