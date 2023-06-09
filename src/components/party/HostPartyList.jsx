@@ -2,6 +2,7 @@ import { useQuery } from 'react-query';
 import { getAPI } from '../../api/api';
 import { PARTIES_URL } from '../../shared/constants';
 import HostPartyItem from './HostPartyItem';
+import { styled } from 'styled-components';
 
 const HostPartyList = () => {
   const { data, isLoading, error } = useQuery('hostParties', () =>
@@ -21,13 +22,11 @@ const HostPartyList = () => {
   return (
     <>
       {partyList?.length > 0 ? (
-        <div>
-          <ul>
-            {partyList?.map(party => (
-              <HostPartyItem key={party.partyId} party={party} />
-            ))}
-          </ul>
-        </div>
+        <ListWrapper>
+          {partyList?.map(party => (
+            <HostPartyItem key={party.partyId} party={party} />
+          ))}
+        </ListWrapper>
       ) : (
         <div>개설한 모임이 없습니다</div>
       )}
@@ -36,3 +35,11 @@ const HostPartyList = () => {
 };
 
 export default HostPartyList;
+
+/* List */
+const ListWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;

@@ -3,60 +3,163 @@ import { dDayConvertor } from '../../shared/dDayConvertor';
 import { Link } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
 import { formmatedDate } from '../../shared/formattedDate';
+import { ReactComponent as Slash } from '../../assets/map/slash.svg';
+import { ReactComponent as Location } from '../../assets/map/location-line.svg';
+import { ReactComponent as People } from '../../assets/footer/mypage.svg';
+import { ReactComponent as Subway } from '../../assets/map/subway.svg';
+import { ReactComponent as Dot } from '../../assets/map/dot.svg';
 
 const HostPartyItem = ({ party }) => {
-  const {
-    partyId,
-    title,
-    // address,
-    currentCount,
-    recruitmentStatus,
-    totalCount,
-    partyDate,
-    state,
-    memberInfo,
-  } = party;
-
-  const dDay = dDayConvertor(partyDate);
-  const formattedDateTime = formmatedDate(partyDate, 'MM.DD · a h:mm');
+  const dDay = dDayConvertor(party.partyDate);
+  const isdday = dDay === 0;
+  const formmatedPartyDate = formmatedDate(party.partyDate, 'MM.DD (ddd)');
+  const partyTime = formmatedDate(party.partyDate, 'a h:mm');
+  const isfulled = party.currentCount === party.totalCount;
 
   return (
-    <PartyItemWrapper>
-      <li key={partyId}>
-        <Link to={`${PATH_URL.PARTY_DETAIL}/${partyId}`}>
-          <p>디데이 : D-{dDay > 0 ? dDay : 0}</p>
-          <p>제목 : {title}</p>
-          {/* <p>장소 : {address}</p> 지도 작업후 추가 */}
-          <p>승인여부: {state === 1 ? '승인완료' : state === 2 ? '승인대기' : ''}</p>
-          <p>모집여부: {recruitmentStatus ? '모집중' : '모집마감'}</p>
-          <p>
-            모집인원 : {currentCount} / {totalCount}명
-          </p>
-          <p>모임시간 : {formattedDateTime}</p>
-          {memberInfo?.map((member, i) => (
-            <ProfileImageWrapper key={i}>
-              <ProfileImage src={member.profileImage} alt="profileImage" />
-            </ProfileImageWrapper>
-          ))}
-        </Link>
-      </li>
-    </PartyItemWrapper>
+    <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`}>
+      <ItemWrapper>
+        <ImageDayInfo>
+          <PlaceImage src={party.imageUrl} alt="placeImage" />
+          <DdayTag isdday={isdday ? 1 : 0}>
+            <Dday>D-{isdday ? 0 : dDay}</Dday>
+          </DdayTag>
+        </ImageDayInfo>
+        <PartyDetailWrapper>
+          <Title>{party.title}</Title>
+          <DetailPlacePeople>
+            <PartyPlace>
+              {party.stationName ? <Subway /> : <Location />}
+              <PlaceName>
+                {party.stationName ? party.stationName?.split(' ')[0] : party.regionName}
+              </PlaceName>
+            </PartyPlace>
+            <PeopleCountInfo isfulled={isfulled ? 1 : 0}>
+              <PeopleIcon isfulled={isfulled ? 1 : 0} />
+              <PeopleCount>{party.currentCount} </PeopleCount>
+              <SlashIcon isfulled={isfulled ? 1 : 0} />
+              <PeopleCount> {party.totalCount} </PeopleCount>
+            </PeopleCountInfo>
+          </DetailPlacePeople>
+          <PartyDateInfo>
+            <PartyDate>{formmatedPartyDate}</PartyDate> <DotIcon />
+            <PartyDate> {partyTime} </PartyDate>
+          </PartyDateInfo>
+        </PartyDetailWrapper>
+      </ItemWrapper>
+    </Link>
   );
 };
 
-const PartyItemWrapper = styled.div`
-  border: 1px solid black;
-`;
-
-const ProfileImageWrapper = styled.div`
-  display: flex;
-`;
-
-const ProfileImage = styled.img`
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 50%;
-`;
-
 export default HostPartyItem;
+
+const ItemWrapper = styled.li`
+  display: flex;
+  align-items: center;
+  padding: 0px 0.5rem;
+  gap: 1rem;
+  height: 101px;
+  font-size: var(--font-size-regular);
+  border-bottom: 1px solid var(--color-gray-100);
+`;
+
+const PlaceImage = styled.img`
+  width: 74px;
+  height: 74px;
+  border-radius: 16px;
+`;
+
+const ImageDayInfo = styled.div`
+  position: relative;
+  display: flex;
+  width: 70px;
+  height: 70px;
+`;
+
+const DdayTag = styled.div`
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  align-items: flex-start;
+  padding: 0.25rem 0.5rem;
+  width: 40px;
+  height: 22px;
+  background: ${props => (props.isdday ? 'var(--color-primary-500)' : 'var(--color-primary-300)')};
+  border-radius: 999px;
+  width: auto;
+`;
+
+const Dday = styled.h5`
+  color: var(--color-white);
+  border-bottom: var(--color-gray-100);
+  white-space: nowrap;
+`;
+
+const PartyDetailWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 242px;
+  height: 62px;
+`;
+
+const Title = styled.h3`
+  width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
+`;
+
+const DetailPlacePeople = styled.div`
+  display: flex;
+  gap: 1rem;
+  display: flex;
+  align-items: flex-start;
+`;
+
+const PartyPlace = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+`;
+
+const PlaceName = styled.h5``;
+
+const PeopleCountInfo = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 0.25rem;
+  align-items: center;
+  color: ${props => (props.isfulled ? 'var(--color-error-500)' : 'inherit')};
+`;
+
+const PeopleIcon = styled(People)`
+  width: 14px;
+  height: 14px;
+  fill: ${props => (props.isfulled ? 'var(--color-error-500)' : 'inherit')};
+`;
+
+const SlashIcon = styled(Slash)`
+  fill: ${props => (props.isfulled ? 'var(--color-error-500)' : 'inherit')};
+`;
+
+const PeopleCount = styled.h5``;
+
+const PartyDateInfo = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  justify-content: center;
+`;
+
+const PartyDate = styled.h5`
+  color: var(--color-gray-500);
+`;
+
+const DotIcon = styled(Dot)`
+  fill: var(--color-gray-500);
+  margin: auto 0;
+  align-items: center;
+`;
