@@ -16,7 +16,7 @@ export default function SelectedPartyList({ partyList }) {
           modules={[Navigation, Pagination]}
           spaceBetween={350}
           slidesPerView={2}
-          navigation
+          // navigation
           pagination={{ clickable: true }}
           scrollbar={{ draggable: true }}
         >

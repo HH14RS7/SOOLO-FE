@@ -568,6 +568,7 @@ const PartyRequestBtn = styled.div`
   border: 1px solid #f63d68;
   border-radius: 12px;
   margin-bottom: 8px;
+  cursor: pointer;
 `;
 
 const PartyModifyBtn = styled.div`
@@ -582,6 +583,7 @@ const PartyModifyBtn = styled.div`
   background-color: #fff;
   border: 1px solid #f63d68;
   border-radius: 12px;
+  cursor: pointer;
 `;
 
 const PartyDeleteBtn = styled.div`
@@ -596,6 +598,7 @@ const PartyDeleteBtn = styled.div`
   background-color: #f63d68;
   border: 1px solid #f63d68;
   border-radius: 12px;
+  cursor: pointer;
 `;
 
 // 참여자 인원수 스타일
