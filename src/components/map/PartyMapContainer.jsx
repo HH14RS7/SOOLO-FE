@@ -37,17 +37,15 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   const { stationName, getStationInfo } = useGetNearbyStation();
   const [loading, setLoading] = useState(false);
 
-  const radius = 50;
+  const radius = 2.5;
   // const radius = searchPlace.endsWith('역') ? 2.5 : 5;
-  // onPlaceChange(searchPlace);
   const fetchPartyList = async (latitude, longitude, searchPlace) => {
     let url = '';
-    console.log(searchPlace);
     try {
       if (!searchPlace) {
         url = `${PARTIES_URL.PARTIES_LIST}?page=0&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=2.5`;
       } else {
-        url = `${PARTIES_URL.PARTIES_LIST_SEARCH}?page=0&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=50&keyword=${searchPlace}`;
+        url = `${PARTIES_URL.PARTIES_LIST_SEARCH}?page=0&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=30&keyword=${searchPlace}`;
       }
 
       const response = await getAPI(url);
@@ -332,6 +330,8 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
 
 const Wrap = styled.div`
   height: 100%;
+  width: 360px;
+  margin: 0 auto;
 `;
 
 const Map = styled.div`

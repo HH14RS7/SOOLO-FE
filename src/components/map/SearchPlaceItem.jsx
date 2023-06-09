@@ -33,6 +33,7 @@ const PlaceItem = styled.li`
 
 const PlaceInfo = styled.div`
   display: flex;
+  align-items: center;
   gap: 0.5rem;
 `;
 
