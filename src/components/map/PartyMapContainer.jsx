@@ -15,6 +15,12 @@ import { ReactComponent as Overlay } from '../../assets/map/overlay.svg';
 import { ReactComponent as OverlayArrow } from '../../assets/map/overlay-arrow.svg';
 import { ReactComponent as Add } from '../../assets/map/add.svg';
 import { ReactComponent as Subtract } from '../../assets/map/subtract.svg';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar } from 'swiper';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const { kakao } = window;
 const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
@@ -29,14 +35,22 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   const mapRef = useRef();
   const { regionName, getRegionName } = useGetRegionName();
   const { stationName, getStationInfo } = useGetNearbyStation();
+  const [loading, setLoading] = useState(false);
 
-  const radius = searchPlace.endsWith('역') ? 2.5 : 5;
-
-  const fetchPartyList = async (latitude, longitude) => {
+  const radius = 50;
+  // const radius = searchPlace.endsWith('역') ? 2.5 : 5;
+  // onPlaceChange(searchPlace);
+  const fetchPartyList = async (latitude, longitude, searchPlace) => {
+    let url = '';
+    console.log(searchPlace);
     try {
-      const response = await getAPI(
-        `${PARTIES_URL.PARTIES_LIST}?page=0&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=${radius}`,
-      );
+      if (!searchPlace) {
+        url = `${PARTIES_URL.PARTIES_LIST}?page=0&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=2.5`;
+      } else {
+        url = `${PARTIES_URL.PARTIES_LIST_SEARCH}?page=0&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=50&keyword=${searchPlace}`;
+      }
+
+      const response = await getAPI(url);
       return response.data.data.partyList;
     } catch (error) {
       console.error('조회실패', error);
@@ -44,30 +58,65 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
     }
   };
 
-  const { data: partyList, isLoading } = useQuery(['parties', latitude, longitude], () =>
-    fetchPartyList(latitude, longitude),
+  const { data: partyList, isLoading } = useQuery(
+    ['parties', latitude, longitude, searchPlace],
+    () => fetchPartyList(latitude, longitude, searchPlace),
   );
 
   // 현재위치 내 모임 조회
   const handleCurrentLocation = useCallback(() => {
-    if (error) {
-      alert(error.message);
-    } else if (location.loading) {
-      alert('로딩중입니다');
+    setLoading(true);
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const lat = position.coords.latitude;
+          const lon = position.coords.longitude;
+          setLatitude(lat);
+          setLongitude(lon);
+          // getRegionName(lat, lon);
+          // getStationInfo(lat, lon);
+          setLoading(false);
+          onPlaceChange('');
+          if (mapRef.current) {
+            const center = new kakao.maps.LatLng(lat, lon);
+            mapRef.current.setCenter(center);
+          }
+        },
+        error => {
+          setLoading(false);
+          alert('위치정보 수집에 동의해주세요');
+          console.error(error);
+        },
+      );
     } else {
-      const lat = location.coordinates.latitude;
-      const lon = location.coordinates.longitude;
-      setLatitude(lat);
-      setLongitude(lon);
-      getRegionName(lat, lon);
-      getStationInfo(lat, lon);
-      onPlaceChange('');
-      if (mapRef.current) {
-        const center = new kakao.maps.LatLng(lat, lon);
-        mapRef.current.setCenter(center);
-      }
+      alert('이 브라우저는 Geolocation을 지원하지 않습니다.');
     }
-  }, [location]);
+  }, []);
+
+  // const handleCurrentLocation = useCallback(() => {
+  //   setLoading(true);
+
+  //   if (location.loaded) {
+  //     const lat = location.coordinates.latitude;
+  //     const lon = location.coordinates.longitude;
+  //     setLatitude(lat);
+  //     setLongitude(lon);
+  //     getRegionName(lat, lon);
+  //     getStationInfo(lat, lon);
+  //     // onPlaceChange('');
+  //     console.log(latitude);
+  //     if (mapRef.current) {
+  //       const center = new kakao.maps.LatLng(lat, lon);
+  //       mapRef.current.setCenter(center);
+  //     }
+  //   } else {
+  //     if (error) {
+  //       alert(error.message);
+  //       setLoading(false);
+  //     }
+  //   }
+  // }, [location]);
 
   // 모임 리스트 마커 찍기
   const drawMarkers = useCallback(() => {
@@ -188,7 +237,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   const placesSearchCB = useCallback((data, status) => {
     if (status === kakao.maps.services.Status.OK) {
       setSelectedParty(null);
-      onPlaceChange('');
+      // onPlaceChange('');
       // marker.setMap('');
       if (data.length > 0) {
         setLatitude(data[0].y);
@@ -258,15 +307,22 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
         <Loading>로딩중입니다</Loading>
       ) : (
         <div>
-          {selectedParty ? (
-            <SelectedPartyList partyList={selectedParty} />
+          {/* 지도 현재위치 로딩중 */}
+          {loading ? (
+            <Loading>현재위치를 가져오는 중입니다.</Loading>
           ) : (
-            <SearchPartyList
-              partyList={partyList}
-              regionName={regionName}
-              stationName={stationName}
-              searchPlace={searchPlace}
-            />
+            <div>
+              {selectedParty ? (
+                <SelectedPartyList partyList={selectedParty} />
+              ) : (
+                <SearchPartyList
+                  partyList={partyList}
+                  regionName={regionName}
+                  stationName={stationName}
+                  searchPlace={searchPlace}
+                />
+              )}
+            </div>
           )}
         </div>
       )}

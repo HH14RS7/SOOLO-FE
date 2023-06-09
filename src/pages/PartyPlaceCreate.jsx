@@ -8,24 +8,24 @@ const PartyPlaceCreate = () => {
   const [place, setPlace] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const { location, error } = useGeolocation();
-  const [currentLocation, setCurrentLocation] = useState({});
+  const [currentLocation, setCurrentLocation] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (isChecked) {
-      if (location.loaded && !error) {
+    const fetchData = async () => {
+      setLoading(true);
+
+      if (isChecked && location.loaded && !error) {
         const { latitude, longitude } = location.coordinates;
         setCurrentLocation({ latitude, longitude });
-        setIsChecked(true);
-      } else if (location.loading) {
-        alert('로딩중입니다');
-        setIsChecked(false);
-      } else if (error) {
-        alert(error.message);
-        setIsChecked(false);
+      } else {
+        setCurrentLocation(null);
       }
-    } else {
-      setIsChecked(false);
-    }
+
+      setLoading(false);
+    };
+
+    fetchData();
   }, [isChecked, location, error]);
 
   const handlePlaceChange = value => {
@@ -45,7 +45,7 @@ const PartyPlaceCreate = () => {
       <PlaceInfo>
         <PlaceLabel htmlFor="place">장소 목록</PlaceLabel>
         <ToggleWrapper>
-          <ToggleLabel htmlFor="location"> 현 위치 중심</ToggleLabel>
+          <ToggleLabel htmlFor="location">현 위치 중심</ToggleLabel>
           <input
             id="location"
             type="checkbox"
@@ -55,11 +55,15 @@ const PartyPlaceCreate = () => {
         </ToggleWrapper>
       </PlaceInfo>
       <Bar />
-      <SearchPlaceList
-        searchPlace={place}
-        currentLocation={currentLocation}
-        isChecked={isChecked}
-      />
+      {loading ? (
+        <div>로딩 중입니다...</div>
+      ) : (
+        <SearchPlaceList
+          searchPlace={place}
+          currentLocation={currentLocation}
+          isChecked={isChecked}
+        />
+      )}
     </Wrapper>
   );
 };
@@ -117,7 +121,6 @@ const ToggleLabel = styled.label`
   font-style: normal;
   font-weight: var(--font-weight-400);
   font-size: 0.85rem;
-  line-height: 100%;
   line-height: 100%;
   display: flex;
   align-items: center;
