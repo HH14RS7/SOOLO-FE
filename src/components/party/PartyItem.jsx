@@ -12,14 +12,15 @@ import { ReactComponent as Subway } from '../../assets/map/subway.svg';
 import { ReactComponent as Dot } from '../../assets/map/dot.svg';
 
 const PartyItem = ({ party }) => {
-  const [isLogin, setIsLogin] = useState(false);
-  const token = Cookies.get('Access_key');
+  const defaultImg = '/img/default-image.png';
   const navigate = useNavigate();
-  const dDay = dDayConvertor(party.partyDate);
 
+  const dDay = dDayConvertor(party.partyDate);
   const isdday = dDay === 0;
+
   const formmatedPartyDate = formmatedDate(party.partyDate, 'MM.DD (ddd)');
   const partyTime = formmatedDate(party.partyDate, 'a h:mm');
+
   const isfulled = party.currentCount === party.totalCount;
 
   // const stateMsg = useMemo(() => {
@@ -34,26 +35,12 @@ const PartyItem = ({ party }) => {
   //   }
   // }, [state]);
 
-  useEffect(() => {
-    if (token) {
-      setIsLogin(true);
-    }
-  }, [token]);
-
-  const handleLinkClick = e => {
-    if (!isLogin) {
-      e.preventDefault();
-      alert('로그인이 필요합니다.');
-      navigate(PATH_URL.LOGIN);
-    }
-  };
-
   return (
     <>
-      <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`} onClick={handleLinkClick}>
+      <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`}>
         <ItemWrapper>
           <ImageDayInfo>
-            <PlaceImage src={party.imageUrl} alt="placeImage" />
+            <PlaceImage src={party.imageUrl ? party.imageUrl : defaultImg} alt="placeImage" />
             <DdayTag isdday={isdday ? 1 : 0}>
               <Dday>D-{isdday ? 0 : dDay}</Dday>
             </DdayTag>
