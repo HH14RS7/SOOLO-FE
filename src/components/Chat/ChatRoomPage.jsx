@@ -1,5 +1,5 @@
 // 기능 import
-import { React, useEffect, useState, useRef, useCallback } from 'react';
+import { React, useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 import { PATH_URL } from '../../shared/constants';
@@ -14,6 +14,7 @@ import { ReactComponent as RoomMenuIcon } from '../../assets/chating/chatroommen
 import { ReactComponent as ChatSendIcon } from '../../assets/chating/chatsend.svg';
 import { ReactComponent as NavigateExitIcon } from '../../assets/chating/NavigateExit.svg';
 import { ReactComponent as PartHostIcon } from '../../assets/chating/hosticon.svg';
+import { ReactComponent as ProfileDefaultImg } from '../../assets/common/profiledefaultimg.svg';
 import { formmatedDate } from '../../shared/formattedDate';
 
 export const ChatRoomPage = () => {
@@ -159,7 +160,10 @@ export const ChatRoomPage = () => {
       //사용자 유니크 ID, 이미지 URL 추가 필요
       const data = JSON.parse(response.body);
 
-      setChatMessageList(chatList => [...chatList, data.data]);
+      setChatMessageList(chatList => [
+        ...chatList,
+        { ...data.data, memberProfileImage: data.data.memberProfileImage || ProfileDefaultImg },
+      ]);
     });
 
     // client.current.publish({
@@ -227,6 +231,8 @@ export const ChatRoomPage = () => {
     alert('곧 업데이트 예정입니다!');
   };
 
+  console.log('chatMessageList ::', chatMessageList);
+
   return (
     <>
       <div
@@ -276,15 +282,19 @@ export const ChatRoomPage = () => {
                       >
                         <OtherImg>
                           <OtherProfile>
-                            <img
-                              src={data.memberProfileImage}
-                              alt="profile"
-                              style={{
-                                width: '100%',
-                                height: '100%',
-                                borderRadius: '8px',
-                              }}
-                            />
+                            {data?.memberProfileImage ? (
+                              <img
+                                src={data?.memberProfileImage}
+                                alt="profile"
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  borderRadius: '8px',
+                                }}
+                              />
+                            ) : (
+                              <ProfileDefault />
+                            )}
                           </OtherProfile>
                           {data.host ? (
                             <OtherHostIcon>
@@ -418,6 +428,12 @@ const Container = styled.div`
   width: 360px;
   margin: 0 auto;
   background: #ffffff;
+`;
+
+const ProfileDefault = styled(ProfileDefaultImg)`
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
 `;
 
 // TopBar 스타일
