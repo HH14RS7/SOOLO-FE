@@ -60,7 +60,7 @@ const Wrapper = styled.section`
 const Title = styled.h4`
   color: var(--color-gray-500);
   white-space: nowrap;
-  padding: 0 0 1rem 8px;
+  padding: 0 0 1rem 1rem;
 `;
 
 const StyledSwiper = styled(Swiper)`

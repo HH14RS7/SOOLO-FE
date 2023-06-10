@@ -14,6 +14,7 @@ import PartyDetailMap from '../map/PartyDetailMap';
 // 이미지 import
 import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 import { ReactComponent as Location } from '../../assets/map/location-line.svg';
+import { ReactComponent as Subway } from '../../assets/map/subway.svg';
 import { ReactComponent as People } from '../../assets/footer/mypage.svg';
 import { ReactComponent as Slash } from '../../assets/map/slash.svg';
 import { ReactComponent as Information } from '../../assets/common/information.svg';
@@ -25,6 +26,7 @@ export const PartyDetailInfo = () => {
   const [data, setData] = useState();
 
   const locationIcon = '/img/map-location.png';
+  const defaultImg = '/img/default-image.png';
 
   // 모임 상세 조회
   useEffect(() => {
@@ -37,7 +39,7 @@ export const PartyDetailInfo = () => {
       .catch(error => {
         console.log('API 요청 중 에러 발생', error);
       });
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    // window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [partyId]);
 
   // 모임 신청 / 취소
@@ -118,7 +120,7 @@ export const PartyDetailInfo = () => {
             </Topbar>
             <PartyDetailImg>
               <img
-                src={data?.imageUrl || SojuRoom}
+                src={data?.imageUrl || defaultImg}
                 alt="partydetail"
                 style={{
                   width: '100%',
@@ -142,12 +144,16 @@ export const PartyDetailInfo = () => {
                       display: 'flex',
                     }}
                   >
-                    <Location
-                      style={{
-                        marginRight: '4px',
-                      }}
-                    />
-                    {data?.regionName}
+                    {data?.stationName ? (
+                      <Subway style={{ marginRight: '4px' }} />
+                    ) : (
+                      <Location
+                        style={{
+                          marginRight: '4px',
+                        }}
+                      />
+                    )}
+                    {data?.stationName ? data?.stationName.split(' ')[0] : data?.regionName}
                   </div>
                   <PeopleCountInfo isfulled={isfulled ? 1 : 0}>
                     <PeopleIcon isfulled={isfulled ? 1 : 0} />
