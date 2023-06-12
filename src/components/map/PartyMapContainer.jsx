@@ -64,6 +64,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   // 현재위치 내 모임 조회
   const handleCurrentLocation = useCallback(() => {
     setLoading(true);
+
     if (location.loaded) {
       const lat = location.coordinates.latitude;
       const lon = location.coordinates.longitude;
@@ -79,12 +80,12 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
         mapRef.current.setLevel(6);
         mapRef.current.panTo(center);
       }
-      setLoading(false);
     } else {
       if (error) {
-        setLoading(false);
         alert(error.message);
       }
+      setLoading(false);
+      return;
     }
 
     setLoading(false);
