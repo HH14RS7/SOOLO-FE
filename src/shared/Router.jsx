@@ -18,7 +18,6 @@ import MyCreateParty from '../pages/MyCreateParty';
 import PartyMapCreate from '../pages/PartyMapCreate';
 import PartyPlaceCreate from '../pages/PartyPlaceCreate';
 import UserUpdatePage from '../pages/UserUpdatePage';
-import { AcountDetails } from '../components/user/AcountDetails';
 import MyAccountDetail from '../pages/MyAccountDetail';
 import ScrollToTop from '../shared/ScrollToTop';
 
