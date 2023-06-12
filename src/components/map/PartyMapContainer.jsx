@@ -61,19 +61,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
     () => fetchPartyList(latitude, longitude, searchPlace),
   );
 
-  // 위치 정보 차단 해제 후에 자동으로 위치 정보를 다시 가져오는 함수
-  const handleLocationPermissionChange = () => {
-    // 위치 정보 차단이 해제되면 handleCurrentLocation 함수를 호출합니다.
-    handleCurrentLocation();
-  };
-
-  // 위치 정보 차단 해제 이벤트를 감지하는 이벤트 핸들러 설정
-  navigator.permissions.query({ name: 'geolocation' }).then(result => {
-    result.onchange = handleLocationPermissionChange;
-  });
-
   // 현재위치 내 모임 조회
-
   const handleCurrentLocation = useCallback(() => {
     setLoading(true);
     if (location.loaded) {
