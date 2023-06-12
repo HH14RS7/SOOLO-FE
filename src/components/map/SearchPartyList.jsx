@@ -5,24 +5,7 @@ import { ReactComponent as Fire } from '../../assets/map/fire.svg';
 import { PATH_URL } from '../../shared/constants';
 import { Link } from 'react-router-dom';
 
-export default function SearchPartyList({ partyList, regionName, stationName, searchPlace }) {
-  let displayRegionName = regionName;
-  let displayStationName = stationName;
-
-  if (searchPlace.endsWith('구') || searchPlace.endsWith('동') || searchPlace.endsWith('역')) {
-    displayRegionName = searchPlace.replace();
-  } else {
-    if (partyList.length > 0) {
-      const { regionName: partyRegionName, stationName: partyStationName } = partyList[0];
-      if (partyRegionName) {
-        displayRegionName = partyRegionName;
-      }
-      if (partyStationName) {
-        displayStationName = partyStationName;
-      }
-    }
-  }
-
+export default function SearchPartyList({ partyList }) {
   return (
     <Wrapper>
       <Header>
@@ -135,7 +118,6 @@ const Button = styled.button`
 `;
 
 const ButtonTitle = styled.div`
-  font-family: 'Inter';
   font-style: normal;
   font-weight: var(--color-weight-600);
   color: var(--color-white);

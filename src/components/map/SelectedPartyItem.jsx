@@ -11,20 +11,22 @@ import { ReactComponent as Dot } from '../../assets/map/dot.svg';
 import { dDayConvertor } from '../../shared/dDayConvertor';
 
 export default function SelectedPartyItem({ party }) {
+  const defaultImg = '/img/default-image.png';
   const { partyId, title, currentCount, totalCount, stationName, regionName, partyDate, imageUrl } =
     party;
+
   const dDay = dDayConvertor(partyDate);
   const isdday = dDay === 0;
-  const formatPartyDate = formmatedDate(partyDate, 'MM.DD (ddd)');
   const partyTime = formmatedDate(partyDate, 'a h:mm');
-  const isfulled = party.currentCount === party.totalCount;
+  const formatPartyDate = formmatedDate(partyDate, 'MM.DD (ddd)');
+  const isfulled = currentCount === totalCount;
 
   return (
     <>
       <Link to={`${PATH_URL.PARTY_DETAIL}/${partyId}`}>
         <PartyItem>
           <ImageDayInfo>
-            <PlaceImage src={party.imageUrl} alt="placeImage" />
+            <PlaceImage src={imageUrl || defaultImg} alt="placeImage" />
             <DdayTag isdday={isdday ? 1 : 0}>
               <Dday>D-{isdday ? 0 : dDay}</Dday>
             </DdayTag>
@@ -33,10 +35,8 @@ export default function SelectedPartyItem({ party }) {
             <Title>{title}</Title>
             <DetailPlacePeople>
               <PartyPlace>
-                {party.stationName ? <Subway /> : <Location />}
-                <PlaceName>
-                  {party.stationName ? party.stationName?.split(' ')[0] : party.regionName}
-                </PlaceName>
+                {stationName ? <Subway /> : <Location />}
+                <PlaceName>{stationName ? stationName?.split(' ')[0] : regionName}</PlaceName>
               </PartyPlace>
               <PeopleCountInfo isfulled={isfulled ? 1 : 0}>
                 <PeopleIcon isfulled={isfulled ? 1 : 0} />

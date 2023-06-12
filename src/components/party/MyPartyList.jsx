@@ -5,6 +5,7 @@ import MyPartyItem from './MyPartyItem';
 import { styled } from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar } from 'swiper';
+import Loading from '../Loading';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -14,12 +15,7 @@ const MyPartyList = () => {
   const { data, isLoading, error } = useQuery('myParties', () =>
     getAPI(`${PARTIES_URL.MY_PARTIES_LIST}`),
   );
-
   const partyList = data?.data.data;
-
-  if (isLoading) {
-    return <div>로딩중입니다.</div>;
-  }
 
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -27,29 +23,31 @@ const MyPartyList = () => {
 
   return (
     <>
-      {partyList?.length > 0 && (
-        <>
-          <Title>신청한 모임</Title>
-          <Swiper
-            modules={[Navigation, Pagination]}
-            spaceBetween={-100}
-            observer={true}
-            observeParents={true}
-            slidesPerView={1}
-            slidesOffsetAfter={-96}
-            slidesOffsetBefore={8}
-          >
-            <Wrapper>
-              <PartyList>
-                {partyList.map(party => (
-                  <SwiperSlide key={party.partyId}>
-                    <MyPartyItem key={party.partyId} party={party} />
-                  </SwiperSlide>
-                ))}
-              </PartyList>
-            </Wrapper>
-          </Swiper>
-        </>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        partyList?.length > 0 && (
+          <>
+            <Title>신청한 모임</Title>
+            <Swiper
+              modules={[Navigation, Pagination]}
+              spaceBetween={-100}
+              slidesPerView={1}
+              slidesOffsetAfter={-96}
+              slidesOffsetBefore={8}
+            >
+              <Wrapper>
+                <PartyList>
+                  {partyList.map(party => (
+                    <SwiperSlide key={party.partyId}>
+                      <MyPartyItem key={party.partyId} party={party} />
+                    </SwiperSlide>
+                  ))}
+                </PartyList>
+              </Wrapper>
+            </Swiper>
+          </>
+        )
       )}
     </>
   );

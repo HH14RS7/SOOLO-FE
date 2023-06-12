@@ -1,20 +1,13 @@
 import moment from 'moment';
 
 export const dDayConvertor = data => {
-  const targetDate = moment(data);
-  const currentDate = moment();
-  const hoursDiff = targetDate.diff(currentDate, 'hours');
+  const targetDate = moment(data).startOf('day');
+  const currentDate = moment().startOf('day');
   let dDay = 0;
 
-  if (hoursDiff <= 24) {
-    const daysDiff = moment.duration(targetDate.diff(currentDate)).asDays();
-    if (daysDiff < 1) {
-      dDay = 0;
-    } else {
-      dDay = Math.ceil(daysDiff);
-    }
-  } else {
-    dDay = targetDate.diff(currentDate, 'days');
+  if (targetDate.isSameOrAfter(currentDate)) {
+    const daysDiff = targetDate.diff(currentDate, 'days');
+    dDay = daysDiff;
   }
 
   return dDay;
