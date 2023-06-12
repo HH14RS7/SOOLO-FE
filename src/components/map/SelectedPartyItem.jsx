@@ -34,7 +34,9 @@ export default function SelectedPartyItem({ party }) {
             <DetailPlacePeople>
               <PartyPlace>
                 {party.stationName ? <Subway /> : <Location />}
-                <PlaceName>{stationName ? stationName : regionName}</PlaceName>
+                <PlaceName>
+                  {party.stationName ? party.stationName?.split(' ')[0] : party.regionName}
+                </PlaceName>
               </PartyPlace>
               <PeopleCountInfo isfulled={isfulled ? 1 : 0}>
                 <PeopleIcon isfulled={isfulled ? 1 : 0} />
