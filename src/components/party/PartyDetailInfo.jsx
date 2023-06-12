@@ -224,7 +224,9 @@ export const PartyDetailInfo = () => {
                     <HostStatus>{data?.memberInfo[0].age}대</HostStatus>
                   </div>
                   <HostIntroduceDiv>자기소개</HostIntroduceDiv>
-                  <HostIntroduce>{data?.memberInfo[0].introduce}</HostIntroduce>
+                  <HostIntroduce>
+                    {data?.memberInfo[0].introduce || '안녕하세요. 저희 모임과 함께하시겠어요?'}
+                  </HostIntroduce>
                 </HostDetailInfo>
               </PartyHostInfo>
             </PartyHostContainer>
