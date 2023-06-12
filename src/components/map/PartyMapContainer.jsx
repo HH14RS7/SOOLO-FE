@@ -340,7 +340,7 @@ const Map = styled.div`
   align-items: center;
   justify-content: center;
   width: 360px;
-  min-height: 512px;
+  min-height: 320px;
   margin: 0 auto;
   // height: 100%; // footer 임시용
 `;

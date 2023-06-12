@@ -39,6 +39,6 @@ const ListWrapper = styled.ul`
   align-items: flex-start;
   gap: 0.5rem;
   position: relative;
-  bottom: 250px;
+  bottom: 150px;
   z-index: 30;
 `;
