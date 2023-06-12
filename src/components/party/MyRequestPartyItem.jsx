@@ -18,12 +18,13 @@ const MyRequestPartyItem = ({ party }) => {
   const formmatedPartyDate = formmatedDate(party.partyDate, 'MM.DD (ddd)');
   const partyTime = formmatedDate(party.partyDate, 'a h:mm');
   const isfulled = party.currentCount === party.totalCount;
+  const defaultImg = '/img/default-image.png';
 
   return (
     <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`}>
       <ItemWrapper>
         <ImageDayInfo>
-          <PlaceImage src={party.imageUrl} alt="placeImage" />
+          <PlaceImage src={defaultImg || party.imageUrl} alt="placeImage" />
           <DdayTag isdday={isdday ? 1 : 0}>
             <Dday>D-{isdday ? 0 : dDay}</Dday>
           </DdayTag>

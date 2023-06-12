@@ -2,25 +2,22 @@ import React, { useState } from 'react';
 import SelectedPartyItem from './SelectedPartyItem';
 import { styled } from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Scrollbar } from 'swiper';
+import { Navigation, Pagination } from 'swiper';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+
 export default function SelectedPartyList({ partyList }) {
+  const spaceBetween = partyList.length === 1 ? 24 : -24;
+
   return (
     <>
       <ListWrapper>
-        <Swiper
-          modules={[Navigation, Pagination]}
-          spaceBetween={-24}
-          slidesPerView={1}
-          slidesOffsetAfter={-8}
-          slidesOffsetBefore={0}
-        >
+        <Swiper modules={[Navigation, Pagination]} spaceBetween={spaceBetween} slidesPerView={1}>
           {partyList?.map(party => (
             <SwiperSlide key={party.partyId}>
-              <SelectedPartyItem key={party.partyId} party={party} />ㄴ
+              <SelectedPartyItem key={party.partyId} party={party} />
             </SwiperSlide>
           ))}
         </Swiper>

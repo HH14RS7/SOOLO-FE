@@ -1,9 +1,7 @@
 import { styled } from 'styled-components';
 import { dDayConvertor } from '../../shared/dDayConvertor';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
-import Cookies from 'js-cookie';
-import { useEffect, useState } from 'react';
 import { formmatedDate } from '../../shared/formattedDate';
 import { ReactComponent as Slash } from '../../assets/map/slash.svg';
 import { ReactComponent as Location } from '../../assets/map/location-line.svg';
@@ -13,34 +11,18 @@ import { ReactComponent as Dot } from '../../assets/map/dot.svg';
 
 const PartyItem = ({ party }) => {
   const defaultImg = '/img/default-image.png';
-  const navigate = useNavigate();
-
   const dDay = dDayConvertor(party.partyDate);
   const isdday = dDay === 0;
-
   const formmatedPartyDate = formmatedDate(party.partyDate, 'MM.DD (ddd)');
   const partyTime = formmatedDate(party.partyDate, 'a h:mm');
-
   const isfulled = party.currentCount === party.totalCount;
-
-  // const stateMsg = useMemo(() => {
-  //   if (state === 0) {
-  //     return '';
-  //   } else if (state === 1) {
-  //     return '참여한 모임';
-  //   } else if (state === 2) {
-  //     return '승인대기중인 모임';
-  //   } else {
-  //     return '거절된 모임';
-  //   }
-  // }, [state]);
 
   return (
     <>
       <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`}>
         <ItemWrapper>
           <ImageDayInfo>
-            <PlaceImage src={party.imageUrl ? party.imageUrl : defaultImg} alt="placeImage" />
+            <PlaceImage src={party.imageUrl || defaultImg} alt="placeImage" />
             <DdayTag isdday={isdday ? 1 : 0}>
               <Dday>D-{isdday ? 0 : dDay}</Dday>
             </DdayTag>

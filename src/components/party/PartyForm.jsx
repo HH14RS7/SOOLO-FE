@@ -144,6 +144,10 @@ const CreateForm = ({ party }) => {
     const formData = new FormData();
     const formatDate = moment(selectedDate).format('YYYY-MM-DD') + ' ' + selectedTime;
 
+    if (!timeValidate()) {
+      return;
+    }
+
     const data = {
       title: item.title.trim(),
       content: item.content.trim(),
@@ -182,6 +186,25 @@ const CreateForm = ({ party }) => {
     navigate(PATH_URL.MAIN);
   };
 
+  const timeValidate = () => {
+    if (!selectedDate || !selectedTime) {
+      alert('시간을 선택해주세요');
+      return false;
+    }
+    const currentDate = new Date();
+    const currentDateTime = currentDate.getHours() + ':' + currentDate.getMinutes();
+
+    const formatSelectedDate = moment(selectedDate).format('YYYY-MM-DD');
+    const formattTodayDate = moment(currentDate).format('YYYY-MM-DD');
+
+    // 현재일 선택시
+    if (formatSelectedDate === formattTodayDate && selectedTime < currentDateTime) {
+      alert('현재 시간 이후로 선택해주세요');
+      return false;
+    }
+
+    return true;
+  };
   // 파일 선택
   const handleUploadClick = () => {
     imgRef.current.click();
@@ -398,7 +421,7 @@ const CreateForm = ({ party }) => {
                 <InfoContent>
                   논란의 여지가 있는 이미지를 업로드시 서비스 가이드 위반으로 이용
                 </InfoContent>
-                <InfoContent> 제제가 들어갈 수 있습니다.</InfoContent>
+                <InfoContent>제재가 들어갈 수 있습니다.</InfoContent>
               </ImageInfo>
             </ImageInfoSection>
             <ButtonWrapper>
@@ -468,8 +491,11 @@ const PlaceInfo = styled.div`
   border: var(--color-gray-200);
   border-radius: 1rem;
   padding: 21px 1rem;
+  width: auto;
   gap: 0.5rem;
   margin-top: 0.5rem;
+  clear: both;
+  float: left;
 `;
 
 const TopInfo = styled.div`
@@ -481,7 +507,7 @@ const TopInfo = styled.div`
 `;
 
 const PlaceName = styled.h4`
-  white-space: no-wrap;
+  white-space: nowrap;
 `;
 
 const LocationIcon = styled.img`
@@ -500,6 +526,7 @@ const PlaceDetail = styled.div`
 const Category = styled.h5`
   color: var(--color-gray-500);
   margin: auto 0;
+  white-space: nowrap;
 `;
 
 const PlaceAddress = styled.h5`
@@ -589,16 +616,13 @@ const TextAreaField = styled.textarea`
   margin-top: 0.5rem;
 
   &::placeholder {
-    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
-    line-height: 100%;
-    /* or 14px */
+    line-height: 1.2;
     display: flex;
     align-items: center;
     letter-spacing: -0.015em;
-    /* Neutral/Dark/Lightest */
     color: #8f9098;
   }
 `;

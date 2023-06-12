@@ -6,6 +6,7 @@ import PartyItem from './PartyItem';
 import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import { ReactComponent as ArrowBottom } from '../../assets/common/arrow-bottom.svg';
+import Loading from '../Loading';
 
 const PartyList = () => {
   const unionImg = './img/union.png';
@@ -18,33 +19,29 @@ const PartyList = () => {
   ];
 
   const queryClient = new QueryClient();
-  // const [recruitmentStatus, setRecruitmentStatus] = useState(RECRUITMENT_STATUS_SELECT[0].value);
   const [recruitmentStatus, setRecruitmentStatus] = useState(RECRUITMENT_STATUS_SELECT[0]);
+  const [totalElements, setTotalElements] = useState(0);
 
   const page = 0; // 임시
 
-  const { data, isLoading, error } = useQuery(['parties', recruitmentStatus.value], () =>
-    getAPI(`${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=${recruitmentStatus.value}`),
+  const { data, isLoading, error } = useQuery(
+    ['parties', recruitmentStatus.value],
+    () =>
+      getAPI(
+        `${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=${recruitmentStatus.value}`,
+      ),
+    {
+      onSuccess: response => {
+        if (recruitmentStatus.value === 0) {
+          setTotalElements(response?.data?.data?.totalElements);
+        }
+      },
+    },
   );
 
   useEffect(() => {
     queryClient.invalidateQueries('parties');
   }, [queryClient, recruitmentStatus]);
-
-  const handleSelectChange = e => {
-    const newRecruitmentStatus = e.target.value;
-    if (recruitmentStatus !== newRecruitmentStatus) {
-      setRecruitmentStatus(newRecruitmentStatus);
-    }
-  };
-
-  if (isLoading) {
-    return <div>로딩중입니다.</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
 
   const partyList = data?.data.data.partyList;
 
@@ -52,30 +49,30 @@ const PartyList = () => {
     setRecruitmentStatus(option);
   };
 
-  const { Option } = components;
-  const IconOption = props => (
-    <Option {...props}>
-      <img src={require('./' + props.data.icon)} style={{ width: 36 }} alt={props.data.label} />
-      {props.data.label}
-    </Option>
-  );
-
   const styles = {
-    control: base => ({
-      ...base,
-    }),
     menu: base => ({
       ...base,
-      fontFamily: 'Times New Roman',
+      fontFamily: 'Pretendard',
     }),
-    control: styles => ({
-      ...styles,
-      backgroundColor: 'white',
-      width: '80px',
+    control: base => ({
+      ...base,
+      width: 'auto',
+      minHeight: '32px',
+      fontStyle: 'normal',
+      fontWeight: '400',
+      fontSize: '14px',
+      padding: '0',
       border: '1px solid #D0D5DD',
+      '&:focus': {
+        border: '1px solid red',
+      },
+      '&::after': {
+        transform: 'rotate(…)',
+        border: "'1xp solid var(--color-primary-500)'",
+      },
       borderRadius: '999px',
     }),
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+    option: (styles, { data, isFocused }) => {
       return {
         ...styles,
         backgroundColor: isFocused ? 'var(--color-primary-500)' : 'var(--color-white)',
@@ -88,25 +85,45 @@ const PartyList = () => {
         '&:before': {
           display: 'none',
         },
+        fontSize: '14px',
       };
     },
+    indicatorSeparator: base => ({
+      ...base,
+      display: 'none',
+      padding: '0px',
+    }),
+  };
+  const CaretDownIcon = () => {
+    return <ArrowBottom icon="caret-down" />;
+  };
+  const DropdownIndicator = props => {
+    return (
+      <components.DropdownIndicator {...props}>
+        <CaretDownIcon />
+      </components.DropdownIndicator>
+    );
   };
 
-  console.log(partyList);
   return (
     <Wrapper>
-      {partyList.length > 0 ? (
+      {isLoading ? (
+        <Loading />
+      ) : totalElements > 0 ? (
         <>
           <PartySection>
             <PartyHeader>
               <Title>현재 진행중인 모임</Title>
-              <StSelect
-                placeholder={RECRUITMENT_STATUS_SELECT[0].label}
-                options={RECRUITMENT_STATUS_SELECT}
-                onChange={option => handleSelected(option)}
-                value={recruitmentStatus}
-                styles={styles}
-              />
+              {
+                <Select
+                  placeholder={RECRUITMENT_STATUS_SELECT[0].label}
+                  options={RECRUITMENT_STATUS_SELECT}
+                  onChange={option => handleSelected(option)}
+                  value={recruitmentStatus}
+                  components={{ DropdownIndicator }}
+                  styles={styles}
+                />
+              }
             </PartyHeader>
             <ListWrapper>
               <List>
@@ -164,48 +181,6 @@ const Title = styled.h4`
   white-space: nowrap;
 `;
 
-const StSelect = styled(Select)`
-  width: 80px;
-  border-radius: 999px;
-  background: yellow;
-  font-size: 12px;
-  &:hover: {
-    border: '2px solid blue';
-    appearance: none;
-    -webkit-appearance: none; //(사파리, 크롬)
-    -moz-appearance: none; //(파이어폭스)
-  }
-  &:option: {
-    background: yellow;
-  }
-`;
-
-// const StSelect = styled(Select)`;
-// display: flex;
-// flex-direction: row;
-// justify-content: flex-end;
-// align-items: flex-start;
-// padding: 8px 16px;
-// gap: 4px;
-
-// width: 80px;
-// height: 32px;
-
-// /* Gray/300 */
-
-// border: 1px solid #d0d5dd;
-// border-radius: 999px;
-// `;
-
-const SelectElement = styled.li`
-  width: 80px;
-  height: 32px;
-  border: 1px solid #d0d5dd;
-  border-radius: 999px;
-`;
-
-const OptionElement = styled.option``;
-
 /* List */
 const ListWrapper = styled.div`
   display: flex;
@@ -225,6 +200,7 @@ const ListBottomSection = styled.section`
   gap: 6px;
   padding-bottom: 120px; // 무한스크롤 구현 후 제거
 `;
+
 /* BottomInfoSection */
 const BottomInfoSection = styled.section`
   display: flex;
@@ -266,4 +242,3 @@ const InfoImg = styled.img`
 `;
 
 export default PartyList;
-//

@@ -1,8 +1,8 @@
 // 기능 import
 import { React, useEffect, useState, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import queryString from 'query-string';
-import { PATH_URL } from '../../shared/constants';
+import { PARTIES_URL, PATH_URL } from '../../shared/constants';
 import * as StompJs from '@stomp/stompjs';
 import styled from 'styled-components';
 import SockJS from 'sockjs-client';
@@ -16,8 +16,11 @@ import { ReactComponent as NavigateExitIcon } from '../../assets/chating/Navigat
 import { ReactComponent as PartHostIcon } from '../../assets/chating/hosticon.svg';
 import { ReactComponent as ProfileDefaultImg } from '../../assets/common/profiledefaultimg.svg';
 import { formmatedDate } from '../../shared/formattedDate';
+import { deleteAPI, postAPI } from '../../api/api';
 
 export const ChatRoomPage = () => {
+  const navigate = useNavigate();
+
   const Access_key = `Bearer ${Cookies.get('Access_key')}`;
   let client = useRef({});
   //메뉴 모달
@@ -27,7 +30,10 @@ export const ChatRoomPage = () => {
 
   const location = useLocation();
   const queryObj = queryString.parse(location.search); // 문자열의 쿼리스트링을 Object로 변환
-  const { chatRoomUniqueId, chatRoomId } = queryObj;
+  const { chatRoomUniqueId, chatRoomId, hostId } = queryObj;
+
+  console.log('chatRoomId ::', chatRoomId);
+  console.log('hostId ::', hostId);
 
   // 채팅방 입장시 안내 문구 기능
   const [showModal, setShowModal] = useState(false);
@@ -160,18 +166,12 @@ export const ChatRoomPage = () => {
       //사용자 유니크 ID, 이미지 URL 추가 필요
       const data = JSON.parse(response.body);
 
-      setChatMessageList(chatList => [
-        ...chatList,
-        { ...data.data, memberProfileImage: data.data.memberProfileImage || ProfileDefaultImg },
-      ]);
+      setChatMessageList(chatList => [...chatList, data.data]);
+      // setChatMessageList(chatList => [
+      //   ...chatList,
+      //   { ...data.data, memberProfileImage: data.data.memberProfileImage || ProfileDefaultImg },
+      // ]);
     });
-
-    // client.current.publish({
-    //   destination: `/pub/chat/message/${chatRoomUniqueId}`,
-    //   body: JSON.stringify({
-    //     readStatus: 'READ',
-    //   }),
-    // });
   };
 
   const publishSend = () => {
@@ -233,6 +233,22 @@ export const ChatRoomPage = () => {
 
   console.log('chatMessageList ::', chatMessageList);
 
+  // 채팅방 나가기 기능 (모임 삭제 / 모임 취소)
+  const ExitButtonHandler = () => {
+    console.log('ExitButtonHandler - hostId :: ', hostId);
+    console.log('ExitButtonHandler - chatRoomId :: ', chatRoomId);
+    console.log('localStorage.memberUniqueId ::', localStorage.memberUniqueId);
+    if (hostId === localStorage.memberUniqueId) {
+      deleteAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${chatRoomId}`);
+      alert('모임이 삭제되었습니다.');
+      navigate(`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`);
+    } else {
+      postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${chatRoomId}`);
+      alert('모임이 취소되었습니다.');
+      navigate(`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`);
+    }
+  };
+
   return (
     <>
       <div
@@ -263,7 +279,7 @@ export const ChatRoomPage = () => {
             <Contents>
               <ParticipantDiv>ㅇㅇㅇ님이 참여했습니다.</ParticipantDiv>
               {chatMessageList?.map((data, index) => {
-                if (data.memberId == localStorage.memberId) {
+                if (data.memberUniqueId === localStorage.memberUniqueId) {
                   return (
                     <MyChatContainer key={index}>
                       <MyChatDiv>
@@ -296,7 +312,7 @@ export const ChatRoomPage = () => {
                               <ProfileDefault />
                             )}
                           </OtherProfile>
-                          {data.host ? (
+                          {data.memberUniqueId === hostId ? (
                             <OtherHostIcon>
                               <PartHostIcon />
                             </OtherHostIcon>
@@ -406,7 +422,13 @@ export const ChatRoomPage = () => {
                 >
                   머무르기
                 </ExitCancel>
-                <EixtBtn>나가기</EixtBtn>
+                <EixtBtn
+                  onClick={() => {
+                    ExitButtonHandler();
+                  }}
+                >
+                  나가기
+                </EixtBtn>
               </ExitBtnDiv>
             </ExitModal>
           </ExitContainer>
