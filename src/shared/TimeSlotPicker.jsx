@@ -4,7 +4,7 @@ import { formmatedDate } from './formattedDate';
 
 const TimeSlotPicker = ({ selectedTime, onTimeSelect, isEdit, selectedDate }) => {
   const now = new Date();
-  const startTime = 13;
+  const startTime = 16;
   const endTime = 24;
   const interval = 30;
 

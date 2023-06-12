@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 export default function Loading() {
   return (
     <LoadingOverlay>
-      <BeatLoader color="#F63D68" speedMultiplier={0.8} />
+      <BeatLoader color="#F63D68" speedMultiplier={1} />
     </LoadingOverlay>
   );
 }
@@ -19,6 +19,6 @@ const LoadingOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
   z-index: 50;
 `;

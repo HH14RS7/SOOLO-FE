@@ -55,7 +55,6 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
       return [];
     }
   };
-  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
 
   const { data: partyList, isLoading } = useQuery(
     ['parties', latitude, longitude, searchPlace],
