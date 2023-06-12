@@ -16,27 +16,22 @@ const MyPartyItem = ({ party }) => {
   const formmatedPartyDate = formmatedDate(party.partyDate, 'MM.DD (ddd)');
   const partyTime = formmatedDate(party.partyDate, 'a h:mm');
 
-  const gradiant1 = '/img/gradiant-black-op20.png';
-  const gradiant2 = '/img/gradiant-op20.png';
-
   return (
     <>
       <Link to={`${PATH_URL.PARTY_DETAIL}/${partyId}`}>
         <PlaceWrapper>
-          <ImageWrapper>
+          <ImageDayInfo>
             <PlaceImage src={party.imageUrl} imgurl={imageUrl} alt="placeImage" />
-            <Gradiant1 src={gradiant1} alt="gradiant1" />
-            <Gradiant2 src={gradiant2} alt="gradiant2" />
-          </ImageWrapper>
-          <DateInfo>
-            <DdayTag isdday={isdday ? 1 : 0}>
-              <Dday>D-{isdday ? 0 : dDay}</Dday>
-            </DdayTag>
-            <PartyDateInfo>
-              <PartyDate>{formmatedPartyDate}</PartyDate> <DotIcon />
-              <PartyDate> {partyTime} </PartyDate>
-            </PartyDateInfo>
-          </DateInfo>
+            <DateInfo>
+              <DdayTag isdday={isdday ? 1 : 0}>
+                <Dday>D-{isdday ? 0 : dDay}</Dday>
+              </DdayTag>
+              <PartyDateInfo>
+                <PartyDate>{formmatedPartyDate}</PartyDate> <DotIcon />
+                <PartyDate> {partyTime} </PartyDate>
+              </PartyDateInfo>
+            </DateInfo>
+          </ImageDayInfo>
           <DetailInfo>
             <Title>{party.title}</Title>
             <PartyPlace>
@@ -64,36 +59,21 @@ const PlaceWrapper = styled.div`
   position: relative;
   border-radius: 16px;
   border: 1px solid var(--color-gray-100);
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
     url(${props => props.imgurl});
 `;
 
-const ImageWrapper = styled.div`
-  width: 100%;
+/* DateInfo */
+const ImageDayInfo = styled.div`
+  // width: 100%;
   height: 74px;
-  position: relative;
 `;
 
 const PlaceImage = styled.img`
   width: 100%;
-  height: 100%;
+  height: 74px;
   object-fit: cover;
-  position: absolute;
-`;
-
-const Gradiant1 = styled.img`
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-`;
-
-const Gradiant2 = styled.img`
-  top: 0px;
-  // left: 0px;
-  width: 100%;
-  height: 100%;
-  position: absolute;
+  border-radius: 1rem;
 `;
 
 const DateInfo = styled.div`
