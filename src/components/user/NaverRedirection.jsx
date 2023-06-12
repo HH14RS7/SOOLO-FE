@@ -25,7 +25,7 @@ const NaverRedirection = () => {
       const refreshkey = r.headers.get('refresh_key').split(' ')[1];
       Cookies.set('Refresh_key', refreshkey);
 
-      alert(r.data.msg);
+      // alert(r.data.msg);
       navigate('/');
     });
   }, [code, navigate]);

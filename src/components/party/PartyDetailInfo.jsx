@@ -328,6 +328,7 @@ const Contents = styled.div`
 const PartyDetailImg = styled.div`
   width: 360px;
   height: 260px;
+  margin-top: 52px;
 `;
 
 // 파티 관련 스타일

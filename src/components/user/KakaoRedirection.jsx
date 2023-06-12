@@ -38,7 +38,7 @@ const KakaoRedirection = () => {
       // Cookies.set('Access_key', accessKey, { expires: expirationTime });
       // Cookies.set('Refresh_key', refreshkey, { expires: refreshTokenExpirationTime });
 
-      alert(r.data.msg);
+      // alert(r.data.msg);
       navigate('/');
     });
   }, [code, navigate]);

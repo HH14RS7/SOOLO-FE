@@ -9,7 +9,7 @@ import { ReactComponent as Mypageicon } from '../../assets/footer/mypage.svg';
 import { ReactComponent as Addbtn } from '../../assets/footer/addbtn.svg';
 
 const Footer = () => {
-  const [activeTitle, setActiveTitle] = useState(0);
+  const [activeTitle, setActiveTitle] = useState('0');
 
   const handleTitleClick = index => {
     setActiveTitle(index);
