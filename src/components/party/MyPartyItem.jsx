@@ -16,6 +16,7 @@ const MyPartyItem = ({ party }) => {
   const formmatedPartyDate = formmatedDate(party.partyDate, 'MM.DD (ddd)');
   const partyTime = formmatedDate(party.partyDate, 'a h:mm');
 
+  const defaultImg = 'img/default-image.png';
   const gradiant1 = '/img/gradiant-black-op20.png';
   const gradiant2 = '/img/gradiant-op20.png';
 
@@ -24,7 +25,7 @@ const MyPartyItem = ({ party }) => {
       <Link to={`${PATH_URL.PARTY_DETAIL}/${partyId}`}>
         <PlaceWrapper>
           <ImageWrapper>
-            <PlaceImage src={party.imageUrl} imgurl={imageUrl} alt="placeImage" />
+            <PlaceImage src={party.imageUrl || defaultImg} alt="placeImage" />
             <Gradiant1 src={gradiant1} alt="gradiant1" />
             <Gradiant2 src={gradiant2} alt="gradiant2" />
           </ImageWrapper>
@@ -69,7 +70,7 @@ const PlaceWrapper = styled.div`
 
 const ImageWrapper = styled.div`
   width: 100%;
-  height: 74px;
+  height: 100%;
   position: relative;
 `;
 
