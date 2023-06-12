@@ -7,20 +7,6 @@ import { Navigation, Pagination, Scrollbar } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-
-{
-  /* <Swiper
-modules={[Navigation, Pagination]}
-spaceBetween={-100}
-// pagination={{ clickable: true }}
-// scrollbar={{ draggable: true }}/
-observer={true}
-observeParents={true}
-slidesPerView={1}
-slidesOffsetAfter={-96}
-slidesOffsetBefore={8}
-> */
-}
 export default function SelectedPartyList({ partyList }) {
   return (
     <>
@@ -31,7 +17,6 @@ export default function SelectedPartyList({ partyList }) {
           slidesPerView={1}
           slidesOffsetAfter={-8}
           slidesOffsetBefore={0}
-          // navigation
         >
           {partyList?.map(party => (
             <SwiperSlide key={party.partyId}>
