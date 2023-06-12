@@ -17,6 +17,7 @@ import { ReactComponent as Add } from '../../assets/map/add.svg';
 import { ReactComponent as Subtract } from '../../assets/map/subtract.svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Scrollbar } from 'swiper';
+import Loading from '../Loading';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -36,17 +37,15 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   const { regionName, getRegionName } = useGetRegionName();
   const { stationName, getStationInfo } = useGetNearbyStation();
   const [loading, setLoading] = useState(false);
-  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  const [isOpen, setIsOpen] = useState(false); // 바텀시트 열림/닫힘 상태를 관리하는 state
 
-  const radius = 2.5;
-  // const radius = searchPlace.endsWith('역') ? 2.5 : 5;
   const fetchPartyList = async (latitude, longitude, searchPlace) => {
     let url = '';
     try {
       if (!searchPlace) {
         url = `${PARTIES_URL.PARTIES_LIST}?page=0&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=2.5`;
       } else {
-        url = `${PARTIES_URL.PARTIES_LIST_SEARCH}?page=0&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=30&keyword=${searchPlace}`;
+        url = `${PARTIES_URL.PARTIES_LIST_SEARCH}?page=0&recruitmentStatus=0&latitude=${latitude}&longitude=${longitude}&radius=500&keyword=${searchPlace}`;
       }
 
       const response = await getAPI(url);
@@ -62,68 +61,54 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
     () => fetchPartyList(latitude, longitude, searchPlace),
   );
 
+  // 위치 정보 차단 해제 후에 자동으로 위치 정보를 다시 가져오는 함수
+  const handleLocationPermissionChange = () => {
+    // 위치 정보 차단이 해제되면 handleCurrentLocation 함수를 호출합니다.
+    handleCurrentLocation();
+  };
+
+  // 위치 정보 차단 해제 이벤트를 감지하는 이벤트 핸들러 설정
+  navigator.permissions.query({ name: 'geolocation' }).then(result => {
+    result.onchange = handleLocationPermissionChange;
+  });
+
   // 현재위치 내 모임 조회
+
   const handleCurrentLocation = useCallback(() => {
     setLoading(true);
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          const lat = position.coords.latitude;
-          const lon = position.coords.longitude;
-          setLatitude(lat);
-          setLongitude(lon);
-          // getRegionName(lat, lon);
-          // getStationInfo(lat, lon);
-          setLoading(false);
-          onPlaceChange('');
-          if (mapRef.current) {
-            const center = new kakao.maps.LatLng(lat, lon);
-            mapRef.current.setCenter(center);
-          }
-        },
-        error => {
-          setLoading(false);
-          alert('위치정보 수집에 동의해주세요');
-          console.error(error);
-        },
-      );
+    if (location.loaded) {
+      const lat = location.coordinates.latitude;
+      const lon = location.coordinates.longitude;
+      setLatitude(lat);
+      setLongitude(lon);
+      getRegionName(lat, lon);
+      getStationInfo(lat, lon);
+      setSelectedParty(null);
+      onPlaceChange('');
+      if (mapRef.current) {
+        const center = new kakao.maps.LatLng(lat, lon);
+        mapRef.current.setCenter(center);
+        mapRef.current.setLevel(6);
+        mapRef.current.panTo(center);
+      }
+      setLoading(false);
     } else {
-      alert('이 브라우저는 Geolocation을 지원하지 않습니다.');
+      if (error) {
+        setLoading(false);
+        alert(error.message);
+      }
     }
-  }, []);
 
-  // const handleCurrentLocation = useCallback(() => {
-  //   setLoading(true);
-
-  //   if (location.loaded) {
-  //     const lat = location.coordinates.latitude;
-  //     const lon = location.coordinates.longitude;
-  //     setLatitude(lat);
-  //     setLongitude(lon);
-  //     getRegionName(lat, lon);
-  //     getStationInfo(lat, lon);
-  //     // onPlaceChange('');
-  //     console.log(latitude);
-  //     if (mapRef.current) {
-  //       const center = new kakao.maps.LatLng(lat, lon);
-  //       mapRef.current.setCenter(center);
-  //     }
-  //   } else {
-  //     if (error) {
-  //       alert(error.message);
-  //       setLoading(false);
-  //     }
-  //   }
-  // }, [location]);
+    setLoading(false);
+  }, [location]);
 
   // 모임 리스트 마커 찍기
   const drawMarkers = useCallback(() => {
     const container = document.getElementById('map');
     const options = {
       center: new kakao.maps.LatLng(latitude, longitude),
-      level: 6,
-      radius: 5000,
+      level: 5,
+      radius: 2000,
     };
 
     const map = new kakao.maps.Map(container, options);
@@ -156,6 +141,12 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
           image: markerImage,
           clickable: true,
         });
+        const bounds = new kakao.maps.LatLngBounds();
+        bounds.extend(position);
+        bounds.extend(new kakao.maps.LatLng(position.getLat() - 0.001, position.getLng() - 0.001));
+        // mapRef.current.setLevel(5);
+        map.setBounds(bounds);
+        marker.setMap(map);
 
         // 중복 마커 체크
         const isDuplicate = markerList.some(
@@ -203,8 +194,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
 
           if (selectedParties.length > 0) {
             setSelectedParty(selectedParties);
-            map.panTo(position);
-            marker.setMap(map);
+            // 마커 위치 조정
           }
           if (customOverlayRef.current) {
             customOverlay.setMap(null);
@@ -303,12 +293,12 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
         </CurrentButton>
       </ButtonWrapper>
       {isLoading ? (
-        <Loading>로딩중입니다</Loading>
+        <Loading />
       ) : (
         <div>
           {/* 지도 현재위치 로딩중 */}
           {loading ? (
-            <Loading>현재위치를 가져오는 중입니다.</Loading>
+            <Loading />
           ) : (
             <div>
               {selectedParty ? (
@@ -332,6 +322,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
 const Wrap = styled.div`
   height: 100%;
   width: 360px;
+  // width: 100%;
   margin: 0 auto;
 `;
 
@@ -339,17 +330,16 @@ const Map = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 360px;
-  min-height: 320px;
-  margin: 0 auto;
-  // height: 100%; // footer 임시용
+  height: 90%;
 `;
 
 const ButtonWrapper = styled.div`
+  position: absolute;
+  position: relative;
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 0 auto;
+  z-index: 15;
+  bottom: 260px;
 `;
 
 const CurrentButton = styled.button`
@@ -359,9 +349,8 @@ const CurrentButton = styled.button`
   background: var(--color-gray-800);
   padding: 1rem 1.5rem;
   border-radius: 0.75rem;
-  margin-top: -15rem;
-  z-index: 5;
   gap: 0.5rem;
+  top: 430px;
 `;
 
 const LocationIcon = styled(Location)`
@@ -409,7 +398,7 @@ const ZoomControlContainer = styled.div`
   position: absolute;
   width: 64px;
   height: 120px;
-  left: 296px;
+  right: 296px;
   top: 72px;
 
   position: absolute;
@@ -443,8 +432,8 @@ const ZoomButton = styled.span`
 `;
 
 // 로딩바 임시
-const Loading = styled.div`
-  margin: 0 auto;
-  width: 360px;
-`;
+// const Loading = styled.div`
+//   margin: 0 auto;
+//   width: 360px;
+// `;
 export default PartyMapContainer;

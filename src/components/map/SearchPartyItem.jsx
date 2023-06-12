@@ -109,6 +109,7 @@ const PlaceImage = styled.img`
   border-radius: 1rem;
   align-items: center;
   isolation: isolate;
+  object-fit: cover;
 `;
 
 const DetailPlacePeople = styled.div`

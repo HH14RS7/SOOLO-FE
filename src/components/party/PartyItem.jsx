@@ -86,6 +86,7 @@ const PlaceImage = styled.img`
   width: 74px;
   height: 74px;
   border-radius: 16px;
+  object-fit: cover;
 `;
 
 const ImageDayInfo = styled.div`

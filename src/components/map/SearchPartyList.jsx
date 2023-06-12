@@ -48,8 +48,6 @@ export default function SearchPartyList({ partyList, regionName, stationName, se
           <Link to={`${PATH_URL.PARTY_PLACE_CREATE}`}>
             <Button>
               <ButtonTitle>모임 만들기</ButtonTitle>
-              {/* ’{displayStationName ? displayStationName.trim().split(' ')[0] : displayRegionName}
-              ’에서 모임 만들기 */}
               <FireIcon />
             </Button>
           </Link>
@@ -62,15 +60,14 @@ export default function SearchPartyList({ partyList, regionName, stationName, se
 const Wrapper = styled.div`
   width: 360px;
   margin: 0 auto;
-  // width: 100%;
   height: 100%;
   border-radius: 16px 16px 0px 0px;
   background-color: var(--color-gray-25);
   border: 1px solid var(--color-gray-300);
   border-bottom: none;
-  // position: relative;
-  // top: -250px;
-  // z-index: 99;
+  z-index: 5;
+  position: relative;
+  bottom: 250px;
 `;
 
 const Header = styled.header`
@@ -93,7 +90,6 @@ const Badge = styled.div`
   justify-content: center;
   background: var(--color-gray-100);
   border-radius: 999px;
-  // width: auto;
 `;
 
 const BadgeCount = styled.h4`
@@ -116,10 +112,10 @@ const List = styled.ul`
 const ListInfo = styled.div`
   width: 100%;
   display: flex;
+  height: 150px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem 0px 0px;
   gap: 0.5rem;
 `;
 

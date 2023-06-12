@@ -20,11 +20,13 @@ import PartyPlaceCreate from '../pages/PartyPlaceCreate';
 import UserUpdatePage from '../pages/UserUpdatePage';
 import { AcountDetails } from '../components/user/AcountDetails';
 import MyAccountDetail from '../pages/MyAccountDetail';
+import ScrollToTop from '../shared/ScrollToTop';
 
 const Router = () => {
   return (
     <BrowserRouter>
       <Layout>
+        <ScrollToTop />
         <Routes>
           <Route path={PATH_URL.MAIN} element={<Main />} />
           <Route path={PATH_URL.LOGIN} element={<Login />} />
