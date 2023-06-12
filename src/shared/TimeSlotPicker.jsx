@@ -1,10 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import { formmatedDate } from './formattedDate';
 
-const TimeSlotPicker = ({ selectedTime, onTimeSelect, isEdit }) => {
-  const startTime = 16;
+const TimeSlotPicker = ({ selectedTime, onTimeSelect, isEdit, selectedDate }) => {
+  const now = new Date();
+  const startTime = 13;
   const endTime = 24;
   const interval = 30;
+
+  const isDatePassed = formmatedDate(now, 'YYYYMMDD') >= formmatedDate(selectedDate, 'YYYYMMDD');
 
   const handleTimeSelect = time => {
     onTimeSelect(time);
@@ -12,19 +16,14 @@ const TimeSlotPicker = ({ selectedTime, onTimeSelect, isEdit }) => {
 
   const renderTimeBoxes = () => {
     return Array.from({ length: (endTime - startTime) * (60 / interval) }, (_, index) => {
-      const now = new Date();
-      const currentHour = now.getHours();
-      const currentMinute = now.getMinutes();
-
       const hour = Math.floor(index / (60 / interval)) + startTime;
       const minute = (index % (60 / interval)) * interval;
       const time = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
 
       const isSelected = selectedTime === time;
-      // 수정 모드에서 선택된 시간일 때 버튼 스타일 변경
       const isButtonActive = isEdit && selectedTime === time;
-      // 지난 시간 체크
-      const isTimePassed = hour < currentHour || (hour === currentHour && minute < currentMinute);
+
+      const isTimePassed = isDatePassed && formmatedDate(now, 'HH:mm') >= time;
 
       return (
         <TimeBox
@@ -62,7 +61,6 @@ const TimeBox = styled.div`
   cursor: ${({ ispassed }) => (ispassed ? 'not-allowed' : 'pointer')};
   background-color: ${({ isselected, isactive, ispassed }) =>
     isselected ? '#F63D68' : isactive ? '#F63D68' : ispassed ? '#E4E7EC' : 'ffffff'};
-  // opacity: ${({ ispassed }) => (ispassed ? 0.5 : 1)};
   pointer-events: ${({ ispassed }) => (ispassed ? 'none' : 'auto')};
 `;
 

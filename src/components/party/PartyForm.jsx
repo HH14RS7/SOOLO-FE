@@ -24,18 +24,16 @@ const CreateForm = ({ party }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(null);
   const [previewImage, setPreviewImage] = useState(party.imgUrl || null);
-  const isEdit = !!party.partyId;
 
+  const isEdit = !!party.partyId;
   const initialTotalCount = isEdit ? party.totalCount : 2;
   const [totalCount, setTotalCount] = useState(initialTotalCount);
 
+  const imgRef = useRef();
   const locationIcon = '/img/map-location.png';
   const addIcon = '/img/add.png';
   const minusIcon = '/img/minus.png';
-  const imgRef = useRef();
-  // const noImg = '/img/no-img.jpg';
   const defaultImg = '/img/default-image.png';
-  const uploadImg = '/img/upload-image.png';
 
   const [img, setImg] = useState(defaultImg);
 
@@ -47,7 +45,7 @@ const CreateForm = ({ party }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
     reset,
     watch,
   } = useForm({
@@ -337,6 +335,7 @@ const CreateForm = ({ party }) => {
                 <TimeHeader>오후</TimeHeader>
                 <TimeSlotPicker
                   selectedTime={selectedTime}
+                  selectedDate={selectedDate}
                   onTimeSelect={handleTimeSelect}
                   isEdit={isEdit}
                 />
