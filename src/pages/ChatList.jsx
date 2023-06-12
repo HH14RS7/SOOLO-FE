@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 // 이미지 import
 import { ReactComponent as PeopleIcon } from '../assets/chating/membericon.svg';
 import { ReactComponent as MenuIcon } from '../assets/chating/menuicons.svg';
+import { ReactComponent as PartyDefaultImg } from '../assets/common/partydefaultimg.svg';
 import { PARTIES_URL } from '../shared/constants';
 
 export const ChatList = () => {
@@ -115,9 +116,11 @@ export const ChatList = () => {
     if (hostId === localStorage.memberUniqueId) {
       deleteAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${roomId}`);
       alert('모임이 삭제되었습니다.');
+      navigate(`${PATH_URL.MAIN}`);
     } else {
       postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${roomId}`);
-      alert('모임이 취소되었습니다');
+      alert('모임이 취소되었습니다.');
+      navigate(`${PATH_URL.MAIN}`);
     }
   };
 
@@ -161,20 +164,24 @@ export const ChatList = () => {
                     <ChatRoom key={index}>
                       <ChatRoomBox>
                         <ChatRoomImg>
-                          <img
-                            src={data.imageUrl}
-                            alt="chatprofile"
-                            style={{
-                              width: '100%',
-                              height: '100%',
-                              borderRadius: '16px',
-                            }}
-                          />
+                          {data?.imageUrl ? (
+                            <img
+                              src={data.imageUrl}
+                              alt="chatprofile"
+                              style={{
+                                width: '100%',
+                                height: '100%',
+                                borderRadius: '16px',
+                              }}
+                            />
+                          ) : (
+                            <PartyDefault />
+                          )}
                         </ChatRoomImg>
                         <ChatRoomContainer>
                           <ChatRoomContents>
                             <Link
-                              to={`${PATH_URL.PARTY_CHATROOM}?chatRoomUniqueId=${data.chatRoomUniqueId}&chatRoomId=${data.chatRoomId}`}
+                              to={`${PATH_URL.PARTY_CHATROOM}?chatRoomUniqueId=${data.chatRoomUniqueId}&chatRoomId=${data.chatRoomId}&hostId=${data.host}`}
                             >
                               <ChatRoomInfo>
                                 <ChatRoomName>{data.title}</ChatRoomName>
@@ -299,6 +306,12 @@ const Container = styled.div`
   width: 360px;
   margin: 0 auto;
   background: #ffffff;
+`;
+
+const PartyDefault = styled(PartyDefaultImg)`
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
 `;
 
 // TopBar 스타일
