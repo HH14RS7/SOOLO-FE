@@ -24,29 +24,35 @@ const MyPartyList = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+
   return (
     <>
-      <Title>신청한 모임</Title>
-      <Swiper
-        modules={[Navigation, Pagination]}
-        spaceBetween={150}
-        slidesPerView={2}
-        // navigation
-        pagination={{ clickable: true }}
-        scrollbar={{ draggable: true }}
-      >
-        {partyList?.length > 0 && (
-          <Wrapper>
-            <PartyList>
-              {partyList?.map(party => (
-                <SwiperSlide key={party.partyId}>
-                  <MyPartyItem key={party.partyId} party={party} />
-                </SwiperSlide>
-              ))}
-            </PartyList>
-          </Wrapper>
-        )}
-      </Swiper>
+      {partyList?.length > 0 && (
+        <>
+          <Title>신청한 모임</Title>
+          <Swiper
+            modules={[Navigation, Pagination]}
+            spaceBetween={-100}
+            // pagination={{ clickable: true }}
+            // scrollbar={{ draggable: true }}/
+            observer={true}
+            observeParents={true}
+            slidesPerView={1}
+            slidesOffsetAfter={-96}
+            slidesOffsetBefore={8}
+          >
+            <Wrapper>
+              <PartyList>
+                {partyList.map(party => (
+                  <SwiperSlide key={party.partyId}>
+                    <MyPartyItem key={party.partyId} party={party} />
+                  </SwiperSlide>
+                ))}
+              </PartyList>
+            </Wrapper>
+          </Swiper>
+        </>
+      )}
     </>
   );
 };
@@ -63,17 +69,10 @@ const Title = styled.h4`
   padding: 0 0 1rem 1rem;
 `;
 
-const StyledSwiper = styled(Swiper)`
-  height: 146px;
-`;
-
 const PartyList = styled.div`
   margin-top: 1rem;
-  // padding: 0 1rem;
   display: flex;
   align-items: flex-start;
-  // gap: 1rem;
-  width: 500px;
   height: 146px;
 `;
 

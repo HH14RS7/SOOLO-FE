@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import SearchPlaceItem from './SearchPlaceItem';
 import { styled } from 'styled-components';
+import { ReactComponent as SearchInfo } from '../../assets/map/search-info.svg';
 
 export default function SearchPlcaeList({ searchPlace, currentLocation, isChecked }) {
   const [placeList, setPlaceList] = useState([]);
@@ -10,7 +11,6 @@ export default function SearchPlcaeList({ searchPlace, currentLocation, isChecke
   const FOOD_CATEGORY_CODE = 'FD6'; // 음식점 카테고리 코드
   const ps = new kakao.maps.services.Places();
   const containerRef = useRef(null);
-  const defaultImg = '/img/default-image.png';
 
   // 키워드 검색 함수
   const placesSearchCB = useCallback((data, status) => {
@@ -80,11 +80,12 @@ export default function SearchPlcaeList({ searchPlace, currentLocation, isChecke
     <div>
       <ListWrapper ref={containerRef}>
         {placeList.length > 0 ? (
-          placeList.map(place => <SearchPlaceItem key={place.id} place={place} />)
+          placeList.map((place, index) => <SearchPlaceItem key={index} place={place} />)
         ) : (
           <DefaultContainer>
-            <DefaultImage src={defaultImg} alt="defaultImg" />
-            <h5>장소를 검색해주세요!</h5>
+            {/* <DefaultImage src={searchInfoImg} alt="noSearchImg" /> */}
+            <SearchInfoIcon />
+            <InfoMsg>장소를 검색해주세요!</InfoMsg>
           </DefaultContainer>
         )}
         {isLoading && <div>로딩중입니다</div>}
@@ -111,7 +112,11 @@ const DefaultContainer = styled.div`
   height: calc(100vh - 270px);
 `;
 
-const DefaultImage = styled.img`
-  width: 50px;
-  height: 50px;
+const SearchInfoIcon = styled(SearchInfo)`
+  width: 48px;
+  height: 48px;
+`;
+
+const InfoMsg = styled.h4`
+  color: var(--color-gray-700);
 `;

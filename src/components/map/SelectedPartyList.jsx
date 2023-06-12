@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import SelectedPartyItem from './SelectedPartyItem';
 import { styled } from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -7,18 +7,16 @@ import { Navigation, Pagination, Scrollbar } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-
 export default function SelectedPartyList({ partyList }) {
   return (
     <>
       <ListWrapper>
         <Swiper
           modules={[Navigation, Pagination]}
-          spaceBetween={350}
-          slidesPerView={2}
-          // navigation
-          pagination={{ clickable: true }}
-          scrollbar={{ draggable: true }}
+          spaceBetween={-24}
+          slidesPerView={1}
+          slidesOffsetAfter={-8}
+          slidesOffsetBefore={0}
         >
           {partyList?.map(party => (
             <SwiperSlide key={party.partyId}>
@@ -33,12 +31,10 @@ export default function SelectedPartyList({ partyList }) {
 const ListWrapper = styled.ul`
   width: 360px;
   height: 170px;
-  margin: 0 auto;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 0.5rem;
   position: relative;
   bottom: 250px;
-  z-index: 30;
+  z-index: 10;
 `;

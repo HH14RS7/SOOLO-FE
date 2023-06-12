@@ -3,6 +3,7 @@ import SearchLocation from '../components/map/SearchLocation';
 import SearchPlaceList from '../components/map/SearchPlaceList';
 import useGeolocation from '../hooks/useGeolocation';
 import { styled } from 'styled-components';
+import { Toggle, ToggleContainer } from '../elements/Toggle';
 
 const PartyPlaceCreate = () => {
   const [place, setPlace] = useState('');
@@ -10,6 +11,7 @@ const PartyPlaceCreate = () => {
   const { location, error } = useGeolocation();
   const [currentLocation, setCurrentLocation] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isOn, setisOn] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,9 +34,9 @@ const PartyPlaceCreate = () => {
     setPlace(value);
   };
 
-  const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-  };
+  // const handleCheckboxChange = () => {
+  //   setIsChecked(!isChecked);
+  // };
 
   return (
     <Wrapper>
@@ -46,12 +48,13 @@ const PartyPlaceCreate = () => {
         <PlaceLabel htmlFor="place">장소 목록</PlaceLabel>
         <ToggleWrapper>
           <ToggleLabel htmlFor="location">현 위치 중심</ToggleLabel>
-          <input
+          <Toggle isOn={isOn} setIson={!isOn} />
+          {/* <input
             id="location"
             type="checkbox"
             checked={isChecked}
             onChange={handleCheckboxChange}
-          />
+          /> */}
         </ToggleWrapper>
       </PlaceInfo>
       <Bar />
@@ -90,12 +93,12 @@ const Label = styled.label`
 
 const PlaceInfo = styled.div`
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0px 1rem;
-  gap: 126px;
+  flex-direction: row;
   height: 40px;
+  gap: 126px;
+  padding: 0 16px;
   margin-top: -1rem;
 `;
 
@@ -113,7 +116,6 @@ const ToggleWrapper = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  padding: 0.5rem 0;
   gap: 0.5rem;
 `;
 

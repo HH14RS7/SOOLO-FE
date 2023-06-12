@@ -8,7 +8,7 @@ export const dDayConvertor = data => {
 
   if (hoursDiff <= 24) {
     const daysDiff = moment.duration(targetDate.diff(currentDate)).asDays();
-    if (daysDiff < 0) {
+    if (daysDiff < 1) {
       dDay = 0;
     } else {
       dDay = Math.ceil(daysDiff);

@@ -4,7 +4,7 @@ import { getAPI } from '../../api/api';
 import { PARTIES_URL } from '../../shared/constants';
 import PartyItem from './PartyItem';
 import styled from 'styled-components';
-import Select from 'react-select'; //라이브러리 import
+import Select, { components } from 'react-select';
 import { ReactComponent as ArrowBottom } from '../../assets/common/arrow-bottom.svg';
 
 const PartyList = () => {
@@ -20,7 +20,6 @@ const PartyList = () => {
   const queryClient = new QueryClient();
   // const [recruitmentStatus, setRecruitmentStatus] = useState(RECRUITMENT_STATUS_SELECT[0].value);
   const [recruitmentStatus, setRecruitmentStatus] = useState(RECRUITMENT_STATUS_SELECT[0]);
-  const [toggle, setToggle] = useState(false);
 
   const page = 0; // 임시
 
@@ -52,21 +51,62 @@ const PartyList = () => {
   const handleSelected = option => {
     setRecruitmentStatus(option);
   };
+
+  const { Option } = components;
+  const IconOption = props => (
+    <Option {...props}>
+      <img src={require('./' + props.data.icon)} style={{ width: 36 }} alt={props.data.label} />
+      {props.data.label}
+    </Option>
+  );
+
+  const styles = {
+    control: base => ({
+      ...base,
+    }),
+    menu: base => ({
+      ...base,
+      fontFamily: 'Times New Roman',
+    }),
+    control: styles => ({
+      ...styles,
+      backgroundColor: 'white',
+      width: '80px',
+      border: '1px solid #D0D5DD',
+      borderRadius: '999px',
+    }),
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+      return {
+        ...styles,
+        backgroundColor: isFocused ? 'var(--color-primary-500)' : 'var(--color-white)',
+        color: isFocused ? 'var(--color-white)' : 'var(--color-black)',
+        cursor: 'pointer',
+        '&:hover': {
+          backgroundColor: 'var(--color-primary-500)',
+          color: 'var(--color-white)',
+        },
+        '&:before': {
+          display: 'none',
+        },
+      };
+    },
+  };
+
+  console.log(partyList);
   return (
     <Wrapper>
-      {partyList ? (
+      {partyList.length > 0 ? (
         <>
           <PartySection>
             <PartyHeader>
               <Title>현재 진행중인 모임</Title>
-              <SelectContainer>
-                <Select
-                  placeholder={RECRUITMENT_STATUS_SELECT[0].label}
-                  options={RECRUITMENT_STATUS_SELECT}
-                  onChange={option => handleSelected(option)}
-                  value={recruitmentStatus}
-                />
-              </SelectContainer>
+              <StSelect
+                placeholder={RECRUITMENT_STATUS_SELECT[0].label}
+                options={RECRUITMENT_STATUS_SELECT}
+                onChange={option => handleSelected(option)}
+                value={recruitmentStatus}
+                styles={styles}
+              />
             </PartyHeader>
             <ListWrapper>
               <List>
@@ -89,7 +129,7 @@ const PartyList = () => {
         <InfoWrapper>
           <InfoImg src={mainInfoImg} alt="mainInfoImage" />
           <BottomInfoSection>
-            <Message>앗! 모임이 아직 열린 모임이 없어요.</Message>
+            <Message>앗! 아직 열린 모임이 없어요.</Message>
             <ButtonInfo>
               <Message>아래</Message>
               <UnionImage src={unionImg} alt="union" />
@@ -102,40 +142,10 @@ const PartyList = () => {
   );
 };
 
-const customStyles = {
-  control: (provided, state) => ({
-    ...provided,
-    border: state.isFocused ? '2px solid blue' : '1px solid #d0d5dd',
-    borderRadius: '999px',
-    fontStyle: 'normal',
-    fontWeight: 400,
-    fontSize: '16px',
-    lineHeight: '100%',
-    // letter-spacing: '-0.015em';
-    // color: '#475467',
-    // boxShadow: 'none',
-    '&:hover': {
-      border: state.isFocused ? '2px solid blue' : '1px solid #d0d5dd',
-    },
-  }),
-  option: (provided, state) => ({
-    ...provided,
-    backgroundColor: state.isFocused ? '#f7f8fa' : 'white',
-    color: state.isFocused ? 'blue' : 'black',
-    fontStyle: 'normal',
-    fontWeight: 400,
-    fontSize: '16px',
-    lineHeight: '100%',
-    '&:hover': {
-      backgroundColor: '#f7f8fa',
-    },
-  }),
-};
 const Wrapper = styled.div`
   width: 360px;
   margin: 0 auto;
-  height: 100%;
-  padding-bottom: 250px;
+  height: calc(100%-200px);
 `;
 
 /* PartySection */
@@ -153,27 +163,39 @@ const Title = styled.h4`
   color: var(--color-gray-500);
   white-space: nowrap;
 `;
-// const SelectContainer = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: flex-end;
-//   align-items: flex-start;
-//   gap: 0.25rem;
-// `;
 
-// const SelectElement = styled.select`
-//   width: 80px;
-//   height: 32px;
-//   border: 1px solid #d0d5dd;
-//   border-radius: 999px;
-// `;
-const SelectContainer = styled.ul`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: flex-start;
-  gap: 0.25rem;
+const StSelect = styled(Select)`
+  width: 80px;
+  border-radius: 999px;
+  background: yellow;
+  font-size: 12px;
+  &:hover: {
+    border: '2px solid blue';
+    appearance: none;
+    -webkit-appearance: none; //(사파리, 크롬)
+    -moz-appearance: none; //(파이어폭스)
+  }
+  &:option: {
+    background: yellow;
+  }
 `;
+
+// const StSelect = styled(Select)`;
+// display: flex;
+// flex-direction: row;
+// justify-content: flex-end;
+// align-items: flex-start;
+// padding: 8px 16px;
+// gap: 4px;
+
+// width: 80px;
+// height: 32px;
+
+// /* Gray/300 */
+
+// border: 1px solid #d0d5dd;
+// border-radius: 999px;
+// `;
 
 const SelectElement = styled.li`
   width: 80px;
@@ -227,23 +249,20 @@ const UnionImage = styled.img`
   height: 16px;
 `;
 
-const InfoContainer = styled.div`
-  // background: green;
-  // height: 100vh;
-`;
-
 const InfoWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  height: calc(100vh - 220px);
   align-items: center;
-  min-height: 250px;
+  justify-content: center;
+  position: absolute;
+  width: 360px;
+  left: calc(50% - 360px / 2);
+  top: calc(50% - 32px / 2);
 `;
 
 const InfoImg = styled.img`
-  width: 86px;
-  height: 86px;
+  width: 48px;
+  height: 48px;
 `;
 
 export default PartyList;
