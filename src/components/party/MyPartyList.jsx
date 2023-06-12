@@ -33,8 +33,6 @@ const MyPartyList = () => {
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={-100}
-            // pagination={{ clickable: true }}
-            // scrollbar={{ draggable: true }}/
             observer={true}
             observeParents={true}
             slidesPerView={1}

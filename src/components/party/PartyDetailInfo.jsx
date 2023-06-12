@@ -39,7 +39,6 @@ export const PartyDetailInfo = () => {
       .catch(error => {
         console.log('API 요청 중 에러 발생', error);
       });
-    // window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [partyId]);
 
   // 모임 신청 / 취소
