@@ -5,6 +5,8 @@ import useGeolocation from '../../hooks/useGeolocation';
 import { styled } from 'styled-components';
 import { Toggle } from '../../elements/Toggle';
 import Loading from '../../components/Loading';
+import { Link } from 'react-router-dom';
+import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 
 export default function SearchPlaceForm() {
   const [place, setPlace] = useState('');
@@ -53,6 +55,19 @@ export default function SearchPlaceForm() {
 
   return (
     <Wrapper>
+      <Topbar>
+        <Link
+          style={{
+            position: 'absolute',
+          }}
+          to={'/'}
+        >
+          <TopBackDiv>
+            <LeftBack />
+          </TopBackDiv>
+        </Link>
+        <TopbarName>모임 생성하기</TopbarName>
+      </Topbar>
       <Header>
         <Label htmlFor="search">모임 장소</Label>
         <SearchLocation onPlaceChange={handlePlaceChange} />
@@ -73,12 +88,45 @@ export default function SearchPlaceForm() {
 const Wrapper = styled.div`
   width: 360px;
   margin: 0 auto;
+  height: 100%;
 `;
 
 const Header = styled.div`
+  margin-top: 3rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+`;
+
+// TopBar 스타일
+const Topbar = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  top: 0;
+  align-items: center;
+  justify-content: space-between;
+  width: 360px;
+  height: 52px;
+  border-bottom: 1px solid #f2f4f7;
+  background: #fff;
+  z-index: 10;
+`;
+
+const TopBackDiv = styled.div`
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  width: 40px;
+  height: 24px;
+  cursor: pointer;
+`;
+
+const TopbarName = styled.div`
+  color: #1d2939;
+  font-size: 16px;
+  text-align: center;
+  flex-grow: 1;
 `;
 
 const Label = styled.label`
