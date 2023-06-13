@@ -19,11 +19,11 @@ function UserUpdate() {
 
   const mutation = useMutation(formData => putUpdateAPI(`${MEMBER_URL.MYPAGE_PUT}`, formData), {
     onSuccess: response => {
-      alert('수정 완료', response);
       queryClient.invalidateQueries('mypagelist');
+      navigate('/mypage');
     },
     onError: error => {
-      alert('마이페이지 post 요청실패 ', error);
+      alert('마이페이지 수정 실패 ', error);
     },
   });
 

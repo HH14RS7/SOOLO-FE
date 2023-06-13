@@ -1,11 +1,13 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import { MEMBER_URL } from '../../shared/constants';
+import { MEMBER_URL, PATH_URL } from '../../shared/constants';
 import { getAPI } from '../../api/api';
 import { styled } from 'styled-components';
 import { ReactComponent as Backicon } from '../../assets/userprofile/back.svg';
 import { ReactComponent as FrameIcon } from '../../assets/mypage/frame35.svg';
+import { ReactComponent as Report } from '../../assets/userprofile/report.svg';
+import { Link } from 'react-router-dom';
 
 export const UserProfileInfo = () => {
   const { id: memberID } = useParams();
@@ -50,6 +52,11 @@ export const UserProfileInfo = () => {
               <TextInfo>자기소개</TextInfo>
               <TextContent>{user?.introduce}</TextContent>
             </Frame4014>
+            <ReportCon>
+              <Link to={`${PATH_URL.USER_REPORT}/${user.memberID}`}>
+                <Report />
+              </Link>
+            </ReportCon>
           </Frame4013>
         </Frame4047>
       </Background>
@@ -204,6 +211,10 @@ const TextContent = styled.div`
   justify-content: center;
   letter-spacing: -0.015em;
   color: #000000;
+`;
+
+const ReportCon = styled.div`
+  margin-top: 114px;
 `;
 
 const StyledBackicon = styled(Backicon)`

@@ -17,6 +17,7 @@ export const PATH_URL = {
   PARTY_PLACE_CREATE: '/party/place/create',
   MYPAGE_UPDATE: '/member/update',
   MY_ACCOUNT_DETAILS: '/mypage/account',
+  USER_REPORT: '/user/report',
 };
 
 export const MEMBER_URL = {
