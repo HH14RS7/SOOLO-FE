@@ -7,6 +7,7 @@ export const PATH_URL = {
   NAVER: '/naver/callback',
   PARTY_DETAIL: '/party/detail',
   PARTY_CREATE: '/party/create',
+  PARTY_APPROVE: '/party/approve',
   PARTY_CHAT: '/party/chat',
   PARTY_CHATROOM: '/party/chat/room',
   PARTY_LIST_MAP: '/party/list/map',
