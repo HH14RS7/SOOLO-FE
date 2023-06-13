@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import SearchPlaceItem from './SearchPlaceItem';
 import { styled } from 'styled-components';
 import { ReactComponent as SearchInfo } from '../../assets/map/search-info.svg';
+import { ReactComponent as NoSearchInfo } from '../../assets/map/no-search-info.svg';
 
-export default function SearchPlcaeList({ searchPlace, currentLocation, isChecked }) {
+export default function SearchPlcaeList({ searchPlace, currentLocation }) {
   const [placeList, setPlaceList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -20,34 +21,34 @@ export default function SearchPlcaeList({ searchPlace, currentLocation, isChecke
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
       // alert('검색 결과가 존재하지 않습니다.');
     } else if (status === kakao.maps.services.Status.ERROR) {
-      // alert('검색 결과 중 오류가 발생했습니다.');
+      alert('검색 결과 중 오류가 발생했습니다.');
     }
   }, []);
 
   useEffect(() => {
     setPlaceList([]);
 
-    // 검색 옵션
     const searchOptions = {
       size: 15,
-      level: 3,
+      page: 1,
       category_group_code: FOOD_CATEGORY_CODE,
     };
 
-    // 현재위치로 검색
-    if (currentLocation && isChecked) {
+    if (searchPlace && currentLocation) {
       searchOptions.location = new kakao.maps.LatLng(
         currentLocation.latitude,
         currentLocation.longitude,
       );
       searchOptions.radius = 20000;
-    }
-
-    // 검색키워드 함수 호출
-    if (searchPlace) {
+      setIsLoading(true);
       ps.keywordSearch(searchPlace, placesSearchCB, searchOptions);
+    } else if (searchPlace) {
+      setIsLoading(true);
+      ps.keywordSearch(searchPlace, placesSearchCB, searchOptions);
+    } else {
+      setIsLoading(false);
     }
-  }, [searchPlace, currentLocation, isChecked, placesSearchCB]);
+  }, [searchPlace, currentLocation, placesSearchCB]);
 
   // 다음 페이지 불러오기 함수
   const loadNextPage = () => {
@@ -83,12 +84,21 @@ export default function SearchPlcaeList({ searchPlace, currentLocation, isChecke
           placeList.map((place, index) => <SearchPlaceItem key={index} place={place} />)
         ) : (
           <DefaultContainer>
-            {/* <DefaultImage src={searchInfoImg} alt="noSearchImg" /> */}
-            <SearchInfoIcon />
-            <InfoMsg>장소를 검색해주세요!</InfoMsg>
+            {!searchPlace && (
+              <>
+                <SearchInfo />
+                <InfoMsg>장소를 검색해주세요!</InfoMsg>
+              </>
+            )}
+            {searchPlace && (
+              <>
+                <NoSearchInfo />
+                <InfoMsg>검색 결과가 없습니다.</InfoMsg>
+                <InfoMsg>다른 단어로 검색해보세요.</InfoMsg>
+              </>
+            )}
           </DefaultContainer>
         )}
-        {isLoading && <div>로딩중입니다</div>}
       </ListWrapper>
     </div>
   );

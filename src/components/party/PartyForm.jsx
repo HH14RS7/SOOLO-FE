@@ -494,8 +494,6 @@ const PlaceInfo = styled.div`
   width: auto;
   gap: 0.5rem;
   margin-top: 0.5rem;
-  clear: both;
-  float: left;
 `;
 
 const TopInfo = styled.div`
@@ -507,7 +505,9 @@ const TopInfo = styled.div`
 `;
 
 const PlaceName = styled.h4`
-  white-space: nowrap;
+  // white-space: nowrap;
+  overflow: hidden;
+  // text-overflow: ellipsis;
 `;
 
 const LocationIcon = styled.img`
@@ -526,7 +526,6 @@ const PlaceDetail = styled.div`
 const Category = styled.h5`
   color: var(--color-gray-500);
   margin: auto 0;
-  white-space: nowrap;
 `;
 
 const PlaceAddress = styled.h5`

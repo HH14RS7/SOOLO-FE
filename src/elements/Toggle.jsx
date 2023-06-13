@@ -1,16 +1,14 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-export const Toggle = () => {
-  const [isOn, setisOn] = useState(false);
-
-  const toggleHandler = () => {
-    setisOn(!isOn);
+export const Toggle = ({ isOn, onToggle }) => {
+  const handleToggle = () => {
+    onToggle(!isOn);
   };
 
   return (
     <>
-      <ToggleContainer onClick={toggleHandler}>
+      <ToggleContainer onClick={handleToggle}>
         <div className={`toggle-container ${isOn ? 'toggle--checked' : null}`} />
         <div className={`toggle-circle ${isOn ? 'toggle--checked' : null}`} />
       </ToggleContainer>

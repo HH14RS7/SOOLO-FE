@@ -41,7 +41,7 @@ export const PartyDetailInfo = () => {
       });
   }, [partyId]);
 
-  // 모임 신청 / 취소
+  // 모임 취소
   const ApplicationButtonHandler = () => {
     postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`).then(response => {
       window.location.replace(`/party/detail/${partyId}`);
@@ -90,7 +90,7 @@ export const PartyDetailInfo = () => {
       ? '1m 이내'
       : data?.distance <= 1000
       ? `${data?.distance}m`
-      : `${data?.distance}km`;
+      : `${data?.distance / 1000}km`;
 
   console.log('data ::', data);
 
@@ -287,18 +287,22 @@ export const PartyDetailInfo = () => {
               ) : data?.state === partyStatus.승인거절 || data?.recruitmentStatus === false ? (
                 ''
               ) : (
-                <PartyRequestBtn
-                  id="saveBtn"
-                  onClick={() => {
-                    ApplicationButtonHandler();
-                  }}
-                >
-                  {data?.state === partyStatus.신청전
-                    ? '모임 신청'
-                    : data?.state === partyStatus.승인 || data?.state === partyStatus.승인대기
-                    ? '신청 취소'
-                    : ''}
-                </PartyRequestBtn>
+                <>
+                  {data?.state === partyStatus.신청전 ? (
+                    <Link to={`${PATH_URL.PARTY_APPROVE}?partyId=${data?.partyId}`}>
+                      <PartyRequestBtn id="saveBtn">모임 신청</PartyRequestBtn>
+                    </Link>
+                  ) : (
+                    <PartyRequestBtn
+                      id="saveBtn"
+                      onClick={() => {
+                        ApplicationButtonHandler();
+                      }}
+                    >
+                      신청 취소
+                    </PartyRequestBtn>
+                  )}
+                </>
               )}
             </div>
           </Contents>
