@@ -65,8 +65,6 @@ const PlaceWrapper = styled.div`
   position: relative;
   border-radius: 16px;
   border: 1px solid var(--color-gray-100);
-  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-    url(${props => props.imgurl});
 `;
 
 const ImageWrapper = styled.div`
@@ -77,9 +75,25 @@ const ImageWrapper = styled.div`
 
 const PlaceImage = styled.img`
   width: 100%;
-  height: 74px;
+  height: 100%;
   object-fit: cover;
-  border-radius: 1rem;
+  position: absolute;
+`;
+
+const Gradiant1 = styled.img`
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+`;
+
+const Gradiant2 = styled.img`
+  top: 0px;
+  // left: 0px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
 `;
 
 const DateInfo = styled.div`
