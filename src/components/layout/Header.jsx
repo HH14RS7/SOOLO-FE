@@ -51,8 +51,8 @@ const Background = styled.div`
   position: fixed;
   top: 0;
   border-bottom: 0.5px solid gray;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  // padding-left: 1.5rem;
+  // padding-right: 1.5rem;
   z-index: 30;
 `;
 

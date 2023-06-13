@@ -15,8 +15,6 @@ import { ReactComponent as Overlay } from '../../assets/map/overlay.svg';
 import { ReactComponent as OverlayArrow } from '../../assets/map/overlay-arrow.svg';
 import { ReactComponent as Add } from '../../assets/map/add.svg';
 import { ReactComponent as Subtract } from '../../assets/map/subtract.svg';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Scrollbar } from 'swiper';
 import Loading from '../Loading';
 
 import 'swiper/css';
@@ -28,7 +26,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   const initialLatitude = 37.497942; // 강남역 초기 위도
   const initialLongitude = 127.027621; // 강남역 초기 경도
 
-  const { location, error } = useGeolocation();
+  const { location } = useGeolocation();
   const [latitude, setLatitude] = useState(initialLatitude);
   const [longitude, setLongitude] = useState(initialLongitude);
   const [selectedParty, setSelectedParty] = useState();
@@ -37,7 +35,6 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   const { regionName, getRegionName } = useGetRegionName();
   const { stationName, getStationInfo } = useGetNearbyStation();
   const [loading, setLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false); // 바텀시트 열림/닫힘 상태를 관리하는 state
 
   const fetchPartyList = async (latitude, longitude, searchPlace) => {
     let url = '';
@@ -51,7 +48,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
       const response = await getAPI(url);
       return response.data.data.partyList;
     } catch (error) {
-      console.error('조회실패', error);
+      // console.error('조회실패', error);
       return [];
     }
   };
@@ -62,12 +59,15 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   );
 
   // 현재위치 내 모임 조회
-  const handleCurrentLocation = useCallback(() => {
+  const handleCurrentLocation = useCallback(async () => {
     setLoading(true);
 
-    if (location.loaded) {
-      const lat = location.coordinates.latitude;
-      const lon = location.coordinates.longitude;
+    try {
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
       setLatitude(lat);
       setLongitude(lon);
       getRegionName(lat, lon);
@@ -80,15 +80,15 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
         mapRef.current.setLevel(6);
         mapRef.current.panTo(center);
       }
-    } else {
-      if (error) {
-        alert(error.message);
-      }
       setLoading(false);
-      return;
+    } catch (error) {
+      const errorMessage =
+        location && location.error.message
+          ? location.error.message
+          : '위치 정보 수집을 허용해주세요';
+      alert(errorMessage);
+      setLoading(false);
     }
-
-    setLoading(false);
   }, [location]);
 
   // 모임 리스트 마커 찍기

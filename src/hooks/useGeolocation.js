@@ -5,7 +5,7 @@ const useGeolocation = (options = {}) => {
     loaded: false,
     loading: true,
     coordinates: { latitude: '', longitude: '' },
-    erorr: '',
+    error: '',
   });
 
   const onSuccess = location => {

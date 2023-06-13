@@ -5,46 +5,69 @@ import useGeolocation from '../../hooks/useGeolocation';
 import { styled } from 'styled-components';
 import { Toggle } from '../../elements/Toggle';
 import Loading from '../../components/Loading';
+import { Link } from 'react-router-dom';
+import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 
 export default function SearchPlaceForm() {
   const [place, setPlace] = useState('');
-  const { location, error } = useGeolocation();
   const [currentLocation, setCurrentLocation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isOn, setIsOn] = useState(false);
+  const { location } = useGeolocation();
 
-  useEffect(() => {
-    const fetchData = () => {
-      if (isOn) {
-        if (location.loaded) {
-          const { latitude, longitude } = location.coordinates;
-          setCurrentLocation({ latitude, longitude });
-          setLoading(false);
-        } else if (error) {
-          alert('위치정보를 허용후 새로고침을 해주세요');
-          setIsOn(!isOn);
-        } else if (location.loading) {
-          setLoading(true);
-        }
-      } else {
-        setPlace(place);
-        setCurrentLocation(null);
-      }
-    };
-    fetchData();
-  }, [location, error, isOn]);
+  const handleCurrentLocation = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      setCurrentLocation({ latitude: lat, longitude: lon });
+      setLoading(false);
+    } catch (error) {
+      const errorMessage =
+        location && location.error.message
+          ? location.error.message
+          : '위치 정보 수집을 허용해주세요';
+      alert(errorMessage);
+      setLoading(false);
+      setIsOn(false);
+    }
+  }, []);
 
   const handlePlaceChange = value => {
     setPlace(value);
   };
 
-  const handleToggle = () => {
+  const handleToggle = useCallback(() => {
     setIsOn(prevIsOn => !prevIsOn);
-    console.log(!isOn);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isOn) {
+      handleCurrentLocation();
+    } else {
+      setCurrentLocation(null);
+    }
+  }, [isOn, handleCurrentLocation]);
 
   return (
     <Wrapper>
+      <Topbar>
+        <Link
+          style={{
+            position: 'absolute',
+          }}
+          to={'/'}
+        >
+          <TopBackDiv>
+            <LeftBack />
+          </TopBackDiv>
+        </Link>
+        <TopbarName>모임 생성하기</TopbarName>
+      </Topbar>
       <Header>
         <Label htmlFor="search">모임 장소</Label>
         <SearchLocation onPlaceChange={handlePlaceChange} />
@@ -53,15 +76,11 @@ export default function SearchPlaceForm() {
         <PlaceLabel htmlFor="place">장소 목록</PlaceLabel>
         <ToggleWrapper>
           <ToggleLabel htmlFor="location">현 위치 중심</ToggleLabel>
-          <Toggle isOn={isOn} onToggle={handleToggle} />
+          {loading ? <Loading type="circle" /> : <Toggle isOn={isOn} onToggle={handleToggle} />}
         </ToggleWrapper>
       </PlaceInfo>
       <Bar />
-      {loading ? (
-        <Loading />
-      ) : (
-        <SearchPlaceList searchPlace={place} currentLocation={currentLocation} />
-      )}
+      <SearchPlaceList searchPlace={place} currentLocation={currentLocation} />
     </Wrapper>
   );
 }
@@ -69,12 +88,45 @@ export default function SearchPlaceForm() {
 const Wrapper = styled.div`
   width: 360px;
   margin: 0 auto;
+  height: 100%;
 `;
 
 const Header = styled.div`
+  margin-top: 3rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+`;
+
+// TopBar 스타일
+const Topbar = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  top: 0;
+  align-items: center;
+  justify-content: space-between;
+  width: 360px;
+  height: 52px;
+  border-bottom: 1px solid #f2f4f7;
+  background: #fff;
+  z-index: 10;
+`;
+
+const TopBackDiv = styled.div`
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  width: 40px;
+  height: 24px;
+  cursor: pointer;
+`;
+
+const TopbarName = styled.div`
+  color: #1d2939;
+  font-size: 16px;
+  text-align: center;
+  flex-grow: 1;
 `;
 
 const Label = styled.label`

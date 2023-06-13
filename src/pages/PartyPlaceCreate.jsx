@@ -3,8 +3,8 @@ import SearchPlaceForm from '../components/map/SearchPlaceForm';
 
 export default function PartyPlaceCreate() {
   return (
-    <div>
+    <>
       <SearchPlaceForm />
-    </div>
+    </>
   );
 }
