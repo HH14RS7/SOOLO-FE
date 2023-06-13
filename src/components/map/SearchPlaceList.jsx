@@ -30,20 +30,22 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
 
     const searchOptions = {
       size: 15,
-      page: 1,
+      page: 3,
       category_group_code: FOOD_CATEGORY_CODE,
     };
 
-    if (searchPlace && currentLocation) {
-      searchOptions.location = new kakao.maps.LatLng(
-        currentLocation.latitude,
-        currentLocation.longitude,
-      );
-      searchOptions.radius = 20000;
+    if (searchPlace) {
       setIsLoading(true);
-      ps.keywordSearch(searchPlace, placesSearchCB, searchOptions);
-    } else if (searchPlace) {
-      setIsLoading(true);
+      if (currentLocation) {
+        searchOptions.location = new kakao.maps.LatLng(
+          currentLocation.latitude,
+          currentLocation.longitude,
+        );
+        searchOptions.radius = 20000;
+      } else {
+        searchOptions.location = null;
+        searchOptions.radius = null;
+      }
       ps.keywordSearch(searchPlace, placesSearchCB, searchOptions);
     } else {
       setIsLoading(false);
@@ -70,7 +72,6 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
     };
   }, [currentPage]);
 
-  // 현재 페이지의 검색 결과를 모두 불러왔을 때만 isLoading 상태를 false로 설정합니다.
   useEffect(() => {
     if (placeList.length === currentPage * 15) {
       setIsLoading(false);
