@@ -65,7 +65,6 @@ const PlaceWrapper = styled.div`
   position: relative;
   border-radius: 16px;
   border: 1px solid var(--color-gray-100);
-    url(${props => props.imgurl});
 `;
 
 const ImageWrapper = styled.div`

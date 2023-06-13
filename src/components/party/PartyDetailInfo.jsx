@@ -90,7 +90,7 @@ export const PartyDetailInfo = () => {
       ? '1m 이내'
       : data?.distance <= 1000
       ? `${data?.distance}m`
-      : `${data?.distance}km`;
+      : `${data?.distance / 1000}km`;
 
   console.log('data ::', data);
 
