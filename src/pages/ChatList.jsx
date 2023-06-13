@@ -1,7 +1,7 @@
 // 기능 import
 import { React, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { CHATING_URL, PATH_URL } from '../shared/constants';
+import { PATH_URL } from '../shared/constants';
 import { ChatApprove } from '../components/Chat/ChatApprove';
 import { deleteAPI, postAPI } from '../api/api';
 import * as StompJs from '@stomp/stompjs';
