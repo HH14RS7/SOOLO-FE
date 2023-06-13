@@ -8,40 +8,48 @@ import Loading from '../../components/Loading';
 
 export default function SearchPlaceForm() {
   const [place, setPlace] = useState('');
-  const { location, error } = useGeolocation();
   const [currentLocation, setCurrentLocation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isOn, setIsOn] = useState(false);
+  const { location } = useGeolocation();
 
-  useEffect(() => {
-    const fetchData = () => {
-      if (isOn) {
-        if (location.loaded) {
-          const { latitude, longitude } = location.coordinates;
-          setCurrentLocation({ latitude, longitude });
-          setLoading(false);
-        } else if (error) {
-          alert('위치정보를 허용후 새로고침을 해주세요');
-          setIsOn(!isOn);
-        } else if (location.loading) {
-          setLoading(true);
-        }
-      } else {
-        setPlace(place);
-        setCurrentLocation(null);
-      }
-    };
-    fetchData();
-  }, [location, error, isOn]);
+  const handleCurrentLocation = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      setCurrentLocation({ latitude: lat, longitude: lon });
+      setLoading(false);
+    } catch (error) {
+      const errorMessage =
+        location && location.error.message
+          ? location.error.message
+          : '위치 정보 수집을 허용해주세요';
+      alert(errorMessage);
+      setLoading(false);
+      setIsOn(false);
+    }
+  }, []);
 
   const handlePlaceChange = value => {
     setPlace(value);
   };
 
-  const handleToggle = () => {
+  const handleToggle = useCallback(() => {
     setIsOn(prevIsOn => !prevIsOn);
-    console.log(!isOn);
-  };
+  }, []);
+
+  useEffect(() => {
+    if (isOn) {
+      handleCurrentLocation();
+    } else {
+      setCurrentLocation(null);
+    }
+  }, [isOn, handleCurrentLocation]);
 
   return (
     <Wrapper>
@@ -53,15 +61,11 @@ export default function SearchPlaceForm() {
         <PlaceLabel htmlFor="place">장소 목록</PlaceLabel>
         <ToggleWrapper>
           <ToggleLabel htmlFor="location">현 위치 중심</ToggleLabel>
-          <Toggle isOn={isOn} onToggle={handleToggle} />
+          {loading ? <Loading type="circle" /> : <Toggle isOn={isOn} onToggle={handleToggle} />}
         </ToggleWrapper>
       </PlaceInfo>
       <Bar />
-      {loading ? (
-        <Loading />
-      ) : (
-        <SearchPlaceList searchPlace={place} currentLocation={currentLocation} />
-      )}
+      <SearchPlaceList searchPlace={place} currentLocation={currentLocation} />
     </Wrapper>
   );
 }

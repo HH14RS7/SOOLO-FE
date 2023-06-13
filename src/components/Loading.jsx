@@ -1,12 +1,20 @@
 import React from 'react';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader, MoonLoader } from 'react-spinners';
 import { styled } from 'styled-components';
 
-export default function Loading() {
+export default function Loading({ type }) {
   return (
-    <LoadingOverlay>
-      <BeatLoader color="#F63D68" speedMultiplier={2} />
-    </LoadingOverlay>
+    <>
+      {type === 'circle' ? (
+        <Container>
+          <MoonLoader color="#F63D68" size={20} />
+        </Container>
+      ) : (
+        <LoadingOverlay>
+          <BeatLoader color="#F63D68" speedMultiplier={2} />
+        </LoadingOverlay>
+      )}
+    </>
   );
 }
 
@@ -19,6 +27,9 @@ const LoadingOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  // background-color: rgba(0, 0, 0, 0.3);
   z-index: 50;
+`;
+
+const Container = styled.div`
+  transition: opacity 0.3s ease-in-out;
 `;
