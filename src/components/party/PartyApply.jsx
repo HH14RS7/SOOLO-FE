@@ -35,12 +35,12 @@ export const PartyApply = () => {
   };
 
   const ApplicationButtonHandler = e => {
-    const approveRequest = {
+    const data = {
       reason,
       amountAlcohol,
     };
 
-    postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`, approveRequest)
+    postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`, data)
       .then(response => {
         alert(response.data.msg);
         navigate(`${PATH_URL.PARTY_DETAIL}/${partyId}`);
