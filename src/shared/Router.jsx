@@ -20,6 +20,7 @@ import PartyPlaceCreate from '../pages/PartyPlaceCreate';
 import UserUpdatePage from '../pages/UserUpdatePage';
 import MyAccountDetail from '../pages/MyAccountDetail';
 import ScrollToTop from '../shared/ScrollToTop';
+import { PartyApprove } from '../pages/PartyApprove';
 
 const Router = () => {
   return (
@@ -38,6 +39,7 @@ const Router = () => {
           <Route exact path={PATH_URL.NAVER} element={<NaverRedirection />} />
           <Route path={`${PATH_URL.PARTY_DETAIL}/:partyId`} element={<PartyDetail />} />
           <Route path={PATH_URL.PARTY_CREATE} element={<PartyCreate />} />
+          <Route path={PATH_URL.PARTY_APPROVE} element={<PartyApprove />} />
           <Route path={`${PATH_URL.PARTY_CHAT}/:id`} element={<ChatList />} />
           <Route path={PATH_URL.PARTY_CHATROOM} element={<ChatRoom />} />
           <Route path={PATH_URL.PARTY_LIST_MAP} element={<PartyListMap />} />
