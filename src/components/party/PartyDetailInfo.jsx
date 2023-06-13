@@ -259,7 +259,7 @@ export const PartyDetailInfo = () => {
               style={{
                 display: 'flex',
                 background: '#f2f4f7',
-                paddingBottom: '80px',
+                paddingBottom: '8px',
                 justifyContent: 'space-evenly',
               }}
             >
@@ -349,7 +349,7 @@ const Topbar = styled.div`
   display: flex;
   position: fixed;
   top: 0;
-  margin-top: 51px;
+  // margin-top: 51px;
   align-items: center;
   justify-content: space-between;
   width: 360px;

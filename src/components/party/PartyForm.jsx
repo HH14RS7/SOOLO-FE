@@ -4,16 +4,19 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { PATH_URL, PARTIES_URL } from '../../shared/constants';
 import { useMutation } from 'react-query';
-import Calendars from '../../shared/Calendars';
-import moment from 'moment';
 import { putUpdateAPI, postImageAPI } from '../../api/api';
+import { Link } from 'react-router-dom';
+import Calendars from '../../shared/Calendars';
+import TimeSlotPicker from '../../shared/TimeSlotPicker';
+import moment from 'moment';
 import useGetRegionName from '../../hooks/useGetRegionName';
 import useGetNearbyStation from '../../hooks/useGetNearbyStation';
-import { ReactComponent as Check } from '../../assets/common/check.svg';
+
 import { ReactComponent as Information } from '../../assets/common/information.svg';
-import TimeSlotPicker from '../../shared/TimeSlotPicker';
+import { ReactComponent as Check } from '../../assets/common/check.svg';
 import { ReactComponent as Upload } from '../../assets/common/upload.svg';
 import { ReactComponent as Close } from '../../assets/common/close.svg';
+import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 
 const CreateForm = ({ party }) => {
   const { regionName, getRegionName } = useGetRegionName();
@@ -261,9 +264,18 @@ const CreateForm = ({ party }) => {
   const handleTimeSelect = time => {
     setSelectedTime(time);
   };
+
   return (
     <Background>
       <Container>
+        <Topbar>
+          <TopBackDiv>
+            <button onClick={handlePrevClick}>
+              <LeftBack />
+            </button>
+          </TopBackDiv>
+          <TopbarName>{isEdit ? '모임 수정하기' : '모임 생성하기'}</TopbarName>
+        </Topbar>
         <Contents>
           <PlaceSection>
             <PlaceHeader>
@@ -451,6 +463,37 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
+// TopBar 스타일
+const Topbar = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  top: 0;
+  align-items: center;
+  justify-content: space-between; /* 변경된 부분 */
+  width: 360px;
+  height: 52px;
+  border-bottom: 1px solid #f2f4f7;
+  background: #fff;
+  z-index: 10;
+`;
+
+const TopBackDiv = styled.div`
+  display: flex;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+`;
+
+const TopbarName = styled.div`
+  color: #1d2939;
+  font-size: 16px;
+  text-align: center;
+  flex-grow: 1;
+  left: calc(50% - 360px / 2);
+`;
+
 const Contents = styled.div`
   width: 100%;
   margin: 0 auto;
@@ -459,6 +502,7 @@ const Contents = styled.div`
 /* PlaceSection */
 const PlaceSection = styled.section`
   padding: 1.5rem 1rem;
+  margin-top: 51px;
 `;
 
 const PlaceHeader = styled.div`
@@ -831,10 +875,9 @@ const FileInput = styled.input`
 /* ButtonWrapper */
 const ButtonWrapper = styled.div`
   margin-top: 4rem;
-  margin-bottom: 92px; // 임시
-  // margin-top: 4rem;
-  // bottom: 0;
   // position: fixed;
+  // bottom: 24px;
+  margin-bottom: 24px;
 `;
 
 /* PostButton */
@@ -848,7 +891,6 @@ const PostButton = styled.button`
   background: var(--color-primary-500);
   border: 1px solid var(--color-primary-500);
   border-radius: 0.75rem;
-
   font-family: 'Inter';
   font-style: normal;
   font-weight: var(--font-weight-600);

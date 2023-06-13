@@ -463,7 +463,7 @@ const Topbar = styled.div`
   display: flex;
   position: fixed;
   top: 0;
-  margin-top: 51px;
+  // margin-top: 51px;
   justify-content: space-between;
   align-items: center;
   width: 360px;

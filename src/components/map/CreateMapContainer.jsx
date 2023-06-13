@@ -2,9 +2,11 @@ import React, { useEffect, useRef } from 'react';
 import { useLocation, useNavigate, useHistory } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { PATH_URL } from '../../shared/constants';
+import { Link } from 'react-router-dom';
 import marker from '../../assets/map/marker.svg';
 import { ReactComponent as Add } from '../../assets/map/add.svg';
 import { ReactComponent as Subtract } from '../../assets/map/subtract.svg';
+import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 
 export default function CreateMapContainer() {
   const { kakao } = window;
@@ -65,6 +67,14 @@ export default function CreateMapContainer() {
 
   return (
     <Wrapper>
+      <Topbar>
+        <TopBackDiv>
+          <button onClick={goSearchPlaceList}>
+            <LeftBack />
+          </button>
+        </TopBackDiv>
+        <TopbarName>가게 정보</TopbarName>
+      </Topbar>
       <Map ref={mapRef} id="map">
         <ZoomControlContainer>
           <ZoomButton onClick={zoomIn}>
@@ -101,10 +111,41 @@ const Wrapper = styled.div`
   margin: 0 auto;
 `;
 
+// TopBar 스타일
+const Topbar = styled.div`
+  display: flex;
+  flex-direction: row;
+  position: fixed;
+  top: 0;
+  align-items: center;
+  justify-content: space-between; /* 변경된 부분 */
+  width: 360px;
+  height: 52px;
+  border-bottom: 1px solid #f2f4f7;
+  background: #fff;
+  z-index: 10;
+`;
+
+const TopBackDiv = styled.div`
+  display: flex;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+`;
+
+const TopbarName = styled.div`
+  color: #1d2939;
+  font-size: 16px;
+  text-align: center;
+  flex-grow: 1;
+  left: calc(50% - 360px / 2);
+`;
+
 const Map = styled.div`
   display: flex;
-  max-height: 360px;
-  min-height: 568px;
+  max-height: 780px;
+  min-height: 720px;
 `;
 
 /* Zoom Control */
@@ -112,11 +153,11 @@ const ZoomControlContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  padding: 1rem 1rem 0 0;
+  padding: 1rem 0.5rem 0 0;
   gap: 0.5rem;
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
+  top: 3rem;
+  right: 0.25rem;
   z-index: 3;
 `;
 
@@ -154,7 +195,6 @@ const PlaceWrapper = styled.div`
   background: var(--color-white);
   padding: 1.5rem 1rem;
   border-top: 1px solid var(--color-gray-200);
-  margin-bottom: 70px; // 임시주석
 `;
 
 const PlaceDetail = styled.div`
@@ -199,7 +239,8 @@ const PlaceAddress = styled.h5`
 
 /* PlaceButton */
 const PlaceButton = styled.button`
-  display: flex;
+  // display: flex;
+  bottom: 0;
   flex-direction: row;
   justify-content: center;
   align-items: center;
