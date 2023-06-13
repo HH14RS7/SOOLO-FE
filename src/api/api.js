@@ -50,7 +50,6 @@ api.interceptors.response.use(
 );
 
 export async function postAPI(url, data) {
-  console.log('url :: ', url);
   return await api.post(API_URL + url, data);
 }
 
