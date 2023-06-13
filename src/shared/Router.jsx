@@ -48,7 +48,6 @@ const Router = () => {
         <Route element={<Layout />}>
           <Route path={PATH_URL.MYPAGE} element={<MyPage />} />
           <Route path={PATH_URL.DETAIL} element={<Detail />} />
-          <Route path={PATH_URL.PARTY_PLACE_CREATE} element={<PartyPlaceCreate />} />
           <Route path={PATH_URL.MY_ACCOUNT_DETAILS} element={<MyAccountDetail />} />
           <Route path={PATH_URL.MYPAGE_UPDATE} element={<UserUpdatePage />} />
           <Route path={`${PATH_URL.PARTY_CHAT}/:id`} element={<ChatList />} />

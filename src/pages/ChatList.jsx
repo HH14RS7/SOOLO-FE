@@ -8,6 +8,7 @@ import * as StompJs from '@stomp/stompjs';
 import styled from 'styled-components';
 import SockJS from 'sockjs-client';
 import Cookies from 'js-cookie';
+import LoginModal from '../components/LoginModal';
 
 // 이미지 import
 import { ReactComponent as PeopleIcon } from '../assets/chating/membericon.svg';
@@ -25,6 +26,8 @@ export const ChatList = () => {
 
   const [roomId, setRoomId] = useState();
   const [hostId, setHostId] = useState();
+
+  const token = Cookies.get('Access_key');
 
   useEffect(() => {
     const client = new StompJs.Client({
@@ -124,43 +127,33 @@ export const ChatList = () => {
     }
   };
 
-  //
-
   return (
     <>
-      <Background
-        style={{
-          position: backgroundPosition,
-        }}
-      >
-        <Container>
-          <TapBar>
-            <JoinTap
-              onClick={() => {
-                handleTabChange(true);
-              }}
-              style={{
-                borderBottom: activeTab === true ? '1px solid #F63D68' : 'none',
-              }}
-            >
-              참여중인 채팅방
-            </JoinTap>
-            <ApprovalTap
-              onClick={() => {
-                handleTabChange(false);
-              }}
-              style={{
-                borderBottom: activeTab === false ? '1px solid #F63D68' : 'none',
-              }}
-            >
-              들어온 승인요청
-            </ApprovalTap>
-          </TapBar>
-          <ChatContainer>
-            {activeTab === true ? (
-              <>
-                {chatData?.data.map((data, index) => {
-                  return (
+      {!token ? (
+        <LoginModal />
+      ) : (
+        <Background>
+          <Container>
+            <TapBar>
+              <JoinTap
+                onClick={() => {
+                  handleTabChange(true);
+                }}
+              >
+                참여중인 채팅방
+              </JoinTap>
+              <ApprovalTap
+                onClick={() => {
+                  handleTabChange(false);
+                }}
+              >
+                들어온 승인요청
+              </ApprovalTap>
+            </TapBar>
+            <ChatContainer>
+              {activeTab === true ? (
+                <>
+                  {chatData?.data.map((data, index) => (
                     <ChatRoom key={index}>
                       <ChatRoomBox>
                         <ChatRoomImg>
@@ -197,7 +190,7 @@ export const ChatList = () => {
                               </TotalMember>
                               <MemberProfile>
                                 {data.imageList.map((imgdata, index) => {
-                                  const currentZIndex = zIndex - index; // 현재 이미지 zindex 값 구하는 로직
+                                  const currentZIndex = zIndex - index;
                                   const marzinLefts = marzinLeft + index * 8;
                                   return (
                                     <img
@@ -235,15 +228,15 @@ export const ChatList = () => {
                         </ChatRoomContainer>
                       </ChatRoomBox>
                     </ChatRoom>
-                  );
-                })}
-              </>
-            ) : (
-              <ChatApprove></ChatApprove>
-            )}
-          </ChatContainer>
-        </Container>
-      </Background>
+                  ))}
+                </>
+              ) : (
+                <ChatApprove></ChatApprove>
+              )}
+            </ChatContainer>
+          </Container>
+        </Background>
+      )}
       {isModalOpen && (
         <div>
           <Modals onClick={handleBackdropClick}>

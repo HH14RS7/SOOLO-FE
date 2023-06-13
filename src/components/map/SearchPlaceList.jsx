@@ -41,8 +41,9 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
           currentLocation.latitude,
           currentLocation.longitude,
         );
-        searchOptions.radius = 20000;
+        searchOptions.radius = 2000;
       } else {
+        searchOptions.radius = 50000;
         searchOptions.location = null;
         searchOptions.radius = null;
       }

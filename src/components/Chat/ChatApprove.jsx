@@ -106,7 +106,7 @@ export const ChatApprove = () => {
                   >
                     주량
                   </div>
-                  <RequestUserAlcohol>소주 99병</RequestUserAlcohol>
+                  <RequestUserAlcohol>{user.amountAlcohol || '미입력'}</RequestUserAlcohol>
                   <div
                     style={{
                       fontSize: '10px',
@@ -116,7 +116,7 @@ export const ChatApprove = () => {
                   >
                     신청한 이유
                   </div>
-                  <RequestUserReason>술 먹고 싶어서 신청했다는데 불만있냐? 씨</RequestUserReason>
+                  <RequestUserReason>{user.reason || '미입력'}</RequestUserReason>
                 </RequestInfo>
               </RequestContents>
               <RequestDiv>
