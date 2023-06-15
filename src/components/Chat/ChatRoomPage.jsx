@@ -1,8 +1,11 @@
 // 기능 import
 import { React, useEffect, useState, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { PARTIES_URL, PATH_URL, CHATING_URL } from '../../shared/constants';
+import { formmatedDate } from '../../shared/formattedDate';
+import { deleteAPI, getWebAPI, postAPI } from '../../api/api';
+import { useQuery } from 'react-query';
 import queryString from 'query-string';
-import { PARTIES_URL, PATH_URL } from '../../shared/constants';
 import * as StompJs from '@stomp/stompjs';
 import styled from 'styled-components';
 import SockJS from 'sockjs-client';
@@ -15,10 +18,6 @@ import { ReactComponent as ChatSendIcon } from '../../assets/chating/chatsend.sv
 import { ReactComponent as NavigateExitIcon } from '../../assets/chating/NavigateExit.svg';
 import { ReactComponent as PartHostIcon } from '../../assets/chating/hosticon.svg';
 import { ReactComponent as ProfileDefaultImg } from '../../assets/common/profiledefaultimg.svg';
-import { formmatedDate } from '../../shared/formattedDate';
-import { deleteAPI, getWebAPI, postAPI } from '../../api/api';
-import { useQuery } from 'react-query';
-import { CHATING_URL } from '../../shared/constants';
 
 export const ChatRoomPage = () => {
   const navigate = useNavigate();
@@ -33,9 +32,6 @@ export const ChatRoomPage = () => {
   const location = useLocation();
   const queryObj = queryString.parse(location.search); // 문자열의 쿼리스트링을 Object로 변환
   const { chatRoomUniqueId, chatRoomId, hostId } = queryObj;
-
-  console.log('chatRoomId ::', chatRoomId);
-  console.log('hostId ::', hostId);
 
   // 채팅방 입장시 안내 문구 기능
   const [showModal, setShowModal] = useState(false);
@@ -56,7 +52,7 @@ export const ChatRoomPage = () => {
   // 기본 채팅 조회
   const { data, loading, error } = useQuery('requests', () =>
     getWebAPI(
-      `/chat/messageList/${
+      `${CHATING_URL.MESSAGE_LIST_GET}/${
         localStorage.memberUniqueId
       }?chatRoomId=${chatRoomId}&chatRoomUniqueId=${chatRoomUniqueId}&page=${0}`,
     ),
@@ -129,11 +125,9 @@ export const ChatRoomPage = () => {
     messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessageList]);
 
-  //이 방에 참여한 사용자(나)의 정보를 가져와!!! 실시!!!
-
   const connect = () => {
     client.current = new StompJs.Client({
-      webSocketFactory: () => new SockJS(`https://im-soolo.shop/ws-stomp`),
+      webSocketFactory: () => new SockJS(`http://${process.env.REACT_APP_WESOCKET_URL}`),
       connectHeaders: {
         Access_key,
       },
@@ -222,10 +216,6 @@ export const ChatRoomPage = () => {
     client.current.deactivate();
   };
 
-  //TODO 채팅방 나가기 누를 때 disconnect() 호출하게 추가
-
-  // console.log('chatMessageList :: ', chatMessageList);
-
   const closeModal = () => {
     setIsModalOpen(false);
     setBackgroundPosition('static');
@@ -255,13 +245,8 @@ export const ChatRoomPage = () => {
     alert('곧 업데이트 예정입니다!');
   };
 
-  console.log('chatMessageList ::', chatMessageList);
-
   // 채팅방 나가기 기능 (모임 삭제 / 모임 취소)
   const ExitButtonHandler = () => {
-    console.log('ExitButtonHandler - hostId :: ', hostId);
-    console.log('ExitButtonHandler - chatRoomId :: ', chatRoomId);
-    console.log('localStorage.memberUniqueId ::', localStorage.memberUniqueId);
     if (hostId === localStorage.memberUniqueId) {
       deleteAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${chatRoomId}`);
       alert('모임이 삭제되었습니다.');
@@ -309,7 +294,7 @@ export const ChatRoomPage = () => {
           <Container>
             {/* <div ref={containerRef}>target</div> */}
             <Contents>
-              <ParticipantDiv>ㅇㅇㅇ님이 참여했습니다.</ParticipantDiv>
+              <ParticipantDiv>즐거운 만남을 하시기 바랍니다!</ParticipantDiv>
               {chatMessageList?.map((data, index) => {
                 if (data.memberUniqueId === localStorage.memberUniqueId) {
                   return (
@@ -495,7 +480,6 @@ const Topbar = styled.div`
   display: flex;
   position: fixed;
   top: 0;
-  // margin-top: 51px;
   justify-content: space-between;
   align-items: center;
   width: 360px;
@@ -538,6 +522,7 @@ const ParticipantDiv = styled.div`
   width: 141px;
   height: 30px;
   margin: 0 auto;
+  padding: 3px;
   align-items: center;
   justify-content: center;
   background: #d0d5dd;
@@ -594,17 +579,11 @@ const OtherContents = styled.div`
 `;
 
 const OtherChatText = styled.div`
-  /* width: 105px; */
-  /* height: 40px; */
   max-width: 219px;
   line-height: 1.2;
   padding: 10px;
   font-size: 14px;
-  /* display: flex; */
-  /* align-items: center; */
-  /* justify-content: center; */
   background: #f8f9fe;
-  /* overflow-x: auto; */
   word-break: break-all;
   border-radius: 20px 20px 20px 0px;
 `;
@@ -859,4 +838,5 @@ const NavigateExitDiv = styled.div`
   padding-top: 8px;
   width: 32px;
   height: 32px;
+  cursor: pointer;
 `;

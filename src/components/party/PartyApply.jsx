@@ -35,6 +35,16 @@ export const PartyApply = () => {
   };
 
   const ApplicationButtonHandler = e => {
+    if (reason && reason.length < 5) {
+      alert('신청이 불가합니다. 모임 신청 이유를 5글자 이상으로 입력해주세요.');
+      return;
+    }
+
+    if (amountAlcohol && amountAlcohol.length < 2) {
+      alert('신청이 불가합니다. 주량을 2글자 이상으로 입력해주세요.');
+      return;
+    }
+
     const data = {
       reason,
       amountAlcohol,
