@@ -26,6 +26,7 @@ export const MEMBER_URL = {
   MYPAGE_GET: '/member/info',
   MYPAGE_PUT: '/member/update',
   TARGET_PAGE_GET: '/member',
+  USER_REPORT_POST: '/report',
 };
 
 export const PARTIES_URL = {

@@ -132,7 +132,7 @@ function UserUpdate() {
             <Frame4094>
               <Field height={40}>
                 <Content
-                  maxlength="9"
+                  maxLength="9"
                   value={nameInput}
                   placeholder={user?.memberName}
                   onChange={memberNameHanlder}

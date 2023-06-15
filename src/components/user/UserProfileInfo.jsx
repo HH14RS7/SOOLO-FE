@@ -8,6 +8,7 @@ import { ReactComponent as Backicon } from '../../assets/userprofile/back.svg';
 import { ReactComponent as FrameIcon } from '../../assets/mypage/frame35.svg';
 import { ReactComponent as Report } from '../../assets/userprofile/report.svg';
 import { Link } from 'react-router-dom';
+import Loading from '../Loading';
 
 export const UserProfileInfo = () => {
   const { id: memberID } = useParams();
@@ -21,7 +22,7 @@ export const UserProfileInfo = () => {
   const user = data?.data?.data;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />;
   }
 
   return (
@@ -53,7 +54,7 @@ export const UserProfileInfo = () => {
               <TextContent>{user?.introduce}</TextContent>
             </Frame4014>
             <ReportCon>
-              <Link to={`${PATH_URL.USER_REPORT}/${user.memberID}`}>
+              <Link to={`${PATH_URL.USER_REPORT}/${memberID}`}>
                 <Report />
               </Link>
             </ReportCon>
