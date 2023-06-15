@@ -31,7 +31,7 @@ export const ChatList = () => {
 
   useEffect(() => {
     const client = new StompJs.Client({
-      brokerURL: 'ws://222.102.175.141:8081/ws-stomp',
+      brokerURL: 'wss://im-soolo.shop/ws-stomp',
       connectHeaders: {
         Access_key: `Bearer ${accesskey}`,
       },
@@ -56,7 +56,7 @@ export const ChatList = () => {
       // heartbeatOutgoing: 4000,
     });
     client.webSocketFactory = function () {
-      return new SockJS('http://222.102.175.141:8081/ws-stomp');
+      return new SockJS('https://im-soolo.shop/ws-stomp');
     };
 
     client.activate();

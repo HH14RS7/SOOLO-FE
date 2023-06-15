@@ -91,10 +91,6 @@ export const MyPageList = () => {
               <ListIcon />
             </Frame4005>
           </Link>
-          <Frame4005>
-            <ListTitle>공지사항</ListTitle>
-            <ListIcon />
-          </Frame4005>
           <Link to={`${PATH_URL.MY_ACCOUNT_DETAILS}`}>
             <Frame4005>
               <ListTitle>계정정보</ListTitle>
