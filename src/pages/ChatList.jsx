@@ -1,7 +1,7 @@
 // 기능 import
 import { React, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { PATH_URL } from '../shared/constants';
+import { PATH_URL, PARTIES_URL } from '../shared/constants';
 import { ChatApprove } from '../components/Chat/ChatApprove';
 import { deleteAPI, postAPI } from '../api/api';
 import * as StompJs from '@stomp/stompjs';
@@ -15,7 +15,6 @@ import { ReactComponent as PeopleIcon } from '../assets/chating/membericon.svg';
 import { ReactComponent as MenuIcon } from '../assets/chating/menuicons.svg';
 import { ReactComponent as PartyDefaultImg } from '../assets/common/partydefaultimg.svg';
 import { ReactComponent as LoadingIcon } from '../assets/chating/loadingicon.svg';
-import { PARTIES_URL } from '../shared/constants';
 
 export const ChatList = () => {
   const navigate = useNavigate();
@@ -32,7 +31,7 @@ export const ChatList = () => {
 
   useEffect(() => {
     const client = new StompJs.Client({
-      brokerURL: 'wss://im-soolo.shop/ws-stomp',
+      brokerURL: `ws://${process.env.REACT_APP_WESOCKET_URL}`,
       connectHeaders: {
         Access_key: `Bearer ${accesskey}`,
       },
@@ -43,11 +42,9 @@ export const ChatList = () => {
         const subscription = client.subscribe(
           `/sub/chat/chatList/${localStorage.memberUniqueId}`,
           message => {
-            console.log(`Received:: ${message.body}`);
             setChatData(JSON.parse(`${message.body}`));
           },
         );
-        console.log('subscription :: ', subscription);
         client.publish({
           destination: `/pub/chat/chatList/${localStorage.memberUniqueId}`,
         });
@@ -57,16 +54,12 @@ export const ChatList = () => {
       // heartbeatOutgoing: 4000,
     });
     client.webSocketFactory = function () {
-      return new SockJS('https://im-soolo.shop/ws-stomp');
+      return new SockJS(`http://${process.env.REACT_APP_WESOCKET_URL}`);
     };
 
     client.activate();
-    // connect(); // 웹소켓 연결 수행
-    return () => {
-      // disconnect(); // 컴포넌트 언마운트 시 웹소켓 연결 해제
-    };
+    return () => {};
   }, []);
-  console.log('chatData :: ', chatData);
 
   // 탭 UI
   const handleTabChange = tab => {
@@ -90,10 +83,6 @@ export const ChatList = () => {
     setHostId(host);
   };
 
-  console.log('roomId ::', roomId);
-  console.log('hostId ::', hostId);
-  console.log('localStorage.memberUniqueId ::', localStorage.memberUniqueId);
-
   const handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
       closeModal();
@@ -114,9 +103,6 @@ export const ChatList = () => {
 
   // 나가기 버튼
   const ExitButtonHandler = () => {
-    console.log('ExitButtonHandler - hostId :: ', hostId);
-    console.log('ExitButtonHandler - roomId :: ', roomId);
-    console.log('localStorage.memberUniqueId ::', localStorage.memberUniqueId);
     if (hostId === localStorage.memberUniqueId) {
       deleteAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${roomId}`);
       alert('모임이 삭제되었습니다.');
@@ -430,14 +416,6 @@ const MemberProfile = styled.div`
   align-items: center;
 `;
 
-const MemberImgDiv = styled.div`
-  width: 18px;
-  height: 18px;
-  border-radius: 15px;
-  border: 1px solid #f63d68;
-  position: absolute;
-`;
-
 const RightContents = styled.div`
   width: 38px;
   height: 60px;
@@ -485,8 +463,6 @@ const Modals = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   background-color: rgba(29, 41, 57, 0.5);
-  /* margin: 0 auto; */
-  /* width: 375px; */
   height: 100%;
 `;
 

@@ -9,7 +9,7 @@ const api = axios.create({
   baseURL: API_URL,
 });
 
-const apis = axios.create({
+const apiweb = axios.create({
   baseURL: WEBAPI_URL,
 });
 
@@ -30,7 +30,7 @@ api.interceptors.request.use(
   },
 );
 
-apis.interceptors.request.use(
+apiweb.interceptors.request.use(
   config => {
     //cookie에 access_token,refresh_token을 어떤 이름으로 저장했는지?
     const accesskey = Cookies.get('Access_key');
@@ -85,7 +85,7 @@ export async function getAPI(url) {
 }
 
 export async function getWebAPI(url, data) {
-  return await apis.get(WEBAPI_URL + url, data);
+  return await apiweb.get(WEBAPI_URL + url, data);
 }
 
 export async function deleteAPI(url) {
