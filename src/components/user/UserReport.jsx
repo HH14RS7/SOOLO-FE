@@ -21,7 +21,7 @@ function UserReport() {
 
   const mutation = useMutation(data => postAPI(`${MEMBER_URL.USER_REPORT_POST}`, data), {
     onSuccess: response => {
-      alert('신고하기 성공 ', response);
+      alert('신고 완료', response);
       navigate('/');
     },
     onError: error => {
