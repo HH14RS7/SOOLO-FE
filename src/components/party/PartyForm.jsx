@@ -17,18 +17,19 @@ import { ReactComponent as Check } from '../../assets/common/check.svg';
 import { ReactComponent as Upload } from '../../assets/common/upload.svg';
 import { ReactComponent as Close } from '../../assets/common/close.svg';
 import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
+import { Modal } from '../../elements/Modal';
 
 const CreateForm = ({ party }) => {
   const { regionName, getRegionName } = useGetRegionName();
   const { stationName, distance, getStationInfo } = useGetNearbyStation();
   const location = useLocation();
   const place = location.state || {};
+  const isEdit = !!party.partyId;
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(null);
   const [previewImage, setPreviewImage] = useState(party.imgUrl || null);
 
-  const isEdit = !!party.partyId;
   const initialTotalCount = isEdit ? party.totalCount : 2;
   const [totalCount, setTotalCount] = useState(initialTotalCount);
 
@@ -37,8 +38,9 @@ const CreateForm = ({ party }) => {
   const addIcon = '/img/add.png';
   const minusIcon = '/img/minus.png';
   const defaultImg = '/img/default-image.png';
-
   const [img, setImg] = useState(defaultImg);
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -115,6 +117,7 @@ const CreateForm = ({ party }) => {
     formData => putUpdateAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${party.partyId}`, formData),
     {
       onSuccess: response => {
+        setIsModalOpen(true);
         alert(response.data.msg);
       },
       onError: error => {
@@ -129,6 +132,7 @@ const CreateForm = ({ party }) => {
     {
       onSuccess: response => {
         alert(response.data.msg);
+        setIsModalOpen(true);
       },
       onError: error => {
         alert(error.message);
@@ -195,17 +199,18 @@ const CreateForm = ({ party }) => {
       return false;
     }
     const currentDate = new Date();
-    const currentDateTime = currentDate.getHours() + ':' + currentDate.getMinutes();
+    const currentDateTime = currentDate.getHours() * 100 + currentDate.getMinutes();
 
     const formatSelectedDate = moment(selectedDate).format('YYYY-MM-DD');
     const formattTodayDate = moment(currentDate).format('YYYY-MM-DD');
-
     // 현재일 선택시
-    if (formatSelectedDate === formattTodayDate && selectedTime < currentDateTime) {
+    if (
+      formatSelectedDate === formattTodayDate &&
+      parseInt(selectedTime.replace(':', '')) < currentDateTime
+    ) {
       alert('현재 시간 이후로 선택해주세요');
       return false;
     }
-
     return true;
   };
   // 파일 선택
@@ -261,12 +266,34 @@ const CreateForm = ({ party }) => {
     e.preventDefault();
     setTotalCount(totalCount => Math.max(totalCount - 1, 2));
   };
+
   const handleTimeSelect = time => {
     setSelectedTime(time);
   };
 
+  const ExitopenModal = () => {
+    setIsExitModalOpen(true);
+  };
+
+  const ExitcloseModal = () => {
+    setIsExitModalOpen(false);
+  };
+
+  const handleModalButtonClick = () => {
+    setIsModalOpen(false);
+    navigate(PATH_URL.MAIN);
+  };
+
   return (
     <Background>
+      {isModalOpen && (
+        <Modal
+          title="모임글이 수정되었습니다."
+          subTitle="모달 부제목"
+          text1="확인"
+          onClick={handleModalButtonClick}
+        />
+      )}
       <Container>
         <Topbar>
           <TopBackDiv>
