@@ -70,6 +70,8 @@ export const ChatApprove = () => {
 
   console.log('requestList ::', requestList);
 
+  console.log('제목뽑기 ::', requestList.data);
+
   return (
     <>
       <Background>
@@ -80,6 +82,7 @@ export const ChatApprove = () => {
             }}
           ></div>
           {requestList?.data?.map((user, index) => (
+            // console.log('user :::', user);
             <RequestContainer key={index}>
               <RequestContents>
                 <RequestImgDiv>
@@ -96,6 +99,7 @@ export const ChatApprove = () => {
                   </Link>
                 </RequestImgDiv>
                 <RequestInfo>
+                  <div>{user.title}</div>
                   <RequestUserName>{user.memberName}</RequestUserName>
                   <div
                     style={{

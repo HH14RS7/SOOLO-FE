@@ -23,7 +23,7 @@ const Footer = () => {
             <Icon active={activeTitle === '0'} onClick={() => handleTitleClick('0')}>
               <Partyicon fill={activeTitle === '0' ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title active={activeTitle === '0'}>모임</Title>
+            <Title active={activeTitle === '0'}>홈</Title>
           </Link>
         </TabBarItem>
         <TabBarItem index={'1'}>

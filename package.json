@@ -9,6 +9,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
+    "event-source-polyfill": "^1.0.31",
     "js-cookie": "^3.0.5",
     "json-server": "^0.17.3",
     "jwt-decode": "^3.1.2",

@@ -194,7 +194,6 @@ const Topbar = styled.div`
   display: flex;
   position: fixed;
   top: 0;
-  margin-top: 51px;
   align-items: center;
   justify-content: space-between;
   width: 360px;
