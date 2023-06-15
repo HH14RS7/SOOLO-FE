@@ -12,7 +12,7 @@ function SearchLocation({ onPlaceChange }) {
   const handleSubmit = e => {
     e.preventDefault();
     onPlaceChange(inputText);
-    setInputText('');
+    // setInputText('');
   };
 
   return (
