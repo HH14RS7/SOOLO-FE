@@ -12,25 +12,31 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
   const FOOD_CATEGORY_CODE = 'FD6'; // 음식점 카테고리 코드
   const ps = new kakao.maps.services.Places();
   const containerRef = useRef(null);
-
+  const [hasResult, setHasResults] = useState(true);
   // 키워드 검색 함수
-  const placesSearchCB = useCallback((data, status) => {
+  const placesSearchCB = useCallback((data, status, pagination) => {
     if (status === kakao.maps.services.Status.OK) {
-      setPlaceList(prevList => [...prevList, ...data]);
+      setPlaceList(data);
       setIsLoading(false);
+      setHasResults(true);
+      displayPagination(pagination);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+      setHasResults(false);
       // alert('검색 결과가 존재하지 않습니다.');
     } else if (status === kakao.maps.services.Status.ERROR) {
+      setHasResults(false);
       alert('검색 결과 중 오류가 발생했습니다.');
     }
   }, []);
 
   useEffect(() => {
+    setCurrentPage(1);
+
     setPlaceList([]);
 
     const searchOptions = {
-      size: 15,
-      page: 3,
+      size: 10,
+      page: 1,
       category_group_code: FOOD_CATEGORY_CODE,
     };
 
@@ -51,34 +57,52 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
     } else {
       setIsLoading(false);
     }
-  }, [searchPlace, currentLocation, placesSearchCB]);
+  }, [searchPlace, currentLocation, placesSearchCB, currentPage]);
 
-  // 다음 페이지 불러오기 함수
-  const loadNextPage = () => {
-    setCurrentPage(prevPage => prevPage + 1);
-  };
+  // 검색결과 목록 하단에 페이지 번호 표시
+  // 검색결과 목록 하단에 페이지 번호 표시
+  function displayPagination(pagination) {
+    var paginationEl = document.getElementById('pagination');
 
-  useEffect(() => {
-    function handleScroll() {
-      const { scrollTop, clientHeight, scrollHeight } = containerRef.current;
-
-      if (scrollTop + clientHeight >= scrollHeight - 300 && !isLoading) {
-        loadNextPage();
-      }
+    if (!paginationEl) {
+      return; // 오류 방지: paginationEl이 null인 경우 함수 종료
     }
 
-    // containerRef.current.addEventListener('scroll', handleScroll);
-    return () => {
-      // containerRef.current.removeEventListener('scroll', handleScroll);
-    };
-  }, [currentPage]);
+    var fragment = document.createDocumentFragment(),
+      i;
+
+    // 기존에 추가된 페이지 번호 삭제
+    while (paginationEl.hasChildNodes()) {
+      paginationEl.removeChild(paginationEl.lastChild);
+    }
+
+    for (i = 1; i <= pagination.last; i++) {
+      var el = document.createElement('a');
+      el.href = '#';
+      el.innerHTML = i;
+
+      if (i === pagination.current) {
+        el.className = 'on';
+      } else {
+        el.onclick = (function (i) {
+          return function () {
+            pagination.gotoPage(i);
+          };
+        })(i);
+      }
+
+      fragment.appendChild(el);
+    }
+    paginationEl.appendChild(fragment);
+  }
 
   useEffect(() => {
-    if (placeList.length === currentPage * 15) {
+    if (placeList.length === currentPage * 3) {
       setIsLoading(false);
     }
   }, [placeList, currentPage]);
 
+  console.log(placeList.length);
   return (
     <div>
       <ListWrapper ref={containerRef}>
@@ -101,6 +125,7 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
             )}
           </DefaultContainer>
         )}
+        {hasResult && <Pagination id="pagination"></Pagination>}
       </ListWrapper>
     </div>
   );
@@ -131,4 +156,38 @@ const SearchInfoIcon = styled(SearchInfo)`
 
 const InfoMsg = styled.h4`
   color: var(--color-gray-700);
+`;
+
+const Pagination = styled.div`
+  margin: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: normal;
+  font-weight: var(--font-weight-400);
+  font-size: var(--font-small);
+  line-height: 100%;
+  letter-spacing: -0.015em;
+  border-radius: 999px;
+
+  a {
+    color: white;
+    font-size: var(--font-small);
+    text-decoration: none;
+    background: var(--color-primary-100);
+    margin: 0 5px;
+    padding: 8px 12px;
+
+    border-radius: 999px;
+    transition: background-color 0.3s, color 0.3s;
+
+    &:hover {
+      background-color: var(--color-primary-300);
+    }
+
+    &.on {
+      font-weight: bold;
+      background-color: var(--color-primary-500);
+    }
+  }
 `;
