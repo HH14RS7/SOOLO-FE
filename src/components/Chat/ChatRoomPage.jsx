@@ -16,7 +16,9 @@ import { ReactComponent as NavigateExitIcon } from '../../assets/chating/Navigat
 import { ReactComponent as PartHostIcon } from '../../assets/chating/hosticon.svg';
 import { ReactComponent as ProfileDefaultImg } from '../../assets/common/profiledefaultimg.svg';
 import { formmatedDate } from '../../shared/formattedDate';
-import { deleteAPI, postAPI } from '../../api/api';
+import { deleteAPI, getWebAPI, postAPI } from '../../api/api';
+import { useQuery } from 'react-query';
+import { CHATING_URL } from '../../shared/constants';
 
 export const ChatRoomPage = () => {
   const navigate = useNavigate();
@@ -44,13 +46,35 @@ export const ChatRoomPage = () => {
   const [totalPage, setTotalPage] = useState(0);
 
   const [message, setMessage] = useState('');
-  const [data, setData] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const containerRef = useRef(null);
 
   // 자동 스크롤
   const messageEndRef = useRef(null);
+
+  // 기본 채팅 조회
+  const { data, loading, error } = useQuery('requests', () =>
+    getWebAPI(
+      `/chat/messageList/${
+        localStorage.memberUniqueId
+      }?chatRoomId=${chatRoomId}&chatRoomUniqueId=${chatRoomUniqueId}&page=${0}`,
+    ),
+  );
+
+  useEffect(() => {
+    if (data) {
+      setChatMessageList(data?.data?.data?.chatMessageList?.reverse());
+    }
+  }, [data]);
+
+  // if (Loading) {
+  //   return <div>로딩중입니다.</div>;
+  // }
+
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersect, {
@@ -248,6 +272,14 @@ export const ChatRoomPage = () => {
       navigate(`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`);
     }
   };
+
+  // if (Loading) {
+  //   return <div>로딩중입니다.</div>;
+  // }
+
+  // if (error) {
+  //   return <div>Error: {error.message}</div>;
+  // }
 
   return (
     <>

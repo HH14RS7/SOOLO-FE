@@ -61,7 +61,6 @@ const PartyList = () => {
       fontStyle: 'normal',
       fontWeight: '400',
       fontSize: '14px',
-      padding: '0',
       border: '1px solid #D0D5DD',
       '&:focus': {
         border: '1px solid red',
