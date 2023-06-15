@@ -53,4 +53,5 @@ export const CHATING_URL = {
   CHAT_ROOM_SUBS: 'sub/chat/message',
   BEFORE_CHAT_LIST: 'PUB/chat/room',
   CHAT_INPUT: 'pub/chat/message',
+  MESSAGE_LIST_GET: '/chat/messageList',
 };

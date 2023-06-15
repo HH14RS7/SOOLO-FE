@@ -3,11 +3,34 @@ import Cookies from 'js-cookie';
 
 const API_URL = `${process.env.REACT_APP_SERVER_URL}`;
 
+const WEBAPI_URL = `http://222.102.175.141:8081`;
+
 const api = axios.create({
   baseURL: API_URL,
 });
 
+const apis = axios.create({
+  baseURL: WEBAPI_URL,
+});
+
 api.interceptors.request.use(
+  config => {
+    //cookie에 access_token,refresh_token을 어떤 이름으로 저장했는지?
+    const accesskey = Cookies.get('Access_key');
+    const refreshkey = Cookies.get('Refresh_key');
+
+    if (accesskey) {
+      config.headers['Access_key'] = `Bearer ${accesskey}`;
+      config.headers['Refresh_key'] = `Bearer ${refreshkey}`;
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  },
+);
+
+apis.interceptors.request.use(
   config => {
     //cookie에 access_token,refresh_token을 어떤 이름으로 저장했는지?
     const accesskey = Cookies.get('Access_key');
@@ -59,6 +82,10 @@ export async function putAPI(url, data) {
 
 export async function getAPI(url) {
   return await api.get(API_URL + url);
+}
+
+export async function getWebAPI(url, data) {
+  return await apis.get(WEBAPI_URL + url, data);
 }
 
 export async function deleteAPI(url) {
