@@ -23,6 +23,7 @@ import ScrollToTop from '../shared/ScrollToTop';
 import { PartyApprove } from '../pages/PartyApprove';
 import MainLayout from './MainLayout';
 import FullLayout from './FullLayout';
+import UserReportPage from '../pages/UserReportPage';
 
 const Router = () => {
   return (
@@ -43,6 +44,7 @@ const Router = () => {
           <Route path={PATH_URL.PARTY_CREATE} element={<PartyCreate />} />
           <Route path={`${MEMBER_URL.TARGET_PAGE_GET}/:id`} element={<UserProfilePage />} />
           <Route path={PATH_URL.PARTY_MAP_CREATE} element={<PartyMapCreate />} />
+          <Route path={`${PATH_URL.USER_REPORT}/:id`} element={<UserReportPage />} />
         </Route>
         {/* SubHeader, Footer 컴포넌트 */}
         <Route element={<Layout />}>
