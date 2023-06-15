@@ -17,7 +17,7 @@ import { ReactComponent as Check } from '../../assets/common/check.svg';
 import { ReactComponent as Upload } from '../../assets/common/upload.svg';
 import { ReactComponent as Close } from '../../assets/common/close.svg';
 import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
-import { Modal } from '../../elements/Modal';
+// import { Modal } from '../../elements/Modal';
 
 const CreateForm = ({ party }) => {
   const { regionName, getRegionName } = useGetRegionName();
@@ -39,8 +39,8 @@ const CreateForm = ({ party }) => {
   const minusIcon = '/img/minus.png';
   const defaultImg = '/img/default-image.png';
   const [img, setImg] = useState(defaultImg);
-  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -117,7 +117,7 @@ const CreateForm = ({ party }) => {
     formData => putUpdateAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${party.partyId}`, formData),
     {
       onSuccess: response => {
-        setIsModalOpen(true);
+        // setIsModalOpen(true);
         alert(response.data.msg);
       },
       onError: error => {
@@ -132,7 +132,7 @@ const CreateForm = ({ party }) => {
     {
       onSuccess: response => {
         alert(response.data.msg);
-        setIsModalOpen(true);
+        // setIsModalOpen(true);
       },
       onError: error => {
         alert(error.message);
@@ -271,29 +271,29 @@ const CreateForm = ({ party }) => {
     setSelectedTime(time);
   };
 
-  const ExitopenModal = () => {
-    setIsExitModalOpen(true);
-  };
+  // const ExitopenModal = () => {
+  //   setIsExitModalOpen(true);
+  // };
 
-  const ExitcloseModal = () => {
-    setIsExitModalOpen(false);
-  };
+  // const ExitcloseModal = () => {
+  //   setIsExitModalOpen(false);
+  // };
 
-  const handleModalButtonClick = () => {
-    setIsModalOpen(false);
-    navigate(PATH_URL.MAIN);
-  };
+  // const handleModalButtonClick = () => {
+  //   setIsModalOpen(false);
+  //   navigate(PATH_URL.MAIN);
+  // };
 
   return (
     <Background>
-      {isModalOpen && (
+      {/* {isModalOpen && (
         <Modal
           title="모임글이 수정되었습니다."
           subTitle="모달 부제목"
           text1="확인"
           onClick={handleModalButtonClick}
         />
-      )}
+      )} */}
       <Container>
         <Topbar>
           <TopBackDiv>
