@@ -8,6 +8,7 @@ import * as StompJs from '@stomp/stompjs';
 import styled from 'styled-components';
 import SockJS from 'sockjs-client';
 import Cookies from 'js-cookie';
+import LoginModal from '../components/LoginModal';
 
 // 이미지 import
 import { ReactComponent as PeopleIcon } from '../assets/chating/membericon.svg';
@@ -26,6 +27,8 @@ export const ChatList = () => {
 
   const [roomId, setRoomId] = useState();
   const [hostId, setHostId] = useState();
+
+  const token = Cookies.get('Access_key');
 
   useEffect(() => {
     const client = new StompJs.Client({
@@ -124,8 +127,6 @@ export const ChatList = () => {
       navigate(`${PATH_URL.MAIN}`);
     }
   };
-
-  //
 
   return (
     <>
