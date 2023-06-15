@@ -209,6 +209,7 @@
   <img src="https://img.shields.io/badge/.ENV-ECD53F?style=for-the-badge&logo=.ENV&logoColor=white"/>
   <img src="https://img.shields.io/badge/Stomp-000000?style=for-the-badge&logo=&logoColor=white"/>
   <img src="https://img.shields.io/badge/WEBSOCKET-000000?style=for-the-badge&logo=&logoColor=white"/>
+  <img src="https://img.shields.io/badge/React Query-FF4154?style=for-the-badge&logo=React Query&logoColor=white"/>
   <img src="https://img.shields.io/badge/RECOIL-000000?style=for-the-badge&logo=&logoColor=white"/>
   <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white"/>
   <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white"/>
