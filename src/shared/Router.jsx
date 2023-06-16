@@ -24,6 +24,7 @@ import { PartyApprove } from '../pages/PartyApprove';
 import MainLayout from './MainLayout';
 import FullLayout from './FullLayout';
 import UserReportPage from '../pages/UserReportPage';
+import WalkThroughPage from '../pages/WalkThroughPage';
 
 const Router = () => {
   return (
@@ -59,6 +60,8 @@ const Router = () => {
           <Route path={PATH_URL.MY_CREATE_PARTY} element={<MyCreateParty />} />
           <Route path={PATH_URL.PARTY_APPROVE} element={<PartyApprove />} />
         </Route>
+        {/* header, footer 모두 없음 */}
+        <Route path={PATH_URL.WALK_THROUGH} element={<WalkThroughPage />} />
       </Routes>
     </BrowserRouter>
   );
