@@ -404,7 +404,7 @@ const CreateForm = ({ party }) => {
               </TimeSection>
             </DateContainer>
             <ImageUplaodSection>
-              <Label htmlFor="img">이미지 업로드</Label>
+              <Label htmlFor="img">이미지 업로드(선택)</Label>
               <PlaceImageWrapper>
                 <PlaceImage src={previewImage || party.imageUrl || defaultImg} alt="PlaceImage" />
                 {/* 업로드버튼 */}
@@ -418,7 +418,13 @@ const CreateForm = ({ party }) => {
                     ref={imgRef}
                     onChange={handleFileChange}
                   />
-                  <UploadMsg>이미지 업로드 하기</UploadMsg>
+                  <UploadMsg>
+                    {isEdit && party?.imageUrl
+                      ? '이미지 변경하기'
+                      : !previewImage
+                      ? '이미지 업로드하기'
+                      : '이미지 변경하기'}
+                  </UploadMsg>{' '}
                 </UploadButton>
                 {/* <ButtonContainer>
                   <ImgModifyButton onClick={handleUploadClick}>
