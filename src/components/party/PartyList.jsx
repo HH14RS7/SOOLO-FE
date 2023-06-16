@@ -1,53 +1,50 @@
 import { useState, useEffect } from 'react';
-import { QueryClient, useQuery } from 'react-query';
 import { getAPI } from '../../api/api';
 import { PARTIES_URL } from '../../shared/constants';
 import PartyItem from './PartyItem';
 import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import { ReactComponent as ArrowBottom } from '../../assets/common/arrow-bottom.svg';
-import Loading from '../Loading';
+import { useInView } from 'react-intersection-observer';
 
 const PartyList = () => {
   const unionImg = './img/union.png';
   const mainInfoImg = './img/main-info.png';
-
   const RECRUITMENT_STATUS_SELECT = [
     { value: 0, label: '전체' },
     { value: 1, label: '모집중' },
     { value: 2, label: '모집마감' },
   ];
-
-  const queryClient = new QueryClient();
+  const [partyList, setPartyList] = useState([]);
   const [recruitmentStatus, setRecruitmentStatus] = useState(RECRUITMENT_STATUS_SELECT[0]);
-  const [totalElements, setTotalElements] = useState(0);
 
-  const page = 0; // 임시
+  const [Page, setPage] = useState(0);
+  const [ref, inView] = useInView();
 
-  const { data, isLoading, error } = useQuery(
-    ['parties', recruitmentStatus.value],
-    () =>
-      getAPI(
-        `${PARTIES_URL.PARTIES_LIST}?page=${page}&recruitmentStatus=${recruitmentStatus.value}`,
-      ),
-    {
-      onSuccess: response => {
-        if (recruitmentStatus.value === 0) {
-          setTotalElements(response?.data?.data?.totalElements);
-        }
-      },
-    },
-  );
-
-  useEffect(() => {
-    queryClient.invalidateQueries('parties');
-  }, [queryClient, recruitmentStatus]);
-
-  const partyList = data?.data.data.partyList;
+  const getPartyList = () => {
+    getAPI(`${PARTIES_URL.PARTIES_LIST}?page=${Page}&recruitmentStatus=${recruitmentStatus.value}`)
+      .then(res => {
+        console.log('partyList', res.data.data.partyList);
+        // 리스트 뒤로 붙여주기
+        setPartyList([...partyList, ...res?.data?.data?.partyList]);
+        // 요청 성공 시에 페이지에 1 카운트 해주기
+        setPage(page => page + 1);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 
   const handleSelected = option => {
     setRecruitmentStatus(option);
   };
+
+  useEffect(() => {
+    // inView가 true 일때만 실행한다.
+    if (inView) {
+      getPartyList();
+    }
+  }, [inView]);
 
   const styles = {
     menu: base => ({
@@ -106,54 +103,55 @@ const PartyList = () => {
 
   return (
     <Wrapper>
-      {isLoading ? (
-        <Loading />
-      ) : totalElements > 0 ? (
-        <>
-          <PartySection>
-            <PartyHeader>
-              <Title>현재 진행중인 모임</Title>
-              {
-                <Select
-                  placeholder={RECRUITMENT_STATUS_SELECT[0].label}
-                  options={RECRUITMENT_STATUS_SELECT}
-                  onChange={option => handleSelected(option)}
-                  value={recruitmentStatus}
-                  components={{ DropdownIndicator }}
-                  styles={styles}
-                />
-              }
-            </PartyHeader>
-            <ListWrapper>
-              <List>
-                {partyList.map(party => (
-                  <PartyItem key={party.partyId} party={party} />
-                ))}
-              </List>
-            </ListWrapper>
-          </PartySection>
-          <ListBottomSection>
-            <Message>마음에 드는 모임이 없으신가요?</Message>
-            <ButtonInfo>
-              <Message>아래</Message>
-              <UnionImage src={unionImg} alt="union" />
-              <Message>통해 모임을 열어보세요! </Message>
-            </ButtonInfo>
-          </ListBottomSection>
-        </>
-      ) : (
-        <InfoWrapper>
-          <InfoImg src={mainInfoImg} alt="mainInfoImage" />
-          <BottomInfoSection>
-            <Message>앗! 아직 열린 모임이 없어요.</Message>
-            <ButtonInfo>
-              <Message>아래</Message>
-              <UnionImage src={unionImg} alt="union" />
-              <Message>을 통해 모임을 열어보세요!</Message>
-            </ButtonInfo>
-          </BottomInfoSection>
-        </InfoWrapper>
-      )}
+      <>
+        {partyList ? (
+          <>
+            <PartySection>
+              <PartyHeader>
+                <Title>현재 진행중인 모임</Title>
+                {
+                  <Select
+                    placeholder={RECRUITMENT_STATUS_SELECT[0].label}
+                    options={RECRUITMENT_STATUS_SELECT}
+                    onChange={option => handleSelected(option)}
+                    value={recruitmentStatus}
+                    components={{ DropdownIndicator }}
+                    styles={styles}
+                  />
+                }
+              </PartyHeader>
+              <ListWrapper>
+                <List>
+                  {partyList?.map(party => (
+                    <PartyItem key={party.partyId} party={party} />
+                  ))}
+                </List>
+              </ListWrapper>
+              <div ref={ref}></div>
+              <ListBottomSection>
+                <Message>마음에 드는 모임이 없으신가요?</Message>
+                <ButtonInfo>
+                  <Message>아래</Message>
+                  <UnionImage src={unionImg} alt="union" />
+                  <Message>통해 모임을 열어보세요! </Message>
+                </ButtonInfo>
+              </ListBottomSection>
+            </PartySection>
+          </>
+        ) : (
+          <InfoWrapper>
+            <InfoImg src={mainInfoImg} alt="mainInfoImage" />
+            <BottomInfoSection>
+              <Message>앗! 아직 열린 모임이 없어요.</Message>
+              <ButtonInfo>
+                <Message>아래</Message>
+                <UnionImage src={unionImg} alt="union" />
+                <Message>을 통해 모임을 열어보세요!</Message>
+              </ButtonInfo>
+            </BottomInfoSection>
+          </InfoWrapper>
+        )}
+      </>
     </Wrapper>
   );
 };
