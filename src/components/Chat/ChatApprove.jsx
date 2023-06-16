@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useMutation, useQuery } from 'react-query';
 import { getAPI, postAPI, deleteAPI } from '../../api/api';
 import { MEMBER_URL, PARTIES_URL } from '../../shared/constants';
-import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
 
@@ -60,7 +60,6 @@ export const ChatApprove = () => {
   }
 
   const handleAccept = participateId => {
-    console.log('participateId :: ', participateId);
     acceptRequest.mutate(participateId);
   };
 
@@ -68,9 +67,7 @@ export const ChatApprove = () => {
     rejectRequest.mutate(participateId);
   };
 
-  console.log('requestList ::', requestList);
-
-  console.log('제목뽑기 ::', requestList.data);
+  console.log('requestList.data ::', requestList.data);
 
   return (
     <>
@@ -82,7 +79,6 @@ export const ChatApprove = () => {
             }}
           ></div>
           {requestList?.data?.map((user, index) => (
-            // console.log('user :::', user);
             <RequestContainer key={index}>
               <RequestContents>
                 <RequestImgDiv>
@@ -99,8 +95,17 @@ export const ChatApprove = () => {
                   </Link>
                 </RequestImgDiv>
                 <RequestInfo>
-                  <div>{user.title}</div>
                   <RequestUserName>{user.memberName}</RequestUserName>
+                  <Link to={`${PARTIES_URL.PARTIES_DETAIL}/${user.partyId}`}>
+                    <div
+                      style={{
+                        fontSize: '12px',
+                        marginBottom: '8px',
+                      }}
+                    >
+                      모임 : {user.title}
+                    </div>
+                  </Link>
                   <div
                     style={{
                       fontSize: '10px',

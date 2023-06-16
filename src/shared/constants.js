@@ -1,5 +1,6 @@
 export const PATH_URL = {
-  MAIN: '/',
+  WALK_THROUGH: '/',
+  MAIN: '/home',
   LOGIN: '/user/login',
   DETAIL: '/detail/:detailId',
   MYPAGE: '/mypage',
