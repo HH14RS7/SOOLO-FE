@@ -23,11 +23,16 @@ export const ChatList = () => {
   const accesskey = Cookies.get('Access_key');
   const [zIndex, setZIndex] = useState(8);
   const [marzinLeft, setMarzinLeft] = useState(0);
+  const [showModal, setShowModal] = useState(false);
 
   const [roomId, setRoomId] = useState();
   const [hostId, setHostId] = useState();
 
-  const token = Cookies.get('Access_key');
+  useEffect(() => {
+    if (!accesskey) {
+      setShowModal(true);
+    }
+  }, []);
 
   useEffect(() => {
     const client = new StompJs.Client({
@@ -116,6 +121,7 @@ export const ChatList = () => {
 
   return (
     <>
+      {showModal && <LoginModal />}
       <Background
         style={{
           position: backgroundPosition,
