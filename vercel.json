@@ -1,0 +1,8 @@
+{
+    "routes": [
+      {
+        "src": "/websocket-endpoint",
+        "dest": "https://im-soolo.shop"
+      }
+    ]
+  }
