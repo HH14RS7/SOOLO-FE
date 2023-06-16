@@ -32,7 +32,6 @@ const CreateForm = ({ party }) => {
 
   const initialTotalCount = isEdit ? party.totalCount : 2;
   const [totalCount, setTotalCount] = useState(initialTotalCount);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const imgRef = useRef();
   const locationIcon = '/img/map-location.png';
@@ -152,6 +151,10 @@ const CreateForm = ({ party }) => {
     const formData = new FormData();
     const formatDate = moment(selectedDate).format('YYYY-MM-DD') + ' ' + selectedTime;
 
+    if (!timeValidate()) {
+      return;
+    }
+
     const data = {
       title: item.title.trim(),
       content: item.content.trim(),
@@ -167,13 +170,6 @@ const CreateForm = ({ party }) => {
       regionName: isEdit ? party.regionName : regionName,
       categoryName: isEdit ? party.categoryName : place.category_name?.split('>').reverse()[0],
     };
-
-    if (isValid) {
-      setIsButtonDisabled(false); // 필드 유효성 검사를 통과한 경우 버튼 활성화
-      // 나머지 코드는 동일하게 유지
-    } else {
-      setIsButtonDisabled(true); // 필드 유효성 검사를 통과하지 못한 경우 버튼 비활성화
-    }
 
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
     const img = imgRef.current.files[0];
@@ -197,17 +193,11 @@ const CreateForm = ({ party }) => {
     navigate(PATH_URL.MAIN);
   };
 
-  const isValid = data => {
-    const { title, content, totalCount } = data;
-    if (!title || !content || !totalCount) {
-      return false;
-    }
-
+  const timeValidate = () => {
     if (!selectedDate || !selectedTime) {
       alert('시간을 선택해주세요');
       return false;
     }
-
     const currentDate = new Date();
     const currentDateTime = currentDate.getHours() * 100 + currentDate.getMinutes();
 
@@ -434,7 +424,7 @@ const CreateForm = ({ party }) => {
                       : !previewImage
                       ? '이미지 업로드하기'
                       : '이미지 변경하기'}
-                  </UploadMsg>
+                  </UploadMsg>{' '}
                 </UploadButton>
                 {/* <ButtonContainer>
                   <ImgModifyButton onClick={handleUploadClick}>
@@ -481,7 +471,7 @@ const CreateForm = ({ party }) => {
             </ImageInfoSection>
             <ButtonWrapper>
               {/* <button onClick={handlePrevClick}>취소하기</button> */}
-              <PostButton type="submit" disabled={isButtonDisabled}>
+              <PostButton type="submit">
                 {isEdit ? '모임글 수정하기' : '모임글 게시하기'}
               </PostButton>
             </ButtonWrapper>
