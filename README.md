@@ -11,7 +11,7 @@
 |최하나|김종범|이승현|조우필|최세준|김수진|정선우|이효림|
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 |[@chana](https://github.com/chana73)|[@JayB202](https://github.com/JayB202)|[@SHyun](https://github.com/seungheyon)|[@feeljoy](https://github.com/Cho-woo-pil)|[@Haribboo](https://github.com/Sejun0910)|[@jjin](https://github.com/devjjin)|[@sunwoo](https://github.com/Jeongsunwoo)|[@Hyo](https://github.com/HH14RS7)|
-|TL / BE|BE|BE|BE|VL / FE|FE|FE|DS|
+|TL / BE|BE|BE|BE|VL / FE|FE|FE|DE|
 
 <br>
 
