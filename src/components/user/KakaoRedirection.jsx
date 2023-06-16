@@ -2,6 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Loading from '../Loading';
 
 const KakaoRedirection = () => {
   const code = window.location.search;
@@ -43,7 +44,7 @@ const KakaoRedirection = () => {
     });
   }, [code, navigate]);
 
-  return <div>로그인 중입니다.</div>;
+  return <Loading />;
 };
 
 export default KakaoRedirection;

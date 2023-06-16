@@ -282,6 +282,7 @@ const ProfileImageWrapper = styled.div`
   position: relative;
   width: 70px;
   height: 70px;
+  object-fit: cover;
 `;
 
 const ImgUpdateCon = styled.label`

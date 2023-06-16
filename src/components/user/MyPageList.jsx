@@ -91,10 +91,6 @@ export const MyPageList = () => {
               <ListIcon />
             </Frame4005>
           </Link>
-          <Frame4005>
-            <ListTitle>공지사항</ListTitle>
-            <ListIcon />
-          </Frame4005>
           <Link to={`${PATH_URL.MY_ACCOUNT_DETAILS}`}>
             <Frame4005>
               <ListTitle>계정정보</ListTitle>
@@ -174,8 +170,8 @@ const Rectangle3971 = styled.div`
 const ProfileImage = styled.img`
   width: 70px;
   height: 70px;
-  background: url(.jpg), #d9d9d9;
   border-radius: 16px;
+  object-fit: cover;
 `;
 
 const Topbar360 = styled.div`
@@ -285,8 +281,6 @@ const Frame4013 = styled.div`
 `;
 
 const Introduce = styled.div`
-  width: 47px;
-  height: 12px;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 700;
@@ -336,8 +330,6 @@ const Frame4008 = styled.div`
 `;
 
 const MypageTitle = styled.div`
-  width: 55px;
-  height: 12px;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 700;

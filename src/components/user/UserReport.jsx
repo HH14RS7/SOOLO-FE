@@ -189,8 +189,6 @@ const Topbar = styled.div`
 `;
 
 const Title = styled.div`
-  width: 100px;
-  height: 16px;
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 400;
@@ -234,6 +232,7 @@ const ProfileImage = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 8px;
+  object-fit: cover;
 `;
 
 const ContentCon = styled.div`

@@ -119,6 +119,7 @@ const ProfileImage = styled.img`
   height: 100px;
   border-radius: 999px;
   margin-bottom: 16px;
+  object-fit: cover;
 `;
 
 const MemberName = styled.div`
