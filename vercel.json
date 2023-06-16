@@ -1,8 +1,3 @@
 {
-    "routes": [
-      {
-        "src": "/websocket-endpoint",
-        "dest": "https://im-soolo.shop/ws-stomp"
-      }
-    ]
+    "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
   }
