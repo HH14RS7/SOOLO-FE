@@ -11,6 +11,7 @@ const api = axios.create({
 
 const apiweb = axios.create({
   baseURL: WEBAPI_URL,
+  withCredentials: true,
 });
 
 api.interceptors.request.use(
