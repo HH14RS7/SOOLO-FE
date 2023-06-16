@@ -149,22 +149,4 @@ export const GlobalStyle = createGlobalStyle`
     text-decoration: none;
     color: inherit;
   }
-
-  .swiper-pagination-bullet {
-    background: var(--color-primary-300);
-  }
-  .swiper-pagination-bullet-active {
-    background: var(--color-primary-400);
-  } 
-  .swiper-button-pre {
-    color: var(--color-primary-200);
-  }
-  .swiper-button-next:after{
-    color: var(--color-primary-300);
-  }
-  .swiper-button-prev:after, .swiper-rtl .swiper-button-next:after {
-    content: 'prev';
-    color: var(--color-primary-400);
-}
-
 `;
