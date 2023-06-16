@@ -32,6 +32,6 @@ const ListWrapper = styled.ul`
   flex-direction: row;
   align-items: flex-start;
   position: relative;
-  bottom: 250px;
+  bottom: 200px;
   z-index: 10;
 `;
