@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 const API_URL = `${process.env.REACT_APP_SERVER_URL}`;
 
-const WEBAPI_URL = `https://im-soolo.shop`;
+const WEBAPI_URL = `${process.env.REACT_APP_API_SOCKET_URL}`;
 
 const api = axios.create({
   baseURL: API_URL,
@@ -11,6 +11,7 @@ const api = axios.create({
 
 const apiweb = axios.create({
   baseURL: WEBAPI_URL,
+  withCredentials: true,
 });
 
 api.interceptors.request.use(
@@ -84,8 +85,8 @@ export async function getAPI(url) {
   return await api.get(API_URL + url);
 }
 
-export async function getWebAPI(url, data) {
-  return await apiweb.get(WEBAPI_URL + url, data);
+export async function getWebAPI(url) {
+  return await apiweb.get(WEBAPI_URL + url);
 }
 
 export async function deleteAPI(url) {
