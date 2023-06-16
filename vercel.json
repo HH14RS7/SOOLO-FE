@@ -2,7 +2,7 @@
     "routes": [
       {
         "src": "/websocket-endpoint",
-        "dest": "https://im-soolo.shop"
+        "dest": "https://im-soolo.shop/ws-stomp"
       }
     ]
   }
