@@ -127,7 +127,7 @@ export const ChatRoomPage = () => {
 
   const connect = () => {
     client.current = new StompJs.Client({
-      webSocketFactory: () => new SockJS(`https://${process.env.REACT_APP_SOCKET_URL}`),
+      webSocketFactory: () => new SockJS(`http://${process.env.REACT_APP_ROOM_SOCKET_URL}`),
       connectHeaders: {
         Access_key,
       },

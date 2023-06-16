@@ -31,7 +31,7 @@ export const ChatList = () => {
 
   useEffect(() => {
     const client = new StompJs.Client({
-      brokerURL: `wss://${process.env.REACT_APP_SOCKET_URL}`,
+      brokerURL: `${process.env.REACT_APP_LIST1_SOCKET_URL}`,
       connectHeaders: {
         Access_key: `Bearer ${accesskey}`,
       },
@@ -54,7 +54,7 @@ export const ChatList = () => {
       // heartbeatOutgoing: 4000,
     });
     client.webSocketFactory = function () {
-      return new SockJS(`https://${process.env.REACT_APP_SOCKET_URL}`);
+      return new SockJS(`${process.env.REACT_APP_LIST2_SOCKET_URL}`);
     };
 
     client.activate();
