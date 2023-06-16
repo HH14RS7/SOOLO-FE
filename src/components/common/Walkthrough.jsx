@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
@@ -11,9 +11,23 @@ import { useNavigate } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
 
 const Walkthrough = () => {
+  const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
+  const [mockupHeight, setMockupHeight] = useState(503.55);
   const goMain = () => {
     navigate(PATH_URL.MAIN);
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setViewportHeight(window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const swiperRef = useRef(null);
@@ -53,15 +67,7 @@ const Walkthrough = () => {
     if (nextIndex < images.length) {
       setActiveIndex(nextIndex);
       swiperRef.current.swiper.slideTo(nextIndex);
-      console.log('내가페이지다', activeIndex);
     }
-  };
-  const [mockupHeight, setMockupHeight] = useState(503.55); // 초기값 설정
-
-  // height 값 변경하는 함수
-  const handleHeightChange = () => {
-    const newHeight = mockupHeight + 100; // 새로운 height 값 계산
-    setMockupHeight(newHeight); // 상태 업데이트
   };
 
   return (
@@ -83,13 +89,19 @@ const Walkthrough = () => {
                 <Mockup
                   src={image}
                   alt={`mockup${index + 1}`}
-                  style={{ height: `${mockupHeight}px` }}
+                  style={{
+                    top: viewportHeight < 800 ? `${viewportHeight - mockupHeight - 70}px` : '230px',
+                  }}
                 />
               </SwiperSlide>
             ))}
           </StSwiper>
           {activeIndex === 1 && <SubImage src={subImage} alt="subImage" />}
-          <Bottom>
+          <Bottom
+            style={{
+              top: `${viewportHeight - 260}px`,
+            }}
+          >
             <Info>
               <Message>{messages[activeIndex].message1}</Message>
               <Message>{messages[activeIndex].message2}</Message>
@@ -157,18 +169,20 @@ const StSwiper = styled(Swiper)`
 `;
 
 const Mockup = styled.img`
-  // top: calc(50%-220px / 2);
   position: relative;
   width: 250px;
+
   height: 503.55px;
   left: calc(50% - 250px / 2);
-  top: 68px;
   filter: drop-shadow(10px 4px 4px rgba(0, 0, 0, 0.1));
 `;
 
 const SubImage = styled.img`
   position: absolute;
   bottom: 254px;
+  @media (min-height: 800px) {
+    top: 400px;
+  }
   user-select: none;
   z-index: 10;
 `;
