@@ -84,8 +84,8 @@ export async function getAPI(url) {
   return await api.get(API_URL + url);
 }
 
-export async function getWebAPI(url, data) {
-  return await apiweb.get(WEBAPI_URL + url, data);
+export async function getWebAPI(url) {
+  return await apiweb.get(WEBAPI_URL + url);
 }
 
 export async function deleteAPI(url) {

@@ -354,8 +354,8 @@ export const ChatRoomPage = () => {
             <NavigateModal>
               <NavigateDiv>
                 <NavigateText>
-                  가이드라인 어쩌구 지키지 않으면 죽여버릴거야..채팅할 때 조심하세요 안 그러면
-                  찾아가요..
+                  욕설, 불법, 폭력적인 내용 등 다수에게 불쾌함을 주는 내용 작성 시 이용 정지의
+                  사유가 되며 제제 대상이 될 수 있습니다.
                 </NavigateText>
                 <NavigateExitDiv
                   onClick={() => {
