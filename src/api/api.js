@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 const API_URL = `${process.env.REACT_APP_SERVER_URL}`;
 
-const WEBAPI_URL = `http://222.102.175.141:8081`;
+const WEBAPI_URL = `https://im-soolo.shop`;
 
 const api = axios.create({
   baseURL: API_URL,
