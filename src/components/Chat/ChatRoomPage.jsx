@@ -374,7 +374,7 @@ export const ChatRoomPage = () => {
                 value={message}
                 onChange={e => setMessage(e.target.value)}
                 onKeyDown={e => {
-                  if (e.keyCode === 13) {
+                  if (e.keyCode === 13 && message.trim() !== '') {
                     sendMessage(message);
                   }
                 }}
