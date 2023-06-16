@@ -106,7 +106,7 @@ export default function CreateMapContainer() {
 }
 
 const Wrapper = styled.div`
-  height: 100%;
+  height: 100vh;
   width: 360px;
   margin: 0 auto;
 `;
@@ -185,11 +185,10 @@ const ZoomButton = styled.span`
 
 /* PlaceWrapper */
 const PlaceWrapper = styled.div`
-  position: absolute;
+  position: fixed;
   display: flex;
   height: 176px;
   flex-direction: column;
-  flex-grow: 1;
   bottom: 0;
   z-index: 5;
   background: var(--color-white);
