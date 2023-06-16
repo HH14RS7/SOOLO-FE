@@ -12,6 +12,9 @@ const api = axios.create({
 const apiweb = axios.create({
   baseURL: WEBAPI_URL,
   withCredentials: true,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+  },
 });
 
 api.interceptors.request.use(
