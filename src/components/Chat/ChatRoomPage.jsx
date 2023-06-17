@@ -321,9 +321,10 @@ export const ChatRoomPage = () => {
                                   src={data?.memberProfileImage}
                                   alt="profile"
                                   style={{
-                                    width: '100%',
-                                    height: '100%',
+                                    width: '40px',
+                                    height: '40px',
                                     borderRadius: '8px',
+                                    objectFit: 'cover',
                                   }}
                                 />
                               </Link>
@@ -438,7 +439,11 @@ export const ChatRoomPage = () => {
           <ExitContainer>
             <ExitModal>
               <ExitName>채팅방을 나가시겠습니까?</ExitName>
-              <ExitText>한번 나간 채팅방은 다시 들어올 수 없습니다.</ExitText>
+              {hostId === localStorage.memberUniqueId ? (
+                <ExitText>채팅방을 나가면 모임이 삭제됩니다.</ExitText>
+              ) : (
+                <ExitText>채팅방을 나가면 모임이 나가집니다.</ExitText>
+              )}
               <ExitBtnDiv>
                 <ExitCancel
                   onClick={() => {
@@ -768,6 +773,11 @@ const ExitName = styled.div`
   font-size: 16px;
   font-weight: 700;
   margin-top: 60px;
+`;
+
+const ExitHostGuest = styled.div`
+  font-size: 14px;
+  font-weight: 400;
 `;
 
 const ExitText = styled.div`
