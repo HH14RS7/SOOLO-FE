@@ -105,11 +105,12 @@ export const PartyDetailInfo = () => {
         <Container>
           <Contents>
             <Topbar>
-              <TopBackDiv>
+              <TopBackDiv
+                style={{
+                  position: 'absolute',
+                }}
+              >
                 <LeftBack
-                  style={{
-                    position: 'absolute',
-                  }}
                   onClick={() => {
                     navigate(-1);
                   }}
