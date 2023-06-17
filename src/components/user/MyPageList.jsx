@@ -18,7 +18,11 @@ export const MyPageList = () => {
     onSuccess: response => {
       Cookies.remove('Access_key');
       Cookies.remove('Refresh_key');
-      navigate('/user/login');
+      localStorage.removeItem('memberId');
+      localStorage.removeItem('memberUniqueId');
+      localStorage.removeItem('memberName');
+      localStorage.removeItem('profileImage');
+      navigate('/home');
     },
     onError: error => {
       alert('로그아웃 요청실패 ', error);
@@ -295,7 +299,6 @@ const Introduce = styled.div`
 
 const IntroduceContent = styled.div`
   width: 237px;
-  height: 16px;
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 400;

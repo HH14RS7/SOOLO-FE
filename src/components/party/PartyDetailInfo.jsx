@@ -105,16 +105,16 @@ export const PartyDetailInfo = () => {
         <Container>
           <Contents>
             <Topbar>
-              <Link
+              <TopBackDiv>
+                <LeftBack
                 style={{
                   position: 'absolute',
                 }}
-                to={'/home'}
-              >
-                <TopBackDiv>
-                  <LeftBack />
-                </TopBackDiv>
-              </Link>
+                  onClick={() => {
+                    navigate(-1);
+                  }}
+                />
+              </TopBackDiv>
               <TopbarName>모임 정보</TopbarName>
             </Topbar>
             <PartyDetailImg>
