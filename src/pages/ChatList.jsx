@@ -151,111 +151,113 @@ export const ChatList = () => {
             </ApprovalTap>
           </TapBar>
           <ChatContainer>
-            {activeTab === true ? (
-              <>
-                {chatData?.data && chatData.data.length > 0 ? (
-                  chatData.data.map((data, index) => {
-                    return (
-                      <ChatRoom key={index}>
-                        <ChatRoomBox>
-                          <ChatRoomImg>
-                            {data?.imageUrl ? (
-                              <img
-                                src={data.imageUrl}
-                                alt="chatprofile"
-                                style={{
-                                  width: '100%',
-                                  height: '100%',
-                                  borderRadius: '16px',
-                                }}
-                              />
-                            ) : (
-                              <PartyDefault />
-                            )}
-                          </ChatRoomImg>
-                          <ChatRoomContainer>
-                            <ChatRoomContents>
-                              <Link
-                                to={`${PATH_URL.PARTY_CHATROOM}?chatRoomUniqueId=${data.chatRoomUniqueId}&chatRoomId=${data.chatRoomId}&hostId=${data.host}`}
-                              >
-                                <ChatRoomInfo>
-                                  <ChatRoomName>{data.title}</ChatRoomName>
-                                  <ChatRoomContent>{data.lastMessage}</ChatRoomContent>
-                                </ChatRoomInfo>
-                              </Link>
-                              <RoomMember>
-                                <TotalMember>
-                                  <MemberIcon>
-                                    <PeopleIcon />
-                                  </MemberIcon>
-                                  {data.currentCount}명 참여중
-                                </TotalMember>
-                                <MemberProfile>
-                                  {data.imageList.map((imgdata, index) => {
-                                    const currentZIndex = zIndex - index; // 현재 이미지 zindex 값 구하는 로직
-                                    const marzinLefts = marzinLeft + index * 8;
-                                    return (
-                                      <img
-                                        key={index}
-                                        src={imgdata}
-                                        alt="member1"
-                                        style={{
-                                          width: '18px',
-                                          height: '18px',
-                                          borderRadius: '15px',
-                                          border: '1px solid #f63d68',
-                                          borderradius: '100%',
-                                          position: 'absolute',
-                                          marginLeft: marzinLefts,
-                                          zIndex: currentZIndex,
-                                        }}
-                                      />
-                                    );
-                                  })}
-                                </MemberProfile>
-                              </RoomMember>
-                            </ChatRoomContents>
-                            <RightContents>
-                              <ChatMessageNumber>
-                                <MessageNumber>{data.readCount}</MessageNumber>
-                              </ChatMessageNumber>
-                              <ChatMenu
-                                onClick={() => {
-                                  openModal(data.chatRoomId, data.host);
-                                }}
-                              >
-                                <MenuIcon />
-                              </ChatMenu>
-                            </RightContents>
-                          </ChatRoomContainer>
-                        </ChatRoomBox>
-                      </ChatRoom>
-                    );
-                  })
-                ) : (
-                  <div
-                    style={{
-                      width: '360px',
-                      height: '87vh',
-                      background: '#f2f4f7',
-                      display: 'flex',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <LoadingDiv>
-                      <LoadingIcon
-                        style={{
-                          margin: '0 auto',
-                        }}
-                      />
-                      <LoadingText>참여중인 채팅방이 없습니다.</LoadingText>
-                    </LoadingDiv>
-                  </div>
-                )}
-              </>
-            ) : (
-              <ChatApprove></ChatApprove>
-            )}
+            <SSSEEE>
+              {activeTab === true ? (
+                <>
+                  {chatData?.data && chatData.data.length > 0 ? (
+                    chatData.data.map((data, index) => {
+                      return (
+                        <ChatRoom key={index}>
+                          <ChatRoomBox>
+                            <ChatRoomImg>
+                              {data?.imageUrl ? (
+                                <img
+                                  src={data.imageUrl}
+                                  alt="chatprofile"
+                                  style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    borderRadius: '16px',
+                                  }}
+                                />
+                              ) : (
+                                <PartyDefault />
+                              )}
+                            </ChatRoomImg>
+                            <ChatRoomContainer>
+                              <ChatRoomContents>
+                                <Link
+                                  to={`${PATH_URL.PARTY_CHATROOM}?chatRoomUniqueId=${data.chatRoomUniqueId}&chatRoomId=${data.chatRoomId}&hostId=${data.host}`}
+                                >
+                                  <ChatRoomInfo>
+                                    <ChatRoomName>{data.title}</ChatRoomName>
+                                    <ChatRoomContent>{data.lastMessage}</ChatRoomContent>
+                                  </ChatRoomInfo>
+                                </Link>
+                                <RoomMember>
+                                  <TotalMember>
+                                    <MemberIcon>
+                                      <PeopleIcon />
+                                    </MemberIcon>
+                                    {data.currentCount}명 참여중
+                                  </TotalMember>
+                                  <MemberProfile>
+                                    {data.imageList.map((imgdata, index) => {
+                                      const currentZIndex = zIndex - index; // 현재 이미지 zindex 값 구하는 로직
+                                      const marzinLefts = marzinLeft + index * 8;
+                                      return (
+                                        <img
+                                          key={index}
+                                          src={imgdata}
+                                          alt="member1"
+                                          style={{
+                                            width: '18px',
+                                            height: '18px',
+                                            borderRadius: '15px',
+                                            border: '1px solid #f63d68',
+                                            borderradius: '100%',
+                                            position: 'absolute',
+                                            marginLeft: marzinLefts,
+                                            zIndex: currentZIndex,
+                                          }}
+                                        />
+                                      );
+                                    })}
+                                  </MemberProfile>
+                                </RoomMember>
+                              </ChatRoomContents>
+                              <RightContents>
+                                <ChatMessageNumber>
+                                  <MessageNumber>{data.readCount}</MessageNumber>
+                                </ChatMessageNumber>
+                                <ChatMenu
+                                  onClick={() => {
+                                    openModal(data.chatRoomId, data.host);
+                                  }}
+                                >
+                                  <MenuIcon />
+                                </ChatMenu>
+                              </RightContents>
+                            </ChatRoomContainer>
+                          </ChatRoomBox>
+                        </ChatRoom>
+                      );
+                    })
+                  ) : (
+                    <div
+                      style={{
+                        width: '360px',
+                        height: '87vh',
+                        background: '#f2f4f7',
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <LoadingDiv>
+                        <LoadingIcon
+                          style={{
+                            margin: '0 auto',
+                          }}
+                        />
+                        <LoadingText>참여중인 채팅방이 없습니다.</LoadingText>
+                      </LoadingDiv>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <ChatApprove></ChatApprove>
+              )}
+            </SSSEEE>
           </ChatContainer>
         </Container>
       </Background>
@@ -315,12 +317,14 @@ const Background = styled.div`
   background: #ffffff;
   width: 100%;
   height: 100%;
+  margin: 0 auto;
 `;
 
 const Container = styled.div`
   width: 360px;
+  height: 100%;
   margin: 0 auto;
-  background: #ffffff;
+  background: #f2f4f7;
 `;
 
 const PartyDefault = styled(PartyDefaultImg)`
@@ -331,6 +335,7 @@ const PartyDefault = styled(PartyDefaultImg)`
 
 // TopBar 스타일
 const TapBar = styled.div`
+  background: #fff;
   width: 360px;
   height: 52px;
   display: flex;
@@ -350,13 +355,12 @@ const ApprovalTap = styled.button`
 // Chat List 스타일
 const ChatContainer = styled.div`
   width: 100%;
-  height: 100%;
-  padding-bottom: 70px;
 `;
 
 const ChatRoom = styled.div`
   display: flex;
   align-items: center;
+  background: #fff;
   width: 360px;
   height: 94px;
   border-bottom: 1px solid #e4e7ec;
@@ -607,4 +611,14 @@ const LoadingDiv = styled.div`
 const LoadingText = styled.div`
   width: 360px;
   margin-top: 8px;
+`;
+
+// 임시
+
+const SSSEEE = styled.div`
+  width: 360px;
+  height: 100%;
+  background: #f2f4f7;
+  margin: 0 auto;
+  padding-bottom: 70px;
 `;
