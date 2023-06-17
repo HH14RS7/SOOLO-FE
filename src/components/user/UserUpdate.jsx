@@ -131,7 +131,7 @@ function UserUpdate() {
             <Titleprofile>이름</Titleprofile>
             <Frame4094>
               <Field height={40}>
-                <Content
+                <Content1
                   maxLength="9"
                   value={nameInput}
                   placeholder={user?.memberName}
@@ -151,13 +151,25 @@ function UserUpdate() {
           </TextArea>
           <TextArea>
             <Titleprofile>자기소개</Titleprofile>
-            <Field height={100}>
-              <Content
-                value={introduceInput}
-                placeholder={user?.introduce}
-                onChange={introduceHanlder}
-              />
-            </Field>
+            <Frame4094>
+              <Field height={100}>
+                <Content2
+                  maxLength="49"
+                  value={introduceInput}
+                  placeholder={user?.introduce}
+                  onChange={introduceHanlder}
+                />
+              </Field>
+              <Frame4031>
+                {introduceInput.length > 49 ? (
+                  <SupportText color={'red'}>
+                    자기소개는 최대 40자 입니다. {introduceInput.length} / 50
+                  </SupportText>
+                ) : (
+                  <SupportText color={'#98a2b3'}>{introduceInput.length} / 50</SupportText>
+                )}
+              </Frame4031>
+            </Frame4094>
           </TextArea>
         </Frame4041>
         <UpdateButton type="submit">
@@ -313,7 +325,6 @@ const Frame4094 = styled.div`
   padding: 0px;
   gap: 8px;
   width: 328px;
-  height: 58px;
 `;
 
 const Field = styled.div`
@@ -329,16 +340,20 @@ const Field = styled.div`
   border-radius: 12px;
 `;
 
-const Content = styled.input`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+const Content1 = styled.textarea`
   padding: 0px;
-  gap: 6px;
   width: 296px;
-  height: 16px;
+  height: 14px;
   border: none;
   outline: none;
+`;
+
+const Content2 = styled.textarea`
+  padding: 0px;
+  width: 296px;
+  border: none;
+  outline: none;
+  white-space: pre-wrap;
 `;
 
 const Frame4031 = styled.div`
