@@ -20,6 +20,7 @@ const MyPartyList = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
+  console.log('partyList::::::::', partyList.state);
 
   return (
     <>
@@ -38,11 +39,13 @@ const MyPartyList = () => {
             >
               <Wrapper>
                 <PartyList>
-                  {partyList.map(party => (
-                    <SwiperSlide key={party.partyId}>
-                      <MyPartyItem key={party.partyId} party={party} />
-                    </SwiperSlide>
-                  ))}
+                  {partyList
+                    .filter(party => party.state !== 3)
+                    .map(party => (
+                      <SwiperSlide key={party.partyId}>
+                        <MyPartyItem key={party.partyId} party={party} />
+                      </SwiperSlide>
+                    ))}
                 </PartyList>
               </Wrapper>
             </Swiper>
