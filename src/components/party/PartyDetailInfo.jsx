@@ -99,6 +99,8 @@ export const PartyDetailInfo = () => {
     window.open(url, '_blank');
   };
 
+  console.log('data ::', data);
+
   return (
     <>
       <Background>
@@ -236,15 +238,17 @@ export const PartyDetailInfo = () => {
                 {data?.memberInfo.slice(1).map((member, i) => (
                   <PartyMemberInfoBox key={i}>
                     <PartyMemberImg>
-                      <img
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          borderRadius: '100%',
-                        }}
-                        src={member.profileImage}
-                        alt="partymemberimg"
-                      />
+                      <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${member.memberId}`}>
+                        <img
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            borderRadius: '100%',
+                          }}
+                          src={member.profileImage}
+                          alt="partymemberimg"
+                        />
+                      </Link>
                     </PartyMemberImg>
                     <div>
                       <PartyMemberName>{member.memberName}</PartyMemberName>
