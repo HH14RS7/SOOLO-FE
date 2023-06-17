@@ -562,6 +562,7 @@ const PartyMemberName = styled.div`
 const PartyMemberIntroduce = styled.div`
   font-size: 14px;
   font-weight: 400;
+  max-width: 200px;
   color: #667085;
 `;
 
