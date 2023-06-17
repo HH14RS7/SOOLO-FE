@@ -138,9 +138,9 @@ export const ChatRoomPage = () => {
         subscribe();
         publish();
       },
-      // onDisconnect: () => {
-      //   disconnect();
-      // },
+      onDisconnect: () => {
+        disconnect();
+      },
     });
     client.current.activate();
   };
