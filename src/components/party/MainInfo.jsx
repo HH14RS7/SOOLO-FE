@@ -9,10 +9,7 @@ export default function MainInfo() {
 
   const goForms = () => {
     if (token) {
-      window.open(
-        'https://docs.google.com/forms/d/12pWAWiklb-Mz8xNg-Kfng8Pi1nd7mU-2mnzsWRGjrBg/edit?ts=64899f93',
-        '_blank',
-      );
+      window.open('https://forms.gle/PAFUCTugD5KZqAHx6', '_blank');
     } else {
       setShowModal(true);
     }
