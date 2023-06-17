@@ -387,8 +387,8 @@ const ProfileImage = styled.img`
   height: 70px;
   left: 0px;
   top: 0px;
-  background: url(.jpg), #d9d9d9;
   border-radius: 16px;
+  object-fit: cover;
 `;
 
 const FileInput = styled.input`

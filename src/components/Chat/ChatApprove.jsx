@@ -67,8 +67,6 @@ export const ChatApprove = () => {
     rejectRequest.mutate(participateId);
   };
 
-  console.log('requestList.data ::', requestList.data);
-
   return (
     <>
       <Background>

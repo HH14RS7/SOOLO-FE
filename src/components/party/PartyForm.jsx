@@ -23,6 +23,7 @@ const CreateForm = ({ party }) => {
   const { regionName, getRegionName } = useGetRegionName();
   const { stationName, distance, getStationInfo } = useGetNearbyStation();
   const location = useLocation();
+
   const place = location.state || {};
   const isEdit = !!party.partyId;
 
@@ -247,8 +248,9 @@ const CreateForm = ({ party }) => {
     if (isEdit) {
       navigate(PATH_URL.MAIN);
     } else {
-      // 장소검색으로 이동
-      navigate(PATH_URL.PARTY_MAP_CREATE, { state: place });
+      if (window.confirm('확인시 입력하신 내용이 초기화됩니다.')) {
+        navigate(PATH_URL.PARTY_MAP_CREATE, { state: place });
+      }
     }
   };
 

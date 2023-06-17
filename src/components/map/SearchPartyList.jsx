@@ -43,14 +43,40 @@ export default function SearchPartyList({ partyList }) {
 const Wrapper = styled.div`
   width: 360px;
   margin: 0 auto;
-  height: 100%;
+  // height: 220px;
+  height: 260px;
   border-radius: 16px 16px 0px 0px;
   background-color: var(--color-gray-25);
   border: 1px solid var(--color-gray-300);
   border-bottom: none;
+  margin-bottom: 70px;
+
   z-index: 5;
-  position: relative;
-  bottom: 250px;
+  // 임시 슬라이드 전
+  // position: relative;
+  // bottom: 250px;
+
+  position: absolute;
+  bottom: 0px;
+
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 8px;
+    background-color: var(--color-gray-25);
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: var(--color-gray-25);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--color-gray-200);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
 `;
 
 const Header = styled.header`

@@ -57,7 +57,7 @@ const Logo = styled.img`
   width: 52.05px;
   height: 18.25px;
   opacity: 0;
-  animation: ${fadeIn} 1s ease-in-out;
+  animation: ${fadeIn} 2.5s ease-in-out;
   // animation: fade-in 1s ease-in forwards, fade-out 4s 1s ease-out forwards;
 `;
 

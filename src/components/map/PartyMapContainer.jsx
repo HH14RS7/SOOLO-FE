@@ -35,6 +35,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   const { regionName, getRegionName } = useGetRegionName();
   const { stationName, getStationInfo } = useGetNearbyStation();
   const [loading, setLoading] = useState(false);
+  const [isMarkerClicked, setMarkerClicked] = useState(false);
 
   const fetchPartyList = async (latitude, longitude, searchPlace) => {
     let url = '';
@@ -58,9 +59,14 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
     () => fetchPartyList(latitude, longitude, searchPlace),
   );
 
+  const handleMarkerClick = useCallback(() => {
+    setMarkerClicked(true);
+  }, []);
+
   // 현재위치 내 모임 조회
   const handleCurrentLocation = useCallback(async () => {
     setLoading(true);
+    setMarkerClicked(false); // 마커 임시 높이
 
     try {
       const position = await new Promise((resolve, reject) => {
@@ -184,6 +190,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
           if (selectedParties.length > 0) {
             setSelectedParty(selectedParties);
             // 마커 위치 조정
+            handleMarkerClick();
           }
           if (customOverlayRef.current) {
             customOverlay.setMap(null);
@@ -201,6 +208,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
               customOverlayRef.current = null;
             }
             setSelectedParty(null);
+            setMarkerClicked(false); // 마커 임시 높이
           });
         });
       });
@@ -231,6 +239,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
       alert('검색 결과 중 오류가 발생했습니다.');
       return;
     }
+    setMarkerClicked(false); // 마커 임시 높이
   }, []);
 
   // 오버레이 닫기
@@ -240,6 +249,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
       customOverlayRef.current = null;
     }
     setSelectedParty(null);
+    setMarkerClicked(false); // 마커 임시 높이
   }, []);
 
   // 검색 키워드 함수
@@ -265,7 +275,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
 
   return (
     <Wrap>
-      <Map id="map">
+      <Map id="map" ismarkeredclicked={isMarkerClicked ? 1 : 0}>
         <ZoomControlContainer>
           <ZoomButton onClick={zoomIn}>
             <AddIcon />
@@ -275,7 +285,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
           </ZoomButton>
         </ZoomControlContainer>
       </Map>
-      <ButtonWrapper>
+      <ButtonWrapper ismarkeredclicked={isMarkerClicked ? 1 : 0}>
         <CurrentButton onClick={handleCurrentLocation}>
           <LocationIcon />
           <CoordinateTitle>현재 위치로 찾기</CoordinateTitle>
@@ -309,7 +319,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
 };
 
 const Wrap = styled.div`
-  height: 100%;
+  height: 90vh;
   width: 360px;
   // width: 100%;
   margin: 0 auto;
@@ -319,16 +329,17 @@ const Map = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 90%;
+  height: ${({ ismarkeredclicked }) => (ismarkeredclicked ? '90%' : '70%')};
+  // height: 70%;
 `;
 
 const ButtonWrapper = styled.div`
   position: absolute;
-  position: relative;
   display: flex;
+  padding-left: 90px;
   justify-content: center;
   z-index: 15;
-  bottom: 260px;
+  bottom: ${({ ismarkeredclicked }) => (ismarkeredclicked ? '320px' : '360px')};
 `;
 
 const CurrentButton = styled.button`
@@ -339,7 +350,6 @@ const CurrentButton = styled.button`
   padding: 1rem 1.5rem;
   border-radius: 0.75rem;
   gap: 0.5rem;
-  top: 430px;
 `;
 
 const LocationIcon = styled(Location)`

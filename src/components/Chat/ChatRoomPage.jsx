@@ -1,7 +1,7 @@
 // 기능 import
 import { React, useEffect, useState, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { PARTIES_URL, PATH_URL, CHATING_URL } from '../../shared/constants';
+import { PARTIES_URL, PATH_URL, CHATING_URL, MEMBER_URL } from '../../shared/constants';
 import { formmatedDate } from '../../shared/formattedDate';
 import { deleteAPI, getWebAPI, postAPI } from '../../api/api';
 import { useQuery } from 'react-query';
@@ -138,9 +138,9 @@ export const ChatRoomPage = () => {
         subscribe();
         publish();
       },
-      // onDisconnect: () => {
-      //   disconnect();
-      // },
+      onDisconnect: () => {
+        disconnect();
+      },
     });
     client.current.activate();
   };
@@ -282,7 +282,7 @@ export const ChatRoomPage = () => {
                 <LeftBack />
               </TopBackDiv>
             </Link>
-            <TopbarName>모임이름</TopbarName>
+            <TopbarName>채팅룸</TopbarName>
             <ModalBtn
               onClick={() => {
                 openModal();
@@ -316,15 +316,17 @@ export const ChatRoomPage = () => {
                         <OtherImg>
                           <OtherProfile>
                             {data?.memberProfileImage ? (
-                              <img
-                                src={data?.memberProfileImage}
-                                alt="profile"
-                                style={{
-                                  width: '100%',
-                                  height: '100%',
-                                  borderRadius: '8px',
-                                }}
-                              />
+                              <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${data.memberId}`}>
+                                <img
+                                  src={data?.memberProfileImage}
+                                  alt="profile"
+                                  style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    borderRadius: '8px',
+                                  }}
+                                />
+                              </Link>
                             ) : (
                               <ProfileDefault />
                             )}
@@ -374,7 +376,7 @@ export const ChatRoomPage = () => {
                 value={message}
                 onChange={e => setMessage(e.target.value)}
                 onKeyDown={e => {
-                  if (e.keyCode === 13) {
+                  if (e.keyCode === 13 && message.trim() !== '') {
                     sendMessage(message);
                   }
                 }}
@@ -386,7 +388,13 @@ export const ChatRoomPage = () => {
                   marginLeft: '16px',
                 }}
               ></input>
-              <ChatBtn onClick={() => sendMessage(message)}>
+              <ChatBtn
+                onClick={() => {
+                  if (message.trim() !== '') {
+                    sendMessage(message);
+                  }
+                }}
+              >
                 <ChatSendIcon />
               </ChatBtn>
             </SendDiv>
@@ -826,7 +834,7 @@ const NavigateDiv = styled.div`
 `;
 
 const NavigateText = styled.div`
-  max-width: 190px;
+  max-width: 260px;
   line-height: 14px;
   font-size: 10px;
   color: #344054;

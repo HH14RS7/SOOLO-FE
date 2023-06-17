@@ -121,6 +121,7 @@ export const PartyDetailInfo = () => {
                 style={{
                   width: '100%',
                   height: '100%',
+                  objectFit: 'cover',
                 }}
               />
             </PartyDetailImg>
@@ -558,6 +559,7 @@ const PartyMemberName = styled.div`
 const PartyMemberIntroduce = styled.div`
   font-size: 14px;
   font-weight: 400;
+  max-width: 200px;
   color: #667085;
 `;
 

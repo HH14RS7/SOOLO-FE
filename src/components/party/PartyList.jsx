@@ -23,7 +23,7 @@ const PartyList = () => {
   const getPartyList = () => {
     getAPI(`${PARTIES_URL.PARTIES_LIST}?page=${Page}&recruitmentStatus=${recruitmentStatus.value}`)
       .then(res => {
-        console.log('partyList', res.data.data.partyList);
+        // console.log('partyList', res.data.data.partyList);
         // 리스트 뒤로 붙여주기
         setPartyList([...partyList, ...res?.data?.data?.partyList]);
         // 요청 성공 시에 페이지에 1 카운트 해주기
@@ -108,15 +108,16 @@ const PartyList = () => {
             <PartySection>
               <PartyHeader>
                 <Title>현재 진행중인 모임</Title>
+                {/* select 필터링 임시 주석 */}
                 {
-                  <Select
-                    placeholder={RECRUITMENT_STATUS_SELECT[0].label}
-                    options={RECRUITMENT_STATUS_SELECT}
-                    onChange={option => handleSelected(option)}
-                    value={recruitmentStatus}
-                    components={{ DropdownIndicator }}
-                    styles={styles}
-                  />
+                  // <Select
+                  //   placeholder={RECRUITMENT_STATUS_SELECT[0].label}
+                  //   options={RECRUITMENT_STATUS_SELECT}
+                  //   onChange={option => handleSelected(option)}
+                  //   value={recruitmentStatus}
+                  //   components={{ DropdownIndicator }}
+                  //   styles={styles}
+                  // />
                 }
               </PartyHeader>
               <ListWrapper>
@@ -174,7 +175,7 @@ const PartyHeader = styled.div`
 
 const Title = styled.h4`
   color: var(--color-gray-500);
-  white-space: nowrap;
+  margin: 8px 0; // select 무한스크롤 적용 전 임시
 `;
 
 /* List */
