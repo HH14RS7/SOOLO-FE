@@ -9,7 +9,7 @@ import { PATH_URL } from '../../shared/constants';
 export const ChatApprove = () => {
   const navigate = useNavigate();
 
-  const [requestList, setRequestList] = useState();
+  const [requestList, setRequestList] = useState([]);
 
   // 모임 승인
   const acceptRequest = useMutation(
