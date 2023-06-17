@@ -107,9 +107,9 @@ export const PartyDetailInfo = () => {
             <Topbar>
               <TopBackDiv>
                 <LeftBack
-                style={{
-                  position: 'absolute',
-                }}
+                  style={{
+                    position: 'absolute',
+                  }}
                   onClick={() => {
                     navigate(-1);
                   }}
