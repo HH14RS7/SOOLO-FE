@@ -37,7 +37,7 @@ const Footer = () => {
         setFooterActive(4);
         break;
       default:
-        setFooterActive(0);
+      // setFooterActive(0);
     }
   }, [location.pathname, setFooterActive]);
 
