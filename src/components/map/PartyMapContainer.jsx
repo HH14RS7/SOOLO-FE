@@ -275,7 +275,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
 
   return (
     <Wrap>
-      <Map id="map" isMarkerClicked={isMarkerClicked}>
+      <Map id="map" ismarkeredclicked={isMarkerClicked ? 1 : 0}>
         <ZoomControlContainer>
           <ZoomButton onClick={zoomIn}>
             <AddIcon />
@@ -285,7 +285,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
           </ZoomButton>
         </ZoomControlContainer>
       </Map>
-      <ButtonWrapper isMarkerClicked={isMarkerClicked}>
+      <ButtonWrapper ismarkeredclicked={isMarkerClicked ? 1 : 0}>
         <CurrentButton onClick={handleCurrentLocation}>
           <LocationIcon />
           <CoordinateTitle>현재 위치로 찾기</CoordinateTitle>
@@ -329,7 +329,7 @@ const Map = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: ${({ isMarkerClicked }) => (isMarkerClicked ? '90%' : '70%')};
+  height: ${({ ismarkeredclicked }) => (ismarkeredclicked ? '90%' : '70%')};
   // height: 70%;
 `;
 
@@ -339,7 +339,7 @@ const ButtonWrapper = styled.div`
   padding-left: 90px;
   justify-content: center;
   z-index: 15;
-  bottom: ${({ isMarkerClicked }) => (isMarkerClicked ? '320px' : '360px')};
+  bottom: ${({ ismarkeredclicked }) => (ismarkeredclicked ? '320px' : '360px')};
 `;
 
 const CurrentButton = styled.button`

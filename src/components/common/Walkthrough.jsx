@@ -111,7 +111,7 @@ const Walkthrough = () => {
               </SubMessageWrapper>
             </Info>
             <Button
-              activeIndex={activeIndex}
+              activeindex={activeIndex}
               onClick={() => {
                 handleSkip();
                 if (activeIndex === 2) {
@@ -119,7 +119,7 @@ const Walkthrough = () => {
                 }
               }}
             >
-              <ButtonTitle activeIndex={activeIndex}>
+              <ButtonTitle activeindex={activeIndex}>
                 {activeIndex === 2 ? 'Soolo 시작하기' : '다음'}
               </ButtonTitle>
             </Button>
@@ -253,12 +253,12 @@ const Button = styled.button`
   margin: 0 auto;
   margin-top: 3rem;
   background: ${props =>
-    props.activeIndex === 2 ? 'var(--color-primary-500)' : 'var(--color-white)'};
+    props.activeindex === 2 ? 'var(--color-primary-500)' : 'var(--color-white)'};
 `;
 
 const ButtonTitle = styled.p`
   font-weight: var(--font-weight-700);
   font-size: 12px;
-  color: ${props => (props.activeIndex === 2 ? 'var(--color-white)' : 'var(--color-primary-500)')};
+  color: ${props => (props.activeindex === 2 ? 'var(--color-white)' : 'var(--color-primary-500)')};
 `;
 export default Walkthrough;
