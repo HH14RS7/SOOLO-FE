@@ -110,11 +110,9 @@ export const PartyDetailInfo = () => {
                   position: 'absolute',
                 }}
               >
-                <LeftBack
-                  onClick={() => {
-                    navigate(-1);
-                  }}
-                />
+                <Link to={'/home'}>
+                  <LeftBack />
+                </Link>
               </TopBackDiv>
               <TopbarName>모임 정보</TopbarName>
             </Topbar>
