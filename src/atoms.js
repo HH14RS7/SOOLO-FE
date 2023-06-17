@@ -17,3 +17,8 @@ export const regionNameState = atom({
   key: 'regionNameState',
   default: '강남역',
 });
+
+export const footerActiveState = atom({
+  key: 'footerActiveState',
+  default: 0,
+});

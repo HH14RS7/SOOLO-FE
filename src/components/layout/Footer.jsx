@@ -7,12 +7,15 @@ import { ReactComponent as Mapicon } from '../../assets/footer/map.svg';
 import { ReactComponent as Chaticon } from '../../assets/footer/chat.svg';
 import { ReactComponent as Mypageicon } from '../../assets/footer/mypage.svg';
 import { ReactComponent as Addbtn } from '../../assets/footer/addbtn.svg';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { footerActiveState } from '../../atoms';
 
 const Footer = () => {
-  const [activeTitle, setActiveTitle] = useState(0);
+  const footerActive = useRecoilValue(footerActiveState);
+  const setFooterActive = useSetRecoilState(footerActiveState);
 
   const handleTitleClick = index => {
-    setActiveTitle(index);
+    setFooterActive(index);
   };
 
   return (
@@ -20,24 +23,30 @@ const Footer = () => {
       <Tabs>
         <TabBarItem index={0}>
           <Link to={`${PATH_URL.MAIN}`}>
-            <Icon active={activeTitle === 0 ? 'true' : 'false'} onClick={() => handleTitleClick(0)}>
-              <Partyicon fill={activeTitle === 0 ? '#F63D68' : '#000000'} />
+            <Icon
+              active={footerActive === 0 ? 'true' : 'false'}
+              onClick={() => handleTitleClick(0)}
+            >
+              <Partyicon fill={footerActive === 0 ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title active={activeTitle === 0 ? 'true' : 'false'}>홈</Title>
+            <Title active={footerActive === 0 ? 'true' : 'false'}>홈</Title>
           </Link>
         </TabBarItem>
         <TabBarItem index={1}>
           <Link to={`${PATH_URL.PARTY_LIST_MAP}`}>
-            <Icon active={activeTitle === 1 ? 'true' : 'false'} onClick={() => handleTitleClick(1)}>
-              <Mapicon fill={activeTitle === 1 ? '#F63D68' : '#000000'} />
+            <Icon
+              active={footerActive === 1 ? 'true' : 'false'}
+              onClick={() => handleTitleClick(1)}
+            >
+              <Mapicon fill={footerActive === 1 ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title active={activeTitle === 1 ? 'true' : 'false'}>위치</Title>
+            <Title active={footerActive === 1 ? 'true' : 'false'}>위치</Title>
           </Link>
         </TabBarItem>
         <TabBarItem index={2}>
           <Link to={`${PATH_URL.PARTY_PLACE_CREATE}`}>
             <PartyAdd
-              active={activeTitle === 2 ? 'true' : 'false'}
+              active={footerActive === 2 ? 'true' : 'false'}
               onClick={() => handleTitleClick(2)}
             >
               <Addbtn />
@@ -46,18 +55,24 @@ const Footer = () => {
         </TabBarItem>
         <TabBarItem index={3}>
           <Link to={`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`}>
-            <Icon active={activeTitle === 3 ? 'true' : 'false'} onClick={() => handleTitleClick(3)}>
-              <Chaticon fill={activeTitle === 3 ? '#F63D68' : '#000000'} />
+            <Icon
+              active={footerActive === 3 ? 'true' : 'false'}
+              onClick={() => handleTitleClick(3)}
+            >
+              <Chaticon fill={footerActive === 3 ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title active={activeTitle === 3 ? 'true' : 'false'}>채팅</Title>
+            <Title active={footerActive === 3 ? 'true' : 'false'}>채팅</Title>
           </Link>
         </TabBarItem>
         <TabBarItem index={4}>
           <Link to={`${PATH_URL.MYPAGE}`}>
-            <Icon active={activeTitle === 4 ? 'true' : 'false'} onClick={() => handleTitleClick(4)}>
-              <Mypageicon fill={activeTitle === 4 ? '#F63D68' : '#000000'} />
+            <Icon
+              active={footerActive === 4 ? 'true' : 'false'}
+              onClick={() => handleTitleClick(4)}
+            >
+              <Mypageicon fill={footerActive === 4 ? '#F63D68' : '#000000'} />
             </Icon>
-            <Title active={activeTitle === 4 ? 'true' : 'false'} left="calc(50% - 43px/2 + 0.5px)">
+            <Title active={footerActive === 4 ? 'true' : 'false'} left="calc(50% - 43px/2 + 0.5px)">
               마이페이지
             </Title>
           </Link>
