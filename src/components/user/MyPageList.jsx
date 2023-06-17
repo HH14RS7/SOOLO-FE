@@ -18,7 +18,11 @@ export const MyPageList = () => {
     onSuccess: response => {
       Cookies.remove('Access_key');
       Cookies.remove('Refresh_key');
-      navigate('/user/login');
+      localStorage.removeItem('memberId');
+      localStorage.removeItem('memberUniqueId');
+      localStorage.removeItem('memberName');
+      localStorage.removeItem('profileImage');
+      navigate('/home');
     },
     onError: error => {
       alert('로그아웃 요청실패 ', error);
