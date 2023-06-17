@@ -35,7 +35,7 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
     setPlaceList([]);
 
     const searchOptions = {
-      size: 10,
+      size: 12,
       page: 1,
       category_group_code: FOOD_CATEGORY_CODE,
     };
@@ -165,19 +165,19 @@ const Pagination = styled.div`
   align-items: center;
   font-style: normal;
   font-weight: var(--font-weight-400);
-  font-size: var(--font-small);
+  font-size: var(--font-regular);
   line-height: 100%;
   letter-spacing: -0.015em;
   border-radius: 999px;
 
   a {
-    color: white;
-    font-size: var(--font-small);
+    font-size: var(--font-regular);
+    color: var(--color-primary-500);
+    background: white;
+    border: 1px solid var(--color-primary-300);
     text-decoration: none;
-    background: var(--color-primary-100);
-    margin: 0 5px;
-    padding: 8px 12px;
-
+    margin: 0 12px;
+    padding: 16px 20px;
     border-radius: 999px;
     transition: background-color 0.3s, color 0.3s;
 
@@ -186,6 +186,7 @@ const Pagination = styled.div`
     }
 
     &.on {
+      color: white;
       font-weight: bold;
       background-color: var(--color-primary-500);
     }
