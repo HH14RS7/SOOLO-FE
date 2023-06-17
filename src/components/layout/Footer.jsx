@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
 import { styled } from 'styled-components';
 import { ReactComponent as Partyicon } from '../../assets/footer/party.svg';
@@ -11,12 +11,35 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { footerActiveState } from '../../atoms';
 
 const Footer = () => {
+  const location = useLocation();
   const footerActive = useRecoilValue(footerActiveState);
   const setFooterActive = useSetRecoilState(footerActiveState);
 
   const handleTitleClick = index => {
     setFooterActive(index);
   };
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case PATH_URL.MAIN:
+        setFooterActive(0);
+        break;
+      case PATH_URL.PARTY_LIST_MAP:
+        setFooterActive(1);
+        break;
+      case PATH_URL.PARTY_PLACE_CREATE:
+        setFooterActive(2);
+        break;
+      case `${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`:
+        setFooterActive(3);
+        break;
+      case PATH_URL.MYPAGE:
+        setFooterActive(4);
+        break;
+      default:
+        setFooterActive(0);
+    }
+  }, [location.pathname, setFooterActive]);
 
   return (
     <TabBar>
