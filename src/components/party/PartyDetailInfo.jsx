@@ -109,7 +109,7 @@ export const PartyDetailInfo = () => {
                 style={{
                   position: 'absolute',
                 }}
-                to={'/'}
+                to={'/home'}
               >
                 <TopBackDiv>
                   <LeftBack />
@@ -205,6 +205,7 @@ export const PartyDetailInfo = () => {
                         width: '100%',
                         height: '100%',
                         borderRadius: '100%',
+                        objectFit: 'cover',
                       }}
                       src={data?.memberInfo[0].profileImage}
                       alt="hostimg"
@@ -508,6 +509,7 @@ const HostIntroduceDiv = styled.div`
 
 const HostIntroduce = styled.div`
   font-size: 14px;
+  max-width: 200px;
   font-weight: 400;
   color: #1d2939;
 `;
