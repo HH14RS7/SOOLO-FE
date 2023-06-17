@@ -47,9 +47,9 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
           currentLocation.latitude,
           currentLocation.longitude,
         );
-        searchOptions.radius = 2000;
+        searchOptions.radius = 5000;
       } else {
-        searchOptions.radius = 50000;
+        searchOptions.radius = 20000;
         searchOptions.location = null;
         searchOptions.radius = null;
       }
@@ -59,7 +59,6 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
     }
   }, [searchPlace, currentLocation, placesSearchCB, currentPage]);
 
-  // 검색결과 목록 하단에 페이지 번호 표시
   // 검색결과 목록 하단에 페이지 번호 표시
   function displayPagination(pagination) {
     var paginationEl = document.getElementById('pagination');
