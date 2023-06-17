@@ -7,6 +7,9 @@ const KakaoLoginComponent = () => {
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
   const loginHandler = () => {
+    alert(
+      '🚨주의🚨\n회원가입시 모든 정보제공 (성별,연령) 체크 필수에 동의하여야만 가입이 가능합니다!',
+    );
     window.location.href = KAKAO_AUTH_URL;
   };
 
