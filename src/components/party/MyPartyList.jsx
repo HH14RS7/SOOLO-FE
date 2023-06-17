@@ -20,7 +20,6 @@ const MyPartyList = () => {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-  console.log('partyList::::::::', partyList.state);
 
   return (
     <>
