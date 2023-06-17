@@ -386,7 +386,13 @@ export const ChatRoomPage = () => {
                   marginLeft: '16px',
                 }}
               ></input>
-              <ChatBtn onClick={() => sendMessage(message)}>
+              <ChatBtn
+                onClick={() => {
+                  if (message.trim() !== '') {
+                    sendMessage(message);
+                  }
+                }}
+              >
                 <ChatSendIcon />
               </ChatBtn>
             </SendDiv>
