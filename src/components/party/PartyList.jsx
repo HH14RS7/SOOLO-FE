@@ -17,7 +17,6 @@ const PartyList = () => {
   ];
   const [partyList, setPartyList] = useState([]);
   const [recruitmentStatus, setRecruitmentStatus] = useState(RECRUITMENT_STATUS_SELECT[0]);
-
   const [Page, setPage] = useState(0);
   const [ref, inView] = useInView();
 
