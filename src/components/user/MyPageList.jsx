@@ -295,7 +295,6 @@ const Introduce = styled.div`
 
 const IntroduceContent = styled.div`
   width: 237px;
-  height: 16px;
   font-family: 'Pretendard';
   font-style: normal;
   font-weight: 400;
