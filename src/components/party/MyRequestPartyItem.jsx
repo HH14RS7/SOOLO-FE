@@ -24,7 +24,7 @@ const MyRequestPartyItem = ({ party }) => {
     <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`}>
       <ItemWrapper>
         <ImageDayInfo>
-          <PlaceImage src={defaultImg || party.imageUrl} alt="placeImage" />
+          <PlaceImage src={party.imageUrl || defaultImg} alt="placeImage" />
           <DdayTag isdday={isdday ? 1 : 0}>
             <Dday>D-{isdday ? 0 : dDay}</Dday>
           </DdayTag>
@@ -84,6 +84,7 @@ const PlaceImage = styled.img`
   width: 74px;
   height: 74px;
   border-radius: 16px;
+  object-fit: cover;
 `;
 
 const ImageDayInfo = styled.div`
