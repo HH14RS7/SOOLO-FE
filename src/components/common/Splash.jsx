@@ -2,7 +2,7 @@ import React from 'react';
 import { styled, keyframes } from 'styled-components';
 
 const Spalash = () => {
-  const favicon = process.env.PUBLIC_URL + '/favicon.png';
+  const favicon = process.env.PUBLIC_URL + '/favicon.ico';
   const logo = '/img/logo.png';
 
   return (
