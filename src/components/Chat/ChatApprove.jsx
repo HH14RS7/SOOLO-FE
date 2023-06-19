@@ -18,13 +18,10 @@ export const ChatApprove = () => {
     {
       onSuccess: response => {
         alert(response.data.msg);
-        queryClient.invalidateQueries('requests');
-        navigate(`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`);
+        return queryClient.invalidateQueries('requests');
       },
       onError: error => {
         alert(error.data.msg);
-        queryClient.invalidateQueries('requests');
-        navigate(`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`);
       },
     },
   );
@@ -35,13 +32,11 @@ export const ChatApprove = () => {
     {
       onSuccess: response => {
         alert(response.data.msg);
-        queryClient.invalidateQueries('requests');
-        navigate(`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`);
+        return queryClient.invalidateQueries('requests');
       },
       onError: error => {
         alert(error.data.msg);
         queryClient.invalidateQueries('requests');
-        navigate(`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`);
       },
     },
   );
