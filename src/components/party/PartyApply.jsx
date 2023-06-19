@@ -84,23 +84,39 @@ export const PartyApply = () => {
                 <ApproveName>내 주량</ApproveName>
                 {limitInput?.length === 1 ? (
                   <ApprovInputDiv color={'red'}>
-                    <LimitInput
+                    <textarea
                       type="text"
                       value={(limitInput, amountAlcohol)}
                       maxLength="10"
                       placeholder="예 : 소주 한병, 많이 약해요, 취해본 적이 없어요..."
                       onChange={limitInputHandler}
-                    />
+                      style={{
+                        height: '90px',
+                        width: '318px',
+                        outline: 'none',
+                        border: 'none',
+                        padding: '5px',
+                        margin: 'auto',
+                      }}
+                    ></textarea>
                   </ApprovInputDiv>
                 ) : (
                   <ApprovInputDiv color={'#C5C6CC'}>
-                    <LimitInput
+                    <textarea
                       type="text"
                       value={(limitInput, amountAlcohol)}
                       maxLength="10"
                       placeholder="예 : 소주 한병, 많이 약해요, 취해본 적이 없어요..."
                       onChange={limitInputHandler}
-                    />
+                      style={{
+                        height: '90px',
+                        width: '318px',
+                        outline: 'none',
+                        border: 'none',
+                        padding: '5px',
+                        margin: 'auto',
+                      }}
+                    ></textarea>
                   </ApprovInputDiv>
                 )}
                 {limitInput?.length < 2 ? (
@@ -129,23 +145,39 @@ export const PartyApply = () => {
                 <ApproveName>모임에 신청한 이유</ApproveName>
                 {approveInput?.length < 5 ? (
                   <ApprovInputDiv color={'red'}>
-                    <ApproveReason
+                    <textarea
                       type="text"
                       value={(approveInput, reason)}
                       maxLength="25"
                       placeholder="모임을 신청한 이유를 적어주세요"
                       onChange={approveInputHandler}
-                    />
+                      style={{
+                        height: '90px',
+                        width: '318px',
+                        outline: 'none',
+                        border: 'none',
+                        padding: '5px',
+                        margin: 'auto',
+                      }}
+                    ></textarea>
                   </ApprovInputDiv>
                 ) : (
                   <ApprovInputDiv color={'#C5C6CC'}>
-                    <ApproveReason
+                    <textarea
                       type="text"
                       value={(approveInput, reason)}
                       maxLength="25"
                       placeholder="모임을 신청한 이유를 적어주세요"
                       onChange={approveInputHandler}
-                    />
+                      style={{
+                        height: '90px',
+                        width: '318px',
+                        outline: 'none',
+                        border: 'none',
+                        padding: '5px',
+                        margin: 'auto',
+                      }}
+                    ></textarea>
                   </ApprovInputDiv>
                 )}
                 {approveInput?.length < 5 ? (
