@@ -399,9 +399,14 @@ const ChatRoomName = styled.div`
 `;
 
 const ChatRoomContent = styled.div`
+  max-width: 180px;
   font-size: 10px;
   font-weight: 400;
   color: #667085;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
 `;
 
 const RoomMember = styled.div`
