@@ -6,7 +6,6 @@ import { partyStatus } from '../../shared/partyStatus';
 import { deleteAPI, getAPI, postAPI } from '../../api/api';
 import { useMutation } from 'react-query';
 import { styled } from 'styled-components';
-import SojuRoom from '../../assets/sojuroomimg.webp';
 import { Link } from 'react-router-dom';
 import { formmatedDate } from '../../shared/formattedDate';
 import PartyDetailMap from '../map/PartyDetailMap';
@@ -92,14 +91,10 @@ export const PartyDetailInfo = () => {
       ? `${data?.distance}m`
       : `${data?.distance / 1000}km`;
 
-  console.log('data ::', data);
-
   // 가게 정보 더보기
   const handleDetailClick = url => {
     window.open(url, '_blank');
   };
-
-  console.log('data ::', data);
 
   return (
     <>
