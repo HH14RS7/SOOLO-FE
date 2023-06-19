@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, QueryClient } from 'react-query';
 import { getAPI, postAPI, deleteAPI } from '../../api/api';
 import { MEMBER_URL, PARTIES_URL } from '../../shared/constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
 
 export const ChatApprove = () => {
+  const queryClient = new QueryClient();
   const navigate = useNavigate();
 
   const [requestList, setRequestList] = useState([]);
@@ -45,11 +46,15 @@ export const ChatApprove = () => {
     getAPI(`${PARTIES_URL.MY_APPROVE_LIST}`),
   );
 
+  // useEffect(() => {
+  //   if (data) {
+  //     setRequestList(data.data);
+  //   }
+  // }, [queryClient]);
+
   useEffect(() => {
-    if (data) {
-      setRequestList(data.data);
-    }
-  }, [data]);
+    queryClient.invalidateQueries('requests');
+  }, [queryClient]);
 
   if (isLoading) {
     return <div>로딩중입니다.</div>;
@@ -67,6 +72,8 @@ export const ChatApprove = () => {
     rejectRequest.mutate(participateId);
   };
 
+  console.log('data ::', data);
+
   return (
     <>
       <div
@@ -74,63 +81,65 @@ export const ChatApprove = () => {
           height: '1px',
         }}
       ></div>
-      {requestList?.data?.map((user, index) => (
-        <RequestContainer key={index}>
-          <RequestContents>
-            <RequestImgDiv>
-              <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${user.memberId}`}>
-                <img
-                  src={user.memberProfileImage}
-                  alt="memberimg"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
-              </Link>
-            </RequestImgDiv>
-            <RequestInfo>
-              <RequestUserName>{user.memberName}</RequestUserName>
-              <Link to={`${PARTIES_URL.PARTIES_DETAIL}/${user.partyId}`}>
-                <div
-                  style={{
-                    fontSize: '12px',
-                    marginBottom: '8px',
-                  }}
-                >
-                  모임 : {user.title}
-                </div>
-              </Link>
-              <div
-                style={{
-                  fontSize: '10px',
-                  color: '#667085',
-                  marginBottom: '8px',
-                }}
-              >
-                주량
-              </div>
-              <RequestUserAlcohol>{user.amountAlcohol || '미입력'}</RequestUserAlcohol>
-              <div
-                style={{
-                  fontSize: '10px',
-                  color: '#667085',
-                  marginBottom: '8px',
-                }}
-              >
-                신청한 이유
-              </div>
-              <RequestUserReason>{user.reason || '미입력'}</RequestUserReason>
-            </RequestInfo>
-          </RequestContents>
-          <RequestDiv>
-            <ApproveBtn onClick={() => handleReject(user.partyParticipateId)}>거절</ApproveBtn>
-            <RejecBtn onClick={() => handleAccept(user.partyParticipateId)}>승인</RejecBtn>
-          </RequestDiv>
-        </RequestContainer>
-      ))}
+      {data?.data?.data?.length > 0
+        ? data?.data?.data?.map((user, index) => (
+            <RequestContainer key={index}>
+              <RequestContents>
+                <RequestImgDiv>
+                  <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${user.memberId}`}>
+                    <img
+                      src={user.memberProfileImage}
+                      alt="memberimg"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  </Link>
+                </RequestImgDiv>
+                <RequestInfo>
+                  <RequestUserName>{user.memberName}</RequestUserName>
+                  <Link to={`${PARTIES_URL.PARTIES_DETAIL}/${user.partyId}`}>
+                    <div
+                      style={{
+                        fontSize: '12px',
+                        marginBottom: '8px',
+                      }}
+                    >
+                      모임 : {user.title}
+                    </div>
+                  </Link>
+                  <div
+                    style={{
+                      fontSize: '10px',
+                      color: '#667085',
+                      marginBottom: '8px',
+                    }}
+                  >
+                    주량
+                  </div>
+                  <RequestUserAlcohol>{user.amountAlcohol || '미입력'}</RequestUserAlcohol>
+                  <div
+                    style={{
+                      fontSize: '10px',
+                      color: '#667085',
+                      marginBottom: '8px',
+                    }}
+                  >
+                    신청한 이유
+                  </div>
+                  <RequestUserReason>{user.reason || '미입력'}</RequestUserReason>
+                </RequestInfo>
+              </RequestContents>
+              <RequestDiv>
+                <ApproveBtn onClick={() => handleReject(user.partyParticipateId)}>거절</ApproveBtn>
+                <RejecBtn onClick={() => handleAccept(user.partyParticipateId)}>승인</RejecBtn>
+              </RequestDiv>
+            </RequestContainer>
+          ))
+        : ''}
     </>
   );
 };
