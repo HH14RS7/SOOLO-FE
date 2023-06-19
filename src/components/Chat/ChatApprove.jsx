@@ -14,8 +14,6 @@ export const ChatApprove = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
-  const [requestList, setRequestList] = useState([]);
-
   // 모임 승인
   const acceptRequest = useMutation(
     participateId => postAPI(`${PARTIES_URL.ACCEPT}/${participateId}`),
