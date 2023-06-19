@@ -17,8 +17,8 @@ export const ChatApprove = () => {
     participateId => postAPI(`${PARTIES_URL.ACCEPT}/${participateId}`),
     {
       onSuccess: response => {
+        queryClient.invalidateQueries('requests');
         alert(response.data.msg);
-        return queryClient.invalidateQueries('requests');
       },
       onError: error => {
         alert(error.data.msg);
@@ -31,12 +31,11 @@ export const ChatApprove = () => {
     participateId => deleteAPI(`${PARTIES_URL.ACCEPT}/${participateId}`),
     {
       onSuccess: response => {
+        queryClient.invalidateQueries('requests');
         alert(response.data.msg);
-        return queryClient.invalidateQueries('requests');
       },
       onError: error => {
         alert(error.data.msg);
-        queryClient.invalidateQueries('requests');
       },
     },
   );
