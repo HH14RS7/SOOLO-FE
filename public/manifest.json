@@ -1,29 +1,28 @@
 {
-    "short_name": "I'm Soolo",
-    "name": "I'm Soolo",
-    "description": "새로운 사람들과 술을 좋아하는 당신을 위한 술집도모 서비스🍺",
-    "categories": [
-      "app"
-    ],
-    "icons": [
-      {
-        "src": "favicon.png",
-        "sizes": "64x64 32x32 24x24 16x16",
-        "type": "image/png"
-      },
-      {
-        "src": "logo192.png",
-        "type": "image/png",
-        "sizes": "192x192"
-      },
-      {
-        "src": "logo512.png",
-        "type": "image/png",
-        "sizes": "512x512"
-      }
-    ],
-    "start_url": "/",
-    "display": "standalone",
-    "theme_color": "#000000",
-    "background_color": "#FFFFFF"
-  }
+  "short_name": "I'm Soolo",
+  "name": "I'm Soolo",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#FFFFFF",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+      
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}
