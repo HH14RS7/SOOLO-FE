@@ -11,14 +11,15 @@ import { Link } from 'react-router-dom';
 import Loading from '../Loading';
 
 export const UserProfileInfo = () => {
-  const { id: memberID } = useParams();
+  const { id: memberId } = useParams();
   const navigate = useNavigate();
 
   const { data, isLoading } = useQuery('memberInfo', async () => {
-    const response = await getAPI(`${MEMBER_URL.TARGET_PAGE_GET}/${memberID}`);
+    const response = await getAPI(`${MEMBER_URL.TARGET_PAGE_GET}/${memberId}`);
     return response;
   });
 
+  const memberID = localStorage.getItem('memberId');
   const user = data?.data?.data;
 
   if (isLoading) {
@@ -54,9 +55,11 @@ export const UserProfileInfo = () => {
               <TextContent>{user?.introduce}</TextContent>
             </Frame4014>
             <ReportCon>
-              <Link to={`${PATH_URL.USER_REPORT}/${memberID}`}>
-                <Report />
-              </Link>
+              {memberId === memberID ? null : (
+                <Link to={`${PATH_URL.USER_REPORT}/${memberId}`}>
+                  <Report />
+                </Link>
+              )}
             </ReportCon>
           </Frame4013>
         </Frame4047>
