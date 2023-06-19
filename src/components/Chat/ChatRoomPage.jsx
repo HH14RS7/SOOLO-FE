@@ -181,14 +181,9 @@ export const ChatRoomPage = () => {
   const subscribeSend = () => {
     client.current.subscribe(`/sub/chat/message/${chatRoomUniqueId}`, response => {
       console.log('response :: ', response);
-      //사용자 유니크 ID, 이미지 URL 추가 필요
       const data = JSON.parse(response.body);
 
       setChatMessageList(chatList => [...chatList, data.data]);
-      // setChatMessageList(chatList => [
-      //   ...chatList,
-      //   { ...data.data, memberProfileImage: data.data.memberProfileImage || ProfileDefaultImg },
-      // ]);
     });
   };
 
