@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
 import { styled } from 'styled-components';

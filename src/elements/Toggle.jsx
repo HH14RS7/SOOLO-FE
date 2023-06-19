@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 
 export const Toggle = ({ isOn, onToggle }) => {
@@ -52,9 +51,4 @@ const ToggleContainer = styled.div`
     bottom: 14.29%;
     transition: 0.5s;
   }
-`;
-
-const Desc = styled.div`
-  //설명 부분의 CSS를 구현
-  text-align: center;
 `;

@@ -35,27 +35,44 @@ export const PartyApply = () => {
   };
 
   const ApplicationButtonHandler = e => {
-    if (reason && reason.length < 5) {
-      alert('신청이 불가합니다. 모임 신청 이유를 5글자 이상으로 입력해주세요.');
-      return;
-    }
+    if (reason && reason.length >= 5 && amountAlcohol && amountAlcohol.length >= 2) {
+      const data = {
+        reason,
+        amountAlcohol,
+      };
 
-    if (amountAlcohol && amountAlcohol.length < 2) {
-      alert('신청이 불가합니다. 주량을 2글자 이상으로 입력해주세요.');
-      return;
-    }
-
-    const data = {
-      reason,
-      amountAlcohol,
-    };
-
-    postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`, data)
-      .then(response => {
+      postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`, data).then(response => {
         alert(response.data.msg);
         navigate(`${PATH_URL.PARTY_DETAIL}/${partyId}`);
-      })
-      .catch(e => console.log('e ::', e));
+      });
+    } else {
+      if (!reason || reason.length < 5) {
+        alert('모임 신청 이유를 5글자 이상으로 입력해주세요.');
+      } else if (!amountAlcohol || amountAlcohol.length < 2) {
+        alert('주량을 2글자 이상으로 입력해주세요.');
+      }
+    }
+    // if (reason && reason.length < 5) {
+    //   alert('신청이 불가합니다. 모임 신청 이유를 5글자 이상으로 입력해주세요.');
+    //   return;
+    // }
+
+    // if (amountAlcohol && amountAlcohol.length < 2) {
+    //   alert('신청이 불가합니다. 주량을 2글자 이상으로 입력해주세요.');
+    //   return;
+    // }
+
+    // const data = {
+    //   reason,
+    //   amountAlcohol,
+    // };
+
+    // postAPI(`${PARTIES_URL.PARTIES_APPLICATION}/${partyId}`, data)
+    //   .then(response => {
+    //     alert(response.data.msg);
+    //     navigate(`${PATH_URL.PARTY_DETAIL}/${partyId}`);
+    //   })
+    //   .catch(e => console.log('e ::', e));
   };
 
   return (
@@ -84,23 +101,39 @@ export const PartyApply = () => {
                 <ApproveName>내 주량</ApproveName>
                 {limitInput?.length === 1 ? (
                   <ApprovInputDiv color={'red'}>
-                    <LimitInput
+                    <textarea
                       type="text"
                       value={(limitInput, amountAlcohol)}
-                      maxLength="10"
+                      maxLength="20"
                       placeholder="예 : 소주 한병, 많이 약해요, 취해본 적이 없어요..."
                       onChange={limitInputHandler}
-                    />
+                      style={{
+                        height: '90px',
+                        width: '318px',
+                        outline: 'none',
+                        border: 'none',
+                        padding: '5px',
+                        margin: 'auto',
+                      }}
+                    ></textarea>
                   </ApprovInputDiv>
                 ) : (
                   <ApprovInputDiv color={'#C5C6CC'}>
-                    <LimitInput
+                    <textarea
                       type="text"
                       value={(limitInput, amountAlcohol)}
-                      maxLength="10"
+                      maxLength="20"
                       placeholder="예 : 소주 한병, 많이 약해요, 취해본 적이 없어요..."
                       onChange={limitInputHandler}
-                    />
+                      style={{
+                        height: '90px',
+                        width: '318px',
+                        outline: 'none',
+                        border: 'none',
+                        padding: '5px',
+                        margin: 'auto',
+                      }}
+                    ></textarea>
                   </ApprovInputDiv>
                 )}
                 {limitInput?.length < 2 ? (
@@ -109,10 +142,10 @@ export const PartyApply = () => {
                     2자 이상 적어주세요.
                   </ReportText>
                 ) : null}
-                {limitInput?.length > 9 ? (
-                  <LengthDiv color={'red'}> {limitInput?.length || 0} / 10</LengthDiv>
+                {limitInput?.length > 19 ? (
+                  <LengthDiv color={'red'}> {limitInput?.length || 0} / 20</LengthDiv>
                 ) : (
-                  <LengthDiv color={'#98a2b3'}> {limitInput?.length || 0} / 10</LengthDiv>
+                  <LengthDiv color={'#98a2b3'}> {limitInput?.length || 0} / 20</LengthDiv>
                 )}
               </div>
             </ApproveDiv>
@@ -129,23 +162,39 @@ export const PartyApply = () => {
                 <ApproveName>모임에 신청한 이유</ApproveName>
                 {approveInput?.length < 5 ? (
                   <ApprovInputDiv color={'red'}>
-                    <ApproveReason
+                    <textarea
                       type="text"
                       value={(approveInput, reason)}
-                      maxLength="25"
+                      maxLength="50"
                       placeholder="모임을 신청한 이유를 적어주세요"
                       onChange={approveInputHandler}
-                    />
+                      style={{
+                        height: '90px',
+                        width: '318px',
+                        outline: 'none',
+                        border: 'none',
+                        padding: '5px',
+                        margin: 'auto',
+                      }}
+                    ></textarea>
                   </ApprovInputDiv>
                 ) : (
                   <ApprovInputDiv color={'#C5C6CC'}>
-                    <ApproveReason
+                    <textarea
                       type="text"
                       value={(approveInput, reason)}
-                      maxLength="25"
+                      maxLength="50"
                       placeholder="모임을 신청한 이유를 적어주세요"
                       onChange={approveInputHandler}
-                    />
+                      style={{
+                        height: '90px',
+                        width: '318px',
+                        outline: 'none',
+                        border: 'none',
+                        padding: '5px',
+                        margin: 'auto',
+                      }}
+                    ></textarea>
                   </ApprovInputDiv>
                 )}
                 {approveInput?.length < 5 ? (
@@ -154,10 +203,10 @@ export const PartyApply = () => {
                     5자 이상 적어주세요.
                   </ReportText>
                 ) : null}
-                {approveInput?.length > 24 ? (
-                  <LengthDiv color={'red'}> {approveInput?.length || 0} / 25</LengthDiv>
+                {approveInput?.length > 49 ? (
+                  <LengthDiv color={'red'}> {approveInput?.length || 0} / 50</LengthDiv>
                 ) : (
-                  <LengthDiv color={'#98a2b3'}> {approveInput?.length || 0} / 25</LengthDiv>
+                  <LengthDiv color={'#98a2b3'}> {approveInput?.length || 0} / 50</LengthDiv>
                 )}
               </div>
             </ApproveDiv>

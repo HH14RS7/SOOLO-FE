@@ -27,6 +27,7 @@ export const ChatList = () => {
 
   const [roomId, setRoomId] = useState();
   const [hostId, setHostId] = useState();
+  const [chatUniqueId, setChatUniqueId] = useState();
 
   useEffect(() => {
     if (!accesskey) {
@@ -119,6 +120,13 @@ export const ChatList = () => {
     }
   };
 
+  // 채팅방 들어가는 네비게이
+  const ChatJoinHandler = (chatRoomUniqueId, chatRoomId, host) => {
+    navigate(
+      `${PATH_URL.PARTY_CHATROOM}?chatRoomUniqueId=${chatRoomUniqueId}&chatRoomId=${chatRoomId}&hostId=${host}`,
+    );
+  };
+
   return (
     <>
       {showModal && <LoginModal />}
@@ -157,7 +165,12 @@ export const ChatList = () => {
                   {chatData?.data && chatData.data.length > 0 ? (
                     chatData.data.map((data, index) => {
                       return (
-                        <ChatRoom key={index}>
+                        <ChatRoom
+                          key={index}
+                          onClick={() => {
+                            ChatJoinHandler(data.chatRoomUniqueId, data.chatRoomId, data.host);
+                          }}
+                        >
                           <ChatRoomBox>
                             <ChatRoomImg>
                               {data?.imageUrl ? (
@@ -176,14 +189,10 @@ export const ChatList = () => {
                             </ChatRoomImg>
                             <ChatRoomContainer>
                               <ChatRoomContents>
-                                <Link
-                                  to={`${PATH_URL.PARTY_CHATROOM}?chatRoomUniqueId=${data.chatRoomUniqueId}&chatRoomId=${data.chatRoomId}&hostId=${data.host}`}
-                                >
-                                  <ChatRoomInfo>
-                                    <ChatRoomName>{data.title}</ChatRoomName>
-                                    <ChatRoomContent>{data.lastMessage}</ChatRoomContent>
-                                  </ChatRoomInfo>
-                                </Link>
+                                <ChatRoomInfo>
+                                  <ChatRoomName>{data.title}</ChatRoomName>
+                                  <ChatRoomContent>{data.lastMessage}</ChatRoomContent>
+                                </ChatRoomInfo>
                                 <RoomMember>
                                   <TotalMember>
                                     <MemberIcon>
@@ -221,7 +230,8 @@ export const ChatList = () => {
                                   <MessageNumber>{data.readCount}</MessageNumber>
                                 </ChatMessageNumber>
                                 <ChatMenu
-                                  onClick={() => {
+                                  onClick={event => {
+                                    event.stopPropagation();
                                     openModal(data.chatRoomId, data.host);
                                   }}
                                 >
@@ -364,6 +374,7 @@ const ChatRoom = styled.div`
   width: 360px;
   height: 94px;
   border-bottom: 1px solid #e4e7ec;
+  cursor: pointer;
 `;
 
 const ChatRoomBox = styled.div`
@@ -399,9 +410,14 @@ const ChatRoomName = styled.div`
 `;
 
 const ChatRoomContent = styled.div`
+  max-width: 180px;
   font-size: 10px;
   font-weight: 400;
   color: #667085;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
 `;
 
 const RoomMember = styled.div`
