@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useMutation, useQuery, QueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getAPI, postAPI, deleteAPI } from '../../api/api';
 import { MEMBER_URL, PARTIES_URL } from '../../shared/constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
 
 export const ChatApprove = () => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const [requestList, setRequestList] = useState([]);
@@ -17,8 +17,8 @@ export const ChatApprove = () => {
     participateId => postAPI(`${PARTIES_URL.ACCEPT}/${participateId}`),
     {
       onSuccess: response => {
+        queryClient.invalidateQueries('requests');
         alert(response.data.msg);
-        return queryClient.invalidateQueries('requests');
       },
       onError: error => {
         alert(error.data.msg);
@@ -31,12 +31,11 @@ export const ChatApprove = () => {
     participateId => deleteAPI(`${PARTIES_URL.ACCEPT}/${participateId}`),
     {
       onSuccess: response => {
+        queryClient.invalidateQueries('requests');
         alert(response.data.msg);
-        return queryClient.invalidateQueries('requests');
       },
       onError: error => {
         alert(error.data.msg);
-        queryClient.invalidateQueries('requests');
       },
     },
   );
@@ -44,16 +43,6 @@ export const ChatApprove = () => {
   const { data, isLoading, error } = useQuery('requests', () =>
     getAPI(`${PARTIES_URL.MY_APPROVE_LIST}`),
   );
-
-  // useEffect(() => {
-  //   if (data) {
-  //     setRequestList(data.data);
-  //   }
-  // }, [queryClient]);
-
-  useEffect(() => {
-    queryClient.invalidateQueries('requests');
-  }, [queryClient]);
 
   if (isLoading) {
     return <div>로딩중입니다.</div>;
