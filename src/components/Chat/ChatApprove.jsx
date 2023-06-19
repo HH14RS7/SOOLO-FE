@@ -17,7 +17,6 @@ export const ChatApprove = () => {
     participateId => postAPI(`${PARTIES_URL.ACCEPT}/${participateId}`),
     {
       onSuccess: response => {
-        queryClient.invalidateQueries('requests');
         alert(response.data.msg);
       },
       onError: error => {
@@ -31,7 +30,6 @@ export const ChatApprove = () => {
     participateId => deleteAPI(`${PARTIES_URL.ACCEPT}/${participateId}`),
     {
       onSuccess: response => {
-        queryClient.invalidateQueries('requests');
         alert(response.data.msg);
       },
       onError: error => {
@@ -44,16 +42,6 @@ export const ChatApprove = () => {
     getAPI(`${PARTIES_URL.MY_APPROVE_LIST}`),
   );
 
-  // useEffect(() => {
-  //   if (data) {
-  //     setRequestList(data.data);
-  //   }
-  // }, [queryClient]);
-
-  // useEffect(() => {
-  //   queryClient.invalidateQueries('requests');
-  // }, [queryClient]);
-
   if (isLoading) {
     return <div>로딩중입니다.</div>;
   }
@@ -63,11 +51,27 @@ export const ChatApprove = () => {
   }
 
   const handleAccept = participateId => {
-    acceptRequest.mutate(participateId);
+    acceptRequest.mutate(participateId, {
+      onSuccess: response => {
+        queryClient.invalidateQueries('requests');
+        alert(response.data.msg);
+      },
+      onError: error => {
+        alert(error.data.msg);
+      },
+    });
   };
 
   const handleReject = participateId => {
-    rejectRequest.mutate(participateId);
+    rejectRequest.mutate(participateId, {
+      onSuccess: response => {
+        queryClient.invalidateQueries('requests');
+        alert(response.data.msg);
+      },
+      onError: error => {
+        alert(error.data.msg);
+      },
+    });
   };
 
   console.log('data ::', data);
