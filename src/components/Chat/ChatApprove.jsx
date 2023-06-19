@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useMutation, useQuery, QueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getAPI, postAPI, deleteAPI } from '../../api/api';
 import { MEMBER_URL, PARTIES_URL } from '../../shared/constants';
 import { Link, useNavigate } from 'react-router-dom';
 import { PATH_URL } from '../../shared/constants';
 
 export const ChatApprove = () => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const [requestList, setRequestList] = useState([]);
@@ -17,6 +17,7 @@ export const ChatApprove = () => {
     participateId => postAPI(`${PARTIES_URL.ACCEPT}/${participateId}`),
     {
       onSuccess: response => {
+        queryClient.invalidateQueries('requests');
         alert(response.data.msg);
       },
       onError: error => {
@@ -30,6 +31,7 @@ export const ChatApprove = () => {
     participateId => deleteAPI(`${PARTIES_URL.ACCEPT}/${participateId}`),
     {
       onSuccess: response => {
+        queryClient.invalidateQueries('requests');
         alert(response.data.msg);
       },
       onError: error => {
@@ -51,27 +53,11 @@ export const ChatApprove = () => {
   }
 
   const handleAccept = participateId => {
-    acceptRequest.mutate(participateId, {
-      onSuccess: response => {
-        queryClient.invalidateQueries('requests');
-        alert(response.data.msg);
-      },
-      onError: error => {
-        alert(error.data.msg);
-      },
-    });
+    acceptRequest.mutate(participateId);
   };
 
   const handleReject = participateId => {
-    rejectRequest.mutate(participateId, {
-      onSuccess: response => {
-        queryClient.invalidateQueries('requests');
-        alert(response.data.msg);
-      },
-      onError: error => {
-        alert(error.data.msg);
-      },
-    });
+    rejectRequest.mutate(participateId);
   };
 
   console.log('data ::', data);
