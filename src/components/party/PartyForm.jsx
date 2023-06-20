@@ -30,6 +30,7 @@ const CreateForm = ({ party }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(null);
   const [previewImage, setPreviewImage] = useState(party.imgUrl || null);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const initialTotalCount = isEdit ? party.totalCount : 2;
   const [totalCount, setTotalCount] = useState(initialTotalCount);
@@ -52,10 +53,12 @@ const CreateForm = ({ party }) => {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
     reset,
     watch,
   } = useForm({
     mode: 'onChange',
+    shouldFocusError: true, // 포커스를 오류가 있는 필드로 이동
   });
 
   const title = watch('title', '');
@@ -174,6 +177,7 @@ const CreateForm = ({ party }) => {
 
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
     const img = imgRef.current.files[0];
+
     img && formData.append('image', img);
 
     // if (!img) {
@@ -227,19 +231,32 @@ const CreateForm = ({ party }) => {
   };
 
   const handleFileChange = e => {
+    setErrorMessage('');
+
     const file = e.target.files[0];
     if (file) {
+      const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
+      const fileExtension = file.name.toLowerCase().split('.').pop();
+      const maxSizeInBytes = 10 * 1024 * 1024;
+
+      if (!allowedExtensions.includes(fileExtension)) {
+        setErrorMessage(`${fileExtension}은(는) 업로드가 허용되지 않는 확장자입니다.`);
+        return;
+      }
+
+      if (file.size > maxSizeInBytes) {
+        setErrorMessage('10MB 이내 파일을 업로드해주세요.');
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = () => {
         setPreviewImage(reader.result);
       };
+
       reader.readAsDataURL(file);
       setImg(file);
     }
-    // else {
-    //   setPreviewImage(party.imageUrl); // 기존 이미지 보여주기
-    //   setImg(null);
-    // }
   };
 
   // 이전으로 버튼 클릭
@@ -414,7 +431,7 @@ const CreateForm = ({ party }) => {
                   <UploadIcon />
                   <FileInput
                     type="file"
-                    accept="image/*"
+                    accept=".jpg, .jpeg, .png, .gif, .bmp, .webp, .svg"
                     id="img"
                     name="img"
                     ref={imgRef}
@@ -426,7 +443,7 @@ const CreateForm = ({ party }) => {
                       : !previewImage
                       ? '이미지 업로드하기'
                       : '이미지 변경하기'}
-                  </UploadMsg>{' '}
+                  </UploadMsg>
                 </UploadButton>
                 {/* <ButtonContainer>
                   <ImgModifyButton onClick={handleUploadClick}>
@@ -455,6 +472,9 @@ const CreateForm = ({ party }) => {
                   </ImgModifyButton>
                 </ButtonContainer> */}
               </PlaceImageWrapper>
+              <ModifyInfo>
+                <InfoMsg> {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}</InfoMsg>
+              </ModifyInfo>
             </ImageUplaodSection>
             <ImageInfoSection>
               <InfoHeader>
