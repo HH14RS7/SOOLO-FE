@@ -12,8 +12,6 @@ const MapContainer = ({ searchPlace, party }) => {
   const currentloaction = useGeolocation();
   const [Places, setPlaces] = useState([]);
   const mapRef = useRef();
-  const mapdata = useRecoilValue(mapDataState);
-  const stationData = useRecoilValue(stationDataState);
   const isEdit = !!party.partyId;
   var geocoder = new kakao.maps.services.Geocoder();
 

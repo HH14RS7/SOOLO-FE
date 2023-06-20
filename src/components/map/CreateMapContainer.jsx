@@ -1,12 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import { useLocation, useNavigate, useHistory } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { PATH_URL } from '../../shared/constants';
-import { Link } from 'react-router-dom';
 import marker from '../../assets/map/marker.svg';
 import { ReactComponent as Add } from '../../assets/map/add.svg';
 import { ReactComponent as Subtract } from '../../assets/map/subtract.svg';
 import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
+import { useSetRecoilState } from 'recoil';
+import { tempPartyData } from '../../atoms';
 
 export default function CreateMapContainer() {
   const { kakao } = window;
@@ -14,11 +15,10 @@ export default function CreateMapContainer() {
   const place = location.state || {};
   const navigate = useNavigate();
   const moreButton = '/img/more-detail.png';
-
-  console.log(place);
   const latitude = place.y;
   const longitude = place.x;
   const mapRef = useRef(null);
+  const setTempPartyData = useSetRecoilState(tempPartyData);
 
   useEffect(() => {
     const container = mapRef.current;
@@ -62,7 +62,11 @@ export default function CreateMapContainer() {
   };
 
   const goSearchPlaceList = () => {
-    navigate(PATH_URL.PARTY_PLACE_CREATE);
+    const isConfirm = window.confirm('확인시 입력하신 내용이 초기화됩니다.');
+    if (isConfirm) {
+      setTempPartyData(null);
+      navigate(PATH_URL.PARTY_PLACE_CREATE);
+    }
   };
 
   return (
@@ -100,7 +104,6 @@ export default function CreateMapContainer() {
         </PlaceDetail>
         <PlaceButton onClick={handleItemClick}>이곳에서 모임 열기</PlaceButton>
       </PlaceWrapper>
-      {/* <button onClick={goSearchPlaceList}>이전으로</button> */}
     </Wrapper>
   );
 }
