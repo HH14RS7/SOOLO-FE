@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getAPI, putUpdateAPI } from '../../api/api';
 import { MEMBER_URL } from '../../shared/constants';
@@ -34,11 +34,22 @@ function UserUpdate() {
     return response;
   });
 
+  const user = data?.data?.data;
+
+  useEffect(() => {
+    if (user) {
+      setNameInput(user.memberName);
+      if (!user.introduce) {
+        setIntroduceInput('안녕하세요. 반갑습니다.');
+      } else {
+        setIntroduceInput(user.introduce);
+      }
+    }
+  }, []);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
-  const user = data?.data?.data;
 
   const memberNameHanlder = e => {
     setNameInput(e.target.value);
@@ -156,7 +167,7 @@ function UserUpdate() {
                 <Content2
                   maxLength="49"
                   value={introduceInput}
-                  placeholder={user?.introduce}
+                  placeholder={user?.introduce || '안녕하세요. 반갑습니다.'}
                   onChange={introduceHanlder}
                 />
               </Field>
@@ -346,6 +357,7 @@ const Content1 = styled.textarea`
   height: 14px;
   border: none;
   outline: none;
+  overflow: hidden;
 `;
 
 const Content2 = styled.textarea`

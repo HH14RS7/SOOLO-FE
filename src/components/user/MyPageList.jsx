@@ -74,7 +74,7 @@ export const MyPageList = () => {
             </Frame4016>
             <Frame4013>
               <Introduce>자기 소개</Introduce>
-              <IntroduceContent>{user?.introduce}</IntroduceContent>
+              <IntroduceContent>{user?.introduce || '안녕하세요. 반갑습니다.'}</IntroduceContent>
             </Frame4013>
           </Frame4017>
         </PartyDetailImg>
