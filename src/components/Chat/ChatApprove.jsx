@@ -78,6 +78,7 @@ export const ChatApprove = () => {
             width: '360px',
             margin: '0 auto',
             background: '#f9fafb',
+            paddingBottom: '70px',
           }}
         >
           <Topbar>
