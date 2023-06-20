@@ -536,6 +536,7 @@ const Topbar = styled.div`
 
 const TopBackDiv = styled.div`
   display: flex;
+  position: absolute;
   align-items: center;
   width: 24px;
   height: 24px;
