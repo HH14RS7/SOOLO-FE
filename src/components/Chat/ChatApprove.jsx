@@ -9,6 +9,7 @@ import { PATH_URL } from '../../shared/constants';
 // 이미지 import
 import { ReactComponent as Location } from '../../assets/map/location-line.svg';
 import { ReactComponent as LoadingIcon } from '../../assets/chating/noapprove.svg';
+import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 
 export const ChatApprove = () => {
   const queryClient = useQueryClient();
@@ -68,100 +69,155 @@ export const ChatApprove = () => {
     <>
       <div
         style={{
-          height: '1px',
+          width: '100%',
+          height: '100%',
         }}
-      ></div>
-      {data?.data?.data?.length > 0 ? (
-        data?.data?.data?.map((user, index) => (
-          <RequestContainer key={index}>
-            <Link to={`${PARTIES_URL.PARTIES_DETAIL}/${user.partyId}`}>
-              <PartyName>
-                <div
-                  style={{
-                    width: '16px',
-                    height: '16px',
-                  }}
-                >
-                  <Location
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                    }}
-                  />
-                </div>
-                {user.title}
-              </PartyName>
-            </Link>
-            <RequestContents>
-              <RequestImgDiv>
-                <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${user.memberId}`}>
-                  <img
-                    src={user.memberProfileImage}
-                    alt="memberimg"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: '100%',
-                      objectFit: 'cover',
-                    }}
-                  />
-                </Link>
-              </RequestImgDiv>
-              <RequestInfo>
-                <RequestUserName>{user.memberName}</RequestUserName>
-                <div
-                  style={{
-                    fontSize: '10px',
-                    color: '#667085',
-                    marginBottom: '8px',
-                  }}
-                >
-                  주량
-                </div>
-                <RequestUserAlcohol>{user.amountAlcohol || '미입력'}</RequestUserAlcohol>
-                <div
-                  style={{
-                    fontSize: '10px',
-                    color: '#667085',
-                    marginBottom: '8px',
-                  }}
-                >
-                  신청한 이유
-                </div>
-                <RequestUserReason>{user.reason || '미입력'}</RequestUserReason>
-              </RequestInfo>
-            </RequestContents>
-            <RequestDiv>
-              <ApproveBtn onClick={() => handleReject(user.partyParticipateId)}>거절</ApproveBtn>
-              <RejecBtn onClick={() => handleAccept(user.partyParticipateId)}>승인</RejecBtn>
-            </RequestDiv>
-          </RequestContainer>
-        ))
-      ) : (
+      >
         <div
           style={{
             width: '360px',
-            height: '87vh',
-            background: '#f2f4f7',
-            display: 'flex',
-            alignItems: 'center',
+            margin: '0 auto',
+            background: '#f9fafb',
           }}
         >
-          <LoadingDiv>
-            <LoadingIcon
+          <Topbar>
+            <TopBackDiv
               style={{
-                margin: '0 auto',
-                width: '48px',
-                height: '48px',
+                position: 'absolute',
               }}
-            />
-            <LoadingText>들어온 승인요청이 없습니다.</LoadingText>
-          </LoadingDiv>
+            >
+              <Link to={'/home'}>
+                <LeftBack />
+              </Link>
+            </TopBackDiv>
+            <TopbarName>들어온 승인 요청</TopbarName>
+          </Topbar>
+          {data?.data?.data?.length > 0 ? (
+            data?.data?.data?.map((user, index) => (
+              <RequestContainer key={index}>
+                <Link to={`${PARTIES_URL.PARTIES_DETAIL}/${user.partyId}`}>
+                  <PartyName>
+                    <div
+                      style={{
+                        width: '16px',
+                        height: '16px',
+                      }}
+                    >
+                      <Location
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      />
+                    </div>
+                    {user.title}
+                  </PartyName>
+                </Link>
+                <RequestContents>
+                  <RequestImgDiv>
+                    <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${user.memberId}`}>
+                      <img
+                        src={user.memberProfileImage}
+                        alt="memberimg"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: '100%',
+                          objectFit: 'cover',
+                        }}
+                      />
+                    </Link>
+                  </RequestImgDiv>
+                  <RequestInfo>
+                    <RequestUserName>{user.memberName}</RequestUserName>
+                    <div
+                      style={{
+                        fontSize: '10px',
+                        color: '#667085',
+                        marginBottom: '8px',
+                      }}
+                    >
+                      주량
+                    </div>
+                    <RequestUserAlcohol>{user.amountAlcohol || '미입력'}</RequestUserAlcohol>
+                    <div
+                      style={{
+                        fontSize: '10px',
+                        color: '#667085',
+                        marginBottom: '8px',
+                      }}
+                    >
+                      신청한 이유
+                    </div>
+                    <RequestUserReason>{user.reason || '미입력'}</RequestUserReason>
+                  </RequestInfo>
+                </RequestContents>
+                <RequestDiv>
+                  <ApproveBtn onClick={() => handleReject(user.partyParticipateId)}>
+                    거절
+                  </ApproveBtn>
+                  <RejecBtn onClick={() => handleAccept(user.partyParticipateId)}>승인</RejecBtn>
+                </RequestDiv>
+              </RequestContainer>
+            ))
+          ) : (
+            <div
+              style={{
+                width: '360px',
+                height: '87vh',
+                background: '#f2f4f7',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <LoadingDiv>
+                <LoadingIcon
+                  style={{
+                    margin: '0 auto',
+                    width: '48px',
+                    height: '48px',
+                  }}
+                />
+                <LoadingText>들어온 승인요청이 없습니다.</LoadingText>
+              </LoadingDiv>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </>
   );
 };
+
+// TopBar 스타일
+const Topbar = styled.div`
+  display: flex;
+  top: 0;
+  // margin-top: 51px;
+  align-items: center;
+  justify-content: space-between;
+  width: 360px;
+  height: 52px;
+  border-bottom: 1px solid #f2f4f7;
+  background: #fff;
+  z-index: 10;
+  margin: 0 auto;
+`;
+
+const TopBackDiv = styled.div`
+  display: flex;
+  align-items: center;
+  padding-left: 16px;
+  width: 40px;
+  height: 24px;
+  cursor: pointer;
+`;
+
+const TopbarName = styled.div`
+  color: #1d2939;
+  font-size: 16px;
+  text-align: center;
+  flex-grow: 1;
+`;
 
 // 모임 참여자 div 스타일
 const RequestContainer = styled.div`
