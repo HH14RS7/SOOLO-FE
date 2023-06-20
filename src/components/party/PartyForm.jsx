@@ -178,8 +178,6 @@ const CreateForm = ({ party }) => {
     };
 
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-    const img = imgRef.current.files[0];
-
     img && formData.append('image', img);
 
     if (isEdit) {
@@ -239,10 +237,9 @@ const CreateForm = ({ party }) => {
       const reader = new FileReader();
       reader.onload = () => {
         setPreviewImage(reader.result);
+        setImg(file);
       };
-
       reader.readAsDataURL(file);
-      setImg(file);
     }
   };
 
