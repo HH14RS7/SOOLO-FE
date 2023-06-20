@@ -75,6 +75,7 @@ export const ChatApprove = () => {
       >
         <div
           style={{
+            height: '100%',
             width: '360px',
             margin: '0 auto',
             background: '#f9fafb',
