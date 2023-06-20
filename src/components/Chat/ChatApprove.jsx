@@ -163,18 +163,6 @@ export const ChatApprove = () => {
   );
 };
 
-// 기본 Default 스타일
-const Background = styled.div`
-  width: 100%;
-`;
-
-const Container = styled.div`
-  width: 360px;
-  height: 100%;
-  background: #f2f4f7;
-  margin: 0 auto;
-`;
-
 // 모임 참여자 div 스타일
 const RequestContainer = styled.div`
   margin: 0 auto;
@@ -234,6 +222,8 @@ const RequestUserAlcohol = styled.div`
 
 const RequestUserReason = styled.div`
   font-size: 14px;
+  max-width: 210px;
+  word-wrap: break-word;
   color: #1d2939;
 `;
 
