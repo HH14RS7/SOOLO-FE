@@ -14,6 +14,8 @@ function UserUpdate() {
   const [nameInput, setNameInput] = useState('');
   const [introduceInput, setIntroduceInput] = useState('');
   const [previewImage, setPreviewImage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [img, setImg] = useState(null);
   const imgRef = useRef();
   const navigate = useNavigate();
 
@@ -72,7 +74,6 @@ function UserUpdate() {
       return;
     }
 
-    const img = imgRef.current.files[0];
     const formData = new FormData();
     const data = {
       memberName: nameInput,
@@ -85,11 +86,28 @@ function UserUpdate() {
   };
 
   const handleFileChange = e => {
+    setErrorMessage('');
+
     const file = e.target.files[0];
     if (file) {
+      const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
+      const fileExtension = file.name.toLowerCase().split('.').pop();
+      const maxSizeInBytes = 10 * 1024 * 1024;
+
+      if (!allowedExtensions.includes(fileExtension)) {
+        setErrorMessage(`${fileExtension}은(는) 업로드가 허용되지 않는 확장자입니다.`);
+        return;
+      }
+
+      if (file.size > maxSizeInBytes) {
+        setErrorMessage('10MB 이내 파일을 업로드해주세요.');
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = () => {
         setPreviewImage(reader.result);
+        setImg(file);
       };
       reader.readAsDataURL(file);
     }
@@ -129,13 +147,14 @@ function UserUpdate() {
                 <Imgupdate />
                 <FileInput
                   type="file"
-                  accept="image/*"
+                  accept=".jpg, .jpeg, .png, .gif, .bmp, .webp, .svg"
                   id="img"
                   name="img"
                   ref={imgRef}
                   onChange={handleFileChange}
                 />
               </ImgUpdateCon>
+              {errorMessage && <SupportText color={'red'}>{errorMessage}</SupportText>}
             </ProfileImageWrapper>
           </Frame4040>
           <TextArea>

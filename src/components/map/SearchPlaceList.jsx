@@ -61,13 +61,13 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
 
   // 검색결과 목록 하단에 페이지 번호 표시
   function displayPagination(pagination) {
-    var paginationEl = document.getElementById('pagination');
+    const paginationEl = document.getElementById('pagination');
 
     if (!paginationEl) {
       return; // 오류 방지: paginationEl이 null인 경우 함수 종료
     }
 
-    var fragment = document.createDocumentFragment(),
+    let fragment = document.createDocumentFragment(),
       i;
 
     // 기존에 추가된 페이지 번호 삭제
@@ -76,7 +76,7 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
     }
 
     for (i = 1; i <= pagination.last; i++) {
-      var el = document.createElement('a');
+      const el = document.createElement('a');
       el.href = '#';
       el.innerHTML = i;
 
