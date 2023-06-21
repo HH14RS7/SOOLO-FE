@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getAPI, postAPI, deleteAPI } from '../../api/api';
 import { MEMBER_URL, PARTIES_URL } from '../../shared/constants';
-import { Link, useNavigate } from 'react-router-dom';
-import { PATH_URL } from '../../shared/constants';
+import { Link } from 'react-router-dom';
 
 // 이미지 import
 import { ReactComponent as Location } from '../../assets/map/location-line.svg';
@@ -13,7 +12,6 @@ import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 
 export const ChatApprove = () => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   // 모임 승인
   const acceptRequest = useMutation(
@@ -63,23 +61,10 @@ export const ChatApprove = () => {
     rejectRequest.mutate(participateId);
   };
 
-  console.log('data ::', data);
-
   return (
     <>
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <div
-          style={{
-            width: '360px',
-            margin: '0 auto',
-            background: '#f9fafb',
-          }}
-        >
+      <Background>
+        <Contents>
           <Topbar>
             <TopBackDiv
               style={{
@@ -97,19 +82,14 @@ export const ChatApprove = () => {
               <RequestContainer key={index}>
                 <Link to={`${PARTIES_URL.PARTIES_DETAIL}/${user.partyId}`}>
                   <PartyName>
-                    <div
-                      style={{
-                        width: '16px',
-                        height: '16px',
-                      }}
-                    >
+                    <PartyIcon>
                       <Location
                         style={{
                           width: '100%',
                           height: '100%',
                         }}
                       />
-                    </div>
+                    </PartyIcon>
                     {user.title}
                   </PartyName>
                 </Link>
@@ -130,25 +110,9 @@ export const ChatApprove = () => {
                   </RequestImgDiv>
                   <RequestInfo>
                     <RequestUserName>{user.memberName}</RequestUserName>
-                    <div
-                      style={{
-                        fontSize: '10px',
-                        color: '#667085',
-                        marginBottom: '8px',
-                      }}
-                    >
-                      주량
-                    </div>
+                    <ExplainText>주량</ExplainText>
                     <RequestUserAlcohol>{user.amountAlcohol || '미입력'}</RequestUserAlcohol>
-                    <div
-                      style={{
-                        fontSize: '10px',
-                        color: '#667085',
-                        marginBottom: '8px',
-                      }}
-                    >
-                      신청한 이유
-                    </div>
+                    <ExplainText>신청한 이유</ExplainText>
                     <RequestUserReason>{user.reason || '미입력'}</RequestUserReason>
                   </RequestInfo>
                 </RequestContents>
@@ -161,16 +125,8 @@ export const ChatApprove = () => {
               </RequestContainer>
             ))
           ) : (
-            <div
-              style={{
-                width: '360px',
-                height: '87vh',
-                background: '#f2f4f7',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <LoadingDiv>
+            <NoRequestContents>
+              <NoRequestDiv>
                 <LoadingIcon
                   style={{
                     margin: '0 auto',
@@ -178,21 +134,34 @@ export const ChatApprove = () => {
                     height: '48px',
                   }}
                 />
-                <LoadingText>들어온 승인요청이 없습니다.</LoadingText>
-              </LoadingDiv>
-            </div>
+                <NoRequestText>들어온 승인요청이 없습니다.</NoRequestText>
+              </NoRequestDiv>
+            </NoRequestContents>
           )}
-        </div>
-      </div>
+        </Contents>
+      </Background>
     </>
   );
 };
+
+// 기본 스타일
+const Background = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
+const Contents = styled.div`
+  height: 100%;
+  width: 360px;
+  margin: 0 auto;
+  background: #f9fafb;
+  padding-bottom: 70px;
+`;
 
 // TopBar 스타일
 const Topbar = styled.div`
   display: flex;
   top: 0;
-  // margin-top: 51px;
   align-items: center;
   justify-content: space-between;
   width: 360px;
@@ -245,6 +214,11 @@ const PartyName = styled.div`
   padding: 10px;
 `;
 
+const PartyIcon = styled.div`
+  width: 16px;
+  height: 16px;
+`;
+
 const RequestContents = styled.div`
   display: flex;
 `;
@@ -283,6 +257,12 @@ const RequestUserReason = styled.div`
   color: #1d2939;
 `;
 
+const ExplainText = styled.div`
+  font-size: 10px;
+  color: #667085;
+  margin-bottom: 8px;
+`;
+
 // 승인 버튼
 const RequestDiv = styled.div`
   display: flex;
@@ -317,8 +297,16 @@ const RejecBtn = styled.div`
   cursor: pointer;
 `;
 
-// 로딩 스타일
-const LoadingDiv = styled.div`
+// 승인 요청 없을 때 Div
+const NoRequestContents = styled.div`
+  width: 360px;
+  height: 87vh;
+  background: #f2f4f7;
+  display: flex;
+  align-items: center;
+`;
+
+const NoRequestDiv = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -328,7 +316,7 @@ const LoadingDiv = styled.div`
   height: 70px;
 `;
 
-const LoadingText = styled.div`
+const NoRequestText = styled.div`
   width: 360px;
   margin-top: 8px;
 `;

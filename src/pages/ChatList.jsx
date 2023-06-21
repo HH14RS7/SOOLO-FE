@@ -1,8 +1,7 @@
 // 기능 import
 import { React, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { PATH_URL, PARTIES_URL } from '../shared/constants';
-import { ChatApprove } from '../components/Chat/ChatApprove';
 import { deleteAPI, postAPI } from '../api/api';
 import * as StompJs from '@stomp/stompjs';
 import styled from 'styled-components';
@@ -19,7 +18,6 @@ import { ReactComponent as LoadingIcon } from '../assets/chating/loadingicon.svg
 export const ChatList = () => {
   const navigate = useNavigate();
   const [chatData, setChatData] = useState();
-  const [activeTab, setActiveTab] = useState(true);
   const accesskey = Cookies.get('Access_key');
   const [zIndex, setZIndex] = useState(8);
   const [marzinLeft, setMarzinLeft] = useState(0);
@@ -27,7 +25,6 @@ export const ChatList = () => {
 
   const [roomId, setRoomId] = useState();
   const [hostId, setHostId] = useState();
-  const [chatUniqueId, setChatUniqueId] = useState();
 
   useEffect(() => {
     if (!accesskey) {
@@ -42,7 +39,7 @@ export const ChatList = () => {
         Access_key: `Bearer ${accesskey}`,
       },
       debug: function (str) {
-        console.log(str);
+        // console.log(str);
       },
       onConnect: () => {
         const subscription = client.subscribe(
@@ -66,11 +63,6 @@ export const ChatList = () => {
     client.activate();
     return () => {};
   }, []);
-
-  // 탭 UI
-  const handleTabChange = tab => {
-    setActiveTab(tab);
-  };
 
   //메뉴 모달
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -120,7 +112,7 @@ export const ChatList = () => {
     }
   };
 
-  // 채팅방 들어가는 네비게이
+  // 채팅방 들어가는 기능
   const ChatJoinHandler = (chatRoomUniqueId, chatRoomId, host) => {
     navigate(
       `${PATH_URL.PARTY_CHATROOM}?chatRoomUniqueId=${chatRoomUniqueId}&chatRoomId=${chatRoomId}&hostId=${host}`,
@@ -140,7 +132,7 @@ export const ChatList = () => {
             <JoinTap>참여중인 채팅방</JoinTap>
           </TapBar>
           <ChatContainer>
-            <SSSEEE>
+            <StyleDiv>
               {chatData?.data && chatData.data.length > 0 ? (
                 chatData.data.map((data, index) => {
                   return (
@@ -242,7 +234,7 @@ export const ChatList = () => {
                   </LoadingDiv>
                 </div>
               )}
-            </SSSEEE>
+            </StyleDiv>
           </ChatContainer>
         </Container>
       </Background>
@@ -321,6 +313,7 @@ const PartyDefault = styled(PartyDefaultImg)`
 // TopBar 스타일
 const TapBar = styled.div`
   display: flex;
+  align-items: center;
   justify-content: center;
   background: #fff;
   width: 360px;
@@ -328,14 +321,9 @@ const TapBar = styled.div`
   border-bottom: 1px solid #e4e7ec;
 `;
 
-const JoinTap = styled.button`
+const JoinTap = styled.div`
   font-size: 16px;
   font-weight: 400;
-`;
-
-const ApprovalTap = styled.button`
-  width: 132px;
-  height: 52px;
 `;
 
 // Chat List 스타일
@@ -607,7 +595,7 @@ const LoadingText = styled.div`
 
 // 임시
 
-const SSSEEE = styled.div`
+const StyleDiv = styled.div`
   width: 360px;
   height: 100%;
   background: #f2f4f7;

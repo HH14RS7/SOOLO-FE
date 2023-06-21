@@ -11,6 +11,9 @@ import styled from 'styled-components';
 import SockJS from 'sockjs-client';
 import Cookies from 'js-cookie';
 
+// 무한 스크롤
+import { useInView } from 'react-intersection-observer';
+
 // 이미지 import
 import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 import { ReactComponent as RoomMenuIcon } from '../../assets/chating/chatroommenu.svg';
@@ -23,33 +26,38 @@ export const ChatRoomPage = () => {
   const navigate = useNavigate();
 
   const Access_key = `Bearer ${Cookies.get('Access_key')}`;
+
+  // clinet가 변경되더라도 컴포넌트가 리렌더링이 되지 않고 유지하게 하는 변수
   let client = useRef({});
+
   //메뉴 모달
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [backgroundPosition, setBackgroundPosition] = useState('static');
 
+  // URL 파라미터 전달받기
   const location = useLocation();
   const queryObj = queryString.parse(location.search); // 문자열의 쿼리스트링을 Object로 변환
   const { chatRoomUniqueId, chatRoomId, hostId } = queryObj;
 
-  // 채팅방 입장시 안내 문구 기능
+  // 채팅방 입장시 경고 문구
   const [showModal, setShowModal] = useState(false);
 
   //채팅목록 조회 후 셋팅 값
   const [chatMessageList, setChatMessageList] = useState([]);
-  const [page, setPage] = useState(0);
-  const [totalPage, setTotalPage] = useState(0);
 
+  // 채팅창에 입력한 메시지
   const [message, setMessage] = useState('');
 
-  const [isLoading, setIsLoading] = useState(false);
-  const containerRef = useRef(null);
-
   // 자동 스크롤
-  const messageEndRef = useRef(null);
+  const [count, setCount] = useState(0);
+  const messageEndRef = useRef();
 
-  // 기본 채팅 조회
+  // 무한 스크롤
+  const [page, setPage] = useState(1);
+  const [ref, inView] = useInView();
+
+  // 이전 채팅 조회
   const { data, loading, error } = useQuery('requests', () =>
     getWebAPI(
       `${CHATING_URL.MESSAGE_LIST_GET}/${
@@ -60,57 +68,11 @@ export const ChatRoomPage = () => {
 
   useEffect(() => {
     if (data) {
-      setChatMessageList(data?.data?.data?.chatMessageList?.reverse());
+      setChatMessageList(data?.data?.data?.chatMessageList);
     }
   }, [data]);
 
-  // if (Loading) {
-  //   return <div>로딩중입니다.</div>;
-  // }
-
-  // if (error) {
-  //   return <div>Error: {error.message}</div>;
-  // }
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(handleIntersect, {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.3,
-    });
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-    };
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      setIsLoading(true);
-      console.log('페치');
-
-      subscribe();
-      publish();
-
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const handleIntersect = entries => {
-    const target = entries[0];
-    if (target.isIntersecting && !isLoading) {
-      fetchData();
-    }
-  };
-
+  // 채팅방 입장시 경고 문구 + 소켓 연결
   useEffect(() => {
     setShowModal(true);
     connect();
@@ -120,11 +82,22 @@ export const ChatRoomPage = () => {
     };
   }, []);
 
-  // 스크롤
+  // 채팅방 입장시 밑으로 자동스크롤
   useEffect(() => {
-    messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
-  }, [chatMessageList]);
+    setCount(count => count + 1);
+  }, []);
 
+  // 채팅치면 가장 하단으로 자동 스크롤
+  useEffect(() => {
+    if (messageEndRef) {
+      messageEndRef.current.scrollIntoView({
+        false: false,
+        inline: 'nearest',
+      });
+    }
+  }, [count]);
+
+  // 소켓 연결
   const connect = () => {
     client.current = new StompJs.Client({
       webSocketFactory: () => new SockJS(`${process.env.REACT_APP_ROOM_SOCKET_URL}`),
@@ -132,45 +105,13 @@ export const ChatRoomPage = () => {
         Access_key,
       },
       onConnect: () => {
-        console.log('success');
         subscribeSend();
-
-        subscribe();
-        publish();
       },
       onDisconnect: () => {
         disconnect();
       },
     });
     client.current.activate();
-  };
-
-  const subscribe = () => {
-    client.current.subscribe(`/sub/chat/messageList/${localStorage.memberUniqueId}`, response => {
-      const data = JSON.parse(response.body);
-      console.log('data.data.chatMessageList :: ', data);
-      setChatMessageList(data.data.chatMessageList.reverse());
-
-      console.log('page 이전::', page);
-      const prevPage = data.data.page;
-      console.log('prevPage :: ', prevPage);
-      setPage(prev => prev + 1);
-      console.log('page 이후::', page);
-      setTotalPage(data.data.totalpage);
-    });
-  };
-
-  const publish = () => {
-    if (!client.current.connected) return;
-
-    client.current.publish({
-      destination: `/pub/chat/messageList/${localStorage.memberUniqueId}`,
-      body: JSON.stringify({
-        chatRoomId,
-        chatRoomUniqueId,
-        page,
-      }),
-    });
   };
 
   // 채팅 보내기
@@ -180,10 +121,9 @@ export const ChatRoomPage = () => {
 
   const subscribeSend = () => {
     client.current.subscribe(`/sub/chat/message/${chatRoomUniqueId}`, response => {
-      console.log('response :: ', response);
       const data = JSON.parse(response.body);
-
       setChatMessageList(chatList => [...chatList, data.data]);
+      setCount(count => count + 1);
     });
   };
 
@@ -200,42 +140,71 @@ export const ChatRoomPage = () => {
         chatRoomId: chatRoomId,
         chatRoomUniqueId: chatRoomUniqueId,
         message: message,
-        // readStatus: 'READ',
       }),
     });
     setMessage('');
   };
 
+  // 무한 스크롤
+  const productFetch = () => {
+    getWebAPI(
+      `${CHATING_URL.MESSAGE_LIST_GET}/${localStorage.memberUniqueId}?chatRoomId=${chatRoomId}&chatRoomUniqueId=${chatRoomUniqueId}&page=${page}`,
+    ).then(res => {
+      setChatMessageList([...res?.data?.data?.chatMessageList, ...chatMessageList]);
+      setPage(page => page + 1);
+    });
+  };
+
+  useEffect(() => {
+    if (inView) {
+      productFetch();
+    }
+  }, [inView]);
+
+  // 최상단으로 이동
+  // const onTop = () => {
+  //   if (!window.scrollY) return;
+  //   window.scrollTo({
+  //     top: 0,
+  //     behavior: 'smooth',
+  //   });
+  // };
+
+  // 소켓 종료
   const disconnect = () => {
-    console.log('소켓 종료');
     client.current.deactivate();
   };
 
+  // 나가기 모달에서 머무르기 버튼
   const closeModal = () => {
     setIsModalOpen(false);
     setBackgroundPosition('static');
   };
 
+  // 메뉴 모달 버튼
   const openModal = () => {
     setIsModalOpen(true);
     setBackgroundPosition('fixed');
   };
 
+  // 모달 밖의 영역 클릭 시 모달 닫치는 기능
   const handleBackdropClick = e => {
-    console.log('e ::', e);
     if (e.target === e.currentTarget) {
       closeModal();
     }
   };
 
+  // 나가기 모달 띄우는 버튼
   const ExitopenModal = () => {
     setIsExitModalOpen(true);
   };
 
+  // 채팅방 설정에서 머무르기 버튼
   const ExitcloseModal = () => {
     setIsExitModalOpen(false);
   };
 
+  // 신고하기 버튼
   const ReportButtonHandler = () => {
     alert('곧 업데이트 예정입니다!');
   };
@@ -263,14 +232,22 @@ export const ChatRoomPage = () => {
 
   return (
     <>
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          position: backgroundPosition,
-        }}
-      >
+      <BackgroundDiv backgroundposition={backgroundPosition}>
         <Background>
+          {/* <button
+            style={{
+              width: '100px',
+              height: '50px',
+              Background: 'yellow',
+              position: 'fixed',
+              right: '30px',
+              bottom: '150px',
+              cursor: 'pointer',
+            }}
+            onClick={onTop}
+          >
+            상단으로 이동
+          </button> */}
           <Topbar>
             <Link to={`${PATH_URL.PARTY_CHAT}/${localStorage.memberUniqueId}`}>
               <TopBackDiv>
@@ -287,8 +264,8 @@ export const ChatRoomPage = () => {
             </ModalBtn>
           </Topbar>
           <Container>
-            {/* <div ref={containerRef}>target</div> */}
             <Contents>
+              <div ref={ref}></div>
               <ParticipantDiv>즐거운 만남을 하시기 바랍니다!</ParticipantDiv>
               {chatMessageList?.map((data, index) => {
                 if (data.memberUniqueId === localStorage.memberUniqueId) {
@@ -345,7 +322,6 @@ export const ChatRoomPage = () => {
                   );
                 }
               })}
-              <div ref={messageEndRef}></div>
             </Contents>
           </Container>
           {showModal && (
@@ -395,8 +371,9 @@ export const ChatRoomPage = () => {
               </ChatBtn>
             </SendDiv>
           </SendContents>
+          <div ref={messageEndRef}></div>
         </Background>
-      </div>
+      </BackgroundDiv>
       {isModalOpen && (
         <div>
           <Modals onClick={handleBackdropClick}>
@@ -421,16 +398,7 @@ export const ChatRoomPage = () => {
         </div>
       )}
       {isExitModalOpen && (
-        <div
-          style={{
-            width: '100vw',
-            height: '100vh',
-            background: 'none',
-            position: 'fixed',
-            top: 0,
-            zIndex: 13,
-          }}
-        >
+        <ExitModalBackground>
           <ExitContainer>
             <ExitModal>
               <ExitName>채팅방을 나가시겠습니까?</ExitName>
@@ -457,11 +425,18 @@ export const ChatRoomPage = () => {
               </ExitBtnDiv>
             </ExitModal>
           </ExitContainer>
-        </div>
+        </ExitModalBackground>
       )}
     </>
   );
 };
+
+// 기본 배경 스타일
+const BackgroundDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  position: ${props => props.backgroundposition};
+`;
 
 const Background = styled.div`
   background: #e4e7ec;
@@ -743,6 +718,16 @@ const ComingSoon = styled.div`
   border-radius: 10px;
   background: #f2f4f7;
   color: #344054;
+`;
+
+// 나가기 모달
+const ExitModalBackground = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background: none;
+  position: fixed;
+  top: 0;
+  z-index: 13;
 `;
 
 const ExitContainer = styled.div`
