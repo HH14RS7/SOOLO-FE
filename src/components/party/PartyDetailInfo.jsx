@@ -16,7 +16,6 @@ import { ReactComponent as Location } from '../../assets/map/location-line.svg';
 import { ReactComponent as Subway } from '../../assets/map/subway.svg';
 import { ReactComponent as People } from '../../assets/footer/mypage.svg';
 import { ReactComponent as Slash } from '../../assets/map/slash.svg';
-import { ReactComponent as Information } from '../../assets/common/information.svg';
 
 export const PartyDetailInfo = () => {
   const location = useLocation();
@@ -95,6 +94,8 @@ export const PartyDetailInfo = () => {
   const handleDetailClick = url => {
     window.open(url, '_blank');
   };
+
+  console.log(data);
 
   return (
     <>
@@ -233,17 +234,15 @@ export const PartyDetailInfo = () => {
                 {data?.memberInfo.slice(1).map((member, i) => (
                   <PartyMemberInfoBox key={i}>
                     <PartyMemberImg>
-                      <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${member.memberId}`}>
-                        <img
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            borderRadius: '100%',
-                          }}
-                          src={member.profileImage}
-                          alt="partymemberimg"
-                        />
-                      </Link>
+                      <img
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: '100%',
+                        }}
+                        src={member.profileImage}
+                        alt="partymemberimg"
+                      />
                     </PartyMemberImg>
                     <div>
                       <PartyMemberName>{member.memberName}</PartyMemberName>
@@ -384,20 +383,6 @@ const PartyInfo = styled.div`
   height: 104px;
   background: #fff;
   margin-top: 14px;
-`;
-
-const DdayDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 40px;
-  height: 22px;
-  background: #f63d68;
-  border-radius: 20px;
-  font-size: 14px;
-  color: #fff;
-  margin-bottom: 12px;
 `;
 
 const Addresses = styled.div`
@@ -719,9 +704,4 @@ const Category = styled.h5`
 
 const PlaceAddress = styled.h5`
   color: var(--color-gray-500);
-`;
-
-const PlaceNameSection = styled.section`
-  display: flex;
-  flex-direction: column;
 `;
