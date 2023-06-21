@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import { ReactComponent as ArrowBottom } from '../../assets/common/arrow-bottom.svg';
 import { useInView } from 'react-intersection-observer';
+import { useInfiniteQuery } from 'react-query';
+import Loading from '../Loading';
 
 const PartyList = () => {
   const unionImg = './img/union.png';
@@ -15,35 +17,53 @@ const PartyList = () => {
     { value: 1, label: '모집중' },
     { value: 2, label: '모집마감' },
   ];
-  const [partyList, setPartyList] = useState([]);
-  const [recruitmentStatus, setRecruitmentStatus] = useState(RECRUITMENT_STATUS_SELECT[0]);
-  const [Page, setPage] = useState(0);
-  const [ref, inView] = useInView();
 
-  const getPartyList = () => {
-    getAPI(`${PARTIES_URL.PARTIES_LIST}?page=${Page}&recruitmentStatus=${recruitmentStatus.value}`)
-      .then(res => {
-        // console.log('partyList', res.data.data.partyList);
-        // 리스트 뒤로 붙여주기
-        setPartyList([...partyList, ...res?.data?.data?.partyList]);
-        // 요청 성공 시에 페이지에 1 카운트 해주기
-        setPage(page => page + 1);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  const [recruitmentStatus, setRecruitmentStatus] = useState(RECRUITMENT_STATUS_SELECT[0]);
+
+  const { isLoading, data, fetchNextPage } = useInfiniteQuery(
+    ['getFeedAxios', recruitmentStatus],
+    ({ pageParam = 0 }) => getFeedAxios({ pageParam, recruitmentStatus }),
+    {
+      getNextPageParam: lastPage => {
+        if (lastPage.totalElements === 0) {
+          return;
+        } else {
+          return lastPage.page + 1;
+        }
+      },
+    },
+  );
+
+  const getFeedAxios = async ({ pageParam = 0, recruitmentStatus }) => {
+    try {
+      const { data } = await getAPI(
+        `${PARTIES_URL.PARTIES_LIST}?page=${pageParam}&recruitmentStatus=${recruitmentStatus.value}`,
+      );
+      return data?.data;
+    } catch (error) {
+      throw error;
+    }
   };
+
+  const partyList = data?.pages.flatMap(party => party.partyList);
+
+  const [ref, inView] = useInView({
+    threshold: 0,
+  });
+
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage]);
 
   const handleSelected = option => {
     setRecruitmentStatus(option);
   };
 
-  useEffect(() => {
-    // inView가 true 일때만 실행한다.
-    if (inView) {
-      getPartyList();
-    }
-  }, [inView]);
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const styles = {
     menu: base => ({
@@ -109,16 +129,14 @@ const PartyList = () => {
               <PartyHeader>
                 <Title>현재 진행중인 모임</Title>
                 {/* select 필터링 임시 주석 */}
-                {
-                  // <Select
-                  //   placeholder={RECRUITMENT_STATUS_SELECT[0].label}
-                  //   options={RECRUITMENT_STATUS_SELECT}
-                  //   onChange={option => handleSelected(option)}
-                  //   value={recruitmentStatus}
-                  //   components={{ DropdownIndicator }}
-                  //   styles={styles}
-                  // />
-                }
+                <Select
+                  placeholder={RECRUITMENT_STATUS_SELECT[0].label}
+                  options={RECRUITMENT_STATUS_SELECT}
+                  onChange={option => handleSelected(option)}
+                  value={recruitmentStatus}
+                  components={{ DropdownIndicator }}
+                  styles={styles}
+                />
               </PartyHeader>
               <ListWrapper>
                 <List>
