@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Select, { components } from 'react-select';
 import { ReactComponent as ArrowBottom } from '../../assets/common/arrow-bottom.svg';
 import { useInView } from 'react-intersection-observer';
-import { useInfiniteQuery, useQueryClient } from 'react-query';
+import { useInfiniteQuery } from 'react-query';
 import Loading from '../Loading';
 
 const PartyList = () => {
@@ -18,15 +18,14 @@ const PartyList = () => {
     { value: 2, label: '모집마감' },
   ];
 
-  const queryClient = useQueryClient();
   const [recruitmentStatus, setRecruitmentStatus] = useState(RECRUITMENT_STATUS_SELECT[0]);
 
   const { isLoading, data, fetchNextPage } = useInfiniteQuery(
-    ['getPartyList', recruitmentStatus],
-    ({ pageParam = 0 }) => getPartyList({ pageParam, recruitmentStatus }),
+    ['getFeedAxios', recruitmentStatus],
+    ({ pageParam = 0 }) => getFeedAxios({ pageParam, recruitmentStatus }),
     {
       getNextPageParam: lastPage => {
-        if (lastPage.totalElements < 20) {
+        if (lastPage.totalElements === 0) {
           return;
         } else {
           return lastPage.page + 1;
@@ -35,7 +34,7 @@ const PartyList = () => {
     },
   );
 
-  const getPartyList = async ({ pageParam = 0, recruitmentStatus }) => {
+  const getFeedAxios = async ({ pageParam = 0, recruitmentStatus }) => {
     try {
       const { data } = await getAPI(
         `${PARTIES_URL.PARTIES_LIST}?page=${pageParam}&recruitmentStatus=${recruitmentStatus.value}`,
@@ -51,9 +50,6 @@ const PartyList = () => {
   const [ref, inView] = useInView({
     threshold: 0,
   });
-  useEffect(() => {
-    queryClient.invalidateQueries('getPartyList');
-  }, [recruitmentStatus, queryClient]);
 
   useEffect(() => {
     if (inView) {
