@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { PATH_URL } from '../../shared/constants';
@@ -6,19 +6,26 @@ import marker from '../../assets/map/marker.svg';
 import { ReactComponent as Add } from '../../assets/map/add.svg';
 import { ReactComponent as Subtract } from '../../assets/map/subtract.svg';
 import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
-import { useSetRecoilState } from 'recoil';
+import { ReactComponent as Close } from '../../assets/common/close.svg';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { tempPartyData } from '../../atoms';
+import { Modal } from '../../elements/Modal';
 
 export default function CreateMapContainer() {
+  const moreButton = '/img/more-detail.png';
   const { kakao } = window;
+  const navigate = useNavigate();
   const location = useLocation();
   const place = location.state || {};
-  const navigate = useNavigate();
-  const moreButton = '/img/more-detail.png';
-  const latitude = place.y;
-  const longitude = place.x;
   const mapRef = useRef(null);
+
+  const partyData = useRecoilValue(tempPartyData);
   const setTempPartyData = useSetRecoilState(tempPartyData);
+  const [isBackModalOpen, setIsBackModalOpen] = useState(false);
+  const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
+
+  const longitude = place.x;
+  const latitude = place.y;
 
   useEffect(() => {
     const container = mapRef.current;
@@ -61,23 +68,39 @@ export default function CreateMapContainer() {
     window.open(url, '_blank');
   };
 
-  const goSearchPlaceList = () => {
-    const isConfirm = window.confirm('확인시 입력하신 내용이 초기화됩니다.');
-    if (isConfirm) {
-      setTempPartyData(null);
+  const goPage = page => {
+    setTempPartyData(null);
+    if (page === 'main') {
+      navigate(PATH_URL.MAIN);
+    } else if (page === 'prev') {
       navigate(PATH_URL.PARTY_PLACE_CREATE);
+    }
+  };
+
+  const handleBackModalOpen = () => {
+    setIsBackModalOpen(prevState => !prevState);
+    if (!partyData) {
+      goPage('prev');
+    }
+  };
+
+  const handleCloseModalOpen = () => {
+    setIsCloseModalOpen(prevState => !prevState);
+    if (!partyData) {
+      goPage('main');
     }
   };
 
   return (
     <Wrapper>
       <Topbar>
-        <TopBackDiv>
-          <button onClick={goSearchPlaceList}>
-            <LeftBack />
-          </button>
-        </TopBackDiv>
+        <button onClick={handleBackModalOpen}>
+          <LeftBack />
+        </button>
         <TopbarName>가게 정보</TopbarName>
+        <button onClick={handleCloseModalOpen}>
+          <Close />
+        </button>
       </Topbar>
       <Map ref={mapRef} id="map">
         <ZoomControlContainer>
@@ -94,7 +117,7 @@ export default function CreateMapContainer() {
           <LeftDetail>
             <TopInfo>
               <h4>{place.place_name}</h4>
-              <Category> {place.category_name.split('>').reverse()[0]}</Category>
+              <Category> {place.category_name?.split('>').reverse()[0]}</Category>
             </TopInfo>
             <PlaceAddress> {place.road_address_name}</PlaceAddress>
           </LeftDetail>
@@ -104,6 +127,28 @@ export default function CreateMapContainer() {
         </PlaceDetail>
         <PlaceButton onClick={handleItemClick}>이곳에서 모임 열기</PlaceButton>
       </PlaceWrapper>
+      {isBackModalOpen && partyData && (
+        <Modal
+          type="both"
+          message="이전으로 이동하시겠습니까?"
+          subMessage="이동시 입력하신 글은 저장되지 않습니다."
+          cancelName="머무르기"
+          confirmName="이전으로"
+          onCancelClick={handleBackModalOpen}
+          onConfirmClick={() => goPage('prev')}
+        />
+      )}
+      {isCloseModalOpen && (
+        <Modal
+          type="both"
+          message="메인으로 이동하시겠습니까?"
+          subMessage="이동시 입력하신 글은 저장되지 않습니다."
+          cancelName="머무르기"
+          confirmName="메인으로"
+          onCancelClick={handleCloseModalOpen}
+          onConfirmClick={() => goPage('main')}
+        />
+      )}
     </Wrapper>
   );
 }
@@ -121,7 +166,7 @@ const Topbar = styled.div`
   position: fixed;
   top: 0;
   align-items: center;
-  justify-content: space-between; /* 변경된 부분 */
+  justify-content: space-between;
   width: 360px;
   height: 52px;
   border-bottom: 1px solid #f2f4f7;
@@ -129,27 +174,16 @@ const Topbar = styled.div`
   z-index: 10;
 `;
 
-const TopBackDiv = styled.div`
-  display: flex;
-  position: absolute;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-`;
-
 const TopbarName = styled.div`
   color: #1d2939;
   font-size: 16px;
   text-align: center;
   flex-grow: 1;
-  left: calc(50% - 360px / 2);
 `;
 
 const Map = styled.div`
   display: flex;
-  max-height: 780px;
-  min-height: 720px;
+  height: 100%;
 `;
 
 /* Zoom Control */

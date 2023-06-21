@@ -1,35 +1,64 @@
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-export const Modal = ({ title, subTitle, text1, onClick }) => {
-  const navigate = useNavigate();
+export const Modal = props => {
+  const { type, message, subMessage, cancelName, confirmName, onCancelClick, onConfirmClick } =
+    props;
 
-  return (
-    <>
-      <>
-        <Modals>
-          <ExitContainer>
-            <ExitModal>
-              <ExitName>{title}</ExitName>
-              <ExitText>{subTitle}</ExitText>
-              <ExitBtnDiv>
-                <EixtBtn
-                  onClick={() => {
-                    navigate('/user/login');
-                  }}
-                >
-                  {text1}
-                </EixtBtn>
-              </ExitBtnDiv>
-            </ExitModal>
-          </ExitContainer>
-        </Modals>
-      </>
-    </>
-  );
+  // one button
+  if (type === 'single') {
+    return (
+      <Container>
+        <ModalWrapper>
+          <Modals>
+            <Message>{message}</Message>
+            <SubMessage>{subMessage}</SubMessage>
+            <ButtonWrapper>
+              <ConfirmBtn width="295px" onClick={onConfirmClick}>
+                {confirmName}
+              </ConfirmBtn>
+            </ButtonWrapper>
+          </Modals>
+        </ModalWrapper>
+      </Container>
+    );
+  }
+
+  // two button
+  if (type === 'both') {
+    return (
+      <Container>
+        <ModalWrapper>
+          <Modals>
+            <Message>{message}</Message>
+            <SubMessage>{subMessage}</SubMessage>
+            <ButtonWrapper>
+              <CancelBtn onClick={onCancelClick}>{cancelName}</CancelBtn>
+              <ConfirmBtn width="140px" onClick={onConfirmClick}>
+                {confirmName}
+              </ConfirmBtn>
+            </ButtonWrapper>
+          </Modals>
+        </ModalWrapper>
+      </Container>
+    );
+  }
+
+  // non button
+  if (type === 'none') {
+    return (
+      <Container>
+        <ModalWrapper>
+          <Modals>
+            <Message>{message}</Message>
+            <SubMessage>{subMessage}</SubMessage>
+          </Modals>
+        </ModalWrapper>
+      </Container>
+    );
+  }
 };
 
-const Modals = styled.div`
+const Container = styled.div`
   position: fixed;
   overflow: hidden;
   left: 0;
@@ -43,53 +72,67 @@ const Modals = styled.div`
   z-index: 11;
 `;
 
-const ExitContainer = styled.div`
+const ModalWrapper = styled.div`
   width: 100%;
-  /* height: 100%; */
   top: 32vh;
-  /* display: inline-flex; */
   display: flex;
   position: absolute;
 `;
 
-const ExitModal = styled.div`
+const Modals = styled.div`
   text-align: center;
   margin: auto;
   z-index: 100;
-  width: 327px;
-  height: 198px;
-  border-radius: 16px;
+  width: ${props => props.width || '327px'};
+  height: ${props => props.height || '198px'};
+  border-radius: 1rem;
   background: #fff;
 `;
 
-const ExitName = styled.div`
+const Message = styled.div`
   font-size: 16px;
-  font-weight: 700;
+  font-weight: var(--font-weight-700);
   margin-top: 60px;
 `;
 
-const ExitText = styled.div`
-  font-size: 14px;
-  margin-top: 8px;
+const SubMessage = styled.div`
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
 `;
 
-const ExitBtnDiv = styled.div`
+const ButtonWrapper = styled.div`
   display: flex;
   justify-content: space-evenly;
   margin-top: 36px;
 `;
 
-const EixtBtn = styled.div`
+const CancelBtn = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
   justify-content: center;
-  color: #fff;
-  font-weight: 600;
-  font-size: 12px;
-  width: 295px;
+  color: var(--color-white);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-600);
+  width: 140px;
   height: 48px;
-  background: #f63d68;
+  background: var(--color-primary-500);
+  border: 1.5px solid #667085;
   border-radius: 12px;
+  cursor: pointer;
+`;
+
+const ConfirmBtn = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  color: var(--color-white);
+  font-weight: var(--font-weight-600);
+  font-size: 0.75rem;
+  width: ${props => props.width || '295px'};
+  height: 3rem;
+  background: var(--color-primary-500);
+  border-radius: 0.75rem;
   cursor: pointer;
 `;
