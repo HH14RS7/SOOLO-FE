@@ -12,6 +12,7 @@ export const PATH_URL = {
   PARTY_CHAT: '/party/chat',
   PARTY_CHATROOM: '/party/chat/room',
   PARTY_LIST_MAP: '/party/list/map',
+  PARTY_REQUEST_APPROVE: '/party/request/approve',
   MY_REQUEST_PARTY: '/mypage/party/request',
   MY_CREATE_PARTY: '/mypage/party/create',
   PARTY_MAP_CREATE: '/party/map/create',

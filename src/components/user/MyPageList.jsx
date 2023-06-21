@@ -95,6 +95,12 @@ export const MyPageList = () => {
               <ListIcon />
             </Frame4005>
           </Link>
+          <Link to={`${PATH_URL.PARTY_REQUEST_APPROVE}`}>
+            <Frame4005>
+              <ListTitle>들어온 승인 요청</ListTitle>
+              <ListIcon />
+            </Frame4005>
+          </Link>
           <Link to={`${PATH_URL.MY_ACCOUNT_DETAILS}`}>
             <Frame4005>
               <ListTitle>계정정보</ListTitle>
