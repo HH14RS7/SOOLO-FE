@@ -26,6 +26,7 @@ import FullLayout from './FullLayout';
 import UserReportPage from '../pages/UserReportPage';
 import WalkThroughPage from '../pages/WalkThroughPage';
 import { PartyRequestApprove } from '../pages/PartyRequestApprove';
+import { NotFoundPage } from '../pages/NotFoundPage';
 
 const Router = () => {
   return (
@@ -64,6 +65,7 @@ const Router = () => {
         </Route>
         {/* header, footer 모두 없음 */}
         <Route path={PATH_URL.WALK_THROUGH} element={<WalkThroughPage />} />
+        <Route path={PATH_URL.NOT_FOUND} element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

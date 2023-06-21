@@ -1,4 +1,5 @@
 export const PATH_URL = {
+  NOT_FOUND: '*',
   WALK_THROUGH: '/',
   MAIN: '/home',
   LOGIN: '/user/login',
