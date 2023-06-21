@@ -111,13 +111,13 @@ const CancelBtn = styled.div`
   align-items: center;
   text-align: center;
   justify-content: center;
-  color: var(--color-white);
+  color: var(--color-gray-500);
   font-size: 0.75rem;
   font-weight: var(--font-weight-600);
   width: 140px;
   height: 48px;
-  background: var(--color-primary-500);
-  border: 1.5px solid #667085;
+  background: var(--color--white);
+  border: 1.5px solid var(--color-gray-500);
   border-radius: 12px;
   cursor: pointer;
 `;
