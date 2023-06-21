@@ -20,7 +20,7 @@ const PartyItem = ({ party }) => {
   return (
     <>
       <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`}>
-        <ItemWrapper>
+        <ItemWrapper recuritmentsatus={party.recruitmentStatus ? 1 : 0}>
           <ImageDayInfo>
             <PlaceImage src={party.imageUrl || defaultImg} alt="placeImage" />
             <DdayTag isdday={isdday ? 1 : 0}>
@@ -62,6 +62,7 @@ const ItemWrapper = styled.li`
   height: 101px;
   font-size: var(--font-size-regular);
   border-bottom: 1px solid var(--color-gray-100);
+  opacity: ${props => (props.recuritmentsatus ? 1 : 0.6)};
 `;
 
 const PlaceImage = styled.img`

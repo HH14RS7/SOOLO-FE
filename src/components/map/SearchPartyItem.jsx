@@ -21,7 +21,7 @@ export default function SearchPartyItem({ party }) {
   return (
     <Wrapper>
       <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`}>
-        <ItemWrapper>
+        <ItemWrapper recuritmentsatus={party.recruitmentStatus ? 1 : 0}>
           <ImageDayInfo>
             <PlaceImage src={party.imageUrl || defaultImg} alt="placeImage" />
             <DdayTag isdday={isdday ? 1 : 0}>
@@ -63,6 +63,7 @@ const ItemWrapper = styled.li`
   gap: 1rem;
   font-size: var(--font-size-regular);
   border-bottom: 1px solid var(--color-gray-100);
+  opacity: ${props => (props.recuritmentsatus ? 1 : 0.6)};
 `;
 
 const ImageDayInfo = styled.div`
