@@ -1,6 +1,5 @@
 import PartyList from '../components/party/PartyList';
 import MyPartyList from '../components/party/MyPartyList';
-
 import { styled } from 'styled-components';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';

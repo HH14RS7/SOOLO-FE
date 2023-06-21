@@ -193,7 +193,7 @@ function UserUpdate() {
               <Frame4031>
                 {introduceInput.length > 49 ? (
                   <SupportText color={'red'}>
-                    자기소개는 최대 40자 입니다. {introduceInput.length} / 50
+                    자기소개는 최대 50자 입니다. {introduceInput.length} / 50
                   </SupportText>
                 ) : (
                   <SupportText color={'#98a2b3'}>{introduceInput.length} / 50</SupportText>
