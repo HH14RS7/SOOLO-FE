@@ -51,6 +51,7 @@ const PartyList = () => {
   const [ref, inView] = useInView({
     threshold: 0,
   });
+
   useEffect(() => {
     queryClient.invalidateQueries('getPartyList');
   }, [recruitmentStatus, queryClient]);
@@ -217,7 +218,7 @@ const ListBottomSection = styled.section`
   align-items: center;
   padding: 2rem 0;
   gap: 6px;
-  padding-bottom: 120px; // 무한스크롤 구현 후 제거
+  margin-bottom: 70px;
 `;
 
 /* BottomInfoSection */
