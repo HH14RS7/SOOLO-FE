@@ -58,6 +58,18 @@
   font-size: 12px;
 }
 
+.react-datepicker__day--selected,
+.react-datepicker__day--today.react-datepicker__day--selected {
+  font-weight: bold;
+  width: 40px;
+  height: 40px;
+  background: #f63d68;
+  border-radius: 20px;
+  padding: 0px;
+  text-align: center;
+  color: #ffffff;
+}
+
 /* 선택된 날짜 스타일 */
 .react-datepicker__day--selected {
   font-weight: bold;
