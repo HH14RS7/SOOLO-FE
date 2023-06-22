@@ -153,8 +153,10 @@ const CreateForm = ({ party }) => {
 
   // 지하철, 행정구역 정보 조회
   useEffect(() => {
-    getRegionName(latitude, longitude);
-    getStationInfo(latitude, longitude);
+    if (!isEdit) {
+      getRegionName(latitude, longitude);
+      getStationInfo(latitude, longitude);
+    }
   }, [latitude, longitude]);
 
   // 모임 등록 및 수정
