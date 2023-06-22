@@ -10,6 +10,16 @@ export const tempPartyData = atom({
   default: '',
 });
 
+export const noticeState = atom({
+  key: 'noticeState',
+  default: {},
+});
+
+export const sse = atom({
+  key: 'sse',
+  default: {},
+});
+
 // export const mapDataState = atom({
 //   key: 'mapDataState',
 //   default: null,

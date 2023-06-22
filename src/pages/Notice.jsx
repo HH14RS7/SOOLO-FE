@@ -1,0 +1,10 @@
+import React from 'react';
+import { PartyNotice } from '../components/PartyNotice';
+import Cookies from 'js-cookie';
+import LoginModal from '../components/LoginModal';
+
+export const Notice = () => {
+  const token = Cookies.get('Access_key');
+
+  return <>{!token ? <LoginModal /> : <PartyNotice />}</>;
+};

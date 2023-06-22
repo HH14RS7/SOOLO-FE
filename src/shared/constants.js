@@ -21,6 +21,7 @@ export const PATH_URL = {
   MYPAGE_UPDATE: '/member/update',
   MY_ACCOUNT_DETAILS: '/mypage/account',
   USER_REPORT: '/user/report',
+  NOTICE: '/notice',
 };
 
 export const MEMBER_URL = {
