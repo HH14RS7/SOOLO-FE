@@ -18,6 +18,7 @@ const KakaoRedirection = () => {
       localStorage.setItem('memberUniqueId', r.data.data.memberUniqueId);
       localStorage.setItem('memberName', r.data.data.memberName);
       localStorage.setItem('profileImage', r.data.data.profileImage);
+      localStorage.setItem('sse', null);
 
       // access_key설정
       const accessKey = r.headers.get('access_key').split(' ')[1];

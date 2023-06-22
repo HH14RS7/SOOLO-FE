@@ -18,6 +18,7 @@ const NaverRedirection = () => {
       localStorage.setItem('memberUniqueId', r.data.data.memberUniqueId);
       localStorage.setItem('memberName', r.data.data.memberName);
       localStorage.setItem('profileImage', r.data.data.profileImage);
+      localStorage.setItem('sse', null);
       // Access_key를 쿠키로 설정
       const accessKey = r.headers.get('access_key').split(' ')[1];
       Cookies.set('Access_key', accessKey);
