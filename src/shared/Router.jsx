@@ -27,6 +27,7 @@ import UserReportPage from '../pages/UserReportPage';
 import WalkThroughPage from '../pages/WalkThroughPage';
 import { PartyRequestApprove } from '../pages/PartyRequestApprove';
 import { NotFoundPage } from '../pages/NotFoundPage';
+import { Notice } from '../pages/Notice';
 
 const Router = () => {
   return (
@@ -62,6 +63,7 @@ const Router = () => {
           <Route path={PATH_URL.MY_CREATE_PARTY} element={<MyCreateParty />} />
           <Route path={PATH_URL.PARTY_APPROVE} element={<PartyApprove />} />
           <Route path={PATH_URL.PARTY_REQUEST_APPROVE} element={<PartyRequestApprove />} />
+          <Route path={PATH_URL.NOTICE} element={<Notice />} />
         </Route>
         {/* header, footer 모두 없음 */}
         <Route path={PATH_URL.WALK_THROUGH} element={<WalkThroughPage />} />
