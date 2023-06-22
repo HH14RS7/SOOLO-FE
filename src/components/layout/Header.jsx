@@ -31,8 +31,10 @@ export const Header = () => {
   const isLogin = Cookies.get('Access_key');
   let eventSource = undefined;
 
+  const isSSE = localStorage.getItem('sse') === 'connect' ? true : false;
+
   useEffect(() => {
-    if (isLogin !== null) {
+    if (!isSSE && isLogin !== null) {
       // SSE 연결
       eventSource = new EventSourcePolyfill(`${process.env.REACT_APP_SERVER_URL}/sse/stream`, {
         headers: {
@@ -63,12 +65,14 @@ export const Header = () => {
         //   setListening(!listening);
         //   setGotMessage(true);
         // 실시간 알림 데이터
-        console.log('event ::', event.data);
-        const obj = JSON.parse(event.data);
+        // console.log('event ::', event.data);
+        // const obj = JSON.parse(event.data);
         // console.log('obj ::', obj);
-        const result = obj[1];
-        console.log(result);
-        setNewNotice(obj[1]);
+        // const result = obj[1].data;
+        // console.log('result ::', result);
+        // const Error = JSON.parse(result);
+        // console.log(Error);
+        // setNewNotice(result);
         // }
       };
       // sse 에러
