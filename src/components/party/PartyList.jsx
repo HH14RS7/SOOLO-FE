@@ -218,7 +218,7 @@ const ListBottomSection = styled.section`
   align-items: center;
   padding: 2rem 0;
   gap: 6px;
-  margin-bottom: 70px;
+  padding-bottom: 90px;
 `;
 
 /* BottomInfoSection */
