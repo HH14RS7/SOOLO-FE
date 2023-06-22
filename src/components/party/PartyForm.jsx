@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { PATH_URL, PARTIES_URL } from '../../shared/constants';
-import { useMutation } from 'react-query';
+import { useMutation, useQueries, useQueryClient } from 'react-query';
 import { putUpdateAPI, postImageAPI } from '../../api/api';
 import Calendars from '../../shared/Calendars';
 import TimeSlotPicker from '../../shared/TimeSlotPicker';
@@ -16,7 +16,7 @@ import { ReactComponent as Check } from '../../assets/common/check.svg';
 import { ReactComponent as Upload } from '../../assets/common/upload.svg';
 import { ReactComponent as Close } from '../../assets/common/close.svg';
 import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
-// import { Modal } from '../../elements/Modal';
+import { Modal } from '../../elements/Modal';
 import { tempPartyData } from '../../atoms';
 
 const CreateForm = ({ party }) => {
@@ -25,6 +25,7 @@ const CreateForm = ({ party }) => {
   const { stationName, distance, getStationInfo } = useGetNearbyStation();
   const setTempPartyData = useSetRecoilState(tempPartyData);
   const partyData = useRecoilValue(tempPartyData);
+  const queryClient = useQueryClient();
 
   const place = location.state || {};
   const isEdit = !!party.partyId;
@@ -43,8 +44,14 @@ const CreateForm = ({ party }) => {
   const minusIcon = '/img/minus.png';
   const defaultImg = '/img/default-image.png';
   const [img, setImg] = useState(defaultImg);
-  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
+  const [formData, setFormData] = useState(null);
+
+  // 모달
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
+  const [isTimeModalOpen, setIsTimeModalOpen] = useState(false);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [isResultModalOpen, setIsResultModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -74,8 +81,8 @@ const CreateForm = ({ party }) => {
 
   const TITLE_VALIDATE = {
     required: INPUT_MESSAGE.errortitle,
-    minLength: { value: 5, message: INPUT_MESSAGE.errortitle }, // 에러 메시지 추가
-    maxLength: { value: 20, message: '최대 20자까지 입력할 수 있습니다.' }, // 최대 길이 에러 메시지 추가
+    minLength: { value: 5, message: INPUT_MESSAGE.errortitle },
+    maxLength: { value: 20, message: '최대 20자까지 입력할 수 있습니다.' },
     validate: value => {
       const trimmedValue = value.trim();
       return (
@@ -89,7 +96,7 @@ const CreateForm = ({ party }) => {
 
   const CONTENT_VALIDATE = {
     required: INPUT_MESSAGE.errorContent,
-    maxLength: { value: 255, message: '최대 255자까지 입력할 수 있습니다.' }, // 최대 길이 에러 메시지 추가
+    maxLength: { value: 255, message: '최대 255자까지 입력할 수 있습니다.' },
     validate: value => value.trim().length > 0 || INPUT_MESSAGE.errorContent,
   };
 
@@ -113,7 +120,6 @@ const CreateForm = ({ party }) => {
         setTotalCount(partyData.totalCount);
         setSelectedTime(partyData.selectedTime);
         setSelectedDate(new Date(partyDate));
-        console.log(img);
       }
     }
   }, [partyData]);
@@ -123,8 +129,7 @@ const CreateForm = ({ party }) => {
     formData => putUpdateAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${party.partyId}`, formData),
     {
       onSuccess: response => {
-        // setIsModalOpen(true);
-        alert(response.data.msg);
+        handleModalOpen('result');
       },
       onError: error => {
         alert(error.message);
@@ -137,8 +142,7 @@ const CreateForm = ({ party }) => {
     formData => postImageAPI(`${PARTIES_URL.PARTIES_ADD}`, formData),
     {
       onSuccess: response => {
-        alert(response.data.msg);
-        // setIsModalOpen(true);
+        handleModalOpen('result');
       },
       onError: error => {
         alert(error.message);
@@ -148,19 +152,19 @@ const CreateForm = ({ party }) => {
 
   // 지하철, 행정구역 정보 조회
   useEffect(() => {
-    getRegionName(latitude, longitude);
-    getStationInfo(latitude, longitude);
+    if (!isEdit) {
+      getRegionName(latitude, longitude);
+      getStationInfo(latitude, longitude);
+    }
   }, [latitude, longitude]);
 
   // 모임 등록 및 수정
   const handlePartySubmit = item => {
     const formData = new FormData();
     const formatDate = moment(selectedDate).format('YYYY-MM-DD') + ' ' + selectedTime;
-
     if (!timeValidate()) {
       return;
     }
-
     const data = {
       title: item.title.trim(),
       content: item.content.trim(),
@@ -180,19 +184,17 @@ const CreateForm = ({ party }) => {
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
     img && formData.append('image', img);
 
-    if (isEdit) {
-      updateMutation.mutate(formData);
-    } else {
-      createMutation.mutate(formData);
-    }
-    reset();
-    setTempPartyData(null);
-    navigate(PATH_URL.MAIN);
+    setFormData(formData);
+    handleModalOpen('save');
+  };
+
+  const handleTimeSelect = time => {
+    setSelectedTime(time);
   };
 
   const timeValidate = () => {
     if (!selectedDate || !selectedTime) {
-      alert('시간을 선택해주세요');
+      handleModalOpen('time');
       return false;
     }
     const currentDate = new Date();
@@ -205,7 +207,7 @@ const CreateForm = ({ party }) => {
       formatSelectedDate === formattTodayDate &&
       parseInt(selectedTime.replace(':', '')) < currentDateTime
     ) {
-      alert('현재 시간 이후로 선택해주세요');
+      handleModalOpen('time');
       return false;
     }
     return true;
@@ -243,40 +245,6 @@ const CreateForm = ({ party }) => {
     }
   };
 
-  const handlePrevClick = () => {
-    if (isEdit) {
-      navigate(PATH_URL.MAIN);
-    } else {
-      const tempData = {
-        selectedDate: moment(selectedDate).format('YYYY-MM-DD'),
-        selectedTime,
-        title,
-        content,
-        totalCount,
-      };
-      setTempPartyData(tempData);
-      console.log(previewImage);
-
-      navigate(PATH_URL.PARTY_MAP_CREATE, { state: place });
-    }
-  };
-
-  // 장소 검색 리스트로 이동
-  const goSearchPlace = () => {
-    const isConfirm = window.confirm('확인시 업로드하신 이미지는 초기화됩니다.');
-    if (isConfirm) {
-      const tempData = {
-        selectedDate: moment(selectedDate).format('YYYY-MM-DD'),
-        selectedTime,
-        title,
-        content,
-        totalCount,
-      };
-      setTempPartyData(tempData);
-      navigate(PATH_URL.PARTY_PLACE_CREATE);
-    }
-  };
-
   const handleIncreaseCount = e => {
     e.preventDefault();
     setTotalCount(totalCount => Math.min(totalCount + 1, 15));
@@ -287,47 +255,80 @@ const CreateForm = ({ party }) => {
     setTotalCount(totalCount => Math.max(totalCount - 1, 2));
   };
 
-  const handleTimeSelect = time => {
-    setSelectedTime(time);
+  const tempSaveData = () => {
+    const tempData = {
+      selectedDate: moment(selectedDate).format('YYYY-MM-DD'),
+      selectedTime,
+      title,
+      content,
+      totalCount,
+    };
+    setTempPartyData(tempData);
   };
 
-  const ExitopenModal = () => {
-    setIsExitModalOpen(true);
+  const goPage = page => {
+    if (page === 'main') {
+      setTempPartyData(null);
+      navigate(PATH_URL.MAIN);
+    } else if (page === 'mapBack') {
+      tempSaveData();
+      navigate(PATH_URL.PARTY_MAP_CREATE, { state: place });
+    } else if (page === 'placeBack') {
+      tempSaveData();
+      navigate(PATH_URL.PARTY_PLACE_CREATE, { state: place });
+    }
   };
 
-  const ExitcloseModal = () => {
-    setIsExitModalOpen(false);
+  const handleModalOpen = action => {
+    if (action === 'close') {
+      setIsCloseModalOpen(prevState => !prevState);
+    } else if (action === 'back' || action === 'placeBack') {
+      setIsModalOpen(prevState => !prevState);
+    } else if (action === 'time') {
+      setIsTimeModalOpen(prevState => !prevState);
+    } else if (action === 'save') {
+      setIsSaveModalOpen(prevState => !prevState);
+    } else if (action === 'result') {
+      setIsResultModalOpen(prevState => !prevState);
+    }
   };
 
-  const handleModalButtonClick = () => {
-    setIsModalOpen(false);
-    navigate(PATH_URL.MAIN);
+  const handleModalConfirmClick = () => {
+    const isValid = handleSubmit(handlePartySubmit)();
+    if (isValid) {
+      if (isEdit) {
+        updateMutation.mutate(formData);
+      } else {
+        createMutation.mutate(formData);
+      }
+      reset();
+      setTempPartyData(null);
+    }
   };
 
   return (
     <Background>
-      {/* {isModalOpen && (
-        <Modal
-          title="모임글이 수정되었습니다."
-          subTitle="모달 부제목"
-          text1="확인"
-          onClick={handleModalButtonClick}
-        />
-      )} */}
       <Container>
         <Topbar>
-          <TopBackDiv>
-            <button onClick={handlePrevClick}>
+          {!isEdit && (
+            <button onClick={() => goPage('mapBack')}>
               <LeftBack />
             </button>
-          </TopBackDiv>
+          )}
           <TopbarName>{isEdit ? '모임 수정하기' : '모임 생성하기'}</TopbarName>
+          <button onClick={() => handleModalOpen('close')}>
+            <Close />
+          </button>
         </Topbar>
         <Contents>
           <PlaceSection>
             <PlaceHeader>
               <Label htmlFor="place">모임 장소</Label>
-              {!isEdit && <ModifyButton onClick={goSearchPlace}>장소 변경하기</ModifyButton>}
+              {!isEdit && (
+                <ModifyButton onClick={() => handleModalOpen('placeBack')}>
+                  장소 변경하기
+                </ModifyButton>
+              )}
             </PlaceHeader>
             <PlaceInfo>
               <LocationIcon src={locationIcon} alt="location" />
@@ -406,7 +407,6 @@ const CreateForm = ({ party }) => {
             </PeopleCountSection>
             <DateContainer>
               <Label htmlFor="partyDate">모임 날짜</Label>
-              {/* <input type="hidden" {...register('partyDate', { value: selectedDate })} /> */}
               <Calendars
                 id="partyDate"
                 selectedDate={selectedDate}
@@ -427,7 +427,6 @@ const CreateForm = ({ party }) => {
               <Label htmlFor="img">이미지 업로드(선택)</Label>
               <PlaceImageWrapper>
                 <PlaceImage src={previewImage || party.imageUrl || defaultImg} alt="PlaceImage" />
-                {/* 업로드버튼 */}
                 <UploadButton onClick={handleUploadClick}>
                   <UploadIcon />
                   <FileInput
@@ -446,32 +445,6 @@ const CreateForm = ({ party }) => {
                       : '이미지 변경하기'}
                   </UploadMsg>
                 </UploadButton>
-                {/* <ButtonContainer>
-                  <ImgModifyButton onClick={handleUploadClick}>
-                    <UploadIcon />
-                    <FileInput
-                      type="file"
-                      accept="image/*"
-                      id="img"
-                      name="img"
-                      ref={imgRef}
-                      onChange={handleFileChange}
-                    />
-                    <UploadMsg>이미지 변경하기</UploadMsg>
-                  </ImgModifyButton>
-                  <ImgModifyButton onClick={handleDeleteClick}>
-                    <CloseIcon />
-                    <FileInput
-                      type="file"
-                      accept="image/*"
-                      id="img"
-                      name="img"
-                      ref={imgRef}
-                      onChange={handleFileChange}
-                    />
-                    <UploadMsg>이미지 삭제하기</UploadMsg>
-                  </ImgModifyButton>
-                </ButtonContainer> */}
               </PlaceImageWrapper>
               <ModifyInfo>
                 <InfoMsg> {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}</InfoMsg>
@@ -493,7 +466,6 @@ const CreateForm = ({ party }) => {
               </ImageInfo>
             </ImageInfoSection>
             <ButtonWrapper>
-              {/* <button onClick={handlePrevClick}>취소하기</button> */}
               <PostButton type="submit">
                 {isEdit ? '모임글 수정하기' : '모임글 게시하기'}
               </PostButton>
@@ -501,6 +473,60 @@ const CreateForm = ({ party }) => {
           </FormContainer>
         </Contents>
       </Container>
+      {isModalOpen && (
+        <Modal
+          type="both"
+          message="장소를 변경하시겠습니까?"
+          subMessage="업로드하신 이미지는 임시저장되지 않습니다."
+          cancelName="머무르기"
+          confirmName="변경하기"
+          onCancelClick={() => handleModalOpen('back')}
+          onConfirmClick={() => goPage('placeBack')}
+        />
+      )}
+      {isCloseModalOpen && (
+        <Modal
+          type="both"
+          message={isEdit ? '모임 수정을 취소하시겠습니까?' : '모임 생성을 취소하시겠습니까?'}
+          subMessage={
+            isEdit ? '나가면 수정사항이 저장되지 않습니다.' : '나가면 작성사항이 저장되지 않습니다.'
+          }
+          cancelName="머무르기"
+          confirmName="나가기"
+          onCancelClick={() => handleModalOpen('close')}
+          onConfirmClick={() => goPage('main')}
+        />
+      )}
+      {isTimeModalOpen && (
+        <Modal
+          type="single"
+          message={
+            selectedTime
+              ? '모임 시간은 현재 시간 이후로 선택해주세요.'
+              : '모임 시간을 선택해주세요.'
+          }
+          confirmName="확인"
+          onConfirmClick={() => handleModalOpen('time')}
+        />
+      )}
+      {isSaveModalOpen && !Object.keys(errors).length && (
+        <Modal
+          type="both"
+          message={isEdit ? '모임글을 수정하시겠습니까?' : '모임글을 게시하시겠습니까?'}
+          cancelName="머무르기"
+          confirmName={isEdit ? '수정하기' : '게시하기'}
+          onCancelClick={() => handleModalOpen('save')}
+          onConfirmClick={() => handleModalConfirmClick()}
+        />
+      )}
+      {isResultModalOpen && (
+        <Modal
+          type="single"
+          message={isEdit ? '모임글이 수정되었습니다.' : '모임글이 게시되었습니다.'}
+          confirmName="확인"
+          onConfirmClick={() => goPage('main')}
+        />
+      )}
     </Background>
   );
 };
@@ -532,15 +558,6 @@ const Topbar = styled.div`
   border-bottom: 1px solid #f2f4f7;
   background: #fff;
   z-index: 10;
-`;
-
-const TopBackDiv = styled.div`
-  display: flex;
-  position: absolute;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
 `;
 
 const TopbarName = styled.div`

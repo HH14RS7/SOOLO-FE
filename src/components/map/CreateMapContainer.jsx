@@ -138,7 +138,7 @@ export default function CreateMapContainer() {
           onConfirmClick={() => goPage('prev')}
         />
       )}
-      {isCloseModalOpen && (
+      {isCloseModalOpen && partyData && (
         <Modal
           type="both"
           message="메인으로 이동하시겠습니까?"
