@@ -120,7 +120,6 @@ const CreateForm = ({ party }) => {
         setTotalCount(partyData.totalCount);
         setSelectedTime(partyData.selectedTime);
         setSelectedDate(new Date(partyDate));
-        console.log(img);
       }
     }
   }, [partyData]);
@@ -130,7 +129,7 @@ const CreateForm = ({ party }) => {
     formData => putUpdateAPI(`${PARTIES_URL.PARTIES_STATUS_CHANGE}/${party.partyId}`, formData),
     {
       onSuccess: response => {
-        setIsResultModalOpen(true);
+        handleModalOpen('result');
       },
       onError: error => {
         alert(error.message);
@@ -143,7 +142,7 @@ const CreateForm = ({ party }) => {
     formData => postImageAPI(`${PARTIES_URL.PARTIES_ADD}`, formData),
     {
       onSuccess: response => {
-        setIsResultModalOpen(true);
+        handleModalOpen('result');
       },
       onError: error => {
         alert(error.message);
@@ -559,15 +558,6 @@ const Topbar = styled.div`
   border-bottom: 1px solid #f2f4f7;
   background: #fff;
   z-index: 10;
-`;
-
-const TopBackDiv = styled.div`
-  display: flex;
-  position: absolute;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
 `;
 
 const TopbarName = styled.div`
