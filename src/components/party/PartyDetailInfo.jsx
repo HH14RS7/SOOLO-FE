@@ -667,6 +667,7 @@ const PlaceInfo = styled.div`
   border: var(--color-gray-200);
   border-radius: 1rem;
   padding: 21px 1rem;
+  border: 1px solid var(--color-gray-200);
   gap: 0.5rem;
   margin-top: 0.5rem;
   cursor: pointer;
