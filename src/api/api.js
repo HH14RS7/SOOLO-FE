@@ -7,6 +7,10 @@ const WEBAPI_URL = `${process.env.REACT_APP_API_SOCKET_URL}`;
 
 const api = axios.create({
   baseURL: API_URL,
+  withCredentials: true,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+  },
 });
 
 const apiweb = axios.create({
