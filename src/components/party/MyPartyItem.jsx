@@ -16,7 +16,7 @@ const MyPartyItem = ({ party }) => {
   const formmatedPartyDate = formmatedDate(party.partyDate, 'MM.DD (ddd)');
   const partyTime = formmatedDate(party.partyDate, 'a h:mm');
 
-  const defaultImg = 'img/default-image.png';
+  const defaultImg = 'img/default-image.webp';
   const gradiant1 = '/img/gradiant-black-op20.png';
   const gradiant2 = '/img/gradiant-op20.png';
 
