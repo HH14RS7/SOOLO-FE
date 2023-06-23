@@ -1,23 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components';
-import { useForm } from 'react-hook-form';
+import { useMutation } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { PATH_URL, PARTIES_URL } from '../../shared/constants';
-import { useMutation, useQueries, useQueryClient } from 'react-query';
 import { putUpdateAPI, postImageAPI } from '../../api/api';
+import { useForm } from 'react-hook-form';
+import { Modal } from '../../elements/Modal';
+
+import { tempPartyData } from '../../atoms';
 import Calendars from '../../shared/Calendars';
 import TimeSlotPicker from '../../shared/TimeSlotPicker';
 import moment from 'moment';
+
 import useGetRegionName from '../../hooks/useGetRegionName';
 import useGetNearbyStation from '../../hooks/useGetNearbyStation';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+
 import { ReactComponent as Information } from '../../assets/common/information.svg';
 import { ReactComponent as Check } from '../../assets/common/check.svg';
 import { ReactComponent as Upload } from '../../assets/common/upload.svg';
 import { ReactComponent as Close } from '../../assets/common/close.svg';
 import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
-import { Modal } from '../../elements/Modal';
-import { tempPartyData } from '../../atoms';
+import useImageUpload from '../../hooks/useImageUpload';
 
 const CreateForm = ({ party }) => {
   const location = useLocation();
@@ -25,25 +29,28 @@ const CreateForm = ({ party }) => {
   const { stationName, distance, getStationInfo } = useGetNearbyStation();
   const setTempPartyData = useSetRecoilState(tempPartyData);
   const partyData = useRecoilValue(tempPartyData);
-  const queryClient = useQueryClient();
 
   const place = location.state || {};
   const isEdit = !!party.partyId;
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState(null);
-  const [previewImage, setPreviewImage] = useState(party.imgUrl || null);
-  const [errorMessage, setErrorMessage] = useState('');
 
   const initialTotalCount = isEdit ? party.totalCount : 2;
   const [totalCount, setTotalCount] = useState(initialTotalCount);
 
   const imgRef = useRef();
+  const { errorMessage, previewImage, img, handleFileChange } = useImageUpload(
+    true,
+    0.5,
+    720,
+    true,
+  );
+
   const locationIcon = '/img/map-location.png';
   const addIcon = '/img/add.png';
   const minusIcon = '/img/minus.png';
-  const defaultImg = '/img/default-image.png';
-  const [img, setImg] = useState(defaultImg);
+  const defaultImg = '/img/default-image.webp';
   const [formData, setFormData] = useState(null);
 
   // 모달
@@ -215,34 +222,6 @@ const CreateForm = ({ party }) => {
   // 파일 선택
   const handleUploadClick = () => {
     imgRef.current.click();
-  };
-
-  const handleFileChange = e => {
-    setErrorMessage('');
-
-    const file = e.target.files[0];
-    if (file) {
-      const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
-      const fileExtension = file.name.toLowerCase().split('.').pop();
-      const maxSizeInBytes = 10 * 1024 * 1024;
-
-      if (!allowedExtensions.includes(fileExtension)) {
-        setErrorMessage(`${fileExtension}은(는) 업로드가 허용되지 않는 확장자입니다.`);
-        return;
-      }
-
-      if (file.size > maxSizeInBytes) {
-        setErrorMessage('10MB 이내 파일을 업로드해주세요.');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPreviewImage(reader.result);
-        setImg(file);
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   const handleIncreaseCount = e => {
@@ -431,7 +410,7 @@ const CreateForm = ({ party }) => {
                   <UploadIcon />
                   <FileInput
                     type="file"
-                    accept=".jpg, .jpeg, .png, .gif, .bmp, .webp, .svg"
+                    accept=".jpg, .jpeg, .png, .gif, .bmp, .webp, .svg .heic .heif"
                     id="img"
                     name="img"
                     ref={imgRef}

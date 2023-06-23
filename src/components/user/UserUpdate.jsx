@@ -7,15 +7,20 @@ import { ReactComponent as Profile } from '../../assets/mypage/profile.svg';
 import { ReactComponent as Frame3959icon } from '../../assets/mypage/frame3959.svg';
 import { ReactComponent as Imgupdate } from '../../assets/mypage/imgupdate.svg';
 import { useNavigate } from 'react-router-dom';
+import useImageUpload from '../../hooks/useImageUpload';
 
 function UserUpdate() {
   const queryClient = useQueryClient();
   const [isExitModalOpen, setIsExitModalOpen] = useState(false);
   const [nameInput, setNameInput] = useState('');
   const [introduceInput, setIntroduceInput] = useState('');
-  const [previewImage, setPreviewImage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [img, setImg] = useState(null);
+  const { errorMessage, previewImage, img, handleFileChange } = useImageUpload(
+    true,
+    0.5,
+    140,
+    true,
+  );
+
   const imgRef = useRef();
   const navigate = useNavigate();
 
@@ -83,34 +88,6 @@ function UserUpdate() {
     formData.append('data', new Blob([JSON.stringify(data)], { type: 'application/json' }));
     img && formData.append('image', img);
     mutation.mutate(formData);
-  };
-
-  const handleFileChange = e => {
-    setErrorMessage('');
-
-    const file = e.target.files[0];
-    if (file) {
-      const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
-      const fileExtension = file.name.toLowerCase().split('.').pop();
-      const maxSizeInBytes = 10 * 1024 * 1024;
-
-      if (!allowedExtensions.includes(fileExtension)) {
-        setErrorMessage(`${fileExtension}은(는) 업로드가 허용되지 않는 확장자입니다.`);
-        return;
-      }
-
-      if (file.size > maxSizeInBytes) {
-        setErrorMessage('10MB 이내 파일을 업로드해주세요.');
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPreviewImage(reader.result);
-        setImg(file);
-      };
-      reader.readAsDataURL(file);
-    }
   };
 
   const ExitopenModal = () => {
