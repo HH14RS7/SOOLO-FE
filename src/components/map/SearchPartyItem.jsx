@@ -16,7 +16,7 @@ export default function SearchPartyItem({ party }) {
   const partyDate = formmatedDate(party.partyDate, 'MM.DD (ddd)');
   const partyTime = formmatedDate(party.partyDate, 'a h:mm');
   const isfulled = party.currentCount === party.totalCount;
-  const defaultImg = '/img/default-image.png';
+  const defaultImg = '/img/default-image.webp';
 
   return (
     <Wrapper>

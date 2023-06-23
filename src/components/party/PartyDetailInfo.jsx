@@ -24,7 +24,7 @@ export const PartyDetailInfo = () => {
   const [data, setData] = useState();
 
   const locationIcon = '/img/map-location.png';
-  const defaultImg = '/img/default-image.png';
+  const defaultImg = '/img/default-image.webp';
 
   // 모임 상세 조회
   useEffect(() => {
