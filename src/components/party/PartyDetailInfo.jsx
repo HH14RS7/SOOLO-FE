@@ -95,7 +95,7 @@ export const PartyDetailInfo = () => {
     window.open(url, '_blank');
   };
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <>

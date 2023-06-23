@@ -10,8 +10,8 @@ const KakaoRedirection = () => {
 
   useEffect(() => {
     axios.post(`${process.env.REACT_APP_REDIRECT_URI}/kakao/callback${code}`).then(r => {
-      console.log('data => ', r.data);
-      console.log('header => ', r.headers);
+      // console.log('data => ', r.data);
+      // console.log('header => ', r.headers);
 
       // data을 받아서 localStorage에 저장.
       localStorage.setItem('memberId', r.data.data.memberId);
