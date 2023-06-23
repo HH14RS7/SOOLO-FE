@@ -29,62 +29,77 @@ export const Header = () => {
 
   // 로그인 여부
   const isLogin = Cookies.get('Access_key');
-  let eventSource = undefined;
+  // let eventSource = undefined;
 
   const isSSE = localStorage.getItem('sse') === 'connect' ? true : false;
 
   useEffect(() => {
     if (!isSSE && isLogin !== null) {
       // SSE 연결
-      eventSource = new EventSourcePolyfill(`${process.env.REACT_APP_SERVER_URL}/sse/stream`, {
-        headers: {
-          Access_key: `Bearer ${accesskey}`,
+      const eventSource = new EventSourcePolyfill(
+        `${process.env.REACT_APP_SERVER_URL}/sse/stream`,
+        {
+          headers: {
+            Access_key: `Bearer ${accesskey}`,
+            'Content-Type': 'text/event-stream',
+            Connection: 'Keep-Alive',
+          },
+          heartbeatTimeout: 3000000, //sse 연결 시간 (30분)
+          withCredentials: true,
         },
-        heartbeatTimeout: 3000000, //sse 연결 시간 (30분)
-        withCredentials: true,
-      });
+      );
 
       // sse 최초 연결되었을 때
       eventSource.onopen = event => {
-        setListening(true);
+        if (event.status === 200) {
+          localStorage.setItem('sse', 'connect');
+          // setListening(true);
+        }
       };
 
       // 서버에서 뭔가 날릴 때마다
       eventSource.onmessage = event => {
         // 받은 데이터 Json타입으로 형변환 가능여부fn
-        // const isJson = str => {
-        //   try {
-        //     const json = JSON.parse(str);
-        //     return json && typeof json === 'object';
-        //   } catch (e) {
-        //     return false;
-        //   }
-        // };
-        // if (isJson(event.data)) {
-        //   // 알림 리스트 (재요청하는 파트)
-        //   setListening(!listening);
-        //   setGotMessage(true);
-        // 실시간 알림 데이터
-        // console.log('event ::', event.data);
-        // const obj = JSON.parse(event.data);
-        // console.log('obj ::', obj);
-        // const result = obj[1].data;
-        // console.log('result ::', result);
-        // const Error = JSON.parse(result);
-        // console.log(Error);
-        // setNewNotice(result);
-        // }
+        const isJson = str => {
+          try {
+            const json = JSON.parse(str);
+            // console.log('jsonType', typeof json);
+            // console.log('json ::::::::', json);
+            // console.log('json[1].data :::::::: ', json[1].data);
+            const message = json[1].data;
+            if (!message.includes('connection is open')) {
+              return json && typeof json === 'object';
+            }
+          } catch (e) {
+            return false;
+          }
+        };
+        if (isJson(event.data)) {
+          // 알림 리스트 (재요청하는 파트)
+          // setListening(!listening);
+          // setGotMessage(true);
+          // 실시간 알림 데이터
+          console.log('event ::', event.data);
+          const obj = JSON.parse(event.data);
+          console.log('obj ::', obj);
+          const result = obj[1].data;
+          const data = JSON.parse(result);
+          console.log(data);
+          setNewNotice(data);
+        }
       };
       // sse 에러
-      eventSource.onerror = event => {};
+      eventSource.onerror = () => {
+        localStorage.setItem('sse', null);
+      };
     }
     // 로그인 상태가 아니고, 이벤트 소스에서 데이터를 정삭적으로 수신할 때,
-    return () => {
-      if (!isLogin && eventSource !== undefined) {
-        eventSource.close();
-        setListening(false);
-      }
-    };
+    // return () => {
+    //   if (!isLogin && eventSource !== undefined) {
+    //     eventSource.close();
+    //     setListening(false);
+    //   }
+    // };
   }, [isLogin]);
 
   // 알림 페이지로 이동
@@ -92,7 +107,7 @@ export const Header = () => {
     navigate(`${PATH_URL.NOTICE}`);
   };
 
-  console.log('newNotice ::', newNotice.data);
+  console.log('newNotice ::', newNotice);
 
   return (
     <>
