@@ -51,4 +51,5 @@ const Map = styled.div`
   height: 210px;
   width: 100%;
   border-radius: 1rem;
+  border: 1px solid var(--color-gray-200);
 `;
