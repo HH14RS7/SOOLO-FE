@@ -1,62 +1,41 @@
 @font-face {
-  font-family: 'Pretendard';
+  font-family: 'Pretendard Std Variable';
   font-style: normal;
-  font-weight: 100;
-  src: url(./Pretendard-Thin.woff2);
+  font-display: swap;
+  font-weight: 45 920;
+  src: local('Pretendard Std Variable'),
+    url('./PretendardStdVariable.woff2') format('woff2-variations');
+  unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
 }
 
 @font-face {
   font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 200;
-  src: url(./Pretendard-ExtraLight.woff2);
-}
-
-@font-face {
-  font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 300;
-  src: url(./Pretendard-Light.woff2);
-}
-
-@font-face {
-  font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 400;
-  src: url(./Pretendard-Regular.woff2);
-}
-
-@font-face {
-  font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 500;
-  src: url(./Pretendard-Medium.woff2);
-}
-
-@font-face {
-  font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 600;
-  src: url(./Pretendard-SemiBold.woff2);
-}
-
-@font-face {
-  font-family: 'Pretendard';
-  font-style: normal;
   font-weight: 700;
-  src: url(./Pretendard-Bold.woff2);
+  font-display: swap;
+  src: local('Pretendard Bold'), url('./Pretendard-Bold.subset.woff2') format('woff2'),
+    url('./Pretendard-Bold.subset.woff') format('woff');
 }
 
 @font-face {
   font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 800;
-  src: url(./Pretendard-ExtraBold.woff2);
+  font-weight: 600;
+  font-display: swap;
+  src: local('Pretendard SemiBold'), url('./Pretendard-SemiBold.subset.woff2') format('woff2'),
+    url('./Pretendard-SemiBold.subset.woff') format('woff');
 }
 
 @font-face {
   font-family: 'Pretendard';
-  font-style: normal;
-  font-weight: 800;
-  src: url(./Pretendard-Black.woff2);
+  font-weight: 500;
+  font-display: swap;
+  src: local('Pretendard Medium'), url('./Pretendard-Medium.subset.woff2') format('woff2'),
+    url('./Pretendard-Medium.subset.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Pretendard';
+  font-weight: 400;
+  font-display: swap;
+  src: local('Pretendard Regular'), url('./Pretendard-Regular.subset.woff2') format('woff2'),
+    url('./Pretendard-Regular.subset.woff') format('woff');
 }
