@@ -62,9 +62,9 @@ api.interceptors.response.use(
       const { status, data, msg } = error.response.data;
       // 401 토큰 만료
       if (status === 401) {
-        throw new Error('Internal Server Error 501', msg);
+        throw new Error('Internal Server Error 401', msg);
       } else if (status === 403) {
-        throw new Error('Internal Server Error 403', msg);
+        throw new Error('Internal Server Error 403 만료된 토큰', msg);
       } else if (status === 404) {
         throw new Error('Internal Server Error 404', msg);
       } else if (status === 410) {
