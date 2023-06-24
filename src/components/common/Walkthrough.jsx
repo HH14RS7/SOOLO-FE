@@ -12,7 +12,7 @@ import { PATH_URL } from '../../shared/constants';
 
 const Walkthrough = () => {
   const [viewportHeight, setViewportHeight] = useState(window.innerHeight);
-  const [mockupHeight, setMockupHeight] = useState(503.55);
+  const mockupHeight = 503.55;
   const goMain = () => {
     navigate(PATH_URL.MAIN);
   };
