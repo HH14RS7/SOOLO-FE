@@ -56,7 +56,7 @@ export default function SearchPartyItem({ party }) {
 
 const Wrapper = styled.div``;
 
-const ItemWrapper = styled.li`
+const ItemWrapper = styled.div`
   display: flex;
   padding: 1rem;
   align-items: center;

@@ -21,7 +21,7 @@ export default function SearchPlaceItem({ place }) {
   );
 }
 
-const PlaceItem = styled.li`
+const PlaceItem = styled.div`
   cursor: pointer;
   display: flex;
   flex-direction: column;

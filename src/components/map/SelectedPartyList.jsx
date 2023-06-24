@@ -25,7 +25,7 @@ export default function SelectedPartyList({ partyList }) {
     </>
   );
 }
-const ListWrapper = styled.ul`
+const ListWrapper = styled.div`
   width: 360px;
   height: 170px;
   display: flex;

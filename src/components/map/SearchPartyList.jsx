@@ -113,7 +113,7 @@ const ListWrapper = styled.div`
   align-items: center;
 `;
 
-const List = styled.ul`
+const List = styled.div`
   // width: 360px;
   width: 100%;
 `;
