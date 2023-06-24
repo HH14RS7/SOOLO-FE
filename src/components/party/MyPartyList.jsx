@@ -26,7 +26,8 @@ const MyPartyList = () => {
       {isLoading ? (
         <Loading />
       ) : (
-        partyList?.length > 0 && (
+        partyList?.length > 0 &&
+        partyList?.some(party => party.state !== 3) && (
           <>
             <Title>신청한 모임</Title>
             <Swiper

@@ -24,7 +24,7 @@ export const PartyDetailInfo = () => {
   const [data, setData] = useState();
 
   const locationIcon = '/img/map-location.png';
-  const defaultImg = '/img/default-image.png';
+  const defaultImg = '/img/default-image.webp';
 
   // 모임 상세 조회
   useEffect(() => {
@@ -95,7 +95,7 @@ export const PartyDetailInfo = () => {
     window.open(url, '_blank');
   };
 
-  console.log(data);
+  // console.log(data);
 
   return (
     <>
@@ -667,6 +667,7 @@ const PlaceInfo = styled.div`
   border: var(--color-gray-200);
   border-radius: 1rem;
   padding: 21px 1rem;
+  border: 1px solid var(--color-gray-200);
   gap: 0.5rem;
   margin-top: 0.5rem;
   cursor: pointer;

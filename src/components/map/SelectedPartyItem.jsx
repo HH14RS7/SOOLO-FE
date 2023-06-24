@@ -11,7 +11,7 @@ import { ReactComponent as Dot } from '../../assets/map/dot.svg';
 import { dDayConvertor } from '../../shared/dDayConvertor';
 
 export default function SelectedPartyItem({ party }) {
-  const defaultImg = '/img/default-image.png';
+  const defaultImg = '/img/default-image.webp';
   const { partyId, title, currentCount, totalCount, stationName, regionName, partyDate, imageUrl } =
     party;
 

@@ -10,7 +10,7 @@ import { ReactComponent as Subway } from '../../assets/map/subway.svg';
 import { ReactComponent as Dot } from '../../assets/map/dot.svg';
 
 const PartyItem = ({ party }) => {
-  const defaultImg = '/img/default-image.png';
+  const defaultImg = '/img/default-image.webp';
   const dDay = dDayConvertor(party.partyDate);
   const isdday = dDay === 0;
   const formmatedPartyDate = formmatedDate(party.partyDate, 'MM.DD (ddd)');
@@ -54,7 +54,7 @@ const PartyItem = ({ party }) => {
   );
 };
 
-const ItemWrapper = styled.li`
+const ItemWrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 0px 0.5rem;

@@ -28,23 +28,25 @@ export default function CreateMapContainer() {
   const latitude = place.y;
 
   useEffect(() => {
-    const container = mapRef.current;
-    const options = {
-      center: new kakao.maps.LatLng(latitude, longitude),
-      level: 3,
-    };
+    kakao.maps.load(() => {
+      const container = mapRef.current;
+      const options = {
+        center: new kakao.maps.LatLng(latitude, longitude),
+        level: 3,
+      };
 
-    const map = new kakao.maps.Map(container, options);
-    mapRef.current = map;
-    const imageSrc = marker;
-    const imageSize = new kakao.maps.Size(18, 18);
-    const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
-    const position = new kakao.maps.LatLng(latitude, longitude);
+      const map = new kakao.maps.Map(container, options);
+      mapRef.current = map;
+      const imageSrc = marker;
+      const imageSize = new kakao.maps.Size(18, 18);
+      const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+      const position = new kakao.maps.LatLng(latitude, longitude);
 
-    const markers = new kakao.maps.Marker({
-      map,
-      position,
-      image: markerImage,
+      const markers = new kakao.maps.Marker({
+        map,
+        position,
+        image: markerImage,
+      });
     });
   }, []);
 

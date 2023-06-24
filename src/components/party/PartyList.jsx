@@ -135,7 +135,6 @@ const PartyList = () => {
             <PartySection>
               <PartyHeader>
                 <Title>현재 진행중인 모임</Title>
-                {/* select 필터링 임시 주석 */}
                 <Select
                   placeholder={RECRUITMENT_STATUS_SELECT[0].label}
                   options={RECRUITMENT_STATUS_SELECT}
@@ -200,7 +199,7 @@ const PartyHeader = styled.div`
 
 const Title = styled.h4`
   color: var(--color-gray-500);
-  margin: 8px 0; // select 무한스크롤 적용 전 임시
+  margin: 8px 0;
 `;
 
 /* List */
@@ -211,7 +210,7 @@ const ListWrapper = styled.div`
   align-items: center;
 `;
 
-const List = styled.ul``;
+const List = styled.div``;
 
 /* ListBottomSection */
 const ListBottomSection = styled.section`

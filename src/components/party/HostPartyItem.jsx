@@ -15,7 +15,7 @@ const HostPartyItem = ({ party }) => {
   const formmatedPartyDate = formmatedDate(party.partyDate, 'MM.DD (ddd)');
   const partyTime = formmatedDate(party.partyDate, 'a h:mm');
   const isfulled = party.currentCount === party.totalCount;
-  const defaultImg = '/img/default-image.png';
+  const defaultImg = '/img/default-image.webp';
 
   return (
     <Link to={`${PATH_URL.PARTY_DETAIL}/${party.partyId}`}>
@@ -54,7 +54,7 @@ const HostPartyItem = ({ party }) => {
 
 export default HostPartyItem;
 
-const ItemWrapper = styled.li`
+const ItemWrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 0px 0.5rem;

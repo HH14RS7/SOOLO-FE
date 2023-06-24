@@ -9,7 +9,6 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const { kakao } = window;
-  const ps = new kakao.maps.services.Places();
   const FOOD_CATEGORY_CODE = 'FD6'; // 음식점 카테고리 코드
 
   const containerRef = useRef(null);
@@ -34,32 +33,34 @@ export default function SearchPlcaeList({ searchPlace, currentLocation }) {
 
   useEffect(() => {
     setCurrentPage(1);
+    kakao.maps.load(() => {
+      const ps = new kakao.maps.services.Places();
+      setPlaceList([]);
 
-    setPlaceList([]);
+      const searchOptions = {
+        size: 12,
+        page: 1,
+        category_group_code: FOOD_CATEGORY_CODE,
+      };
 
-    const searchOptions = {
-      size: 12,
-      page: 1,
-      category_group_code: FOOD_CATEGORY_CODE,
-    };
-
-    if (searchPlace) {
-      setIsLoading(true);
-      if (currentLocation) {
-        searchOptions.location = new kakao.maps.LatLng(
-          currentLocation.latitude,
-          currentLocation.longitude,
-        );
-        searchOptions.radius = 5000;
+      if (searchPlace) {
+        setIsLoading(true);
+        if (currentLocation) {
+          searchOptions.location = new kakao.maps.LatLng(
+            currentLocation.latitude,
+            currentLocation.longitude,
+          );
+          searchOptions.radius = 5000;
+        } else {
+          searchOptions.radius = 20000;
+          searchOptions.location = null;
+          searchOptions.radius = null;
+        }
+        ps.keywordSearch(searchPlace, placesSearchCB, searchOptions);
       } else {
-        searchOptions.radius = 20000;
-        searchOptions.location = null;
-        searchOptions.radius = null;
+        setIsLoading(false);
       }
-      ps.keywordSearch(searchPlace, placesSearchCB, searchOptions);
-    } else {
-      setIsLoading(false);
-    }
+    });
   }, [searchPlace, currentLocation, placesSearchCB, currentPage]);
 
   // 검색결과 목록 하단에 페이지 번호 표시

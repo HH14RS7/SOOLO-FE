@@ -71,6 +71,7 @@ const Footer = () => {
             <PartyAdd
               active={footerActive === 2 ? 'true' : 'false'}
               onClick={() => handleTitleClick(2)}
+              aria-label="partyAdd"
             >
               <Addbtn />
             </PartyAdd>
