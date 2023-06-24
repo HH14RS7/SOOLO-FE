@@ -216,7 +216,9 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
   }, [latitude, longitude, partyList]);
 
   useEffect(() => {
-    drawMarkers();
+    kakao.maps.load(() => {
+      drawMarkers();
+    });
   }, [drawMarkers]);
 
   // 키워드 검색
