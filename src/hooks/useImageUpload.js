@@ -18,7 +18,7 @@ const useImageUpload = (isComp = true, imgMaxSize = 0.5, imgMaxWidthHeight = 420
   };
 
   const fileValidate = file => {
-    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', 'heic', 'heif'];
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
     const fileExtension = file.name.toLowerCase().split('.').pop();
     const maxSizeInBytes = 10 * 1024 * 1024;
 
@@ -49,6 +49,7 @@ const useImageUpload = (isComp = true, imgMaxSize = 0.5, imgMaxWidthHeight = 420
           const newFile = new File([compressedFile], file.name, {
             type: `image/${fileType}`,
           });
+          console.log(newFile);
           setImg(newFile);
           encodeFile(newFile);
         });
