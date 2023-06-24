@@ -124,7 +124,7 @@ function UserUpdate() {
                 <Imgupdate />
                 <FileInput
                   type="file"
-                  accept=".jpg, .jpeg, .png, .gif, .bmp, .webp, .svg"
+                  accept=".jpg, .jpeg, .png, .gif, .bmp, .webp, .svg .heic .heif"
                   id="img"
                   name="img"
                   ref={imgRef}
