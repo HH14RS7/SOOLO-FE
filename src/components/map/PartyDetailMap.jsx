@@ -1,18 +1,13 @@
 import React, { useEffect, useRef } from 'react';
-import { useLocation, useNavigate, useHistory } from 'react-router-dom';
 import { styled } from 'styled-components';
-import { PATH_URL } from '../../shared/constants';
 import marker from '../../assets/map/marker.svg';
-import { ReactComponent as Add } from '../../assets/map/add.svg';
-import { ReactComponent as Subtract } from '../../assets/map/subtract.svg';
 
 const { kakao } = window;
 export default function PartyDetailMap({ latitude, longitude }) {
   const mapRef = useRef(null);
 
   useEffect(() => {
-    // Kakao 지도 API 로드가 완료되었는지 확인
-    if (window.kakao && window.kakao.maps) {
+    kakao.maps.load(() => {
       const container = mapRef.current;
       const position = new kakao.maps.LatLng(latitude, longitude);
 
@@ -32,7 +27,7 @@ export default function PartyDetailMap({ latitude, longitude }) {
         position,
         image: markerImage,
       });
-    }
+    });
   }, [latitude, longitude]);
 
   return (

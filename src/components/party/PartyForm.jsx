@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { styled } from 'styled-components';
 import { useMutation } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -24,6 +24,8 @@ import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 import useImageUpload from '../../hooks/useImageUpload';
 
 const CreateForm = ({ party }) => {
+  // const Calendars = lazy(() => import('../../shared/Calendars'));
+
   const location = useLocation();
   const { regionName, getRegionName } = useGetRegionName();
   const { stationName, distance, getStationInfo } = useGetNearbyStation();
@@ -386,11 +388,13 @@ const CreateForm = ({ party }) => {
             </PeopleCountSection>
             <DateContainer>
               <Label htmlFor="partyDate">모임 날짜</Label>
+              {/* <Suspense fallback={<div>...loading</div>}> */}
               <Calendars
                 id="partyDate"
                 selectedDate={selectedDate}
                 setSelectedDate={setSelectedDate}
               />
+              {/* </Suspense> */}
               <TimeSection>
                 <Label htmlFor="partyTime">모임이 시작되는 시간</Label>
                 <TimeHeader>오후</TimeHeader>
@@ -907,11 +911,6 @@ const ImgModifyButton = styled.div`
 
   border: 1px dashed #e4e7ec;
   border-radius: 16px;
-`;
-
-const CloseIcon = styled(Close)`
-  width: 16px;
-  height: 16px;
 `;
 
 const FileInput = styled.input`

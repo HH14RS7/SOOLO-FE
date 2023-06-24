@@ -54,7 +54,7 @@ const HostPartyItem = ({ party }) => {
 
 export default HostPartyItem;
 
-const ItemWrapper = styled.li`
+const ItemWrapper = styled.div`
   display: flex;
   align-items: center;
   padding: 0px 0.5rem;
