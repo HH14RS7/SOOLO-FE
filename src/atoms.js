@@ -12,12 +12,12 @@ export const tempPartyData = atom({
 
 export const noticeState = atom({
   key: 'noticeState',
-  default: {},
+  default: [],
 });
 
 export const sse = atom({
   key: 'sse',
-  default: {},
+  default: '',
 });
 
 // export const mapDataState = atom({
