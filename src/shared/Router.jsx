@@ -28,11 +28,13 @@ import WalkThroughPage from '../pages/WalkThroughPage';
 import { PartyRequestApprove } from '../pages/PartyRequestApprove';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { Notice } from '../pages/Notice';
+import { Alram } from '../components/Alram';
 
 const Router = () => {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <Alram />
       <Routes>
         {/* MainHeader,Footer 컴포넌트 */}
         <Route element={<MainLayout />}>

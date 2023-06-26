@@ -7,7 +7,8 @@ import { PATH_URL } from '../../shared/constants';
 import Cookies from 'js-cookie';
 
 // 클라이언트 데터 관리
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { noticeState } from '../../atoms';
 import { sse } from '../../atoms';
 
 // 이미지 import
@@ -18,96 +19,14 @@ import { ReactComponent as NewAlarm } from '../../assets/header/alarm-new.svg';
 export const Header = () => {
   const navigate = useNavigate();
 
-  const accesskey = Cookies.get('Access_key');
-
-  // sse handle
-  const [newNotice, setNewNotice] = useRecoilState(sse);
-  // sse연결 여부
-  const [listening, setListening] = useState(false);
-  // 리스폰 담을 스테이스
-  const [gotMessage, setGotMessage] = useState(false);
-
-  // 로그인 여부
-  const isLogin = Cookies.get('Access_key');
-  // let eventSource = undefined;
-
-  const isSSE = localStorage.getItem('sse') === 'connect' ? true : false;
-
-  useEffect(() => {
-    if (!isSSE && isLogin !== null) {
-      // SSE 연결
-      const eventSource = new EventSourcePolyfill(
-        `${process.env.REACT_APP_SERVER_URL}/sse/stream`,
-        {
-          headers: {
-            Access_key: `Bearer ${accesskey}`,
-            'Content-Type': 'text/event-stream',
-            Connection: 'Keep-Alive',
-          },
-          heartbeatTimeout: 3000000, //sse 연결 시간 (30분)
-          withCredentials: true,
-        },
-      );
-
-      // sse 최초 연결되었을 때
-      eventSource.onopen = event => {
-        if (event.status === 200) {
-          localStorage.setItem('sse', 'connect');
-          // setListening(true);
-        }
-      };
-
-      // 서버에서 뭔가 날릴 때마다
-      eventSource.onmessage = event => {
-        // 받은 데이터 Json타입으로 형변환 가능여부fn
-        const isJson = str => {
-          try {
-            const json = JSON.parse(str);
-            // console.log('jsonType', typeof json);
-            // console.log('json ::::::::', json);
-            // console.log('json[1].data :::::::: ', json[1].data);
-            const message = json[1].data;
-            if (!message.includes('connection is open')) {
-              return json && typeof json === 'object';
-            }
-          } catch (e) {
-            return false;
-          }
-        };
-        if (isJson(event.data)) {
-          // 알림 리스트 (재요청하는 파트)
-          // setListening(!listening);
-          // setGotMessage(true);
-          // 실시간 알림 데이터
-          console.log('event ::', event.data);
-          const obj = JSON.parse(event.data);
-          console.log('obj ::', obj);
-          const result = obj[1].data;
-          const data = JSON.parse(result);
-          console.log(data);
-          setNewNotice(data);
-        }
-      };
-      // sse 에러
-      eventSource.onerror = () => {
-        localStorage.setItem('sse', null);
-      };
-    }
-    // 로그인 상태가 아니고, 이벤트 소스에서 데이터를 정삭적으로 수신할 때,
-    // return () => {
-    //   if (!isLogin && eventSource !== undefined) {
-    //     eventSource.close();
-    //     setListening(false);
-    //   }
-    // };
-  }, [isLogin]);
+  // 종 테스트
+  const NoticeData = useRecoilValue(noticeState);
+  console.log('NoticeData ::', NoticeData);
 
   // 알림 페이지로 이동
   const bellbuttonHandler = () => {
     navigate(`${PATH_URL.NOTICE}`);
   };
-
-  console.log('newNotice ::', newNotice);
 
   return (
     <>
@@ -116,14 +35,25 @@ export const Header = () => {
           <Link to="/">
             <Logo />
           </Link>
-          <Bell
-            style={{
-              cursor: 'pointer',
-            }}
-            onClick={() => {
-              bellbuttonHandler();
-            }}
-          />
+          {NoticeData === null ? (
+            <Bell
+              style={{
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                bellbuttonHandler();
+              }}
+            />
+          ) : (
+            <NewAlarm
+              style={{
+                cursor: 'pointer',
+              }}
+              onClick={() => {
+                bellbuttonHandler();
+              }}
+            />
+          )}
         </Contents>
       </Background>
     </>
