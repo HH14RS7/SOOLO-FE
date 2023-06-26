@@ -10,6 +10,9 @@ import Cookies from 'js-cookie';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { sse } from '../atoms';
 
+// 이미지 import
+import { ReactComponent as WhiteAlarm } from '../assets/notice/whitebell.svg';
+
 export const Alram = ({ newNotice, setnewNotice }) => {
   const navigate = useNavigate();
 
@@ -112,21 +115,13 @@ export const Alram = ({ newNotice, setnewNotice }) => {
 
   // 3초
   useEffect(() => {
-    // let timer;
-    if (Notice.partyTitle !== undefined) {
+    if (Notice) {
       setTimeout(() => {
-        setNewNotice({});
-      }, 4000);
+        setNewNotice(null);
+      }, 3000);
     }
-
-    // if (Notice) {
-    //   setTimeout(() => {
-    //     setNewNotice(null);
-    //   }, 3000);
-    // }
-    // console.log('Notice return ::', Notice);
-    // console.log('Notice type', typeof Notice);
-    // return () => clearTimeout(timer);
+    console.log('Notice return ::', Notice);
+    console.log('Notice type', typeof Notice);
   }, [Notice]);
 
   // console.log('Notice ::', Notice);
@@ -134,13 +129,16 @@ export const Alram = ({ newNotice, setnewNotice }) => {
   return (
     <>
       {Notice && (
-        <SnackBar>
-          <div>누가 알림보냄@@@@@@@@@@@@</div>
-          <div>{Notice.noticeCode === 1 ? '호스트' : '게스트'}</div>
-          <div>제목: {Notice.partyTitle}</div>
-          <div>누가 신청함: {Notice.participantName}</div>
-          <div>승인 or 거절: {Notice.participateIs ? '승인' : '거절'}</div>
-        </SnackBar>
+        <div>
+          <SnackBar
+            onClick={() => {
+              navigate('/notice');
+            }}
+          >
+            <WhiteAlarm />
+            <AlarmText>새로운 알림이 있습니다.</AlarmText>
+          </SnackBar>
+        </div>
       )}
     </>
   );
@@ -172,17 +170,26 @@ const fadeOut = keyframes`
 
 // 스낵바 스타일
 const SnackBar = styled.div`
-  width: 360px;
-  height: 100px;
+  display: flex;
+  align-items: center;
+  width: 328px;
+  height: 54px;
   margin: 0 auto;
   left: 0;
   right: 0;
   position: fixed;
-  background: white;
-  border: 1px solid #f04438;
-  border-radius: 20px;
-  margin-top: 100px;
+  padding: 18px 24px;
+  background: #1d2939;
+  color: #fff;
+  border-radius: 8px;
+  margin-top: 50px;
   z-index: 5;
   opacity: 0;
   animation: ${fadeIn} 1s forwards, ${fadeOut} 1s 3s forwards;
+  cursor: pointer;
+`;
+
+const AlarmText = styled.div`
+  margin-left: 16px;
+  font-size: 16px;
 `;
