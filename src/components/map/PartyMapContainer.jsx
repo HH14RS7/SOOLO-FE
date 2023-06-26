@@ -102,7 +102,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
     const container = document.getElementById('map');
     const options = {
       center: new kakao.maps.LatLng(latitude, longitude),
-      level: 5,
+      level: 6,
       radius: 2000,
     };
 
