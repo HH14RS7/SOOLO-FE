@@ -3,7 +3,7 @@ export const PATH_URL = {
   WALK_THROUGH: '/',
   MAIN: '/home',
   LOGIN: '/user/login',
-  DETAIL: '/detail/:detailId',
+  DETAIL: '/detail',
   MYPAGE: '/mypage',
   KAKAO: '/kakao/callback',
   NAVER: '/naver/callback',

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { noticeState } from '../atoms';
@@ -9,11 +9,14 @@ import { noticeState } from '../atoms';
 import { ReactComponent as LeftBack } from '../assets/chating/LeftBack.svg';
 import { ReactComponent as Alarm } from '../assets/notice/alarm.svg';
 import { ReactComponent as ComingAlarm } from '../assets/notice/coming up alarm.svg';
+import { ReactComponent as Close } from '../assets/notice/close.svg';
 import { ReactComponent as Email } from '../assets/notice/email.svg';
 import { getAPI } from '../api/api';
-import { MEMBER_URL } from '../shared/constants';
+import { MEMBER_URL, PATH_URL } from '../shared/constants';
 
 export const PartyNotice = () => {
+  const navigate = useNavigate();
+
   const setNotice = useSetRecoilState(noticeState);
   const NoticeData = useRecoilValue(noticeState);
   const { data, isLoading, error } = useQuery('requests', () => getAPI('/sse/notice'));
@@ -39,68 +42,103 @@ export const PartyNotice = () => {
     <>
       <Background>
         <Contents>
-          <Topbar>
-            <TopBackDiv
-              style={{
-                position: 'absolute',
-              }}
-            >
-              <Link to={'/home'}>
-                <LeftBack />
-              </Link>
-            </TopBackDiv>
-            <TopbarName>알림</TopbarName>
-          </Topbar>
-          {NoticeData?.map((notice, i) => {
-            if (notice.noticeCode === 2 && notice.accepted) {
-              return (
-                <NoticeContainer key={i}>
-                  <ImgDiv>
-                    <Alarm />
-                  </ImgDiv>
-                  <NoticeContents>
-                    <NoticeName>
-                      <NoticeOverName>{notice.partyTitle}</NoticeOverName> 모임이
-                      <ApprovalStatus>승인</ApprovalStatus> 되었습니다.
-                    </NoticeName>
-                    <NoticeText>
-                      승인 된 모임은 마이페이지 속 내가 신청한 모임 내에서 확인 가능합니다.
-                    </NoticeText>
-                    <NoticeTime>00시간 전</NoticeTime>
-                  </NoticeContents>
-                </NoticeContainer>
-              );
-            }
+          <div
+            style={{
+              width: '360px',
+              // height: '100%',
+              paddingBottom: '70px',
+            }}
+          >
+            <Topbar>
+              <TopBackDiv
+                style={{
+                  position: 'absolute',
+                }}
+              >
+                <Link to={'/home'}>
+                  <LeftBack />
+                </Link>
+              </TopBackDiv>
+              <TopbarName>알림</TopbarName>
+            </Topbar>
+            {NoticeData?.map((notice, i) => {
+              if (notice.noticeCode === 2 && notice.accepted) {
+                return (
+                  <Link to={`${PATH_URL.PARTY_DETAIL}/${notice.partyId}`}>
+                    <NoticeContainer key={i}>
+                      <ImgDiv>
+                        <Alarm />
+                      </ImgDiv>
+                      <NoticeContents>
+                        <NoticeName>
+                          <NoticeOverName>{notice.partyTitle}</NoticeOverName> 모임이
+                          <ApprovalStatus>승인</ApprovalStatus> 되었습니다.
+                        </NoticeName>
+                        <NoticeText>
+                          승인 된 모임은 마이페이지 속 내가 신청한 모임 내에서 확인 가능합니다.
+                        </NoticeText>
+                        <NoticeTime>00시간 전</NoticeTime>
+                      </NoticeContents>
+                      <DeleteDiv>
+                        <Close
+                          style={{
+                            cursor: 'pointer',
+                          }}
+                        />
+                      </DeleteDiv>
+                    </NoticeContainer>
+                  </Link>
+                );
+              }
 
-            if (notice.noticeCode === 2 && !notice.accepted) {
-              return (
-                <NoticeContainer key={i}>
-                  <ImgDiv>
-                    <Alarm />
-                  </ImgDiv>
-                  <NoticeContents>
-                    <NoticeName>
-                      <NoticeOverName>{notice.partyTitle}</NoticeOverName> 모임이
-                      <RefusalStatus>거절</RefusalStatus> 되었습니다.
-                    </NoticeName>
-                    <NoticeText>
-                      거절 된 모임은 마이페이지 속 내가 신청한 모임 내에서 확인 가능합니다.
-                    </NoticeText>
-                    <NoticeTime>00시간 전</NoticeTime>
-                  </NoticeContents>
-                </NoticeContainer>
-              );
-            }
+              if (notice.noticeCode === 2 && !notice.accepted) {
+                return (
+                  <NoticeContainer
+                    key={i}
+                    onClick={() => {
+                      navigate('/mypage/party/request');
+                    }}
+                  >
+                    <ImgDiv>
+                      <Alarm />
+                    </ImgDiv>
+                    <NoticeContents>
+                      <NoticeName>
+                        <NoticeOverName>{notice.partyTitle}</NoticeOverName> 모임이
+                        <RefusalStatus>거절</RefusalStatus> 되었습니다.
+                      </NoticeName>
+                      <NoticeText>
+                        거절 된 모임은 마이페이지 속 내가 신청한 모임 내에서 확인 가능합니다.
+                      </NoticeText>
+                      <NoticeTime>00시간 전</NoticeTime>
+                    </NoticeContents>
+                    <DeleteDiv>
+                      <Close
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </DeleteDiv>
+                  </NoticeContainer>
+                );
+              }
 
-            if (notice.noticeCode === 1 && notice.participateIs) {
-              return (
-                <HostContainer key={i}>
-                  <ImgDiv>
-                    <Email />
-                  </ImgDiv>
-                  <HostContents>
-                    <HostDiv>
-                      <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${notice.participantId}`}>
+              if (notice.noticeCode === 1 && notice.participateIs) {
+                return (
+                  <HostContainer
+                    key={i}
+                    style={{
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                      navigate('/party/request/approve');
+                    }}
+                  >
+                    <ImgDiv>
+                      <Email />
+                    </ImgDiv>
+                    <HostContents>
+                      <HostDiv>
                         <HostImgDiv>
                           <img
                             src={notice.imgUrl}
@@ -112,28 +150,33 @@ export const PartyNotice = () => {
                             }}
                           />
                         </HostImgDiv>
-                      </Link>
-                      <HostText>
-                        <BoldText>{notice.participantName}</BoldText>님이 '
-                        <BoldPartyName>{notice.partyTitle}</BoldPartyName>' 모임에 참여하기를
-                        원합니다
-                      </HostText>
-                    </HostDiv>
-                    <HostTimeText>00분 전</HostTimeText>
-                  </HostContents>
-                </HostContainer>
-              );
-            }
+                        <HostText>
+                          <BoldText>{notice.participantName}</BoldText>님이 '
+                          <BoldPartyName>{notice.partyTitle}</BoldPartyName>' 모임에 참여하기를
+                          원합니다
+                        </HostText>
+                      </HostDiv>
+                      <HostTimeText>00분 전</HostTimeText>
+                    </HostContents>
+                    <DeleteDiv>
+                      <Close
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </DeleteDiv>
+                  </HostContainer>
+                );
+              }
 
-            if (notice.noticeCode === 1 && !notice.participateIs) {
-              return (
-                <HostContainer key={i}>
-                  <ImgDiv>
-                    <Email />
-                  </ImgDiv>
-                  <HostContents>
-                    <HostDiv>
-                      <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${notice.participantId}`}>
+              if (notice.noticeCode === 1 && !notice.participateIs) {
+                return (
+                  <HostContainer key={i}>
+                    <ImgDiv>
+                      <Email />
+                    </ImgDiv>
+                    <HostContents>
+                      <HostDiv>
                         <HostImgDiv>
                           <img
                             src={notice.imgUrl}
@@ -145,22 +188,28 @@ export const PartyNotice = () => {
                             }}
                           />
                         </HostImgDiv>
-                      </Link>
-                      <HostText>
-                        <BoldText>{notice.participantName}</BoldText>님이 '
-                        <BoldPartyName>{notice.partyTitle}</BoldPartyName>' 모임에 참여를
-                        취소했습니다
-                      </HostText>
-                    </HostDiv>
-                    <HostTimeText>00분 전</HostTimeText>
-                  </HostContents>
-                </HostContainer>
-              );
-            }
-            return null;
-          })}
+                        <HostText>
+                          <BoldText>{notice.participantName}</BoldText>님이 '
+                          <BoldPartyName>{notice.partyTitle}</BoldPartyName>' 모임에 참여를
+                          취소했습니다
+                        </HostText>
+                      </HostDiv>
+                      <HostTimeText>00분 전</HostTimeText>
+                    </HostContents>
+                    <DeleteDiv>
+                      <Close
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                      />
+                    </DeleteDiv>
+                  </HostContainer>
+                );
+              }
+              return null;
+            })}
 
-          {/* <NoticeContainer>
+            {/* <NoticeContainer>
             <ImgDiv>
               <Alarm />
             </ImgDiv>
@@ -219,6 +268,7 @@ export const PartyNotice = () => {
               <HostTimeText>00분 전</HostTimeText>
             </HostContents>
           </HostContainer> */}
+          </div>
         </Contents>
       </Background>
     </>
@@ -236,7 +286,6 @@ const Contents = styled.div`
   width: 360px;
   margin: 0 auto;
   background: #f9fafb;
-  padding-bottom: 70px;
 `;
 
 // TopBar 스타일
@@ -272,12 +321,14 @@ const TopbarName = styled.div`
 // 알림 박스 스타일
 const NoticeContainer = styled.div`
   display: flex;
+  position: relative;
   width: 360px;
   height: 116px;
   padding: 16px;
   gap: 8px;
   background: #fff;
   border-bottom: 1px solid #e4e7ec;
+  cursor: pointer;
 `;
 
 const ImgDiv = styled.div`
@@ -301,7 +352,7 @@ const NoticeName = styled.div`
 
 const NoticeOverName = styled.div`
   font-weight: 700;
-  max-width: 140px;
+  max-width: 120px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -334,7 +385,7 @@ const NoticeText = styled.div`
   font-size: 14px;
   font-weight: 400;
   color: #1d2939;
-  max-width: 295px;
+  max-width: 258px;
   line-height: 18px;
 `;
 
@@ -370,10 +421,11 @@ const TimeContents = styled.div`
 // 호스트 알림 스타일
 const HostContainer = styled.div`
   display: flex;
+  position: relative;
   width: 360px;
   height: 100px;
   padding: 16px;
-  gap: 8px;
+  /* gap: 8px; */
   background: #fff;
   border-bottom: 1px solid #e4e7ec;
 `;
@@ -381,10 +433,11 @@ const HostContainer = styled.div`
 const HostContents = styled.div`
   width: 304px;
   height: 68px;
+  margin-left: 8px;
 `;
 
 const HostDiv = styled.div`
-  width: 305px;
+  /* width: 305px; */
   height: 42px;
   display: flex;
   gap: 16px;
@@ -398,7 +451,7 @@ const HostImgDiv = styled.div`
 
 const HostText = styled.div`
   /* display: flex; */
-  max-width: 245px;
+  max-width: 200px;
   font-size: 14px;
   gap: 2px;
   line-height: 18px;
@@ -427,4 +480,15 @@ const BoldPartyName = styled.span`
 const BoldText = styled.span`
   font-weight: bold;
   margin-right: 2px;
+`;
+
+const DeleteDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
 `;
