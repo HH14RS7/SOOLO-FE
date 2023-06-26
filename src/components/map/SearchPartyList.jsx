@@ -49,7 +49,7 @@ const Wrapper = styled.div`
   background-color: var(--color-gray-25);
   border: 1px solid var(--color-gray-300);
   border-bottom: none;
-  margin-bottom: 70px;
+  // margin-bottom: 70px;
 
   z-index: 5;
   // 임시 슬라이드 전
@@ -126,6 +126,7 @@ const ListInfo = styled.div`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  margin-bottom: 60px;
 `;
 
 const InfoTitle = styled.h5``;
