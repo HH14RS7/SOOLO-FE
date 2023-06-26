@@ -371,6 +371,11 @@ const ChatRoomName = styled.div`
   font-size: 16px;
   font-weight: 400;
   margin-bottom: 4px;
+  max-width: 170px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
 `;
 
 const ChatRoomContent = styled.div`
