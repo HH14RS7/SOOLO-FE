@@ -341,7 +341,7 @@ const ButtonWrapper = styled.div`
   padding-left: 90px;
   justify-content: center;
   z-index: 15;
-  bottom: ${({ ismarkeredclicked }) => (ismarkeredclicked ? '320px' : '360px')};
+  bottom: ${({ ismarkeredclicked }) => (ismarkeredclicked ? '280px' : '280px')};
 `;
 
 const CurrentButton = styled.button`
