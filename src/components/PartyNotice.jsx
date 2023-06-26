@@ -291,15 +291,21 @@ const NoticeContents = styled.div`
 `;
 
 const NoticeName = styled.div`
-  /* display: flex; */
+  display: flex;
   max-width: 300px;
   font-size: 14px;
+  align-items: center;
   gap: 2px;
   margin-bottom: 8px;
 `;
 
 const NoticeOverName = styled.div`
   font-weight: 700;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
 `;
 
 const ApprovalStatus = styled.div`
