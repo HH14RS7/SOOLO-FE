@@ -102,7 +102,7 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
     const container = document.getElementById('map');
     const options = {
       center: new kakao.maps.LatLng(latitude, longitude),
-      level: 5,
+      level: 6,
       radius: 2000,
     };
 
@@ -341,7 +341,7 @@ const ButtonWrapper = styled.div`
   padding-left: 90px;
   justify-content: center;
   z-index: 15;
-  bottom: ${({ ismarkeredclicked }) => (ismarkeredclicked ? '320px' : '360px')};
+  bottom: ${({ ismarkeredclicked }) => (ismarkeredclicked ? '280px' : '280px')};
 `;
 
 const CurrentButton = styled.button`

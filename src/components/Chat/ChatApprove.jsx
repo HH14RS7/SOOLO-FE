@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getAPI, postAPI, deleteAPI } from '../../api/api';
 import { MEMBER_URL, PARTIES_URL } from '../../shared/constants';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // 이미지 import
 import { ReactComponent as Location } from '../../assets/map/location-line.svg';
@@ -11,6 +11,8 @@ import { ReactComponent as LoadingIcon } from '../../assets/chating/noapprove.sv
 import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 
 export const ChatApprove = () => {
+  const navigate = useNavigate();
+
   const queryClient = useQueryClient();
 
   // 모임 승인
@@ -70,10 +72,11 @@ export const ChatApprove = () => {
               style={{
                 position: 'absolute',
               }}
+              onClick={() => {
+                navigate(-1);
+              }}
             >
-              <Link to={'/home'}>
-                <LeftBack />
-              </Link>
+              <LeftBack />
             </TopBackDiv>
             <TopbarName>들어온 승인 요청</TopbarName>
           </Topbar>
