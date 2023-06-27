@@ -1,8 +1,29 @@
 <br>
 
-# 🍻 로고 🍻
 
-### [ 전국 술모임 커뮤니티 ](https://im-soolo.com/) 
+<img src="https://github.com/HH14RS7/SOOLO-FE/assets/128359222/ff19bfbb-1288-44ab-8d09-f79e83c26343">
+
+<h2>
+ <a href="https://im-soolo.com">나는 Soolo</a>
+</h2>
+술과 사람을 좋아하는 당신을 위한 번개 모임 서비스를 제공합니다.
+
+<br><br>
+
+<h2>나는 Soolo?</h2>
+
+### 같이 술 먹을 사람이 없어서 외롭다고요? 그렇지 않을걸요? 나는 Soolo와 함께라면
+<br>
+술은 먹고 싶지만 술 먹을 친구가 없어서 혼자 드신 적이 있나요?<br>
+힘든 하루를 보낸 우리들. 술과 사람을 좋아하는 당신을 위한 번개 모임 서비스를 제공합니다!<br>
+고민은 시간만 늦출 뿐! 지금 바로 시작해 보세요!
+
+<br> <br>
+
+📆 프로젝트 기간
+- 2023.05.19 ~ 2022.06.30
+- [📕 나는 Soolo 노션](https://www.notion.so/Soolo-892498dcfca94515b5219fd4b12c144d)
+- [📄 나는 Soolo 원페이지 노션](https://www.notion.so/SOOLO-b1933d6109504c6199df60bb14b881a4)
 
 <br><br>
 
@@ -13,19 +34,13 @@
 |[@chana](https://github.com/chana73)|[@JayB202](https://github.com/JayB202)|[@SHyun](https://github.com/seungheyon)|[@feeljoy](https://github.com/Cho-woo-pil)|[@SejunS](https://github.com/Sejun0910)|[@jjin](https://github.com/devjjin)|[@sunwoo](https://github.com/Jeongsunwoo)|[@chloe_lee](https://github.com/HH14RS7)|
 |TL / BE|BE|BE|BE|VL / FE|FE|FE|DE|
 
-<br>
-
-### [💩 프로젝트 노션 바로가기](https://www.notion.so/SOOLO-892498dcfca94515b5219fd4b12c144d?pvs=4)
-
 
 <br><br>
 
 
+## 🕹️ 프로젝트 기능
 
-
-## 프로젝트 기능
-
-### 🍻 소셜로그인 (kakao, naver)
+### 🛡 소셜로그인 (kakao, naver)
 
 > * Kakao와 Naver계정을 통한 간편 로그인이 가능합니다.
 > * Refresh Token을 추가로 적용하여 보안성을 높였습니다.
@@ -41,8 +56,9 @@
 </div>
 </details>
 
+<br>
 
-### 🍻 지도 정보를 바탕으로 모임을 생성/참여 
+### 🧭 지도 정보를 바탕으로 모임을 생성/참여 
  
 > * 위치 정보를 기준으로 모임을 생성하고, 주변 모임을 확인하여 참여 신청을 할수 있습니다.
 > * 지도에 마커를 보여줌으로써 좀 더 직관적으로 모임의 위치를 알 수 있습니다. 
@@ -59,22 +75,9 @@
 </div>
 </details>
 
-### 🍻 검색 기능
+<br>
 
-> * JPA를 활용하여 모임에 대해 검색 할수 있도록 구현하였습니다.
-> * 모임의 컨셉, 지역, 제목, 근처역 등을 검색 할 수 있습니다.
-
-<details>
-<summary>미리보기</summary>
-<div markdown="1">
-
-![검색기능](이미지 스냅샷 찍어서 주소 넣을 자리)
-
- <br>
-</div>
-</details>
-
-### 🍻 마이페이지 기능
+### 🧑🏻‍💻👩🏻‍💻 마이페이지 기능
  
 > * 마이페이지에서 내가 신청한 모임, 개설한 모임, 계정정보 등ㅇ르 볼 수 있습니다.
 > * 자기소개와 프로필 이미지 변경이 가능합니다.
@@ -89,7 +92,9 @@
 </div>
 </details>
 
-### 🍻 신고 기능 (사용자, 닉네임, 게시글, 댓글)
+<br>
+
+### 🚨 신고 기능 (사용자, 닉네임, 게시글, 댓글)
  
 > * 악성 사용자, 불건전한 닉네임, 채팅, 모임 내용과 함께 신고할 수 있습니다.
 > * 본인은 본인을 신고할 수 없으며 같은 유저의 신고에 대해서는 계정 하나당 1회로 제한됩니다.
@@ -105,7 +110,12 @@
 </div>
 </details>
 
-### ☑ 무한스크롤
+<br>
+
+### 📃 무한스크롤
+
+> * 무함 스크롤
+> * 무함 스크롤
 
 <details>
 <summary>미리보기</summary>
@@ -117,8 +127,9 @@
 </div>
 </details>
 
+<br>
 
-### 🍻 WebSocket을 활용한 실시간 채팅
+### 💬 WebSocket을 활용한 실시간 채팅
 
 > * 모임에 참여한 사람들과 실시간 채팅이 가능합니다.
 > * 최근에 대화가 이루어진 순서대로 채팅방이 보여집니다.
@@ -138,40 +149,31 @@
 </div>
 </details>
 
+<br>
 
-## 적용 기술
+### 💡 SSE를 이용한 실시간 알림
 
-### ◻ Swagger
-
-> 프론트엔드와 정확하고 원활한 소통을 위하여 스웨거를 도입하여 적용하였습니다.         
-> [Im Soolo Swagger](스웨거 주소 넣을 자리)
-
-
+> * 알림설명1
+> * 알림설명2
+> * 알림설명3
 
 
-### ◻ Github Actions (CI/CD)
+<details>
+<summary>미리보기</summary>
+<div markdown="1">
 
-> 자동 빌드/배포를 위하여 깃허브 액션을 활용하여 CI/CD 를 구축했습니다.         
-
-
-### ◻ Nginx (무중단배포)
-
-> 서비스 운영중 업데이트를 위한 재배포시 중단없는 서비스 제공을 위하여 Nginx 와 Shell Script를 활용해 무중단배포를 구현하였습니다.       
+![알림1](이미지 스냅샷 찍어서 주소 넣을 자리)
 
 
-### ◻ Redis
-
-> RefreshToken 등 소멸기간이 존재하는 데이터의 TimeToLive 관리를 용이하게 할 수 있도록 Redis를 도입하였습니다.
-> 채팅을 사용할 때 모든 메세지를 순간적으로 저장하지 않고 redis를 통해 일정량의 데이터가 쌓일때 저장을 해줌으로서 DB와의 트래픽 숫자를 줄여주었습니다.
+ <br>
+</div>
+</details>
 
 <br><br>
 
+## 🛠️ Trouble Shooting
 
-
-
-## 🚨 Trouble Shooting
-
-#### 이건 같이 씁시다.
+#### 트러블슈팅
 
 <br><br>
 
@@ -187,18 +189,18 @@
 
 <br><br>
 
-## 🍻 Architecture
+## 📐 Architecture
 
-![hh99_14_7_MVP](아키텍쳐 주소 넣을 )
-
-<br>
-
-## [🍻 ERD Diagram](ERD 주소 넣을곳 ( 채팅 관련 ERD도 함께 넣어야 할듯 ))
-
+![나는 Soolo](https://github.com/HH14RS7/SOOLO-FE/assets/128359222/2faafc0d-5ce6-4fe1-96fd-5079bc233946)
 
 <br>
 
-## 📝 Technologies & Tools (FE) 📝
+## 🧮 ERD Diagram
+
+
+<br>
+
+## 🎮 Tools
 
 <div>
   <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white"/>
@@ -226,7 +228,9 @@
 
 </div>
 
-Email : soolo.official7@gmail.com
+<br>
+
+Email : soolo.official7@gmail.com<br>
 Instagram : @soolo_official_
 
 <br>
