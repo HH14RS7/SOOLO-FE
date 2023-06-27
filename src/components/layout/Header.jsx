@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
-import { EventSourcePolyfill } from 'event-source-polyfill';
-import { useEffect } from 'react';
 import { PATH_URL } from '../../shared/constants';
-import Cookies from 'js-cookie';
 
 // 클라이언트 데터 관리
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { noticeState } from '../../atoms';
-import { sse } from '../../atoms';
 
 // 이미지 import
 import { ReactComponent as Logo } from '../../assets/header/logo.svg';

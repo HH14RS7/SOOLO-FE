@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import { useEffect } from 'react';
-import { PATH_URL } from '../shared/constants';
 import Cookies from 'js-cookie';
 
 // 클라이언트 데터 관리
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { sse } from '../atoms';
 
 // 이미지 import
 import { ReactComponent as WhiteAlarm } from '../assets/notice/whitebell.svg';
 
-export const Alram = ({ newNotice, setnewNotice }) => {
+export const Alram = () => {
   const navigate = useNavigate();
-
-  const [show, setShow] = useState(null);
 
   const accesskey = Cookies.get('Access_key');
 
@@ -120,8 +117,6 @@ export const Alram = ({ newNotice, setnewNotice }) => {
         setNewNotice(null);
       }, 3000);
     }
-    console.log('Notice return ::', Notice);
-    console.log('Notice type', typeof Notice);
   }, [Notice]);
 
   // console.log('Notice ::', Notice);
@@ -129,7 +124,7 @@ export const Alram = ({ newNotice, setnewNotice }) => {
   return (
     <>
       {Notice && (
-        <div>
+        <Background>
           <SnackBar
             onClick={() => {
               navigate('/notice');
@@ -138,7 +133,7 @@ export const Alram = ({ newNotice, setnewNotice }) => {
             <WhiteAlarm />
             <AlarmText>새로운 알림이 있습니다.</AlarmText>
           </SnackBar>
-        </div>
+        </Background>
       )}
     </>
   );

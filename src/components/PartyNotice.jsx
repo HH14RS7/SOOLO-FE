@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
@@ -16,6 +16,8 @@ import { MEMBER_URL, PATH_URL } from '../shared/constants';
 
 export const PartyNotice = () => {
   const navigate = useNavigate();
+
+  const [isExitModalOpen, setIsExitModalOpen] = useState(false);
 
   const setNotice = useSetRecoilState(noticeState);
   const NoticeData = useRecoilValue(noticeState);
@@ -38,17 +40,22 @@ export const PartyNotice = () => {
 
   console.log('부재중 알림 ::', NoticeData);
 
+  const DeleteButtonHandler = event => {
+    event.stopPropagation();
+    setIsExitModalOpen(true);
+  };
+
+  const ExitcloseModal = () => {
+    setIsExitModalOpen(false);
+  };
+
+  const DeleteAlram = () => {};
+
   return (
     <>
       <Background>
         <Contents>
-          <div
-            style={{
-              width: '360px',
-              // height: '100%',
-              paddingBottom: '70px',
-            }}
-          >
+          <Container>
             <Topbar>
               <TopBackDiv
                 style={{
@@ -64,30 +71,36 @@ export const PartyNotice = () => {
             {NoticeData?.map((notice, i) => {
               if (notice.noticeCode === 2 && notice.accepted) {
                 return (
-                  <Link to={`${PATH_URL.PARTY_DETAIL}/${notice.partyId}`}>
-                    <NoticeContainer key={i}>
-                      <ImgDiv>
-                        <Alarm />
-                      </ImgDiv>
-                      <NoticeContents>
-                        <NoticeName>
-                          <NoticeOverName>{notice.partyTitle}</NoticeOverName> 모임이
-                          <ApprovalStatus>승인</ApprovalStatus> 되었습니다.
-                        </NoticeName>
-                        <NoticeText>
-                          승인 된 모임은 마이페이지 속 내가 신청한 모임 내에서 확인 가능합니다.
-                        </NoticeText>
-                        <NoticeTime>00시간 전</NoticeTime>
-                      </NoticeContents>
-                      <DeleteDiv>
-                        <Close
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                        />
-                      </DeleteDiv>
-                    </NoticeContainer>
-                  </Link>
+                  <NoticeContainer
+                    key={i}
+                    onClick={() => {
+                      navigate(`${PATH_URL.PARTY_DETAIL}/${notice.partyId}`);
+                    }}
+                  >
+                    <ImgDiv>
+                      <Alarm />
+                    </ImgDiv>
+                    <NoticeContents>
+                      <NoticeName>
+                        <NoticeOverName>{notice.partyTitle}</NoticeOverName> 모임이
+                        <ApprovalStatus>승인</ApprovalStatus> 되었습니다.
+                      </NoticeName>
+                      <NoticeText>
+                        승인 된 모임은 마이페이지 속 내가 신청한 모임 내에서 확인 가능합니다.
+                      </NoticeText>
+                      <NoticeTime>00시간 전</NoticeTime>
+                    </NoticeContents>
+                    <DeleteDiv>
+                      <Close
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                        onClick={event => {
+                          DeleteButtonHandler(event);
+                        }}
+                      />
+                    </DeleteDiv>
+                  </NoticeContainer>
                 );
               }
 
@@ -116,6 +129,9 @@ export const PartyNotice = () => {
                       <Close
                         style={{
                           cursor: 'pointer',
+                        }}
+                        onClick={event => {
+                          DeleteButtonHandler(event);
                         }}
                       />
                     </DeleteDiv>
@@ -163,6 +179,9 @@ export const PartyNotice = () => {
                         style={{
                           cursor: 'pointer',
                         }}
+                        onClick={event => {
+                          DeleteButtonHandler(event);
+                        }}
                       />
                     </DeleteDiv>
                   </HostContainer>
@@ -201,6 +220,9 @@ export const PartyNotice = () => {
                         style={{
                           cursor: 'pointer',
                         }}
+                        onClick={event => {
+                          DeleteButtonHandler(event);
+                        }}
                       />
                     </DeleteDiv>
                   </HostContainer>
@@ -208,69 +230,40 @@ export const PartyNotice = () => {
               }
               return null;
             })}
-
-            {/* <NoticeContainer>
-            <ImgDiv>
-              <Alarm />
-            </ImgDiv>
-            <NoticeContents>
-              <NoticeName>
-                <NoticeOverName>강남에서 술마실 사람</NoticeOverName> 모임이
-                <ApprovalStatus>승인</ApprovalStatus> 되었습니다.
-              </NoticeName>
-              <NoticeText>
-                승인 된 모임은 마이페이지 속 내가 신청한 모임 내에서 확인 가능합니다.
-              </NoticeText>
-              <NoticeTime>00시간 전</NoticeTime>
-            </NoticeContents>
-          </NoticeContainer>
-          <NoticeContainer>
-            <ImgDiv>
-              <Alarm />
-            </ImgDiv>
-            <NoticeContents>
-              <NoticeName>
-                <NoticeOverName>합정에서 와인파티</NoticeOverName> 모임이
-                <RefusalStatus>거절</RefusalStatus> 되었습니다.
-              </NoticeName>
-              <NoticeText>
-                거절 된 모임은 마이페이지 속 내가 신청한 모임 내에서 확인 가능합니다.
-              </NoticeText>
-              <NoticeTime>00시간 전</NoticeTime>
-            </NoticeContents>
-          </NoticeContainer>
-          <TimeContainer>
-            <ImgDiv>
-              <ComingAlarm />
-            </ImgDiv>
-            <TimeContents>
-              <NoticeName>
-                <NoticeOverName>합정에서 와인파티</NoticeOverName> 모임 시작까지
-                <RemainingTime>3시간</RemainingTime> 남았습니다.
-              </NoticeName>
-              <NoticeText>매너있는 즐거운 모임 되세요!</NoticeText>
-              <NoticeTime>00시간 전</NoticeTime>
-            </TimeContents>
-          </TimeContainer>
-          <HostContainer>
-            <ImgDiv>
-              <Email />
-            </ImgDiv>
-            <HostContents>
-              <HostDiv>
-                <HostImgDiv></HostImgDiv>
-                <HostText>
-                  <NoticeOverName>홍길동님</NoticeOverName>이
-                  <NoticeOverName>'홍대에서 밤새 술 마실 사람'</NoticeOverName>모임
-                </HostText>
-                <HostTexts>에 참여하기를 원합니다</HostTexts>
-              </HostDiv>
-              <HostTimeText>00분 전</HostTimeText>
-            </HostContents>
-          </HostContainer> */}
-          </div>
+          </Container>
         </Contents>
       </Background>
+      {isExitModalOpen && (
+        <div
+          style={{
+            width: '100vw',
+            height: '100vh',
+            background: 'none',
+            position: 'fixed',
+            top: 0,
+            zIndex: 13,
+          }}
+        >
+          <Modals>
+            <ExitContainer>
+              <ExitModal>
+                <ExitName>선택하신 알림을 삭제하시겠습니까?</ExitName>
+                <ExitText>삭제한 알림은 목록에서 지워집니다.</ExitText>
+                <ExitBtnDiv>
+                  <ExitCancel
+                    onClick={() => {
+                      ExitcloseModal();
+                    }}
+                  >
+                    취소
+                  </ExitCancel>
+                  <EixtBtn>삭제하기</EixtBtn>
+                </ExitBtnDiv>
+              </ExitModal>
+            </ExitContainer>
+          </Modals>
+        </div>
+      )}
     </>
   );
 };
@@ -286,6 +279,11 @@ const Contents = styled.div`
   width: 360px;
   margin: 0 auto;
   background: #f9fafb;
+`;
+
+const Container = styled.div`
+  width: 360px;
+  padding-bottom: 70px;
 `;
 
 // TopBar 스타일
@@ -491,4 +489,87 @@ const DeleteDiv = styled.div`
   position: absolute;
   right: 0px;
   top: 0px;
+`;
+
+//모달
+
+const Modals = styled.div`
+  position: fixed;
+  overflow: hidden;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: rgba(29, 41, 57, 0.5);
+  height: 100%;
+  z-index: 11;
+`;
+
+const ExitContainer = styled.div`
+  width: 100%;
+  /* height: 100%; */
+  top: 32vh;
+  /* display: inline-flex; */
+  display: flex;
+  position: absolute;
+`;
+
+const ExitModal = styled.div`
+  text-align: center;
+  margin: auto;
+  z-index: 100;
+  width: 327px;
+  height: 198px;
+  border-radius: 16px;
+  background: #fff;
+`;
+
+const ExitName = styled.div`
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 60px;
+`;
+
+const ExitText = styled.div`
+  font-size: 14px;
+  margin-top: 8px;
+`;
+
+const ExitBtnDiv = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 36px;
+`;
+
+const ExitCancel = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  color: #667085;
+  font-size: 12px;
+  font-weight: 600;
+  width: 140px;
+  height: 48px;
+  background: #fff;
+  border: 1.5px solid #667085;
+  border-radius: 12px;
+  cursor: pointer;
+`;
+
+const EixtBtn = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 12px;
+  width: 140px;
+  height: 48px;
+  background: #f63d68;
+  border-radius: 12px;
+  cursor: pointer;
 `;
