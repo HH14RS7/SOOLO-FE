@@ -1,7 +1,6 @@
 <br>
 
-
-<img src="https://github.com/HH14RS7/SOOLO-FE/assets/128359222/ff19bfbb-1288-44ab-8d09-f79e83c26343">
+<img src="https://github.com/HH14RS7/SOOLO-FE/assets/128359222/ff19bfbb-1288-44ab-8d09-f79e83c26343" alt="이미지 설명" style="width:100%;">
 
 <h2>
  <a href="https://im-soolo.com">나는 Soolo</a>
