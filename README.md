@@ -20,7 +20,7 @@
 <br> <br>
 
 📆 프로젝트 기간
-- 2023.05.19 ~ 2022.06.30
+- 2023.05.19 ~ 2023.06.30
 - [📕 나는 Soolo 노션](https://www.notion.so/Soolo-892498dcfca94515b5219fd4b12c144d)
 - [📄 나는 Soolo 원페이지 노션](https://www.notion.so/SOOLO-b1933d6109504c6199df60bb14b881a4)
 
