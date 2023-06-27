@@ -4,33 +4,90 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Loading from '../Loading';
 
+const JWT_EXPIRY_TIME = 3 * 60 * 60 * 1000;
+
 const NaverRedirection = () => {
   const code = window.location.search;
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.post(`${process.env.REACT_APP_REDIRECT_URI}/naver/callback${code}`).then(r => {
-      console.log('data => ', r.data);
-      console.log('header => ', r.headers);
+    axios
+      .post(`${process.env.REACT_APP_REDIRECT_URI}/naver/callback${code}`)
+      .then(onLoginSuccess)
+      .catch(error => {
+        console.log(error);
+      });
+  }, [code]);
 
-      // 토큰을 받아서 localStorage에 저장하는 코드를 여기에 쓴다.
-      localStorage.setItem('memberId', r.data.data.memberId);
-      localStorage.setItem('memberUniqueId', r.data.data.memberUniqueId);
-      localStorage.setItem('memberName', r.data.data.memberName);
-      localStorage.setItem('profileImage', r.data.data.profileImage);
-      localStorage.setItem('sse', null);
-      // Access_key를 쿠키로 설정
-      const accessKey = r.headers.get('access_key').split(' ')[1];
-      Cookies.set('Access_key', accessKey);
+  const onSilentRefresh = async () => {
+    const refreshkey = 'Bearer ' + Cookies.get('Refresh_key');
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/reissue`,
+        { name: 'name' },
+        {
+          headers: {
+            Access_key: null,
+            Refresh_key: refreshkey,
+          },
+        },
+      );
+      onLoginRefresh();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-      // Refresh_key를 쿠키로 설정
-      const refreshkey = r.headers.get('refresh_key').split(' ')[1];
-      Cookies.set('Refresh_key', refreshkey);
+  const onLoginSuccess = response => {
+    // data을 받아서 localStorage에 저장.
+    localStorage.setItem('memberId', response.data.data.memberId);
+    localStorage.setItem('memberUniqueId', response.data.data.memberUniqueId);
+    localStorage.setItem('memberName', response.data.data.memberName);
+    localStorage.setItem('profileImage', response.data.data.profileImage);
+    localStorage.setItem('sse', null);
 
-      // alert(r.data.msg);
-      navigate('/');
-    });
-  }, [code, navigate]);
+    // access_key설정
+    const accessKey = response.headers.get('access_key').split(' ')[1];
+
+    // refresh_key설정
+    const refreshkey = response.headers.get('refresh_key').split(' ')[1];
+
+    Cookies.set('Access_key', accessKey);
+    Cookies.set('Refresh_key', refreshkey);
+
+    // access_key설정
+    // const accessKey = response.headers.get('access_key').split(' ')[1];
+    // axios.defaults.headers.common['Access_key'] = `Bearer ${accessKey}`;
+
+    // refresh_key설정
+    // const refreshkey = response.headers.get('refresh_key').split(' ')[1];
+    // Cookies.set('Refresh_key', refreshkey);
+
+    // accessToken 만료하기 1분 전에 로그인 연장
+    setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+    navigate('/home');
+  };
+
+  const onLoginRefresh = response => {
+    // access_key설정
+    const accessKey = response.headers.get('access_key').split(' ')[1];
+
+    // refresh_key설정
+    const refreshkey = response.headers.get('refresh_key').split(' ')[1];
+
+    Cookies.set('Access_key', accessKey);
+    Cookies.set('Refresh_key', refreshkey);
+    // access_key설정
+    // const accessKey = response.headers.get('access_key').split(' ')[1];
+    // axios.defaults.headers.common['Access_key'] = `Bearer ${accessKey}`;
+
+    // refresh_key설정
+    // const refreshkey = response.headers.get('refresh_key').split(' ')[1];
+    // Cookies.set('Refresh_key', refreshkey);
+
+    // accessToken 만료하기 1분 전에 로그인 연장
+    setTimeout(onSilentRefresh, JWT_EXPIRY_TIME - 60000);
+  };
 
   return <Loading />;
 };
