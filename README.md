@@ -120,7 +120,7 @@
 <summary>미리보기</summary>
 <div markdown="1">
 
-![실시간 채팅](이미지 스냅샷 찍어서 주소 넣을 자리)
+![채팅](https://github.com/HH14RS7/SOOLO-FE/assets/128359222/7e58b786-6961-4822-9602-c6244e537937)
 
  <br>
 </div>
