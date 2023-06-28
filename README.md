@@ -48,7 +48,7 @@
 <summary>미리보기</summary>
 <div markdown="1">
 
-![소셜로그인](이미지 스냅샷 찍어서 주소 넣을 자리)
+![소셜로그인](https://github.com/HH14RS7/SOOLO-FE/assets/128359222/7ffaf683-a760-462e-a109-21a06b22abef)
 
  <br>
 </div>
