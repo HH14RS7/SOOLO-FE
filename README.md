@@ -165,7 +165,7 @@
 
 #### 실시간 채팅 리렌더링 [WIKI보기](https://github.com/HH14RS7/SOOLO-FE/wiki/%5BTrouble-Shooting%5D-%EC%8B%A4%EC%8B%9C%EA%B0%84-%EC%B1%84%ED%8C%85-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84)
 
-#### 모임 검색 기능 리렌더링 [WIKI보기](https://github.com/HH14RS7/SOOLO-FE.wiki.git)
+#### 모임 검색 기능 리렌더링 [WIKI보기](https://github.com/HH14RS7/SOOLO-FE/wiki/%5BTrouble-Shooting%5D-%EB%AA%A8%EC%9E%84-%EC%A0%95%EB%B3%B4-%EA%B2%80%EC%83%89-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84)
 
 <br><br>
 
