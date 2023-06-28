@@ -31,7 +31,7 @@ export const Header = () => {
           <Link to="/">
             <Logo />
           </Link>
-          {NoticeData === null ? (
+          {NoticeData.length < 1 ? (
             <Bell
               style={{
                 cursor: 'pointer',
