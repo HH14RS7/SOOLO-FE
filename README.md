@@ -209,7 +209,7 @@
 
 <br>
 
-<h3>communication</h3>
+<h3>Communication</h3>
 <div>
  <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white"/>
  <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white"/>
