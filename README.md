@@ -47,8 +47,8 @@
 <details>
 <summary>미리보기</summary>
 <div markdown="1">
-
-![소셜로그인](https://github.com/HH14RS7/SOOLO-FE/assets/128359222/7ffaf683-a760-462e-a109-21a06b22abef)
+ 
+![소셜로그인](https://github.com/HH14RS7/SOOLO-FE/assets/128359222/2a92de94-0c62-45cd-bac7-f3f0f809a495)
 
  <br>
 </div>
