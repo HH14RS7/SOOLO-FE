@@ -32,6 +32,7 @@ export const Alram = () => {
   const isLogin = Cookies.get('Access_key');
   // let eventSource = undefined;
 
+  // sse 연결 여부
   const isSSE = localStorage.getItem('sse') === 'connect' ? true : false;
 
   useEffect(() => {
@@ -43,23 +44,23 @@ export const Alram = () => {
           headers: {
             Access_key: `Bearer ${accesskey}`,
             'Content-Type': 'text/event-stream',
-            Connection: 'Keep-Alive',
           },
+          withCredentials: true, //무조건 넣어야 함
           heartbeatTimeout: 3000000, //sse 연결 시간 (30분)
-          withCredentials: true,
         },
       );
 
       // sse 최초 연결되었을 때
       eventSource.onopen = event => {
+        console.log('SSE 연결완료');
         if (event.status === 200) {
           localStorage.setItem('sse', 'connect');
-          // setListening(true);
         }
       };
 
       // 서버에서 뭔가 날릴 때마다
       eventSource.onmessage = event => {
+        console.log('서버가 뭘줌', event);
         // 받은 데이터 Json타입으로 형변환 가능여부fn
         // console.log('여기 알림이요~~', event);
         const isJson = str => {
@@ -78,12 +79,7 @@ export const Alram = () => {
         };
         if (isJson(event.data)) {
           // 알림 리스트 (재요청하는 파트)
-          // setListening(!listening);
-          // setGotMessage(true);
-          // 실시간 알림 데이터
-          console.log('event ::', event.data);
           const obj = JSON.parse(event.data);
-          console.log('obj ::', obj);
           const result = obj[1].data;
           const data = JSON.parse(result);
           console.log(data);
@@ -92,8 +88,7 @@ export const Alram = () => {
       };
       // sse 에러
       eventSource.onerror = error => {
-        // localStorage.setItem('sse', null);
-        // console.log('error ::', error);
+        console.log('에러났음 ::', error);
         if (eventSource !== undefined) {
           eventSource.close();
           localStorage.setItem('sse', null);
@@ -108,7 +103,7 @@ export const Alram = () => {
     //     setListening(false);
     //   }
     // };
-  }, [isLogin]);
+  }, []);
 
   // 3초
   useEffect(() => {
