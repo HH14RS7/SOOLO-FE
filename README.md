@@ -111,22 +111,6 @@
 
 <br>
 
-### 📃 무한스크롤
-
-> * 페이지 이동없이 원활한 스크롤 경험
-
-<details>
-<summary>미리보기</summary>
-<div markdown="1">
-
-![무한스크롤](이미지 스냅샷 찍어서 주소 넣을 자리)
-
- <br>
-</div>
-</details>
-
-<br>
-
 ### 💬 WebSocket을 활용한 실시간 채팅
 
 > * 실시간 채팅을 웹소켓을 통해 빠르고 효과적인 채팅 경험
@@ -160,6 +144,22 @@
 </details>
 
 <br><br>
+
+### 📃 무한스크롤
+
+> * 페이지 이동없이 원활한 스크롤 경험
+
+<details>
+<summary>미리보기</summary>
+<div markdown="1">
+
+![무한스크롤](이미지 스냅샷 찍어서 주소 넣을 자리)
+
+ <br>
+</div>
+</details>
+
+<br>
 
 ## 🛠️ Trouble Shooting
 
