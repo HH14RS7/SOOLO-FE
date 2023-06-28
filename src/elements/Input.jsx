@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import styled from 'styled-components';
 
-import { Grid } from '../elements';
+import { Grid } from '.';
 
 const Input = forwardRef((props, ref) => {
   const {
