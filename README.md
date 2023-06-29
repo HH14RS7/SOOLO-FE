@@ -155,6 +155,12 @@
 |:------------------------------------------------------------------------------------------------------------------------------:|
 | <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/f964c82c-9b29-4a62-80be-4445aca2d71f"/> |
 
+
+![실시간알림](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/c631ec01-edb9-4fc3-ab40-e8342a848d57)
+![(주최자)승인요청알림](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/bf0d72b6-e9a9-4949-aae9-6fa3bb692502)
+![(신청자)승인거절알림확인](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/7c6e79f5-99e8-4393-9341-bc2b8e8c7d16)
+
+
  <br>
 </div>
 </details>
