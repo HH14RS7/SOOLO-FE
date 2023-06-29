@@ -92,13 +92,11 @@
 <summary>미리보기</summary>
 <div markdown="1">
 
-![내가신청한모임](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/f71880d0-8d4b-4140-8d6f-80cf706fb52b)
-![내가개설한모임](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/6290d293-55a7-44f0-95cf-22cbaa3a4838)
-![계정정보](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/ca8c1a4a-6cbf-4f5c-9cff-979d66d64339)
-
-![들어온승인요청](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/8d92c751-99b4-4859-bfad-170608be7270)
-![마이페이지수정](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/b89d64e8-6a6b-4735-8b53-833b8e04beae)
-![상대프로필조회](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/40594fad-2f5a-4a90-8c29-5acd96a95a1b)
+|                                                             내가 신청한 모임                                                             |                                                            내가 개설한 모임                                                             |                                                                        계정 정보                                                             |
+|:------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|
+| <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/f71880d0-8d4b-4140-8d6f-80cf706fb52b"/> | <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/6290d293-55a7-44f0-95cf-22cbaa3a4838"/> |   <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/ca8c1a4a-6cbf-4f5c-9cff-979d66d64339"/> |  
+|                                                           들어온 승인 요청                                                           |                                                           마이페이지 수정                                                           |상대 프로필 조회
+| <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/8d92c751-99b4-4859-bfad-170608be7270"/> | <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/b89d64e8-6a6b-4735-8b53-833b8e04beae"/> |  <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/40594fad-2f5a-4a90-8c29-5acd96a95a1b"/> |  
 
  <br>
 </div>
@@ -115,7 +113,9 @@
 <summary>미리보기</summary>
 <div markdown="1">
 
-![신고 기능](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/a0616030-9811-482e-93b3-87a33d39c56e)
+|                                                             신고 기능                                                            |
+|:------------------------------------------------------------------------------------------------------------------------------:|
+| <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/a0616030-9811-482e-93b3-87a33d39c56e"/> |
 
  <br>
 </div>
@@ -132,7 +132,9 @@
 <summary>미리보기</summary>
 <div markdown="1">
 
-![채팅](https://github.com/HH14RS7/SOOLO-FE/assets/128359222/7e58b786-6961-4822-9602-c6244e537937)
+|                                                             채팅                                                            |
+|:------------------------------------------------------------------------------------------------------------------------------:|
+| <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/128359222/7e58b786-6961-4822-9602-c6244e537937"/> |
 
  <br>
 </div>
@@ -149,7 +151,9 @@
 <summary>미리보기</summary>
 <div markdown="1">
 
-![알림](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/f964c82c-9b29-4a62-80be-4445aca2d71f)
+|                                                             알림                                                            |
+|:------------------------------------------------------------------------------------------------------------------------------:|
+| <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/f964c82c-9b29-4a62-80be-4445aca2d71f"/> |
 
  <br>
 </div>
@@ -165,7 +169,9 @@
 <summary>미리보기</summary>
 <div markdown="1">
 
-![무한스크롤](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/a05aab6f-5cbc-4dcb-818c-e7f8c6bd0eb8)
+|                                                             무한스크롤                                                            |
+|:------------------------------------------------------------------------------------------------------------------------------:|
+| <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/a05aab6f-5cbc-4dcb-818c-e7f8c6bd0eb8"/> |
 
  <br>
 </div>
