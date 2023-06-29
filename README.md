@@ -68,13 +68,15 @@
 <summary>미리보기</summary>
 <div markdown="1">
  
-![모임생성](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/8ae9db22-26fb-446f-af52-d12e90e627cb)
+![모임생성](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/755cef08-65b1-499d-a1b3-754721e8fa6d)
 
 ![위치키워드검색](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/fcf97c07-5dd7-4ecf-a347-c7bcf074fff0)
 ![현재위치로찾기](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/d877205d-565b-4739-b312-6bea3def8964)
 ![같은장소마커클릭](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/98ddbca0-963f-4023-9f20-dc8c16d5bdaa)
 
 ![모임상세보기](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/ffcf26e0-eb0c-4566-bd15-33c591ec24e3)
+
+![모임신청](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/39a1ae38-18ad-4ae5-935a-3456755c1d3e)
 
  <br>
 </div>
