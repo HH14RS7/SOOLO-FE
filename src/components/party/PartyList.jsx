@@ -56,8 +56,6 @@ const PartyList = () => {
     queryClient.invalidateQueries('getPartyList');
   }, [recruitmentStatus, queryClient]);
 
-  useEffect(() => {}, [partyList]);
-
   useEffect(() => {
     if (inView) {
       fetchNextPage();
