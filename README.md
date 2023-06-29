@@ -47,8 +47,10 @@
 <details>
 <summary>미리보기</summary>
 <div markdown="1">
- 
-![소셜로그인](https://github.com/HH14RS7/SOOLO-FE/assets/128359222/2a92de94-0c62-45cd-bac7-f3f0f809a495)
+
+|                                                             로그인                                                             |
+|:------------------------------------------------------------------------------------------------------------------------------:|
+| <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/128359222/2a92de94-0c62-45cd-bac7-f3f0f809a495"/> |
 
  <br>
 </div>
@@ -67,16 +69,12 @@
 <details>
 <summary>미리보기</summary>
 <div markdown="1">
- 
-![모임생성](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/755cef08-65b1-499d-a1b3-754721e8fa6d)
 
-![위치키워드검색](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/fcf97c07-5dd7-4ecf-a347-c7bcf074fff0)
-![현재위치로찾기](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/d877205d-565b-4739-b312-6bea3def8964)
-![같은장소마커클릭](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/98ddbca0-963f-4023-9f20-dc8c16d5bdaa)
-
-![모임상세보기](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/ffcf26e0-eb0c-4566-bd15-33c591ec24e3)
-
-![모임신청](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/39a1ae38-18ad-4ae5-935a-3456755c1d3e)
+|                                                             모임 생성                                                             |                                                            모임 상세보기                                                             |                                                                        모임 신청                                                             |
+|:------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------:|
+| <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/755cef08-65b1-499d-a1b3-754721e8fa6d"/> | <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/ffcf26e0-eb0c-4566-bd15-33c591ec24e3"/> |   <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/39a1ae38-18ad-4ae5-935a-3456755c1d3e"/> |  
+|                                                           위치 키워드 검색                                                           |                                                           현재 위치로 찾기                                                           |같은 장소 마커 클릭
+| <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/fcf97c07-5dd7-4ecf-a347-c7bcf074fff0"/> | <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/d877205d-565b-4739-b312-6bea3def8964"/> |  <img width="180" src="https://github.com/HH14RS7/SOOLO-FE/assets/38846447/98ddbca0-963f-4023-9f20-dc8c16d5bdaa"/> |  
 
  <br>
 </div>
