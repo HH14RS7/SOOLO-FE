@@ -189,7 +189,7 @@
 
 ## 📐 Architecture
 
-![나는 Soolo](https://github.com/HH14RS7/SOOLO-FE/assets/128359222/2faafc0d-5ce6-4fe1-96fd-5079bc233946)
+![나는 Soolo](https://github.com/HH14RS7/SOOLO-BE/assets/127104678/21cbb996-464b-42fc-a611-e1950ea95e72)
 
 <br>
 
