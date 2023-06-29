@@ -26,7 +26,7 @@ const PartyList = () => {
     ({ pageParam = 0 }) => getPartyList({ pageParam, recruitmentStatus }),
     {
       getNextPageParam: lastPage => {
-        if (lastPage.totalElements < 20) {
+        if (lastPage.totalElements < 10) {
           return;
         } else {
           return lastPage.page + 1;
