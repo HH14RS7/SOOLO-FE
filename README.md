@@ -67,8 +67,14 @@
 <details>
 <summary>미리보기</summary>
 <div markdown="1">
+ 
+![모임생성](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/8ae9db22-26fb-446f-af52-d12e90e627cb)
 
-![내가개설한모임](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/6290d293-55a7-44f0-95cf-22cbaa3a4838)
+![위치키워드검색](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/fcf97c07-5dd7-4ecf-a347-c7bcf074fff0)
+![현재위치로찾기](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/d877205d-565b-4739-b312-6bea3def8964)
+![같은장소마커클릭](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/98ddbca0-963f-4023-9f20-dc8c16d5bdaa)
+
+![모임상세보기](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/ffcf26e0-eb0c-4566-bd15-33c591ec24e3)
 
  <br>
 </div>
@@ -85,6 +91,10 @@
 <details>
 <summary>미리보기</summary>
 <div markdown="1">
+
+![내가신청한모임](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/f71880d0-8d4b-4140-8d6f-80cf706fb52b)
+![내가개설한모임](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/6290d293-55a7-44f0-95cf-22cbaa3a4838)
+![계정정보](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/ca8c1a4a-6cbf-4f5c-9cff-979d66d64339)
 
 ![상대프로필조회](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/40594fad-2f5a-4a90-8c29-5acd96a95a1b)
 
@@ -137,7 +147,7 @@
 <summary>미리보기</summary>
 <div markdown="1">
 
-![알림](이미지 스냅샷 찍어서 주소 넣을 자리)
+![알림](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/f964c82c-9b29-4a62-80be-4445aca2d71f)
 
  <br>
 </div>
@@ -153,7 +163,7 @@
 <summary>미리보기</summary>
 <div markdown="1">
 
-![무한스크롤](이미지 스냅샷 찍어서 주소 넣을 자리)
+![무한스크롤](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/a05aab6f-5cbc-4dcb-818c-e7f8c6bd0eb8)
 
  <br>
 </div>
