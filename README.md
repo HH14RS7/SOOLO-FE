@@ -96,6 +96,7 @@
 ![내가개설한모임](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/6290d293-55a7-44f0-95cf-22cbaa3a4838)
 ![계정정보](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/ca8c1a4a-6cbf-4f5c-9cff-979d66d64339)
 
+![마이페이지수정](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/b89d64e8-6a6b-4735-8b53-833b8e04beae)
 ![상대프로필조회](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/40594fad-2f5a-4a90-8c29-5acd96a95a1b)
 
  <br>
