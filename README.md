@@ -68,7 +68,7 @@
 <summary>미리보기</summary>
 <div markdown="1">
 
-![지도](이미지 스냅샷 찍어서 주소 넣을 자리)
+![내가개설한모임](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/6290d293-55a7-44f0-95cf-22cbaa3a4838)
 
  <br>
 </div>
@@ -86,7 +86,7 @@
 <summary>미리보기</summary>
 <div markdown="1">
 
-![마이페이지](이미지 스냅샷 찍어서 주소 넣을 자리)
+![상대프로필조회](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/40594fad-2f5a-4a90-8c29-5acd96a95a1b)
 
  <br>
 </div>
@@ -103,7 +103,7 @@
 <summary>미리보기</summary>
 <div markdown="1">
 
-![신고 기능](이미지 스냅샷 찍어서 주소 넣을 자리)
+![신고 기능](https://github.com/HH14RS7/SOOLO-FE/assets/38846447/a0616030-9811-482e-93b3-87a33d39c56e)
 
  <br>
 </div>
