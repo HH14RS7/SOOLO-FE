@@ -10,7 +10,7 @@ export const socketConnect = (subscribe, publish) => {
       Access_key: `Bearer ${accesskey}`,
     },
     debug: function (str) {
-      console.log('str ::', str);
+      // console.log('str ::', str);
     },
     onConnect: () => {
       subscribe();

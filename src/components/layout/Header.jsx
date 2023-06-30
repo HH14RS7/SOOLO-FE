@@ -17,7 +17,6 @@ export const Header = () => {
 
   // 종 테스트
   const NoticeData = useRecoilValue(noticeState);
-  console.log('NoticeData ::', NoticeData);
 
   // 알림 페이지로 이동
   const bellbuttonHandler = () => {
