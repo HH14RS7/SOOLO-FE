@@ -15,9 +15,7 @@ const KakaoRedirection = () => {
     axios
       .post(`${process.env.REACT_APP_REDIRECT_URI}/kakao/callback${code}`)
       .then(onLoginSuccess)
-      .catch(error => {
-        console.log(error);
-      });
+      .catch(error => {});
   }, [code]);
 
   const onSilentRefresh = async () => {
@@ -34,9 +32,7 @@ const KakaoRedirection = () => {
         },
       );
       onLoginRefresh();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const onLoginSuccess = response => {

@@ -34,9 +34,7 @@ export const PartyDetailInfo = () => {
           setData(response.data.data);
         }
       })
-      .catch(error => {
-        console.log('API 요청 중 에러 발생', error);
-      });
+      .catch(error => {});
   }, [partyId]);
 
   // 모임 취소
@@ -94,8 +92,6 @@ export const PartyDetailInfo = () => {
   const handleDetailClick = url => {
     window.open(url, '_blank');
   };
-
-  console.log(data);
 
   return (
     <>
