@@ -30,7 +30,7 @@ export const Header = () => {
           <Link to="/">
             <Logo />
           </Link>
-          {NoticeData.length < 1 ? (
+          {/* {NoticeData.length < 1 ? (
             <Bell
               style={{
                 cursor: 'pointer',
@@ -39,16 +39,16 @@ export const Header = () => {
                 bellbuttonHandler();
               }}
             />
-          ) : (
-            <NewAlarm
-              style={{
-                cursor: 'pointer',
-              }}
-              onClick={() => {
-                bellbuttonHandler();
-              }}
-            />
-          )}
+          ) : ( */}
+          <NewAlarm
+            style={{
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              bellbuttonHandler();
+            }}
+          />
+          {/* )} */}
         </Contents>
       </Background>
     </>
