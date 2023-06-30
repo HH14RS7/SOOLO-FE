@@ -80,67 +80,73 @@ export const ChatApprove = () => {
             </TopBackDiv>
             <TopbarName>들어온 승인 요청</TopbarName>
           </Topbar>
-          {data?.data?.data?.length > 0 ? (
-            data?.data?.data?.map((user, index) => (
-              <RequestContainer key={index}>
-                <Link to={`${PARTIES_URL.PARTIES_DETAIL}/${user.partyId}`}>
-                  <PartyName>
-                    <PartyIcon>
-                      <Location
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                        }}
-                      />
-                    </PartyIcon>
-                    {user.title}
-                  </PartyName>
-                </Link>
-                <RequestContents>
-                  <RequestImgDiv>
-                    <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${user.memberId}`}>
-                      <img
-                        src={user.memberProfileImage}
-                        alt="memberimg"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          borderRadius: '100%',
-                          objectFit: 'cover',
-                        }}
-                      />
-                    </Link>
-                  </RequestImgDiv>
-                  <RequestInfo>
-                    <RequestUserName>{user.memberName}</RequestUserName>
-                    <ExplainText>주량</ExplainText>
-                    <RequestUserAlcohol>{user.amountAlcohol || '미입력'}</RequestUserAlcohol>
-                    <ExplainText>신청한 이유</ExplainText>
-                    <RequestUserReason>{user.reason || '미입력'}</RequestUserReason>
-                  </RequestInfo>
-                </RequestContents>
-                <RequestDiv>
-                  <ApproveBtn onClick={() => handleReject(user.partyParticipateId)}>
-                    거절
-                  </ApproveBtn>
-                  <RejecBtn onClick={() => handleAccept(user.partyParticipateId)}>승인</RejecBtn>
-                </RequestDiv>
-              </RequestContainer>
-            ))
-          ) : (
-            <NoRequestContents>
-              <NoRequestDiv>
-                <LoadingIcon
-                  style={{
-                    margin: '0 auto',
-                    width: '48px',
-                    height: '48px',
-                  }}
-                />
-                <NoRequestText>들어온 승인요청이 없습니다.</NoRequestText>
-              </NoRequestDiv>
-            </NoRequestContents>
-          )}
+          <div
+            style={{
+              paddingBottom: '70px',
+            }}
+          >
+            {data?.data?.data?.length > 0 ? (
+              data?.data?.data?.map((user, index) => (
+                <RequestContainer key={index}>
+                  <Link to={`${PARTIES_URL.PARTIES_DETAIL}/${user.partyId}`}>
+                    <PartyName>
+                      <PartyIcon>
+                        <Location
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                          }}
+                        />
+                      </PartyIcon>
+                      {user.title}
+                    </PartyName>
+                  </Link>
+                  <RequestContents>
+                    <RequestImgDiv>
+                      <Link to={`${MEMBER_URL.TARGET_PAGE_GET}/${user.memberId}`}>
+                        <img
+                          src={user.memberProfileImage}
+                          alt="memberimg"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            borderRadius: '100%',
+                            objectFit: 'cover',
+                          }}
+                        />
+                      </Link>
+                    </RequestImgDiv>
+                    <RequestInfo>
+                      <RequestUserName>{user.memberName}</RequestUserName>
+                      <ExplainText>주량</ExplainText>
+                      <RequestUserAlcohol>{user.amountAlcohol || '미입력'}</RequestUserAlcohol>
+                      <ExplainText>신청한 이유</ExplainText>
+                      <RequestUserReason>{user.reason || '미입력'}</RequestUserReason>
+                    </RequestInfo>
+                  </RequestContents>
+                  <RequestDiv>
+                    <ApproveBtn onClick={() => handleReject(user.partyParticipateId)}>
+                      거절
+                    </ApproveBtn>
+                    <RejecBtn onClick={() => handleAccept(user.partyParticipateId)}>승인</RejecBtn>
+                  </RequestDiv>
+                </RequestContainer>
+              ))
+            ) : (
+              <NoRequestContents>
+                <NoRequestDiv>
+                  <LoadingIcon
+                    style={{
+                      margin: '0 auto',
+                      width: '48px',
+                      height: '48px',
+                    }}
+                  />
+                  <NoRequestText>들어온 승인요청이 없습니다.</NoRequestText>
+                </NoRequestDiv>
+              </NoRequestContents>
+            )}
+          </div>
         </Contents>
       </Background>
     </>
