@@ -33,9 +33,22 @@
 |[@chana](https://github.com/chana73)|[@JayB202](https://github.com/JayB202)|[@SHyun](https://github.com/seungheyon)|[@feeljoy](https://github.com/Cho-woo-pil)|[@Haribboo](https://github.com/Sejun0910)|[@jjin](https://github.com/devjjin)|[@sunwoo](https://github.com/Jeongsunwoo)|[@chloe_lee](https://glacier-lark-1e3.notion.site/79e5c03b671d4e19889b3d98f1def652?pvs=4)|
 |TL / BE|BE|BE|BE|VL / FE|FE|FE|DE|
 
-
 <br><br>
 
+## 🎮 기술 스택 선정 이유
+|요구사항|선택|선정 이유|
+|:------|:---|:---|
+|css library/framwork|Styled Component|컴포넌트 기반의 CSS-in-JS로 컴포넌트의 재사용성을 높이고, 안정적임|
+|서버 데이터 관리|React Query|클라이언트 상태를 분리하여 관리할 수 있기 때문에 직관적이고 효율적으로 비동기 데이터를 관리하며 자동으로 데이터 캐싱에 대한 컨트롤이 가능|
+|클라이언트 데이터 전역 상태 관리|Recoil|전역 상태 관리 라이브러리 중 비교적 소규모 프로젝트에 사용하기 적합하며 간결함|
+|Web socket을 활용한 채팅 기능|Stomp client|메시지 중심의 실시간 통신을 위한 가벼운 프로토콜이며, 다양한 플랫폼과 언어에서 사용할 수 있으며, 다양한 메시징 시스템과의 통합이 가능하다는 장점|
+|클라이언트 서버 배포를 위한 도구|Vercel|github와 통합한 자동화된 CI/CD를 지원하며 자동배포 및 비용적인 측면과 환경설정 등에 있어 우수함|
+|알림 기능|SSE|경량화된 폴리필로서 필요한 최소한의 기능만을 제공하여 불필요한 코드의 부담을 줄이고 웹 애플리케이션의 성능을 향상시킴|
+|소셜 로그인|kakao, naver|온라인 서비스 이용 시 불편했던 회원 가입 및 로그인 과정을 대폭 간소화 시켜줘 간단하고 편리하게 회원가입 가능|
+|지도 API|kakao map|키워드, 카테고리, 행정구역 등 다양한 검색 기능 제공<br>도로, 건물, 지리적 특징 등 다양한 정보가 포함되어 있어 사용자에게 실용적인 지도 서비스를 제공함|
+
+
+<br><br>
 
 ## 🕹️ 프로젝트 기능
 
