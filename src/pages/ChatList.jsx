@@ -38,9 +38,7 @@ export const ChatList = () => {
       connectHeaders: {
         Access_key: `Bearer ${accesskey}`,
       },
-      debug: function (str) {
-        // console.log(str);
-      },
+      debug: function () {},
       onConnect: () => {
         const subscription = client.subscribe(
           `/sub/chat/chatList/${localStorage.memberUniqueId}`,

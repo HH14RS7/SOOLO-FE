@@ -46,7 +46,6 @@ export const PartyNotice = () => {
   useEffect(() => {
     if (data) {
       setNotice(data?.data?.data?.absenceNoticeDtoList);
-      // console.log('data ::', data);
     }
   }, [data]);
 
@@ -57,8 +56,6 @@ export const PartyNotice = () => {
   if (error) {
     return <div>Error : {error.message}</div>;
   }
-
-  console.log('부재중 알림 ::', NoticeData);
 
   const DeleteButtonHandler = (event, noticeId) => {
     event.stopPropagation();
@@ -78,8 +75,6 @@ export const PartyNotice = () => {
   const AlramReadHandler = noticeId => {
     AlramRead.mutate(noticeId);
   };
-
-  console.log(noticeNumber);
 
   return (
     <>

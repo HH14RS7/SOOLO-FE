@@ -14,9 +14,7 @@ const NaverRedirection = () => {
     axios
       .post(`${process.env.REACT_APP_REDIRECT_URI}/naver/callback${code}`)
       .then(onLoginSuccess)
-      .catch(error => {
-        console.log(error);
-      });
+      .catch(error => {});
   }, [code]);
 
   const onSilentRefresh = async () => {
@@ -33,9 +31,7 @@ const NaverRedirection = () => {
         },
       );
       onLoginRefresh();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const onLoginSuccess = response => {

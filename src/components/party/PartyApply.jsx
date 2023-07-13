@@ -72,7 +72,6 @@ export const PartyApply = () => {
     //     alert(response.data.msg);
     //     navigate(`${PATH_URL.PARTY_DETAIL}/${partyId}`);
     //   })
-    //   .catch(e => console.log('e ::', e));
   };
 
   return (

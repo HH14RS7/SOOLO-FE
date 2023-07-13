@@ -4,7 +4,6 @@ export default function useIntersection(callback, options) {
   const observer = useRef(
     new IntersectionObserver((entries, observer) => {
       entries.forEach(entry => {
-        console.log('닿아니', entry.isIntersecting);
         if (entry.isIntersecting) {
           callback();
         }

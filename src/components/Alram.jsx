@@ -52,7 +52,6 @@ export const Alram = () => {
 
       // sse 최초 연결되었을 때
       eventSource.onopen = event => {
-        console.log('SSE 연결완료');
         if (event.status === 200) {
           localStorage.setItem('sse', 'connect');
         }
@@ -60,15 +59,10 @@ export const Alram = () => {
 
       // 서버에서 뭔가 날릴 때마다
       eventSource.onmessage = event => {
-        console.log('서버가 뭘줌', event);
         // 받은 데이터 Json타입으로 형변환 가능여부fn
-        // console.log('여기 알림이요~~', event);
         const isJson = str => {
           try {
             const json = JSON.parse(str);
-            // console.log('jsonType', typeof json);
-            // console.log('json ::::::::', json);
-            // console.log('json[1].data :::::::: ', json[1].data);
             const message = json[1].data;
             if (!message.includes('connection is open')) {
               return json && typeof json === 'object';
@@ -82,13 +76,11 @@ export const Alram = () => {
           const obj = JSON.parse(event.data);
           const result = obj[1].data;
           const data = JSON.parse(result);
-          console.log(data);
           setNewNotice(data);
         }
       };
       // sse 에러
       eventSource.onerror = error => {
-        console.log('에러났음 ::', error);
         if (eventSource !== undefined) {
           eventSource.close();
           localStorage.setItem('sse', null);
@@ -113,8 +105,6 @@ export const Alram = () => {
       }, 3000);
     }
   }, [Notice]);
-
-  // console.log('Notice ::', Notice);
 
   return (
     <>
