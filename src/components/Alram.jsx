@@ -60,13 +60,9 @@ export const Alram = () => {
       // 서버에서 뭔가 날릴 때마다
       eventSource.onmessage = event => {
         // 받은 데이터 Json타입으로 형변환 가능여부fn
-        // console.log('여기 알림이요~~', event);
         const isJson = str => {
           try {
             const json = JSON.parse(str);
-            // console.log('jsonType', typeof json);
-            // console.log('json ::::::::', json);
-            // console.log('json[1].data :::::::: ', json[1].data);
             const message = json[1].data;
             if (!message.includes('connection is open')) {
               return json && typeof json === 'object';
@@ -109,8 +105,6 @@ export const Alram = () => {
       }, 3000);
     }
   }, [Notice]);
-
-  // console.log('Notice ::', Notice);
 
   return (
     <>

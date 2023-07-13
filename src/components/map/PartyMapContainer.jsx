@@ -49,7 +49,6 @@ const PartyMapContainer = ({ searchPlace, onPlaceChange }) => {
       const response = await getAPI(url);
       return response.data.data.partyList;
     } catch (error) {
-      // console.error('조회실패', error);
       return [];
     }
   };

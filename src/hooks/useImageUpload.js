@@ -49,7 +49,6 @@ const useImageUpload = (isComp = true, imgMaxSize = 0.5, imgMaxWidthHeight = 420
           const newFile = new File([compressedFile], file.name, {
             type: `image/${fileType}`,
           });
-          console.log(newFile);
           setImg(newFile);
           encodeFile(newFile);
         });
