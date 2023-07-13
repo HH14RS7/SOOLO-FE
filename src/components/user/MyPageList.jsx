@@ -35,7 +35,6 @@ export const MyPageList = () => {
   });
 
   const user = data?.data?.data;
-  // console.log('mydata 확인 => ', data?.data?.data);
 
   const logoutHandler = () => {
     mutation.mutate();

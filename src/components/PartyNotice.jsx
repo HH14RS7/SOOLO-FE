@@ -46,7 +46,6 @@ export const PartyNotice = () => {
   useEffect(() => {
     if (data) {
       setNotice(data?.data?.data?.absenceNoticeDtoList);
-      // console.log('data ::', data);
     }
   }, [data]);
 

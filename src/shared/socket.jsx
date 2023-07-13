@@ -9,9 +9,7 @@ export const socketConnect = (subscribe, publish) => {
     connectHeaders: {
       Access_key: `Bearer ${accesskey}`,
     },
-    debug: function (str) {
-      // console.log('str ::', str);
-    },
+    debug: function () {},
     onConnect: () => {
       subscribe();
       publish();
