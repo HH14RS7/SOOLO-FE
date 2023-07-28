@@ -18,7 +18,7 @@ import { useInView } from 'react-intersection-observer';
 import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 import { ReactComponent as RoomMenuIcon } from '../../assets/chating/chatroommenu.svg';
 import { ReactComponent as ChatSendIcon } from '../../assets/chating/chatsend.svg';
-import { ReactComponent as NavigateExitIcon } from '../../assets/chating/NavigateExit.svg';
+import { ReactComponent as NavigateExitIcon } from '../../assets/chating/navigateExit.svg';
 import { ReactComponent as PartHostIcon } from '../../assets/chating/hosticon.svg';
 import { ReactComponent as ProfileDefaultImg } from '../../assets/common/profiledefaultimg.svg';
 

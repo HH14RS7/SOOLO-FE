@@ -4,9 +4,9 @@ import { PARTIES_URL, PATH_URL } from '../../shared/constants';
 import styled from 'styled-components';
 
 // 이미지 import
-import { ReactComponent as ApproveBack } from '../../assets/party/partyapproveX.svg';
+import { ReactComponent as ApproveBack } from '../../assets/common/close.svg';
 import { ReactComponent as Check } from '../../assets/party/approvecheck.svg';
-import { ReactComponent as Warning } from '../../assets/party/reporticon.svg';
+import { ReactComponent as Warning } from '../../assets/common/information.svg';
 import queryString from 'query-string';
 import { postAPI } from '../../api/api';
 
