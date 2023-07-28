@@ -5,7 +5,7 @@ import MyPartyItem from './MyPartyItem';
 import { styled } from 'styled-components';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination } from 'swiper';
-import Loading from '../Loading';
+import Loading from '../common/Loading';
 
 import 'swiper/css';
 import 'swiper/css/navigation';

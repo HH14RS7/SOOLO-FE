@@ -8,7 +8,7 @@ import { ReactComponent as Backicon } from '../../assets/userprofile/back.svg';
 import { ReactComponent as Dot } from '../../assets/common/dot.svg';
 import { ReactComponent as Report } from '../../assets/userprofile/report.svg';
 import { Link } from 'react-router-dom';
-import Loading from '../Loading';
+import Loading from '../common/Loading';
 
 export const UserProfileInfo = () => {
   const { id: memberId } = useParams();

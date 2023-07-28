@@ -5,7 +5,7 @@ import { styled } from 'styled-components';
 import { useMutation, useQuery } from 'react-query';
 import { getAPI, postAPI } from '../../api/api';
 import { MEMBER_URL } from '../../shared/constants';
-import Loading from '../Loading';
+import Loading from '../common/Loading';
 import { ReactComponent as Frame } from '../../assets/userprofile/Frame.svg';
 import { ReactComponent as Frame4033 } from '../../assets/userprofile/Frame4033.svg';
 import { ReactComponent as ReportButton1 } from '../../assets/userprofile/ReportButton1.svg';

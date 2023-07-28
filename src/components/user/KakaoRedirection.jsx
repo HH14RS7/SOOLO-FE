@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Loading from '../Loading';
+import Loading from '../common/Loading';
 import crypto from 'crypto-js';
 
 const JWT_EXPIRY_TIME = 3 * 60 * 60 * 1000;

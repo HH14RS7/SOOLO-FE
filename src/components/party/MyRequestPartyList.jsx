@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { styled } from 'styled-components';
 import Default from '../user/Default';
 import { ReactComponent as Frame4152 } from '../../assets/mypage/Frame4152.svg';
-import Loading from '../Loading';
+import Loading from '../common/Loading';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Backicon } from '../../assets/userprofile/back.svg';
 

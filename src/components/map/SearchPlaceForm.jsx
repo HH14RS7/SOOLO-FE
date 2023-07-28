@@ -4,7 +4,7 @@ import SearchPlaceList from './SearchPlaceList';
 import useGeolocation from '../../hooks/useGeolocation';
 import { styled } from 'styled-components';
 import { Toggle } from '../../elements/Toggle';
-import Loading from '../../components/Loading';
+import Loading from '../common/Loading';
 import { Link } from 'react-router-dom';
 import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
 

@@ -15,7 +15,7 @@ import { ReactComponent as Overlay } from '../../assets/map/overlay.svg';
 import { ReactComponent as OverlayArrow } from '../../assets/map/overlay-arrow.svg';
 import { ReactComponent as Add } from '../../assets/map/add.svg';
 import { ReactComponent as Subtract } from '../../assets/map/subtract.svg';
-import Loading from '../Loading';
+import Loading from '../common/Loading';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
