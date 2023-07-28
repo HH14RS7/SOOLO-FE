@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Splash from '../components/common/Splash';
-import Walkthrough from '../components/common/Walkthrough';
+import Splash from '../components/splash/Splash';
+import Walkthrough from '../components/splash/Walkthrough';
 import { styled } from 'styled-components';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
