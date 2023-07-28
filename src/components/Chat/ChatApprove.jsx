@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 // 이미지 import
 import { ReactComponent as Location } from '../../assets/map/location-line.svg';
 import { ReactComponent as LoadingIcon } from '../../assets/chating/noapprove.svg';
-import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
+import { ReactComponent as LeftBack } from '../../assets/chating/leftBack.svg';
 
 export const ChatApprove = () => {
   const navigate = useNavigate();

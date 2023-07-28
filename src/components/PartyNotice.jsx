@@ -6,13 +6,12 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { noticeState } from '../atoms';
 
 // 이미지 import
-import { ReactComponent as LeftBack } from '../assets/chating/LeftBack.svg';
+import { ReactComponent as LeftBack } from '../assets/chating/leftBack.svg';
 import { ReactComponent as Alarm } from '../assets/notice/alarm.svg';
 import { ReactComponent as Close } from '../assets/notice/close.svg';
 import { ReactComponent as NullAlram } from '../assets/notice/nullalram.svg';
 import { ReactComponent as Email } from '../assets/notice/email.svg';
 import { deleteAPI, getAPI, postAPI } from '../api/api';
-import { MEMBER_URL, PATH_URL } from '../shared/constants';
 
 export const PartyNotice = () => {
   const navigate = useNavigate();
