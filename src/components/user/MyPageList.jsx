@@ -5,7 +5,7 @@ import { deleteAPI, getAPI } from '../../api/api';
 import { styled } from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as UpdateIcon } from '../../assets/mypage/update.svg';
-import { ReactComponent as FrameIcon } from '../../assets/mypage/frame35.svg';
+import { ReactComponent as Dot } from '../../assets/common/dot.svg';
 import { ReactComponent as ListIcon } from '../../assets/mypage/listicon.svg';
 import { ReactComponent as Profile } from '../../assets/mypage/profile.svg';
 import Cookies from 'js-cookie';
@@ -65,7 +65,7 @@ export const MyPageList = () => {
                 <Name>{user?.memberName}</Name>
                 <Frame4010>
                   <Info>{user?.gender === 'male' ? <div>남</div> : <div>여</div>}</Info>
-                  <FrameIcon fill="white" />
+                  <DotIcon />
                   <Info>{user?.age}대</Info>
                 </Frame4010>
               </Frame4011>
@@ -459,4 +459,9 @@ const EixtBtn = styled.div`
   background: #f63d68;
   border-radius: 12px;
   cursor: pointer;
+`;
+
+const DotIcon = styled(Dot)`
+  fill: var(--color-white);
+  margin: auto 6px;
 `;

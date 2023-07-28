@@ -1,16 +1,16 @@
 import React from 'react';
 import { styled, keyframes } from 'styled-components';
+import { ReactComponent as Logo } from '../../assets/header/logo.svg';
 
 const Spalash = () => {
   const favicon = process.env.PUBLIC_URL + '/favicon.ico';
-  const logo = '/img/logo.png';
 
   return (
     <>
       <Container>
         <Images>
           <Favicon src={favicon} alt="favicon" />
-          <Logo src={logo} alt="logo" />
+          <LogoIcon />
         </Images>
         <Info>
           <Message>
@@ -53,12 +53,11 @@ const fadeIn = keyframes`
   }
 `;
 
-const Logo = styled.img`
+const LogoIcon = styled(Logo)`
   width: 52.05px;
   height: 18.25px;
   opacity: 0;
   animation: ${fadeIn} 2.5s ease-in-out;
-  // animation: fade-in 1s ease-in forwards, fade-out 4s 1s ease-out forwards;
 `;
 
 const Info = styled.div`
