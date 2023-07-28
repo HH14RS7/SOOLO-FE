@@ -7,10 +7,10 @@ import Cookies from 'js-cookie';
 
 // 클라이언트 데터 관리
 import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { sse } from '../atoms';
+import { sse } from '../../atoms';
 
 // 이미지 import
-import { ReactComponent as WhiteAlarm } from '../assets/notice/whitebell.svg';
+import { ReactComponent as WhiteAlarm } from '../../assets/notice/new-alarm.svg';
 
 export const Alram = () => {
   const navigate = useNavigate();
@@ -115,7 +115,11 @@ export const Alram = () => {
               navigate('/notice');
             }}
           >
-            <WhiteAlarm />
+            <WhiteAlarm
+              style={{
+                fill: 'white',
+              }}
+            />
             <AlarmText>새로운 알림이 있습니다.</AlarmText>
           </SnackBar>
         </Background>

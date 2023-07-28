@@ -1,5 +1,5 @@
 import React from 'react';
-import { PartyNotice } from '../components/PartyNotice';
+import { PartyNotice } from '../components/notice/PartyNotice';
 import Cookies from 'js-cookie';
 import LoginModal from '../components/LoginModal';
 

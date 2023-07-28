@@ -10,7 +10,7 @@ import { noticeState } from '../../atoms';
 // 이미지 import
 import { ReactComponent as Logo } from '../../assets/header/logo.svg';
 import { ReactComponent as Bell } from '../../assets/notice/alarm.svg';
-import { ReactComponent as NewAlarm } from '../../assets/header/alarm-new.svg';
+import { ReactComponent as NewAlarm } from '../../assets/notice/new-alarm.svg';
 
 export const Header = () => {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ export const Header = () => {
               }}
             />
           ) : (
-            <NewAlarm
+            <NewAlarms
               style={{
                 cursor: 'pointer',
               }}
@@ -56,6 +56,12 @@ export const Header = () => {
 };
 
 const BellIcon = styled(Bell)`
+  width: 24px;
+  height: 24px;
+`;
+
+const NewAlarms = styled(NewAlarm)`
+  fill: black;
   width: 24px;
   height: 24px;
 `;
