@@ -5,7 +5,7 @@ import HostPartyItem from './HostPartyItem';
 import { styled } from 'styled-components';
 import Default from '../user/Default';
 import { ReactComponent as DefaultIcon } from '../../assets/mypage/default2.svg';
-import Loading from '../Loading';
+import Loading from '../common/Loading';
 import { ReactComponent as Backicon } from '../../assets/userprofile/back.svg';
 import { useNavigate } from 'react-router-dom';
 

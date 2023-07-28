@@ -7,7 +7,7 @@ import Select, { components } from 'react-select';
 import { ReactComponent as ArrowBottom } from '../../assets/common/arrow-bottom.svg';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery, useQueryClient } from 'react-query';
-import Loading from '../Loading';
+import Loading from '../common/Loading';
 
 const PartyList = () => {
   const unionImg = './img/union.png';
