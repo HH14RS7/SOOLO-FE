@@ -2,7 +2,7 @@ import { styled } from 'styled-components';
 import KakaoLoginComponent from '../components/user/KakaoLoginComponent';
 import NaverLoginComponent from '../components/user/NaverLoginComponent';
 import SooloLoginComponent from '../components/user/SooloLoginComponent';
-import { ReactComponent as Sooloicon } from '../assets/loginpage/Sooloicon.svg';
+import { ReactComponent as Sooloicon } from '../assets/loginpage/sooloicon.svg';
 import { ReactComponent as Mainicon } from '../assets/loginpage/mainicon.svg';
 import { ReactComponent as Announcement } from '../assets/loginpage/announcement.svg';
 
