@@ -25,6 +25,7 @@ export const PATH_URL = {
 };
 
 export const MEMBER_URL = {
+  SIGNUP: '/member/signup',
   LOGIN: '/member/login',
   LOGOUT: '/member/logout',
   MYPAGE_GET: '/member/info',
