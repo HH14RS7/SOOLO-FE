@@ -9,7 +9,7 @@ import { noticeState } from '../../atoms';
 
 // 이미지 import
 import { ReactComponent as Logo } from '../../assets/header/logo.svg';
-import { ReactComponent as Bell } from '../../assets/header/bellicon.svg';
+import { ReactComponent as Bell } from '../../assets/notice/alarm.svg';
 import { ReactComponent as NewAlarm } from '../../assets/header/alarm-new.svg';
 
 export const Header = () => {
@@ -31,7 +31,7 @@ export const Header = () => {
             <Logo />
           </Link>
           {NoticeData.length < 1 ? (
-            <Bell
+            <BellIcon
               style={{
                 cursor: 'pointer',
               }}
@@ -54,6 +54,11 @@ export const Header = () => {
     </>
   );
 };
+
+const BellIcon = styled(Bell)`
+  width: 24px;
+  height: 24px;
+`;
 
 const Background = styled.div`
   display: flex;
