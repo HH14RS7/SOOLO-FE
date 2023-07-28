@@ -11,7 +11,7 @@ import LoginModal from '../components/LoginModal';
 
 // 이미지 import
 import { ReactComponent as PeopleIcon } from '../assets/chating/membericon.svg';
-import { ReactComponent as MenuIcon } from '../assets/chating/menuicons.svg';
+import { ReactComponent as MenuIcon } from '../assets/chating/chatroommenu.svg';
 import { ReactComponent as PartyDefaultImg } from '../assets/common/partydefaultimg.svg';
 import { ReactComponent as LoadingIcon } from '../assets/chating/loadingicon.svg';
 
