@@ -28,7 +28,7 @@ import WalkThroughPage from '../pages/WalkThroughPage';
 import { PartyRequestApprove } from '../pages/PartyRequestApprove';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { Notice } from '../pages/Notice';
-import { Alram } from '../components/Alram';
+import { Alram } from '../components/notice/Alram';
 
 const Router = () => {
   return (
