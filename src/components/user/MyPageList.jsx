@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as UpdateIcon } from '../../assets/mypage/update.svg';
 import { ReactComponent as Dot } from '../../assets/common/dot.svg';
 import { ReactComponent as ListIcon } from '../../assets/mypage/listicon.svg';
-import { ReactComponent as Profile } from '../../assets/mypage/profile.svg';
+import { ReactComponent as Profile } from '../../assets/common/profiledefaultimage.svg';
 import Cookies from 'js-cookie';
 
 export const MyPageList = () => {

@@ -7,7 +7,7 @@ import * as StompJs from '@stomp/stompjs';
 import styled from 'styled-components';
 import SockJS from 'sockjs-client';
 import Cookies from 'js-cookie';
-import LoginModal from '../components/LoginModal';
+import LoginModal from '../components/common/LoginModal';
 
 // 이미지 import
 import { ReactComponent as PeopleIcon } from '../assets/chating/membericon.svg';
