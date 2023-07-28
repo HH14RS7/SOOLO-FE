@@ -10,7 +10,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { sse } from '../../atoms';
 
 // 이미지 import
-import { ReactComponent as WhiteAlarm } from '../assets/notice/new-alarm.svg';
+import { ReactComponent as WhiteAlarm } from '../../assets/notice/new-alarm.svg';
 
 export const Alram = () => {
   const navigate = useNavigate();
