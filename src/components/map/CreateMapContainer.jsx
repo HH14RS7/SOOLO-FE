@@ -5,7 +5,7 @@ import { PATH_URL } from '../../shared/constants';
 import marker from '../../assets/map/marker.svg';
 import { ReactComponent as Add } from '../../assets/map/add.svg';
 import { ReactComponent as Subtract } from '../../assets/map/subtract.svg';
-import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
+import { ReactComponent as LeftBack } from '../../assets/chating/leftBack.svg';
 import { ReactComponent as Close } from '../../assets/common/close.svg';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { tempPartyData } from '../../atoms';

@@ -15,7 +15,7 @@ import Cookies from 'js-cookie';
 import { useInView } from 'react-intersection-observer';
 
 // 이미지 import
-import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
+import { ReactComponent as LeftBack } from '../../assets/chating/leftBack.svg';
 import { ReactComponent as RoomMenuIcon } from '../../assets/chating/chatroommenu.svg';
 import { ReactComponent as ChatSendIcon } from '../../assets/chating/chatsend.svg';
 import { ReactComponent as NavigateExitIcon } from '../../assets/chating/navigateExit.svg';

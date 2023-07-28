@@ -20,7 +20,7 @@ import { ReactComponent as Information } from '../../assets/common/information.s
 import { ReactComponent as Check } from '../../assets/common/check.svg';
 import { ReactComponent as Upload } from '../../assets/common/upload.svg';
 import { ReactComponent as Close } from '../../assets/common/close.svg';
-import { ReactComponent as LeftBack } from '../../assets/chating/LeftBack.svg';
+import { ReactComponent as LeftBack } from '../../assets/chating/leftBack.svg';
 import useImageUpload from '../../hooks/useImageUpload';
 
 const CreateForm = ({ party }) => {
