@@ -5,7 +5,7 @@ import { MEMBER_URL, PATH_URL } from '../../shared/constants';
 import { getAPI } from '../../api/api';
 import { styled } from 'styled-components';
 import { ReactComponent as Backicon } from '../../assets/userprofile/back.svg';
-import { ReactComponent as FrameIcon } from '../../assets/mypage/frame35.svg';
+import { ReactComponent as Dot } from '../../assets/common/dot.svg';
 import { ReactComponent as Report } from '../../assets/userprofile/report.svg';
 import { Link } from 'react-router-dom';
 import Loading from '../Loading';
@@ -46,7 +46,7 @@ export const UserProfileInfo = () => {
           <MemberName>{user?.memberName}</MemberName>
           <Frame4010>
             <Info>{user?.gender === 'male' ? <div>남</div> : <div>여</div>}</Info>
-            <FrameIcon fill="#1D2939" />
+            <DotIcon />
             <Info>{user?.age}대</Info>
           </Frame4010>
           <Frame4013>
@@ -224,4 +224,9 @@ const ReportCon = styled.div`
 
 const StyledBackicon = styled(Backicon)`
   cursor: pointer;
+`;
+
+const DotIcon = styled(Dot)`
+  fill: var(--color-gray-500);
+  margin: auto 6px;
 `;

@@ -8,7 +8,7 @@ import { ReactComponent as Slash } from '../../assets/map/slash.svg';
 import { ReactComponent as Location } from '../../assets/map/location-line.svg';
 import { ReactComponent as People } from '../../assets/footer/mypage.svg';
 import { ReactComponent as Subway } from '../../assets/map/subway.svg';
-import { ReactComponent as Dot } from '../../assets/map/dot.svg';
+import { ReactComponent as Dot } from '../../assets/common/dot.svg';
 
 export default function SearchPartyItem({ party }) {
   const dDay = dDayConvertor(party.partyDate);
