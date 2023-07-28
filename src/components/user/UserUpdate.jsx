@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getAPI, putUpdateAPI } from '../../api/api';
 import { MEMBER_URL } from '../../shared/constants';
 import { styled } from 'styled-components';
-import { ReactComponent as Profile } from '../../assets/mypage/profile.svg';
+import { ReactComponent as Profile } from '../../assets/common/profiledefaultimage.svg';
 import { ReactComponent as Frame3959icon } from '../../assets/mypage/frame3959.svg';
 import { ReactComponent as Imgupdate } from '../../assets/mypage/imgupdate.svg';
 import { useNavigate } from 'react-router-dom';

@@ -6,10 +6,10 @@ import { useMutation, useQuery } from 'react-query';
 import { getAPI, postAPI } from '../../api/api';
 import { MEMBER_URL } from '../../shared/constants';
 import Loading from '../common/Loading';
-import { ReactComponent as Frame } from '../../assets/userprofile/Frame.svg';
-import { ReactComponent as Frame4033 } from '../../assets/userprofile/Frame4033.svg';
-import { ReactComponent as ReportButton1 } from '../../assets/userprofile/ReportButton1.svg';
-import { ReactComponent as ReportButton2 } from '../../assets/userprofile/ReportButton2.svg';
+import { ReactComponent as Frame } from '../../assets/userprofile/frameReport.svg';
+import { ReactComponent as Frame4033 } from '../../assets/userprofile/frame4033.svg';
+import { ReactComponent as ReportButton1 } from '../../assets/userprofile/reportButton1.svg';
+import { ReactComponent as ReportButton2 } from '../../assets/userprofile/reportButton2.svg';
 import { ReactComponent as Select } from '../../assets/userprofile/select.svg';
 
 function UserReport() {

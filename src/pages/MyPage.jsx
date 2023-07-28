@@ -1,6 +1,6 @@
 import { MyPageList } from '../components/user/MyPageList';
 import Cookies from 'js-cookie';
-import LoginModal from '../components/LoginModal';
+import LoginModal from '../components/common/LoginModal';
 
 const MyPage = () => {
   const token = Cookies.get('Access_key');

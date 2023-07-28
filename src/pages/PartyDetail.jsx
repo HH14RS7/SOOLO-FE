@@ -1,6 +1,6 @@
 import { PartyDetailInfo } from '../components/party/PartyDetailInfo';
 import Cookies from 'js-cookie';
-import LoginModal from '../components/LoginModal';
+import LoginModal from '../components/common/LoginModal';
 
 export const PartyDetail = () => {
   const token = Cookies.get('Access_key');
