@@ -6,7 +6,7 @@ import { styled } from 'styled-components';
 import { Toggle } from '../../elements/Toggle';
 import Loading from '../common/Loading';
 import { Link } from 'react-router-dom';
-import { ReactComponent as LeftBack } from '../../assets/chating/leftBack.svg';
+import { ReactComponent as LeftBack } from '../../assets/chating/left-back.svg';
 
 export default function SearchPlaceForm() {
   const [place, setPlace] = useState('');

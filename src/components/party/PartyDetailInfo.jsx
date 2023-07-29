@@ -11,7 +11,7 @@ import { formmatedDate } from '../../shared/formattedDate';
 import PartyDetailMap from '../map/PartyDetailMap';
 
 // 이미지 import
-import { ReactComponent as LeftBack } from '../../assets/chating/leftBack.svg';
+import { ReactComponent as LeftBack } from '../../assets/chating/left-back.svg';
 import { ReactComponent as Location } from '../../assets/map/location-line.svg';
 import { ReactComponent as Subway } from '../../assets/map/subway.svg';
 import { ReactComponent as People } from '../../assets/footer/mypage.svg';

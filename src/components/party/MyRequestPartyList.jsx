@@ -5,7 +5,7 @@ import MyRequestPartyItem from './MyRequestPartyItem';
 import { useEffect } from 'react';
 import { styled } from 'styled-components';
 import Default from '../user/Default';
-import { ReactComponent as Frame4152 } from '../../assets/mypage/frame4152.svg';
+import { ReactComponent as NoRequest } from '../../assets/mypage/no-request.svg';
 import Loading from '../common/Loading';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Backicon } from '../../assets/userprofile/back.svg';
@@ -50,7 +50,7 @@ const MyRequestPartyList = () => {
           ))}
         </ListWrapper>
       ) : (
-        <Default title={'내가 신청한 모임'} image={<Frame4152 />} />
+        <Default title={'내가 신청한 모임'} image={<NoRequest />} />
       )}
     </>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as Loginicon } from '../../assets/loginpage/kakao_login.svg';
+import { ReactComponent as Loginicon } from '../../assets/loginpage/kakao-login.svg';
 
 const KakaoLoginComponent = () => {
   const REST_API_KEY = `${process.env.REACT_APP_REST_API_KEY}`;

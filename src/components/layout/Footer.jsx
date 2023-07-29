@@ -6,7 +6,7 @@ import { ReactComponent as Partyicon } from '../../assets/footer/party.svg';
 import { ReactComponent as Mapicon } from '../../assets/footer/map.svg';
 import { ReactComponent as Chaticon } from '../../assets/footer/chat.svg';
 import { ReactComponent as Mypageicon } from '../../assets/footer/mypage.svg';
-import { ReactComponent as Addbtn } from '../../assets/footer/addbtn.svg';
+import { ReactComponent as Addbtn } from '../../assets/footer/add-btn.svg';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { footerActiveState } from '../../atoms';
 

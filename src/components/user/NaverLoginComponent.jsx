@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReactComponent as Loginicon } from '../../assets/loginpage/naver_login.svg';
+import { ReactComponent as Loginicon } from '../../assets/loginpage/naver-login.svg';
 
 const NaverLoginComponent = () => {
   const NAVER_CLIENT_ID = `${process.env.REACT_APP_NAVER_CLIENT_ID}`;

@@ -10,10 +10,10 @@ import Cookies from 'js-cookie';
 import LoginModal from '../components/common/LoginModal';
 
 // 이미지 import
-import { ReactComponent as PeopleIcon } from '../assets/chating/membericon.svg';
-import { ReactComponent as MenuIcon } from '../assets/chating/chatroommenu.svg';
-import { ReactComponent as PartyDefaultImg } from '../assets/common/partydefaultimg.svg';
-import { ReactComponent as LoadingIcon } from '../assets/chating/loadingicon.svg';
+import { ReactComponent as PeopleIcon } from '../assets/chating/member-icon.svg';
+import { ReactComponent as MenuIcon } from '../assets/chating/chat-room-menu.svg';
+import { ReactComponent as PartyDefaultImg } from '../assets/common/party-default-img.svg';
+import { ReactComponent as LoadingIcon } from '../assets/chating/loading-icon.svg';
 
 export const ChatList = () => {
   const navigate = useNavigate();

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { ReactComponent as Frame3959icon } from '../../assets/mypage/frame3959.svg';
+import { ReactComponent as Close } from '../../assets/common/close.svg';
 import { useNavigate, useParams } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { useMutation, useQuery } from 'react-query';
 import { getAPI, postAPI } from '../../api/api';
 import { MEMBER_URL } from '../../shared/constants';
 import Loading from '../common/Loading';
-import { ReactComponent as Frame } from '../../assets/userprofile/frameReport.svg';
-import { ReactComponent as Frame4033 } from '../../assets/userprofile/frame4033.svg';
-import { ReactComponent as ReportButton1 } from '../../assets/userprofile/reportButton1.svg';
-import { ReactComponent as ReportButton2 } from '../../assets/userprofile/reportButton2.svg';
+import { ReactComponent as ReportNotice2 } from '../../assets/userprofile/report-notice2.svg';
+import { ReactComponent as ReportNotice1 } from '../../assets/userprofile/report-notice1.svg';
+import { ReactComponent as ReportButton1 } from '../../assets/userprofile/report-button1.svg';
+import { ReactComponent as ReportButton2 } from '../../assets/userprofile/report-button2.svg';
 import { ReactComponent as Select } from '../../assets/userprofile/select.svg';
 
 function UserReport() {
@@ -92,7 +92,7 @@ function UserReport() {
           <Frame3959 />
           <Title>신고하기</Title>
           <Frame3959>
-            <Frame3959icon
+            <CloseIcon
               onClick={() => {
                 navigate(-1);
               }}
@@ -120,7 +120,7 @@ function UserReport() {
         <UserInfoCon marginleft={'16px'} margintop={'34px'}>
           <TextCon>신고내용 (선택)</TextCon>
           <NoticeCon>
-            <Frame />
+            <ReportNotice2 />
           </NoticeCon>
           <Field>
             <Content
@@ -140,7 +140,7 @@ function UserReport() {
               <SupportText color={'#98a2b3'}>{reportContentInput.length} / 200</SupportText>
             )}
           </Frame4031>
-          <Frame4033 />
+          <ReportNotice1 />
           <div style={{ marginTop: '16px' }}>
             {reportTypeInput ? (
               <button type="submit">
@@ -204,6 +204,12 @@ const Frame3959 = styled.div`
   align-items: flex-start;
   padding: 0px 16px 0px 0px;
   width: 40px;
+  height: 24px;
+`;
+
+const CloseIcon = styled(Close)`
+  fill: #1d2939;
+  width: 24px;
   height: 24px;
 `;
 
