@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as UpdateIcon } from '../../assets/mypage/update.svg';
 import { ReactComponent as Dot } from '../../assets/common/dot.svg';
 import { ReactComponent as ListIcon } from '../../assets/mypage/listicon.svg';
-import { ReactComponent as Profile } from '../../assets/common/profiledefaultimage.svg';
+import { ReactComponent as Profile } from '../../assets/common/profiledefaultimg.svg';
 import Cookies from 'js-cookie';
 
 export const MyPageList = () => {
@@ -69,7 +69,11 @@ export const MyPageList = () => {
                   <Info>{user?.age}대</Info>
                 </Frame4010>
               </Frame4011>
-              <ProfileImage src={user?.profileImage || <Profile />} alt="ProfileImage" />
+              {user?.profileImage ? (
+                <ProfileImage src={user?.profileImage} alt="ProfileImage" />
+              ) : (
+                <ProfileIcon />
+              )}
             </Frame4016>
             <Frame4013>
               <Introduce>자기 소개</Introduce>
@@ -177,6 +181,13 @@ const Rectangle3971 = styled.div`
 `;
 
 const ProfileImage = styled.img`
+  width: 70px;
+  height: 70px;
+  border-radius: 16px;
+  object-fit: cover;
+`;
+
+const ProfileIcon = styled(Profile)`
   width: 70px;
   height: 70px;
   border-radius: 16px;
