@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getAPI, putUpdateAPI } from '../../api/api';
 import { MEMBER_URL } from '../../shared/constants';
 import { styled } from 'styled-components';
-import { ReactComponent as Profile } from '../../assets/common/profiledefaultimage.svg';
+import { ReactComponent as Profile } from '../../assets/common/profiledefaultimg.svg';
 import { ReactComponent as Frame3959icon } from '../../assets/mypage/frame3959.svg';
 import { ReactComponent as Imgupdate } from '../../assets/mypage/imgupdate.svg';
 import { useNavigate } from 'react-router-dom';
@@ -116,10 +116,16 @@ function UserUpdate() {
           <Frame4040>
             <Titleprofile>프로필 이미지</Titleprofile>
             <ProfileImageWrapper>
-              <ProfileImage
-                src={previewImage || user?.profileImage || <Profile />}
-                alt="ProfileImage"
-              ></ProfileImage>
+              {user?.profileImage ? (
+                <ProfileImage
+                  src={previewImage || user?.profileImage}
+                  alt="ProfileImage"
+                ></ProfileImage>
+              ) : (
+                <ProfileImage src={previewImage} alt="ProfileImage"></ProfileImage> || (
+                  <ProfileIcon />
+                )
+              )}
               <ImgUpdateCon>
                 <Imgupdate />
                 <FileInput
@@ -391,6 +397,15 @@ const SupportText = styled.div`
 `;
 
 const ProfileImage = styled.img`
+  width: 70px;
+  height: 70px;
+  left: 0px;
+  top: 0px;
+  border-radius: 16px;
+  object-fit: cover;
+`;
+
+const ProfileIcon = styled(Profile)`
   width: 70px;
   height: 70px;
   left: 0px;
