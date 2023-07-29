@@ -5,7 +5,7 @@ import { MEMBER_URL } from '../../shared/constants';
 import { getAPI } from '../../api/api';
 import { styled } from 'styled-components';
 import { ReactComponent as Backicon } from '../../assets/userprofile/back.svg';
-import { ReactComponent as Kakaoicon } from '../../assets/mypage/kakaoicon.svg';
+import { ReactComponent as Kakaoicon } from '../../assets/mypage/kakao-icon.svg';
 
 const AcountDetails = () => {
   const navigate = useNavigate();

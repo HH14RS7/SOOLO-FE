@@ -3,9 +3,9 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { getAPI, putUpdateAPI } from '../../api/api';
 import { MEMBER_URL } from '../../shared/constants';
 import { styled } from 'styled-components';
-import { ReactComponent as Profile } from '../../assets/common/profiledefaultimg.svg';
-import { ReactComponent as Frame3959icon } from '../../assets/mypage/frame3959.svg';
-import { ReactComponent as Imgupdate } from '../../assets/mypage/imgupdate.svg';
+import { ReactComponent as Profile } from '../../assets/common/profile-default-img.svg';
+import { ReactComponent as Close } from '../../assets/common/close.svg';
+import { ReactComponent as Imgupdate } from '../../assets/mypage/img-update.svg';
 import { useNavigate } from 'react-router-dom';
 import useImageUpload from '../../hooks/useImageUpload';
 
@@ -105,7 +105,7 @@ function UserUpdate() {
           <Frame3959 />
           <Title>프로필 수정하기</Title>
           <Frame3959>
-            <Frame3959icon
+            <CloseIcon
               onClick={() => {
                 ExitopenModal();
               }}
@@ -268,6 +268,12 @@ const Frame3959 = styled.div`
   align-items: flex-start;
   padding: 0px 16px 0px 0px;
   width: 40px;
+  height: 24px;
+`;
+
+const CloseIcon = styled(Close)`
+  fill: #1d2939;
+  width: 24px;
   height: 24px;
 `;
 

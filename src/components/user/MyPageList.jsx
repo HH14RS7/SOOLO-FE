@@ -6,8 +6,8 @@ import { styled } from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as UpdateIcon } from '../../assets/mypage/update.svg';
 import { ReactComponent as Dot } from '../../assets/common/dot.svg';
-import { ReactComponent as ListIcon } from '../../assets/mypage/listicon.svg';
-import { ReactComponent as Profile } from '../../assets/common/profiledefaultimg.svg';
+import { ReactComponent as ListIcon } from '../../assets/mypage/list-icon.svg';
+import { ReactComponent as Profile } from '../../assets/common/profile-default-img.svg';
 import Cookies from 'js-cookie';
 
 export const MyPageList = () => {

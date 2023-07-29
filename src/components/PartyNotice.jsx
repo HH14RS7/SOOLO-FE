@@ -3,15 +3,15 @@ import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { noticeState } from '../../atoms';
+import { noticeState } from '../atoms';
 
 // 이미지 import
-import { ReactComponent as LeftBack } from '../../assets/chating/left-back.svg';
-import { ReactComponent as Alarm } from '../../assets/notice/alarm.svg';
-import { ReactComponent as Close } from '../../assets/common/close.svg';
-import { ReactComponent as NullAlram } from '../../assets/notice/null-alram.svg';
-import { ReactComponent as Email } from '../../assets/notice/email.svg';
-import { deleteAPI, getAPI, postAPI } from '../../api/api';
+import { ReactComponent as LeftBack } from '../assets/chating/left-back.svg';
+import { ReactComponent as Alarm } from '../assets/notice/alarm.svg';
+import { ReactComponent as Close } from '../assets/common/close.svg';
+import { ReactComponent as NullAlram } from '../assets/notice/null-alram.svg';
+import { ReactComponent as Email } from '../assets/notice/email.svg';
+import { deleteAPI, getAPI, postAPI } from '../api/api';
 
 export const PartyNotice = () => {
   const navigate = useNavigate();
@@ -152,7 +152,7 @@ export const PartyNotice = () => {
                         <NoticeTime>00시간 전</NoticeTime>
                       </NoticeContents>
                       <DeleteDiv>
-                        <CloseIcon
+                        <Close
                           style={{
                             cursor: 'pointer',
                           }}
@@ -336,12 +336,6 @@ const Contents = styled.div`
 const Container = styled.div`
   width: 360px;
   padding-bottom: 70px;
-`;
-
-const CloseIcon = styled(Close)`
-  fill: #98a2b3;
-  width: 32px;
-  height: 32px;
 `;
 
 // TopBar 스타일
